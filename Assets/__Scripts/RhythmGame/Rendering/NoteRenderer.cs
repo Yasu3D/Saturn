@@ -1,27 +1,70 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using UnityEngine;
 
-public class NoteRenderer : MonoBehaviour
+namespace SaturnGame.Rendering
 {
-    // ==== PROPERTIES ====
-    [Header("PROPERTIES")]
-    public List<Mesh> meshes;
-    public MeshFilter meshFilter;
-    public MeshRenderer meshRenderer;
-    public Material material;
-    public Note note;
-
-    void SetNote(Note newNote)
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+    [AddComponentMenu("SaturnGame/Rendering/Note Renderer")]
+    public class NoteRenderer : MonoBehaviour
     {
-        note = newNote;
+        // ==== MESH ====
+        [SerializeField] private List<Mesh> meshes;
+        [SerializeField] private MeshFilter meshFilter;
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private Material materialTemplate;
+        private Material materialInstance;
 
-        meshFilter.mesh = meshes[note.Size - 1];
-        material.SetColor("NoteColor", new Color (1,0,1,1));
-        meshRenderer.material = material;
+        // ==== NOTE INFO ====
+        public int Size { get; private set; }
+        public int Position { get; private set; }
 
-        float angle = note.Position * -6;
-        transform.eulerAngles = new Vector3 (0, 0, angle);
+        public Color Color { get; private set; }
+        public int Width { get; private set; } = 3;
+        public bool IsSync { get; private set; } = false;
+        public bool IsBonus { get; private set; } = false;
+        public bool IsChain { get; private set; } = false;
+
+        void Awake()
+        {
+            materialInstance = new(materialTemplate);
+        }
+
+        void SetRendererProperties(Note note, int width, bool sync)
+        {
+            Size = note.Size;
+            Position = note.Position;
+
+            Color = NoteColors.GetColor(note.NoteType);
+            Width = width;
+
+            IsSync = sync;
+            IsBonus = note.BonusType is ObjectEnums.BonusType.Bonus; 
+            IsChain = note.NoteType is ObjectEnums.NoteType.Chain;
+        }
+
+        void UpdateRenderer()
+        {
+            if (materialInstance.HasColor("_NoteColor"))
+                materialInstance.SetColor("_NoteColor", Color);
+
+            if (materialInstance.HasFloat("_NoteWidth"))
+                materialInstance.SetFloat("_NoteWidth", Width);
+            
+            if (materialInstance.HasFloat("_Sync"))
+                materialInstance.SetFloat("_Sync", Convert.ToInt32(IsSync));
+
+            if (materialInstance.HasFloat("_Bonus"))
+                materialInstance.SetFloat("_Bonus", Convert.ToInt32(IsBonus));
+
+            if (materialInstance.HasFloat("_Chain"))
+                materialInstance.SetFloat("_Chain", Convert.ToInt32(IsChain));
+
+            meshFilter.mesh = meshes[Size - 1];
+            meshRenderer.material = materialInstance;
+
+            transform.eulerAngles = new Vector3 (0, 0, Position * -6);
+        }
     }
 }

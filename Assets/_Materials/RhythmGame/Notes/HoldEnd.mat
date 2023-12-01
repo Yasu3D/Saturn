@@ -121,7 +121,7 @@ Material:
     - _Chain: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _ColorID: 0
+    - _ColorID: 1
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1

@@ -16,11 +16,11 @@ namespace SaturnGame.RhythmGame
         public enum NoteType
         {
             None,
-            Tap,
-            ForwardSnap,
-            BackwardSnap,
-            ClockwiseSwipe,
-            CounterclockwiseSwipe,
+            Touch,
+            SnapForward,
+            SnapBackward,
+            SwipeClockwise,
+            SwipeCounterclockwise,
             HoldStart,
             HoldSegment,
             HoldEnd,

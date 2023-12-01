@@ -32,29 +32,29 @@ namespace SaturnGame.RhythmGame
                 case 1:
                 case 2:
                 case 20:
-                    NoteType = ObjectEnums.NoteType.Tap;
+                    NoteType = ObjectEnums.NoteType.Touch;
                     break;
                 
                 case 3:
                 case 21:
-                    NoteType = ObjectEnums.NoteType.ForwardSnap;
+                    NoteType = ObjectEnums.NoteType.SnapForward;
                     break;
 
                 case 4:
                 case 22:
-                    NoteType = ObjectEnums.NoteType.BackwardSnap;
+                    NoteType = ObjectEnums.NoteType.SnapBackward;
                     break;
                 
                 case 5:
                 case 6:
                 case 23:
-                    NoteType = ObjectEnums.NoteType.ClockwiseSwipe;
+                    NoteType = ObjectEnums.NoteType.SwipeClockwise;
                     break;
 
                 case 7:
                 case 8:
                 case 24:
-                    NoteType = ObjectEnums.NoteType.CounterclockwiseSwipe;
+                    NoteType = ObjectEnums.NoteType.SwipeCounterclockwise;
                     break;
 
                 case 9:
@@ -131,7 +131,6 @@ namespace SaturnGame.RhythmGame
                     break;
             }
         }
-
         [Range(0, 59)] public int Position;
         [Range(1, 60)] public int Size;
         public ObjectEnums.NoteType NoteType;
