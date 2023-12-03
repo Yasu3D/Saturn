@@ -26,12 +26,12 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _LANETYPE_A
+  - _LANETYPE_E
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2999
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -63,15 +63,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GuideLaneGradient:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 6b27232fcef754640a748ae3b337db5d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _JudgeLineColor:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 355d7bd8c25c1884ebeadeed3c1e72f2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _JudgeLineMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 9c288abc8c87397499d47959e1229660, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -115,9 +115,10 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _ComboShine: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Depth: 600
+    - _Depth: 6
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -129,12 +130,14 @@ Material:
     - _GuideLaneComboShineBrightness: 1
     - _GuideLaneComboShineEnable: 0
     - _GuideLaneShineScrollSpeed: -2
-    - _LANETYPE: 1
+    - _LANETYPE: 5
     - _Metallic: 0
-    - _NoteThickness: 1
+    - _NoteThickness: 3
+    - _NoteWidth: 3
     - _OcclusionStrength: 1
+    - _Opacity: 1
     - _Parallax: 0.005
-    - _QueueControl: 0
+    - _QueueControl: 1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5

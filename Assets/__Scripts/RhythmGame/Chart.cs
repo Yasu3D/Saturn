@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +15,11 @@ namespace SaturnGame.RhythmGame
 
         // ==== NOTES ==========
         [Header("NOTES")]
-        public List<Gimmick> gimmicks;
+        public List<Gimmick> beatsPerMinuteGimmicks;
+        public List<Gimmick> timeSignatureGimmicks;
+        public List<Gimmick> hiSpeedGimmicks;
+        public List<Gimmick> stopGimmicks;
+        public List<Gimmick> reverseGimmicks;
         public List<Note> notes;
         public List<HoldNote> holdNotes;
         public List<Note> masks;
@@ -33,13 +36,13 @@ namespace SaturnGame.RhythmGame
             {
                 string merLine = merFile[index];
 
-                var tempMusicFilePath = GetTag(merLine, "#MUSIC_FILE_PATH ");
+                var tempMusicFilePath = GetMetadata(merLine, "#MUSIC_FILE_PATH ");
                 if (tempMusicFilePath != null) musicFilePath = tempMusicFilePath;
 
-                var tempAudioOffset = GetTag(merLine, "#OFFSET ");
+                var tempAudioOffset = GetMetadata(merLine, "#OFFSET ");
                 if (tempAudioOffset != null) audioOffset = Convert.ToSingle(tempAudioOffset);
 
-                var tempMovieOffset = GetTag(merLine, "#MOVIEOFFSET ");
+                var tempMovieOffset = GetMetadata(merLine, "#MOVIEOFFSET ");
                 if (tempMovieOffset != null) movieOffset = Convert.ToSingle(tempMovieOffset);
 
                 if (merLine.Contains("#BODY"))
@@ -51,9 +54,15 @@ namespace SaturnGame.RhythmGame
             while (++index < merFile.Count);
 
             Note tempNote;
+            Note lastNote = null; // make lastNote start as null so the compiler doesn't scream
             Gimmick tempGimmick;
 
-            gimmicks.Clear();
+            beatsPerMinuteGimmicks.Clear();
+            timeSignatureGimmicks.Clear();
+            hiSpeedGimmicks.Clear();
+            stopGimmicks.Clear();
+            reverseGimmicks.Clear();
+
             notes.Clear();
             holdNotes.Clear();
             masks.Clear();
@@ -68,22 +77,23 @@ namespace SaturnGame.RhythmGame
                 int tick = Convert.ToInt32(splitLine[1]);
                 int objectID = Convert.ToInt32(splitLine[2]);
 
+                // Invalid ID
                 if (objectID == 0) continue;
 
+                // Note
                 if (objectID == 1)
                 {
-                    // create a note
                     int noteTypeID = Convert.ToInt32(splitLine[3]);
+
+                    // skip hold segment and hold end. they're handled separately.
+                    if (noteTypeID is 10 or 11) continue;
 
                     int position = Convert.ToInt32(splitLine[5]);
                     int size = Convert.ToInt32(splitLine[6]);
+
                     tempNote = new Note(measure, tick, noteTypeID, position, size);
 
-                    // hold segment/end are handled separately.
-                    if (noteTypeID is 10 or 11)
-                    {
-                        continue;
-                    }
+                    CheckSync(tempNote, lastNote);
 
                     // hold notes
                     if (noteTypeID is 9 or 25)
@@ -135,14 +145,18 @@ namespace SaturnGame.RhythmGame
                     // mask notes
                     if (noteTypeID is 12 or 13)
                     {
+                        int dir = Convert.ToInt32(splitLine[8]);
+                        tempNote.MaskDirection = (ObjectEnums.MaskDirection) dir;
                         masks.Add(tempNote);
                         continue;
                     }
                     
                     // all other notes
+                    lastNote = tempNote;
                     notes.Add(tempNote);
                 }
 
+                // Gimmick
                 else
                 {
                     // create a gimmick
@@ -160,11 +174,38 @@ namespace SaturnGame.RhythmGame
                         value1 = Convert.ToSingle(splitLine[3]);
 
                     tempGimmick = new Gimmick (measure, tick, objectID, value1, value2);
-                    gimmicks.Add(tempGimmick);
+                    
+                    // sort gimmicks by type
+                    switch (tempGimmick.GimmickType)
+                    {
+                        case ObjectEnums.GimmickType.BeatsPerMinute:
+                            beatsPerMinuteGimmicks.Add(tempGimmick);
+                            break;
+                        case ObjectEnums.GimmickType.TimeSignature:
+                            timeSignatureGimmicks.Add(tempGimmick);
+                            break;
+                        case ObjectEnums.GimmickType.HiSpeed:
+                            hiSpeedGimmicks.Add(tempGimmick);
+                            break;
+                        case ObjectEnums.GimmickType.StopStart:
+                        case ObjectEnums.GimmickType.StopEnd:
+                            stopGimmicks.Add(tempGimmick);
+                            break;
+                        case ObjectEnums.GimmickType.ReverseEffectStart:
+                        case ObjectEnums.GimmickType.ReverseEffectEnd:
+                        case ObjectEnums.GimmickType.ReverseNoteEnd:
+                            reverseGimmicks.Add(tempGimmick);
+                            break;
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Converts a Stream into a List of strings for parsing.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         private List<string> GetFileFromStream(Stream stream)
         {
             List<string> lines = new List<string>();
@@ -174,7 +215,13 @@ namespace SaturnGame.RhythmGame
             return lines;
         }
 
-        private string GetTag(string input, string tag)
+        /// <summary>
+        /// Parses Metadata tags like "#OFFSET"
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        private string GetMetadata(string input, string tag)
         {
             if (input.Contains(tag))
                 return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length);
@@ -182,17 +229,33 @@ namespace SaturnGame.RhythmGame
             return null;;
         }
 
+        /// <summary>
+        /// Check if the last parsed note is on the same timestamp as the current note. <br />
+        /// This should efficiently and cleanly detect any simultaneous notes.
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="last"></param>
+        private void CheckSync(Note current, Note last)
+        {
+            if (last == null) return;
 
+            if (current.Measure == last.Measure && current.Tick == last.Tick)
+            {
+                last.IsSync = true;
+                current.IsSync = true;
+            }
+        }
 
         // DELETE THIS ON SIGHT THANKS
         void Start()
         {
-            string filepath = Path.Combine(Application.streamingAssetsPath, "/Songpacks/DONOTSHIP/test.mer");
+            string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/test.mer");
             if (File.Exists(filepath))
             {
                 FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);
                 LoadChart(fileStream);
             }
+            else Debug.Log("File not found");
         }
     }
 }

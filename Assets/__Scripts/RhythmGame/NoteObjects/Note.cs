@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -7,7 +5,7 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public class Note : ChartObject
     {
-        public Note (int measure, int tick, ObjectEnums.NoteType noteType, ObjectEnums.BonusType bonusType, int position, int size, bool renderFlag = true)
+        public Note (int measure, int tick, ObjectEnums.NoteType noteType, ObjectEnums.BonusType bonusType, int position, int size, bool renderFlag = true, bool isSync = false, ObjectEnums.MaskDirection maskDirection = ObjectEnums.MaskDirection.None)
         {
             Measure = measure;
             Tick = tick;
@@ -16,15 +14,19 @@ namespace SaturnGame.RhythmGame
             NoteType = noteType;
             BonusType = bonusType;
             RenderFlag = renderFlag;
+            MaskDirection = maskDirection;
+            IsSync = isSync;
         }
 
-        public Note (int measure, int tick, int noteID, int position, int size, bool renderFlag = true)
+        public Note (int measure, int tick, int noteID, int position, int size, bool renderFlag = true, bool isSync = false, ObjectEnums.MaskDirection maskDirection = ObjectEnums.MaskDirection.None)
         {
             Measure = measure;
             Tick = tick;
             Position = position;
             Size = size;
             RenderFlag = renderFlag;
+            MaskDirection = maskDirection;
+            IsSync = isSync;
 
             // assign noteType
             switch (noteID)
@@ -131,11 +133,14 @@ namespace SaturnGame.RhythmGame
                     break;
             }
         }
+        
         [Range(0, 59)] public int Position;
         [Range(1, 60)] public int Size;
         public ObjectEnums.NoteType NoteType;
         public ObjectEnums.BonusType BonusType;
+        public ObjectEnums.MaskDirection MaskDirection;
         public bool RenderFlag;
+        public bool IsSync;
     }
 
 }

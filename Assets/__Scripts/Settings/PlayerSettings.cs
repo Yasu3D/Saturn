@@ -27,10 +27,10 @@ namespace SaturnGame.Settings
     {
         public int JudgementDisplayPosition;
         public bool ShowJudgementDetails;
-        public int GuideLaneType;
-        public int GuideLaneOpacity;
+        public int GuideLaneType = 1;
+        public int GuideLaneOpacity = 5;
         public int DisplayOpacity;
-        public bool ShowBarLines;
+        public bool ShowBarLines = true;
         public int CenterDisplayInfo;
         public int ScoreDisplayMethod;
         public bool DisplayMultiplayerRank;
@@ -44,7 +44,7 @@ namespace SaturnGame.Settings
     [System.Serializable] public class DesignSettings
     {
         public int RingColor;
-        public int JudgeLineColor;
+        public int JudgeLineColor = 2;
         public int NoteWidth = 3;
         public int NoteColorID_Touch = 0;
         public int NoteColorID_Chain = 1;
@@ -53,25 +53,25 @@ namespace SaturnGame.Settings
         public int NoteColorID_SnapForward = 4;
         public int NoteColorID_SnapBackward = 5;
         public int NoteColorID_Hold = 6;
-        public bool InvertSlideColor;
+        public bool InvertSlideColor = false;
         public int TouchEffect;
-        public bool ShootEffect;
-        public bool ShowKeyBeams;
-        public bool ShowR_NoteEffect;
+        public bool ShootEffect = true;
+        public bool ShowKeyBeams = true;
+        public bool ShowR_NoteEffect = true;
     }
 
     [System.Serializable] public class SoundSettings
     {
         public int TouchSE;
-        public int BGMVolume;
-        public int NavigatorMenuVolume;
-        public int NavigatorPlayVolume;
-        public int TouchNoteVolume;
-        public int HoldNoteVolume;
-        public int SlideNoteVolume;
-        public int SnapNoteVolume;
-        public int ChainNoteVolume;
-        public int BonusEffectVolume;
-        public int RNoteEffectVolume;
+        public int BGMVolume = 100;
+        public int NavigatorMenuVolume = 30;
+        public bool NavigatorDuringPlay;
+        public int TouchNoteVolume = 80;
+        public int HoldNoteVolume = 80;
+        public int SlideNoteVolume = 80;
+        public int SnapNoteVolume = 80;
+        public int ChainNoteVolume = 80;
+        public int BonusEffectVolume = 80;
+        public int RNoteEffectVolume = 80;
     }
 }

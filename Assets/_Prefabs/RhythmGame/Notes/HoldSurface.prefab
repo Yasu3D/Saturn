@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3799958022561163118}
+  - component: {fileID: 1639821649052849141}
   - component: {fileID: 4059135156454620076}
   - component: {fileID: 8242334217347113592}
-  - component: {fileID: 1639821649052849141}
   m_Layer: 0
   m_Name: HoldSurface
   m_TagString: Untagged
@@ -34,6 +34,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1639821649052849141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4983151163740256349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2490f7ae0147a40b1a723f0c83527a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  holdMesh: {fileID: 0}
+  meshFilter: {fileID: 4059135156454620076}
+  meshRenderer: {fileID: 8242334217347113592}
+  materialTemplate: {fileID: 2100000, guid: 185978123b588794b8ed0a84b69b501d, type: 2}
 --- !u!33 &4059135156454620076
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -84,19 +100,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1639821649052849141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4983151163740256349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df2490f7ae0147a40b1a723f0c83527a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  holdMesh: {fileID: 0}
-  meshFilter: {fileID: 4059135156454620076}
-  meshRenderer: {fileID: 8242334217347113592}
-  materialTemplate: {fileID: 2100000, guid: 185978123b588794b8ed0a84b69b501d, type: 2}

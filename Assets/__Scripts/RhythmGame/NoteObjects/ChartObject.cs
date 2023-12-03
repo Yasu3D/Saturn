@@ -48,5 +48,12 @@ namespace SaturnGame.RhythmGame
             StopStart,
             StopEnd
         }
+        public enum MaskDirection
+        {
+            None = 3,
+            Counterclockwise = 0,
+            Clockwise = 1,
+            Center = 2
+        }
     }
 }

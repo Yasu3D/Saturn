@@ -1,11 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
-using System.IO;
-using Unity.VisualScripting;
-using System;
 
 namespace SaturnGame.RhythmGame
 {
@@ -38,12 +31,12 @@ namespace SaturnGame.RhythmGame
 
         // ==== Timing ====
         [Header("TIMING")]
-        public float staticAudioOffset = -60;
-        public float userAudioOffset = 0;
+        public float StaticAudioOffset = -60;
+        public float UserAudioOffset = 0;
         [Space(10)]
         [SerializeField] private float timeWarpMultiplier = 1.0f;
         [SerializeField] private float forceSyncDiscrepancy = 50f;
-        public float visualTimeScale { get; private set; } = 1.0f;
+        public float VisualTimeScale { get; private set; } = 1.0f;
 
         /// <summary>
         /// Returns Song Position in ms.
@@ -60,7 +53,7 @@ namespace SaturnGame.RhythmGame
         {
             if (bgmPlayer.isPlaying)
             {
-                VisualTime += Time.deltaTime * visualTimeScale * 1000;
+                VisualTime += Time.deltaTime * VisualTimeScale * 1000;
             }
         }
 
@@ -85,69 +78,48 @@ namespace SaturnGame.RhythmGame
             // Warp VisualTime to re-align with audio
             // * 0.001f because SaturnGame uses milliseconds for all timing.
             float timeWarp = discrepancy * timeWarpMultiplier * 0.001f;
-            visualTimeScale = bgmPlayer.pitch - timeWarp;
+            VisualTimeScale = bgmPlayer.pitch - timeWarp;
         }
 
         /// <summary>
         /// Updates current BGM's Beats Per Minute, Time Signature <br />
-        /// and recalculates new BeatDuration from those values.
+        /// and recalculates a new BeatDuration from those values.
         /// </summary>
         /// <param name="bpm">New Beats Per Minute</param>
         /// <param name="sig">New Time Signature</param>
-        public void UpdateBgmData(float bpm = -1, TimeSignature sig = null)
+        public void UpdateBgmData(float bpm, TimeSignature sig)
         {
-            if (bpm > 0)
-                BeatsPerMinute = bpm;
-
-            if (sig != null)
-                TimeSig = sig;
-
+            BeatsPerMinute = bpm;
+            TimeSig = sig;
             BeatDuration = 60 / BeatsPerMinute * TimeSig.Ratio * 1000;
         }
 
-
-
-
-        // EVERYTHING PAST HERE IS DEBUG AND SHOULD BE DELETED ON SIGHT
-        void Start()
+        /// <summary>
+        /// Updates current BGM's Beats Per Minute <br />
+        /// and recalculates a new BeatDuration from those values.
+        /// </summary>
+        /// <param name="bpm">New Beats Per Minute</param>
+        public void UpdateBgmData(float bpm)
         {
-            UpdateBgmData(BeatsPerMinute, TimeSig);
-
-            bgmPlayer.clip = bgmClip;
-
-            testNote.position = new Vector3 (0, 0, -6);
-            testNote.localScale = Vector3.zero;
+            BeatsPerMinute = bpm;
+            BeatDuration = 60 / BeatsPerMinute * TimeSig.Ratio * 1000;
         }
 
-        [Header("DEBUG")]
-        [SerializeField] private TMPro.TextMeshProUGUI text;
-        [SerializeField] private GameObject testObject;
-        [SerializeField] private Transform testNote;
-        private bool toggle;
-        private float lastBeat;
+        /// <summary>
+        /// Updates current BGM's Time Signature and<br />
+        /// recalculates a new BeatDuration from those values.
+        /// </summary>
+        /// <param name="sig">New Time Signature</param>
+        public void UpdateBgmData(TimeSignature sig)
+        {
+            TimeSig = sig;
+            BeatDuration = 60 / BeatsPerMinute * TimeSig.Ratio * 1000;
+        }
+
         void Update()
         {
             UpdateVisualTime();
             ReSync();
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                bgmPlayer.Play();
-            }
-
-            text.text = $"BgmTime {BgmTime()} \n VisualTime {VisualTime}";
-
-            if (VisualTime > lastBeat + BeatDuration)
-            {
-                testObject.SetActive(toggle);
-                toggle = !toggle;
-                lastBeat += BeatDuration;
-            }
-
-            float scrollTime = VisualTime % (BeatDuration * 4) / (BeatDuration * 4);
-
-            testNote.position = new Vector3 (0, 0, Mathf.Lerp(-6, 0, scrollTime));
-            testNote.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, scrollTime);
         }
     }
 }
