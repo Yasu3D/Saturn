@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -15,14 +16,18 @@ namespace SaturnGame.RhythmGame
 
         // ==== NOTES ==========
         [Header("NOTES")]
-        public List<Gimmick> beatsPerMinuteGimmicks;
-        public List<Gimmick> timeSignatureGimmicks;
+        [SerializeField] private List<Gimmick> beatsPerMinuteGimmicks;
+        [SerializeField] private List<Gimmick> timeSignatureGimmicks;
+        [Space(10)]
+        public List<Gimmick> bgmDataGimmicks; // BgmData = BeatsPerMinute *and* TimeSignature.
         public List<Gimmick> hiSpeedGimmicks;
         public List<Gimmick> stopGimmicks;
         public List<Gimmick> reverseGimmicks;
         public List<Note> notes;
         public List<HoldNote> holdNotes;
         public List<Note> masks;
+
+        private const float tickToMeasure = 0.00052083333333333333f; // = 1/1920
 
         public void LoadChart(Stream merStream)
         {
@@ -59,6 +64,8 @@ namespace SaturnGame.RhythmGame
 
             beatsPerMinuteGimmicks.Clear();
             timeSignatureGimmicks.Clear();
+
+            bgmDataGimmicks.Clear();
             hiSpeedGimmicks.Clear();
             stopGimmicks.Clear();
             reverseGimmicks.Clear();
@@ -199,6 +206,9 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
+
+            CreateBgmDataGimmicks();
+            SetTime();
         }
 
         /// <summary>
@@ -246,6 +256,125 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        /// <summary>
+        /// A rather bulky function that ""cleanly"" merges BeatsPerMinuteGimmicks <br />
+        /// and TimeSignatureGimmicks into one list. My only excuse for the bulk <br />
+        /// is that most charts don't have many BPM/TimeSig changes.
+        /// </summary>
+        private void CreateBgmDataGimmicks()
+        {
+            if (beatsPerMinuteGimmicks.Count == 0 || timeSignatureGimmicks.Count == 0) return;
+
+            float lastBpm = beatsPerMinuteGimmicks[0].BeatsPerMinute;
+            TimeSignature lastTimeSig = timeSignatureGimmicks[0].TimeSig;
+
+            // merge both lists and sort by timestamp
+            bgmDataGimmicks = beatsPerMinuteGimmicks.Concat(timeSignatureGimmicks).OrderBy(x => x.Measure * 1920 + x.Tick).ToList();
+            
+            bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
+            bgmDataGimmicks[0].TimeSig = lastTimeSig;
+
+            int lastTime = 0;
+
+            for (int i = 1; i < bgmDataGimmicks.Count; i++)
+            {
+                int currentTime = bgmDataGimmicks[i].Measure * 1920 + bgmDataGimmicks[i].Tick;
+
+                // Handles two gimmicks at the same time, in case a chart changes
+                // BeatsPerMinute and TimeSignature simultaneously.
+                if (lastTime == currentTime)
+                {
+                    // if this is a bpm change, then last change must've been a time sig change.
+                    if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
+                        bgmDataGimmicks[i - 1].BeatsPerMinute = bgmDataGimmicks[i].BeatsPerMinute;
+                    else
+                        bgmDataGimmicks[i - 1].TimeSig = bgmDataGimmicks[i].TimeSig;
+
+                    // remove duplicate gimmick 
+                    bgmDataGimmicks.RemoveAt(i);
+                    continue;
+                }
+
+                if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
+                {
+                    bgmDataGimmicks[i].TimeSig = lastTimeSig;
+                    lastBpm = bgmDataGimmicks[i].BeatsPerMinute;
+                }
+
+                if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
+                {
+                    bgmDataGimmicks[i].BeatsPerMinute = lastBpm;
+                    lastTimeSig = bgmDataGimmicks[i].TimeSig;
+                }
+
+                lastTime = currentTime;
+            }
+
+            bgmDataGimmicks[0].Time = 0;
+            for (int i = 1; i < bgmDataGimmicks.Count; i++)
+            {
+                float currentMeasure = (bgmDataGimmicks[i].Measure * 1920 + bgmDataGimmicks[i].Tick) * tickToMeasure;
+                float lastMeasure = (bgmDataGimmicks[i - 1].Measure * 1920 + bgmDataGimmicks[i - 1].Tick) * tickToMeasure;
+                float timeSig = bgmDataGimmicks[i - 1].TimeSig.Ratio;
+                float bpm = bgmDataGimmicks[i - 1].BeatsPerMinute;
+
+                float bgmTime = (currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm));
+
+                bgmDataGimmicks[i].Time = bgmTime;
+            }
+        }
+
+        // this function makes me want to shoot myself
+        private void SetTime()
+        {
+            foreach (Note note in notes)
+            {
+                note.Time = CalculateTime(note);
+            }
+
+            foreach (Note note in masks)
+            {
+                note.Time = CalculateTime(note);
+            }
+
+            // especially this makes me want to shoot myself
+            foreach (HoldNote hold in holdNotes)
+            {
+                foreach (Note note in hold.Notes)
+                {
+                    note.Time = CalculateTime(note);
+                }
+            }
+
+            // maybe TODO move this somewhere else. Need to figure out how to handle hispeed first.
+            foreach (Gimmick gimmick in hiSpeedGimmicks)
+            {
+                gimmick.Time = CalculateTime(gimmick);
+            }
+
+            foreach (Gimmick gimmick in stopGimmicks)
+            {
+                gimmick.Time = CalculateTime(gimmick);
+            }
+
+            foreach (Gimmick gimmick in reverseGimmicks)
+            {
+                gimmick.Time = CalculateTime(gimmick);
+            }
+        }
+
+        private float CalculateTime(ChartObject chartObject)
+        {
+            int timeStamp = chartObject.Measure * 1920 + chartObject.Tick;
+
+            Gimmick lastBgmData = bgmDataGimmicks.LastOrDefault(x => x.Measure * 1920 + x.Tick < timeStamp) ?? bgmDataGimmicks[0];
+
+            int lastTimestamp = lastBgmData.Measure * 1920 + lastBgmData.Tick;
+
+            float tickTime = 60000.0f / lastBgmData.BeatsPerMinute * 4 * lastBgmData.TimeSig.Ratio * (timeStamp - lastTimestamp) + lastBgmData.Time;
+            return tickTime * tickToMeasure;
+        }
+
         // DELETE THIS ON SIGHT THANKS
         void Start()
         {
@@ -256,6 +385,14 @@ namespace SaturnGame.RhythmGame
                 LoadChart(fileStream);
             }
             else Debug.Log("File not found");
+
+            ChartObject testObject = new()
+            {
+                Measure = 1,
+                Tick = 0
+            };
+            
+            Debug.Log(CalculateTime(testObject));
         }
     }
 }

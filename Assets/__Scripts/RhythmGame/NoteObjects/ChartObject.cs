@@ -9,6 +9,7 @@ namespace SaturnGame.RhythmGame
     {
         public int Measure;
         [Range(0, 1919)] public int Tick;
+        public float Time;
     }
 
     public class ObjectEnums

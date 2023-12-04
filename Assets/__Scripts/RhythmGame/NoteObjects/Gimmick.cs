@@ -81,6 +81,14 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        public Gimmick (int measure, int tick, float bpm, TimeSignature timeSig)
+        {
+            Measure = measure;
+            Tick = tick;
+            BeatsPerMinute = bpm;
+            TimeSig = timeSig;
+        }
+
         public ObjectEnums.GimmickType GimmickType;
         public float BeatsPerMinute;
         public TimeSignature TimeSig;

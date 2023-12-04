@@ -13,6 +13,8 @@ namespace SaturnGame.Rendering
         [SerializeField] private float animationSpeed = 0.008f;
         [SerializeField] private Material material;
 
+        [SerializeField] private Note test;
+
         public void SetRendererProperties(int noteWidth, int opacity, int laneType)
         {
             material.SetFloat("_NoteWidth", noteWidth);
@@ -56,6 +58,10 @@ namespace SaturnGame.Rendering
             material.SetFloat("_ComboShine", Convert.ToInt32(state));
         }
 
+        /// <summary>
+        /// Sets GuideLane Mask with a Mask Note.
+        /// </summary>
+        /// <param name="maskNote"></param>
         public async void SetMask(Note maskNote)
         {
             if (maskNote.NoteType is not (ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove))
@@ -105,14 +111,21 @@ namespace SaturnGame.Rendering
             int floor = Mathf.FloorToInt(halfSize);
             int steps = Mathf.CeilToInt(halfSize);
             int centerClockwise = position + floor;
-            int centerCounterclockwise = position + floor + 1;
+            int centerCounterclockwise = size % 2 != 0 ? centerClockwise : centerClockwise + 1;
+            int offset = size % 2 != 0 ? 60 : 59;
 
             for (int i = 0; i < steps; i++)
             {
-                laneSegments[(centerClockwise - i + 59) % 60].SetActive(state);
-                laneSegments[(centerCounterclockwise + i + 59) % 60].SetActive(state);
+                laneSegments[(centerClockwise - i + offset) % 60].SetActive(state);
+                laneSegments[(centerCounterclockwise + i + offset) % 60].SetActive(state);
                 await Awaitable.WaitForSecondsAsync(animationSpeed);
             }
+        }
+    
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.O))
+                SetMask(test);
         }
     }
 }
