@@ -31,7 +31,7 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        void SetRendererProperties(Note note, int width, bool sync)
+        public void SetRendererProperties(Note note, int width)
         {
             Size = note.Size;
             Position = note.Position;
@@ -39,12 +39,12 @@ namespace SaturnGame.Rendering
             Color = NoteColors.GetColor(note.NoteType);
             Width = width;
 
-            IsSync = sync;
+            IsSync = note.IsSync;
             IsBonus = note.BonusType is ObjectEnums.BonusType.Bonus; 
             IsChain = note.NoteType is ObjectEnums.NoteType.Chain;
         }
 
-        void UpdateRenderer()
+        public void UpdateRenderer()
         {
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);

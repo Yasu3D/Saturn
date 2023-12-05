@@ -1,3 +1,3 @@
 using SaturnGame.Rendering;
 using SaturnGame.RhythmGame;
-public class NoteObjectPool : MonobehaviourPool<NoteRenderer> { }
+public class NoteObjectPool : MonobehaviourPool<NoteContainer> { }

@@ -35,7 +35,7 @@ namespace SaturnGame.Rendering
                 
                 case 1:
                     // Light Yellow
-                    return new Color (0.73f, 0.65f, 0.2f);
+                    return new Color (0.76f, 0.69f, 0.32f);
                 
                 case 2:
                     // Orange

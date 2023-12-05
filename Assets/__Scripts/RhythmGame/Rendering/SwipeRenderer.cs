@@ -27,7 +27,7 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        void SetRendererProperties(Note note)
+        public void SetRendererProperties(Note note)
         {
             Size = note.Size;
             Position = note.Position;
@@ -39,7 +39,7 @@ namespace SaturnGame.Rendering
             Direction = dir ? "_COUNTERCLOCKWISE" : "_CLOCKWISE";
         }
 
-        void UpdateRenderer()
+        public void UpdateRenderer()
         {
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);

@@ -61,6 +61,26 @@ namespace SaturnGame.RhythmGame
             return newObject;
         }
 
+        public T GetObject()
+        {
+            if (AvailableObjects.Count > 0)
+            {
+                T collectedObject = AvailableObjects[0];
+
+                AvailableObjects.RemoveAt(0);
+                ActiveObjects.Add(collectedObject);
+
+                return collectedObject;
+            }
+
+            T newObject = CreateNewObject();
+
+            ActiveObjects.Add(newObject);
+            PoolSize++;
+
+            return newObject;
+        }
+
         public void ReleaseObject(T target)
         {
             if (!ActiveObjects.Contains(target))

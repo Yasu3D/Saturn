@@ -13,8 +13,13 @@ namespace SaturnGame.Rendering
         [SerializeField] private float animationSpeed = 0.008f;
         [SerializeField] private Material material;
 
-        [SerializeField] private Note test;
-
+        /// <summary>
+        /// Applies Material settings for different apperances. <br />
+        /// Parameters should be from user preferences by default.
+        /// </summary>
+        /// <param name="noteWidth">Note width from 1 - 5</param>
+        /// <param name="opacity">Opacity of Guide Lane</param>
+        /// <param name="laneType">Numer of visible lanes from 0 - 6</param>
         public void SetRendererProperties(int noteWidth, int opacity, int laneType)
         {
             material.SetFloat("_NoteWidth", noteWidth);
@@ -53,19 +58,29 @@ namespace SaturnGame.Rendering
             material.EnableKeyword("_LANETYPE" + keyword);
         }
 
+
+        /// <summary>
+        /// Sets a scrolling shine effect to <c>state</c>. <br />
+        /// Used for indicating a combo > 200
+        /// </summary>
         public void SetComboShine(bool state)
         {
             material.SetFloat("_ComboShine", Convert.ToInt32(state));
         }
 
+
         /// <summary>
         /// Sets GuideLane Mask with a Mask Note.
         /// </summary>
-        /// <param name="maskNote"></param>
-        public async void SetMask(Note maskNote)
+        /// <param name="maskNote">Mask Note to animate from</param>
+        /// <param name="speed">Animation speed multiplier</param>
+        public async void SetMask(Note maskNote, float speed = 1)
         {
             if (maskNote.NoteType is not (ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove))
                 return;
+
+            // Avoid division by zero as a failsafe.
+            float clampedSpeed = Mathf.Max(0.00001f, speed);
 
             int position = maskNote.Position;
             int size = maskNote.Size;
@@ -75,37 +90,38 @@ namespace SaturnGame.Rendering
             switch (direction)
             {
                 case ObjectEnums.MaskDirection.Clockwise:
-                    await AnimateClockwise(position, size, state);
+                    await AnimateClockwise(position, size, state, clampedSpeed);
                     break;
                 case ObjectEnums.MaskDirection.Counterclockwise:
-                    await AnimateCounterclockwise(position, size, state);
+                    await AnimateCounterclockwise(position, size, state, clampedSpeed);
                     break;
                 case ObjectEnums.MaskDirection.Center:
-                    await AnimateCenter(position, size, state);
+                    await AnimateCenter(position, size, state, clampedSpeed);
                     break;
             }
         }
 
-        private async Task AnimateClockwise(int position, int size, bool state)
+
+        private async Task AnimateClockwise(int position, int size, bool state, float speed)
         {
             for (int i = 0; i < size; i++)
             {
                 laneSegments[(position + size - i + 59) % 60].SetActive(state);
-                await Awaitable.WaitForSecondsAsync(animationSpeed);
+                await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
             }
         }
 
-        private async Task AnimateCounterclockwise(int position, int size, bool state)
+        private async Task AnimateCounterclockwise(int position, int size, bool state, float speed)
         {
             for (int i = 0; i < size; i++)
             {
                 laneSegments[(i + position + 60) % 60].SetActive(state);
-                await Awaitable.WaitForSecondsAsync(animationSpeed);
+                await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
             }
 
         }
 
-        private async Task AnimateCenter(int position, int size, bool state)
+        private async Task AnimateCenter(int position, int size, bool state, float speed)
         {
             float halfSize = size * 0.5f;
             int floor = Mathf.FloorToInt(halfSize);
@@ -118,14 +134,8 @@ namespace SaturnGame.Rendering
             {
                 laneSegments[(centerClockwise - i + offset) % 60].SetActive(state);
                 laneSegments[(centerCounterclockwise + i + offset) % 60].SetActive(state);
-                await Awaitable.WaitForSecondsAsync(animationSpeed);
+                await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
             }
-        }
-    
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.O))
-                SetMask(test);
         }
     }
 }

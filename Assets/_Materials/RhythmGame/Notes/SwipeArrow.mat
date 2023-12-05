@@ -66,7 +66,7 @@ Material:
     - _Gradient_Power: 1.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Rotation_Speed: 2
+    - _Rotation_Speed: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _NoteColor: {r: 0.06666667, g: 0.5647059, b: 0.05490196, a: 1}

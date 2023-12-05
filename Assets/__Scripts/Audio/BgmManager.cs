@@ -4,13 +4,11 @@ namespace SaturnGame.RhythmGame
 {
     public class BgmManager : MonoBehaviour
     {
-        // ==== Music Info ====
         [Header("MUSIC INFO")]
         public float BeatDuration;
         public float BeatsPerMinute;
         public TimeSignature TimeSig;
 
-        // ==== BGM ====
         [Header("BGM")]
         public AudioSource bgmPlayer;
         public AudioClip bgmClip;

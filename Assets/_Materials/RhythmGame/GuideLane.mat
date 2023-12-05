@@ -67,7 +67,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _JudgeLineColor:
-        m_Texture: {fileID: 2800000, guid: 355d7bd8c25c1884ebeadeed3c1e72f2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 71022aa198031c34eb65679a3fe70358, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _JudgeLineMap:

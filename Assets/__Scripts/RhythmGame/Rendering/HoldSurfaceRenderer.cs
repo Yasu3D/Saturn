@@ -12,6 +12,7 @@ namespace SaturnGame.Rendering
         private const float tunnelRadius = 1.75f;
         private const float tunnelLength = 6f;
         // ==== MESH ====
+        [SerializeField] private Material materialTemplate;
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private Mesh holdMesh;
@@ -19,7 +20,6 @@ namespace SaturnGame.Rendering
         private Vector2[] uv;
         private int[] triangles;
 
-        [SerializeField] private Material materialTemplate;
         private Material materialInstance;
 
         // ==== NOTE INFO ====

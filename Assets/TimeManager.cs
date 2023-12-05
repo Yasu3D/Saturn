@@ -92,7 +92,7 @@ namespace SaturnGame.RhythmGame
             }
 
             if (Input.GetKeyDown(KeyCode.I))
-                SetPlaybackSpeed(0.2f);
+                SetPlaybackSpeed(0.6f);
         }
     }
 }
