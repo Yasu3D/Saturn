@@ -150,11 +150,11 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BackgroundColor: {r: 0.11372546, g: 0.12156857, b: 0.19607836, a: 1}
+    - _BackgroundColor: {r: 0.13166, g: 0.14073999, b: 0.22700001, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GuideLaneColor: {r: 0.23529407, g: 0.24313727, b: 0.33725488, a: 1}
+    - _GuideLaneColor: {r: 0.25255814, g: 0.26097676, b: 0.36200002, a: 1}
     - _LaneShineColor1: {r: 0.23529407, g: 0.24313727, b: 0.33725488, a: 1}
     - _LaneShineColor2: {r: 0.572549, g: 0.68627447, b: 0.737255, a: 1}
     - _Lane_0: {r: 0, g: 0, b: 0, a: 0}

@@ -1,3 +1,3 @@
 using SaturnGame.Rendering;
 using SaturnGame.RhythmGame;
-public class SyncObjectPool : MonobehaviourPool<ObjectRenderer> { }
+public class SyncObjectPool : MonobehaviourPool<GenericContainer> { }

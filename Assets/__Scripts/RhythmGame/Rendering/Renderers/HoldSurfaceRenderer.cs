@@ -13,16 +13,16 @@ namespace SaturnGame.Rendering
         private const float tunnelLength = 6f;
         // ==== MESH ====
         [SerializeField] private Material materialTemplate;
+        private Material materialInstance;
+
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private MeshRenderer meshRenderer;
+
         [SerializeField] private Mesh holdMesh;
         private Vector3[] vertices;
         private Vector2[] uv;
         private int[] triangles;
 
-        private Material materialInstance;
-
-        // ==== NOTE INFO ====
         public int ColorID { get; private set; }
 
         void Awake()
@@ -30,13 +30,10 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        void SetRendererProperties(Note note)
+        void SetRenderer(Note note)
         {
             ColorID = NoteColors.GetColorID(note.NoteType);
-        }
 
-        void UpdateRenderer()
-        {
             if (materialInstance.HasFloat("_ColorID"))
                 materialInstance.SetFloat("_ColorID", ColorID);
 

@@ -9,11 +9,11 @@ namespace SaturnGame.Rendering
     public class NoteColors
     {
         /// <summary>
-        /// Returns user-selected colors depending on NoteType
+        /// Returns user-selected colors and brightness values depending on NoteType
         /// </summary>
         /// <param name="noteType"></param>
         /// <returns></returns>
-        public static Color GetColor(ObjectEnums.NoteType noteType)
+        public static (Color color, float subtract) GetColor(ObjectEnums.NoteType noteType)
         {
             int id = GetColorID(noteType);
 
@@ -21,68 +21,68 @@ namespace SaturnGame.Rendering
         }
 
         /// <summary>
-        /// Returns colors from their corresponding ID
+        /// Returns colors and brightness from their corresponding ID
         /// </summary>
         /// <param name="colorID"></param>
         /// <returns></returns>
-        public static Color GetColor(int colorID)
+        public static (Color color, float subtract) GetColor(int colorID)
         {
             switch (colorID)
             {
                 case 0:
                     // Light Magenta
-                    return new Color (1.0f, 0.22f, 0.93f);
+                    return (new Color (1.0f, 0.22f, 0.93f), 0.3f);
                 
                 case 1:
                     // Light Yellow
-                    return new Color (0.76f, 0.69f, 0.32f);
+                    return (new Color (1.0f, 0.91f, 0.42f), 0.5f);
                 
                 case 2:
                     // Orange
-                    return new Color (1.0f, 0.6f, 0.0f);
+                    return (new Color (1.0f, 0.6f, 0.0f), 0.3f);
                 
                 case 3:
                     // Lime
-                    return new Color (0.14f, 0.82f, 0.11f);
+                    return (new Color (0.14f, 0.82f, 0.11f), 0.3f);
                 
                 case 4:
                     // Red
-                    return new Color (0.87f, 0.09f, 0.09f);
+                    return (new Color (0.87f, 0.09f, 0.09f), 0.3f);
 
                 case 5:
                     // Sky Blue
-                    return new Color (0.12f, 0.67f, 1.0f);
+                    return (new Color (0.12f, 0.67f, 1.0f), 0.3f);
                 
                 case 6:
                     // Dark Yellow
-                    return new Color (0.6f, 0.54f, 0.0f);
+                    return (new Color (0.6f, 0.54f, 0.0f), 0.3f);
                 
                 case 7:
                     // Light Red
-                    return new Color (1.0f, 0.3f, 0.0f);
+                    return (new Color (1.0f, 0.3f, 0.0f), 0.3f);
                 
                 case 8:
                     // Yellow
-                    return new Color (1.0f, 0.94f, 0.0f);
+                    return (new Color (1.0f, 0.94f, 0.0f), 0.3f);
                 
                 case 9:
                     // Pure Green
-                    return new Color (0.22f, 0.62f, 0.42f);
+                    return (new Color (0.22f, 0.62f, 0.42f), 0.3f);
                 
                 case 10:
                     // Bright Blue
-                    return new Color (0.0f, 0.26f, 1.0f);
+                    return (new Color (0.0f, 0.26f, 1.0f), 0.3f);
 
                 case 11:
                     // Light Blue
-                    return new Color (0.4f, 0.8f, 1.0f);
+                    return (new Color (0.4f, 0.8f, 1.0f), 0.3f);
                 
                 case 12:
                     // Light Gray  
-                    return new Color (0.78f, 0.78f, 0.78f);
+                    return (new Color (0.78f, 0.78f, 0.78f), 0.3f);
 
                 default:
-                    return new Color (0,0,0);
+                    return (new Color (0,0,0), 0.3f);
             }
         }
 

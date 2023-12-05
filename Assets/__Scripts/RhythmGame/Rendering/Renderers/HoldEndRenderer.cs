@@ -6,12 +6,8 @@ namespace SaturnGame.Rendering
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     [AddComponentMenu("SaturnGame/Rendering/Hold End Renderer")]
-    public class HoldEndRenderer : MonoBehaviour
+    public class HoldEndRenderer : IObjectRenderer
     {
-        // ==== MESH ====
-        [SerializeField] private List<Mesh> meshes;
-        [SerializeField] private MeshFilter meshFilter;
-        [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
 
@@ -26,16 +22,13 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        void SetRendererProperties(Note note)
+        void SetRenderer(Note note)
         {
             Size = note.Size;
             Position = note.Position;
 
             ColorID = NoteColors.GetColorID(note.NoteType);
-        }
 
-        void UpdateRenderer()
-        {
             if (materialInstance.HasFloat("_ColorID"))
                 materialInstance.SetFloat("_ColorID", ColorID);
 

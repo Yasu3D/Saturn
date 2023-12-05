@@ -7,12 +7,9 @@ namespace SaturnGame.Rendering
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     [AddComponentMenu("SaturnGame/Rendering/Note Renderer")]
-    public class NoteRenderer : MonoBehaviour
+    public class NoteRenderer : IObjectRenderer
     {
         // ==== MESH ====
-        [SerializeField] private List<Mesh> meshes;
-        [SerializeField] private MeshFilter meshFilter;
-        [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
 
@@ -21,6 +18,7 @@ namespace SaturnGame.Rendering
         public int Position { get; private set; }
 
         public Color Color { get; private set; }
+        public float SubStrength { get; private set; }
         public int Width { get; private set; } = 3;
         public bool IsSync { get; private set; } = false;
         public bool IsBonus { get; private set; } = false;
@@ -31,21 +29,21 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRendererProperties(Note note, int width)
+        public void SetRenderer(Note note, int width)
         {
             Size = note.Size;
             Position = note.Position;
 
-            Color = NoteColors.GetColor(note.NoteType);
+            (Color color, float subStrength) = NoteColors.GetColor(note.NoteType);
+
+            Color = color;
+            SubStrength = subStrength;
             Width = width;
 
             IsSync = note.IsSync;
             IsBonus = note.BonusType is ObjectEnums.BonusType.Bonus; 
             IsChain = note.NoteType is ObjectEnums.NoteType.Chain;
-        }
 
-        public void UpdateRenderer()
-        {
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);
 
@@ -60,6 +58,9 @@ namespace SaturnGame.Rendering
 
             if (materialInstance.HasFloat("_Chain"))
                 materialInstance.SetFloat("_Chain", Convert.ToInt32(IsChain));
+
+            if (materialInstance.HasFloat("_SubStrength"))
+                materialInstance.SetFloat("_SubStrength", SubStrength);
 
             meshFilter.mesh = meshes[Size - 1];
             meshRenderer.material = materialInstance;

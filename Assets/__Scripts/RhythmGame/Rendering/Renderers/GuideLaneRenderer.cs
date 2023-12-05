@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SaturnGame.RhythmGame;
@@ -7,6 +6,7 @@ using UnityEngine;
 
 namespace SaturnGame.Rendering
 {
+    [AddComponentMenu("SaturnGame/Rendering/Guide Lane Renderer")]
     public class GuideLaneRenderer : MonoBehaviour
     {
         [SerializeField] private List<GameObject> laneSegments;
@@ -20,7 +20,7 @@ namespace SaturnGame.Rendering
         /// <param name="noteWidth">Note width from 1 - 5</param>
         /// <param name="opacity">Opacity of Guide Lane</param>
         /// <param name="laneType">Numer of visible lanes from 0 - 6</param>
-        public void SetRendererProperties(int noteWidth, int opacity, int laneType)
+        public void SetRenderer(int noteWidth, int opacity, int laneType)
         {
             material.SetFloat("_NoteWidth", noteWidth);
             material.SetFloat("_Opacity", opacity * 0.2f); // remap from 0-5 to 0-1

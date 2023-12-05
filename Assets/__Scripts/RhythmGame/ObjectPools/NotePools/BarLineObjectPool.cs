@@ -1,2 +1,2 @@
 using SaturnGame.RhythmGame;
-public class BarLineObjectPool : ObjectPool { }
+public class BarLineObjectPool : MonobehaviourPool<BarLineContainer> { }
