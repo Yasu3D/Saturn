@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using SaturnGame.Rendering;
 using SaturnGame.Settings;
 using UnityEngine;
@@ -81,6 +82,20 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        private Gimmick bgmData;
+        private int bgmDataIndex = 0;
+        private void ProcessBgmData()
+        {
+            if (bgmDataIndex > chart.notes.Count - 1) return;
+
+            while (bgmDataIndex < chart.bgmDataGimmicks.Count && chart.bgmDataGimmicks[bgmDataIndex].Time <= nextMeasureTime)
+            {
+                bgmData = chart.bgmDataGimmicks[bgmDataIndex];
+
+                if (bgmData != null) bgmManager.UpdateBgmData(bgmData.BeatsPerMinute, bgmData.TimeSig);
+                bgmDataIndex++;
+            }
+        }
 
         private void UpdateObjects()
         {
@@ -165,7 +180,8 @@ namespace SaturnGame.RhythmGame
             NoteContainer container = notePool.GetObject();
             
             container.note = input;
-            container.renderer.SetRenderer(input, 3);
+            int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
+            container.renderer.SetRenderer(input, noteWidth);
 
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
@@ -227,6 +243,7 @@ namespace SaturnGame.RhythmGame
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
+            ProcessBgmData();
             ProcessMasks();
             ProcessNotes();
             ProcessBarLines();

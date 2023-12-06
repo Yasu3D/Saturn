@@ -5,6 +5,7 @@ namespace SaturnGame.RhythmGame
     public class BgmManager : MonoBehaviour
     {
         [Header("MUSIC INFO")]
+
         public float BeatDuration;
         public float BeatsPerMinute;
         public TimeSignature TimeSig;
