@@ -124,6 +124,7 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+
         private void UpdateObjects()
         {
             foreach (NoteContainer container in notePool.ActiveObjects)
@@ -147,7 +148,7 @@ namespace SaturnGame.RhythmGame
 
         private void ReleaseObjects()
         {
-            // get rid of objects by releasing them back into the pool.
+            // Get rid of objects by releasing them back into the pool.
             foreach (NoteContainer container in noteGarbage)
             {
                 notePool.ReleaseObject(container);
@@ -173,6 +174,7 @@ namespace SaturnGame.RhythmGame
                 barLinePool.ReleaseObject(barLine);
             }
 
+            // Clear the garbage lists
             noteGarbage.Clear();
             snapGarbage.Clear();
             swipeGarbage.Clear();
@@ -180,22 +182,6 @@ namespace SaturnGame.RhythmGame
             barLineGarbage.Clear();
         }
 
-        private float GetScaledTime(float input)
-        {
-            float hiSpeed = lastHiSpeedChange.HiSpeed;
-            float hiSpeedTime = lastHiSpeedChange.Time;
-            float hiSpeedScaledTime = lastHiSpeedChange.ScaledVisualTime;
-            
-            return hiSpeedScaledTime + ((input - hiSpeedTime) * hiSpeed);
-        }
-
-        private float ScrollDuration()
-        {
-            // A note scrolling from it's spawnpoint to the judgement line takes
-            // approximately 3266.667 milliseconds. This is 10x that, because
-            // NoteSpeed is stored as an integer that's 10x the actual value.
-            return 32660.667f / SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
-        }
 
         private void AnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
         {
@@ -205,13 +191,13 @@ namespace SaturnGame.RhythmGame
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
             transform.localScale = new Vector3(scroll, scroll, scroll);
 
-            // Collect all objects after passing the judgement line. To return them to their pool.
-            // Using 1/4 of the ScrollDuration to keep the distance they're collected at consistent.
+            // Collect all objects after passing the judgement line to return them to their pool.
             if (GetScaledTime(timeManager.VisualTime) - despawnTime * 0.25f >= time)
             {
                 garbage.Add(obj);
             }
         }
+
 
         private NoteContainer GetNote(Note input)
         {
@@ -253,6 +239,17 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
+        private BarLineContainer GetBarLine(float timestamp)
+        {
+            BarLineContainer container = barLinePool.GetObject();
+            
+            container.time = timestamp;
+            container.transform.SetParent(activeObjectsContainer);
+            container.gameObject.SetActive(true);
+
+            return container;
+        }
+
         private GenericContainer GetR_Effect(Note input)
         {
             GenericContainer container = r_EffectPool.GetObject();
@@ -260,17 +257,6 @@ namespace SaturnGame.RhythmGame
             container.note = input;
             container.renderer.SetRenderer(input.Size, input.Position);
 
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
-        }
-
-        private BarLineContainer GetBarLine(float timestamp)
-        {
-            BarLineContainer container = barLinePool.GetObject();
-            
-            container.time = timestamp;
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
 
@@ -290,6 +276,25 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
+
+        private float GetScaledTime(float input)
+        {
+            float hiSpeed = lastHiSpeedChange.HiSpeed;
+            float hiSpeedTime = lastHiSpeedChange.Time;
+            float hiSpeedScaledTime = lastHiSpeedChange.ScaledVisualTime;
+            
+            return hiSpeedScaledTime + ((input - hiSpeedTime) * hiSpeed);
+        }
+
+        private float ScrollDuration()
+        {
+            // A Note scrolling from it's spawn point to the judgement line takes
+            // approximately 3266.667 milliseconds. This is 10x that, because
+            // NoteSpeed is stored as an integer that's 10x the actual value.
+            return 32660.667f / SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
+        }
+
+
         void Update()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
@@ -300,6 +305,7 @@ namespace SaturnGame.RhythmGame
             ProcessNotes();
             ProcessSync();
             ProcessBarLines();
+            
             UpdateObjects();
             ReleaseObjects();
         }

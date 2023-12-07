@@ -20,6 +20,7 @@ namespace SaturnGame.Rendering
             return GetColor(id);
         }
 
+
         /// <summary>
         /// Returns colors and brightness from their corresponding ID
         /// </summary>
@@ -86,6 +87,7 @@ namespace SaturnGame.Rendering
             }
         }
 
+
         /// <summary>
         /// Returns colors adjusted for the swipe shader from their corresponding ID
         /// </summary>
@@ -151,6 +153,7 @@ namespace SaturnGame.Rendering
                     return new Color (0,0,0);
             }
         }
+
 
         /// <summary>
         /// Returns color ID from user settings.

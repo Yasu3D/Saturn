@@ -35,6 +35,7 @@ namespace SaturnGame.RhythmGame
 
         private int readerIndex = 0;
 
+
         /// <summary>
         /// Parses a <c>.mer</c> file and creates lists of objects from it.
         /// </summary>
@@ -96,30 +97,34 @@ namespace SaturnGame.RhythmGame
         }
 
 
+
         /// <summary>
-        /// Check for common errors that may happen during a chart load.
+        /// Converts a Stream into a List of strings for parsing.
         /// </summary>
+        /// <param name="stream"></param>
         /// <returns></returns>
-        private (bool passed, string error) CheckLoadErrors()
+        private List<string> GetFileFromStream(Stream stream)
         {
-            // I made the checks separate to spare the next person reading this an aneyurism.
-            // It's also organized from most likely to least likely, so it doesn't matter much.
-            if (bgmManager.bgmClip is null)
-                return (false, "BgmClip not found!");
+            List<string> lines = new List<string>();
+            StreamReader reader = new StreamReader(stream);
+            while (!reader.EndOfStream)
+                lines.Add(reader.ReadLine() ?? "");
+            return lines;
+        }
 
-            if (endOfChart is null)
-                return (false, "Chart is missing End of Chart note!");
 
-            if (notes.Last().Time > bgmManager.bgmClip.length * 1000) // conv. to ms
-                return (false, "Chart is longer than audio!");
+        /// <summary>
+        /// Parses Metadata tags like "#OFFSET"
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        private string GetMetadata(string input, string tag)
+        {
+            if (input.Contains(tag))
+                return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length);
 
-            if (musicFilePath is "")
-                return (false, "Music file path is missing!");
-
-            if (bgmDataGimmicks.Count == 0)
-                return (false, "Chart is missing BPM and TimeSignature data!");
-
-            return (true, "");
+            return null;;
         }
 
 
@@ -310,42 +315,40 @@ namespace SaturnGame.RhythmGame
 
 
         /// <summary>
+        /// Check for common errors that may happen during a chart load.
+        /// </summary>
+        /// <returns></returns>
+        private (bool passed, string error) CheckLoadErrors()
+        {
+            // I made the checks separate to spare the next person reading this an aneyurism.
+            // It's also organized from most likely to least likely, so it doesn't matter much.
+            if (bgmManager.bgmClip is null)
+                return (false, "BgmClip not found!");
+
+            if (endOfChart is null)
+                return (false, "Chart is missing End of Chart note!");
+
+            if (notes.Last().Time > bgmManager.bgmClip.length * 1000) // conv. to ms
+                return (false, "Chart is longer than audio!");
+
+            if (musicFilePath is "")
+                return (false, "Music file path is missing!");
+
+            if (bgmDataGimmicks.Count == 0)
+                return (false, "Chart is missing BPM and TimeSignature data!");
+
+            return (true, "");
+        }
+
+
+
+        /// <summary>
         /// Generates a Bar Line every Measure.
         /// </summary>
         private void GenerateBarLines()
         {
             for (int i = 0; i <= endOfChart.Measure; i++)
                 barLines.Add(new ChartObject(i, 0));
-        }
-
-
-        /// <summary>
-        /// Converts a Stream into a List of strings for parsing.
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        private List<string> GetFileFromStream(Stream stream)
-        {
-            List<string> lines = new List<string>();
-            StreamReader reader = new StreamReader(stream);
-            while (!reader.EndOfStream)
-                lines.Add(reader.ReadLine() ?? "");
-            return lines;
-        }
-
-
-        /// <summary>
-        /// Parses Metadata tags like "#OFFSET"
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="tag"></param>
-        /// <returns></returns>
-        private string GetMetadata(string input, string tag)
-        {
-            if (input.Contains(tag))
-                return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length);
-
-            return null;;
         }
 
 
@@ -549,7 +552,6 @@ namespace SaturnGame.RhythmGame
             {
                 float currentTime = hiSpeedGimmicks[i].Time;
                 float scaledTime = lastScaledTime + (Mathf.Abs(currentTime - lastTime) * lastHiSpeed);
-                Debug.Log($"{lastScaledTime} + ({currentTime} - {lastScaledTime}) * {lastHiSpeed} = {scaledTime}");
                 hiSpeedGimmicks[i].ScaledVisualTime = scaledTime;
 
                 lastScaledTime = scaledTime;
@@ -557,6 +559,7 @@ namespace SaturnGame.RhythmGame
                 lastHiSpeed = hiSpeedGimmicks[i].HiSpeed;
             }
         }
+
 
 
         /// <summary>
