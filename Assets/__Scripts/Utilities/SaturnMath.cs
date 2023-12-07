@@ -14,7 +14,7 @@ namespace SaturnGame
         public const float tickToMeasure = 1.0f / 1920.0f;
 
         /// <summary>
-        /// Unclamped variant of Unity's <c>Mathf.InverseLerp</c>.
+        /// Unclamped version of Unity's <c>Mathf.InverseLerp</c>.
         /// </summary>
         /// <returns>
         /// Where <c>value</c> lies between <c>a</c> and <c>b</c>.
@@ -27,6 +27,15 @@ namespace SaturnGame
             }
 
             return 0f;
+        }
+
+        /// <summary>
+        /// Returns the Euclidean remainder ("true modulo") of a number. <br />
+        /// The result will always be positive, unlike using the <c>%</c> operator in C#.
+        /// </summary>
+        public static int Modulo(int x, int m)
+        {
+            return (x % m + m) % m;
         }
     }
 }

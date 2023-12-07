@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using SaturnGame.Rendering;
 using SaturnGame.Settings;
 using UnityEngine;
@@ -53,7 +52,7 @@ namespace SaturnGame.RhythmGame
             if (noteIndex > chart.notes.Count - 1) return;
 
             // Scans through the chart note by note.
-            while (noteIndex < chart.notes.Count && timeManager.VisualTime + ScrollDuration() >= chart.notes[noteIndex].Time)
+            while (noteIndex < chart.notes.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.notes[noteIndex].ScaledVisualTime)
             {
                 Note currentNote = chart.notes[noteIndex];
 
@@ -72,13 +71,15 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-        private float nextMeasureTime = 0;
+        private int barLineIndex = 0;
         private void ProcessBarLines()
         {
-            if (timeManager.VisualTime + ScrollDuration() >= nextMeasureTime)
+            if (barLineIndex > chart.barLines.Count - 1) return;
+
+            while (barLineIndex < chart.barLines.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.barLines[barLineIndex].ScaledVisualTime)
             {
-                GetBarLine(nextMeasureTime);
-                nextMeasureTime += bgmManager.BeatDuration * 4;
+                GetBarLine(chart.barLines[barLineIndex].ScaledVisualTime);
+                barLineIndex++;
             }
         }
 
@@ -88,7 +89,7 @@ namespace SaturnGame.RhythmGame
         {
             if (bgmDataIndex > chart.notes.Count - 1) return;
 
-            while (bgmDataIndex < chart.bgmDataGimmicks.Count && chart.bgmDataGimmicks[bgmDataIndex].Time <= nextMeasureTime)
+            while (bgmDataIndex < chart.bgmDataGimmicks.Count && chart.bgmDataGimmicks[bgmDataIndex].Time <= timeManager.VisualTime)
             {
                 bgmData = chart.bgmDataGimmicks[bgmDataIndex];
 
@@ -97,22 +98,35 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        private Gimmick lastHiSpeedChange = new(0, 0, ObjectEnums.GimmickType.HiSpeed, 1, null);
+        private int hiSpeedIndex = 0;
+        private void ProcessHiSpeed()
+        {
+            if (hiSpeedIndex > chart.notes.Count - 1) return;
+
+            while (hiSpeedIndex < chart.hiSpeedGimmicks.Count && chart.hiSpeedGimmicks[hiSpeedIndex].Time <= timeManager.VisualTime)
+            {
+                lastHiSpeedChange = chart.hiSpeedGimmicks[hiSpeedIndex];
+                hiSpeedIndex++;
+            }
+        }
+
         private void UpdateObjects()
         {
             foreach (NoteContainer container in notePool.ActiveObjects)
-                AnimateObject(container, noteGarbage, container.note.Time, container.renderer.transform);
+                AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, ScrollDuration());
 
             foreach (SnapContainer container in snapPool.ActiveObjects)
-                AnimateObject(container, snapGarbage, container.note.Time, container.transform);
+                AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, ScrollDuration());
 
             foreach (SwipeContainer container in swipePool.ActiveObjects)
-                AnimateObject(container, swipeGarbage, container.note.Time, container.transform);
+                AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, ScrollDuration());
 
             foreach (GenericContainer container in r_EffectPool.ActiveObjects)
-                AnimateObject(container, r_EffectGarbage, container.note.Time, container.transform);
+                AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, ScrollDuration());
 
             foreach (BarLineContainer container in barLinePool.ActiveObjects)
-                AnimateObject(container, barLineGarbage, container.time, container.transform);
+                AnimateObject(container, barLineGarbage, container.time, container.transform, 0);
         }
 
         private void ReleaseObjects()
@@ -151,6 +165,15 @@ namespace SaturnGame.RhythmGame
         }
 
 
+        private float GetScaledTime(float input)
+        {
+            float hiSpeed = lastHiSpeedChange.HiSpeed;
+            float hiSpeedTime = lastHiSpeedChange.Time;
+            float hiSpeedScaledTime = lastHiSpeedChange.ScaledVisualTime;
+            
+            return hiSpeedScaledTime + ((input - hiSpeedTime) * hiSpeed);
+        }
+
         private float ScrollDuration()
         {
             // A note scrolling from it's spawnpoint to the judgement line takes
@@ -159,9 +182,9 @@ namespace SaturnGame.RhythmGame
             return 32660.667f / SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
         }
 
-        private void AnimateObject<T> (T obj, List<T> garbage, float time, Transform transform)
+        private void AnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
         {
-            float distance = time - timeManager.VisualTime;
+            float distance = time - GetScaledTime(timeManager.VisualTime);
             float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
 
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
@@ -169,7 +192,7 @@ namespace SaturnGame.RhythmGame
 
             // Collect all objects after passing the judgement line. To return them to their pool.
             // Using 1/4 of the ScrollDuration to keep the distance they're collected at consistent.
-            if (timeManager.VisualTime - ScrollDuration() * 0.25f >= time)
+            if (GetScaledTime(timeManager.VisualTime) - despawnTime * 0.25f >= time)
             {
                 garbage.Add(obj);
             }
@@ -244,6 +267,7 @@ namespace SaturnGame.RhythmGame
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
             ProcessBgmData();
+            ProcessHiSpeed();
             ProcessMasks();
             ProcessNotes();
             ProcessBarLines();

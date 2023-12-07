@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public class Gimmick : ChartObject
     {
-        public Gimmick (int measure, int tick, ObjectEnums.GimmickType gimmickType, object value1 = null, object value2 = null)
+        public Gimmick (int measure, int tick, ObjectEnums.GimmickType gimmickType, object value1 = null, object value2 = null) : base(measure, tick)
         {
             Measure = measure;
             Tick = tick;
@@ -19,20 +20,20 @@ namespace SaturnGame.RhythmGame
                     break;
 
                 case ObjectEnums.GimmickType.BeatsPerMinute:
-                    BeatsPerMinute = (float) value1;
+                    BeatsPerMinute = Convert.ToSingle(value1);
                     break;
 
                 case ObjectEnums.GimmickType.TimeSignature:
-                    TimeSig = new TimeSignature((int) value1, (int) value2);
+                    TimeSig = new TimeSignature(Convert.ToInt32(value1), Convert.ToInt32(value2));
                     break;
 
                 case ObjectEnums.GimmickType.HiSpeed:
-                    HiSpeed = (float) value1;
+                    HiSpeed = Convert.ToSingle(value1);
                     break;
             }
         }
 
-        public Gimmick (int measure, int tick, int gimmickID, object value1 = null, object value2 = null)
+        public Gimmick (int measure, int tick, int gimmickID, object value1 = null, object value2 = null) : base(measure, tick)
         {
             Measure = measure;
             Tick = tick;
@@ -42,17 +43,17 @@ namespace SaturnGame.RhythmGame
             {
                 case 2:
                     GimmickType = ObjectEnums.GimmickType.BeatsPerMinute;
-                    BeatsPerMinute = (float) value1;
+                    BeatsPerMinute = Convert.ToSingle(value1);
                     break;
 
                 case 3:
                     GimmickType = ObjectEnums.GimmickType.TimeSignature;
-                    TimeSig = new TimeSignature((int) value1, (int) value2);
+                    TimeSig = new TimeSignature(Convert.ToInt32(value1), Convert.ToInt32(value2));
                     break;
 
                 case 5:
                     GimmickType = ObjectEnums.GimmickType.HiSpeed;
-                    HiSpeed = (float) value1;
+                    HiSpeed = Convert.ToSingle(value1);
                     break;
 
                 case 6:
@@ -81,7 +82,7 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-        public Gimmick (int measure, int tick, float bpm, TimeSignature timeSig)
+        public Gimmick (int measure, int tick, float bpm, TimeSignature timeSig) : base(measure, tick)
         {
             Measure = measure;
             Tick = tick;

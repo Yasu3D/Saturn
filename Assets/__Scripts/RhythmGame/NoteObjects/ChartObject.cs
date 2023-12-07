@@ -7,9 +7,16 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public class ChartObject
     {
+        public ChartObject(int measure, int tick)
+        {
+            Measure = measure;
+            Tick = tick;
+        }
+        
         public int Measure;
         [Range(0, 1919)] public int Tick;
         public float Time;
+        public float ScaledVisualTime;
     }
 
     public class ObjectEnums

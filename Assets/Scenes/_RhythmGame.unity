@@ -967,13 +967,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BeatDuration: 0
-  BeatsPerMinute: 160
+  BeatsPerMinute: 181
   TimeSig:
     Upper: 4
     Lower: 4
     Ratio: 1
   bgmPlayer: {fileID: 1534859774}
-  bgmClip: {fileID: 8300000, guid: f5efbe8025a9dc641b8e38a250d4dc90, type: 3}
+  bgmClip: {fileID: 8300000, guid: 544cd4bdc34336d44b75b4b0f2394f18, type: 3}
 --- !u!4 &1783936257
 Transform:
   m_ObjectHideFlags: 0

@@ -28,6 +28,7 @@ namespace SaturnGame.RhythmGame
         public List<Note> notes;
         public List<HoldNote> holdNotes;
         public List<Note> masks;
+        public List<ChartObject> barLines;
         public ChartObject endOfChart;
 
         private int readerIndex = 0;
@@ -65,8 +66,12 @@ namespace SaturnGame.RhythmGame
             await Task.Run(() => ParseMetadata(merFile));
             Debug.Log("[Chart Load] Parsing Chart...");
             await Task.Run(() => ParseChart(merFile));
+            Debug.Log("[Chart Load] Generating Bar Lines...");
+            await Task.Run(() => GenerateBarLines());
             Debug.Log("[Chart Load] Creating BgmData...");
             await Task.Run(() => CreateBgmData());
+            Debug.Log("[Chart Load] Creating HiSpeedData...");
+            await Task.Run(() => CreateHiSpeedData());
             Debug.Log("[Chart Load] Calculating Time...");
             await Task.Run(() => SetTime());
 
@@ -175,7 +180,7 @@ namespace SaturnGame.RhythmGame
                     // end of chart note
                     if (noteTypeID is 14)
                     {
-                        endOfChart = new ChartObject{ Measure = measure, Tick = tick };
+                        endOfChart = new(measure, tick);
                         continue;
                     }
 
@@ -293,6 +298,16 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Generates a Bar Line every Measure.
+        /// </summary>
+        private void GenerateBarLines()
+        {
+            for (int i = 0; i <= endOfChart.Measure; i++)
+                barLines.Add(new ChartObject(i, 0));
         }
 
 
@@ -428,9 +443,36 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        /// <summary>
+        /// Calculates scaled timestamps for HiSpeed changes.
+        /// </summary>
+        private void CreateHiSpeedData()
+        {
+            foreach (Gimmick gimmick in hiSpeedGimmicks)
+            {
+                gimmick.Time = CalculateTime(gimmick);
+            }
+
+            float lastScaledTime = 0;
+            float lastTime = 0;
+            float lastHiSpeed = 1;
+            
+            for (int i = 0; i < hiSpeedGimmicks.Count; i++)
+            {
+                float currentTime = hiSpeedGimmicks[i].Time;
+                float scaledTime = lastScaledTime + (Mathf.Abs(currentTime - lastTime) * lastHiSpeed);
+                Debug.Log($"{lastScaledTime} + ({currentTime} - {lastScaledTime}) * {lastHiSpeed} = {scaledTime}");
+                hiSpeedGimmicks[i].ScaledVisualTime = scaledTime;
+
+                lastScaledTime = scaledTime;
+                lastTime = hiSpeedGimmicks[i].Time;
+                lastHiSpeed = hiSpeedGimmicks[i].HiSpeed;
+            }
+        }
+
 
         /// <summary>
-        /// Loops through every Note and Gimmick in every list <br />
+        /// Loops through every ChartObject in every list <br />
         /// and calculates the object's time in milliseconds <br />
         /// according to all BPM and TimeSignature changes.
         /// </summary>
@@ -439,11 +481,19 @@ namespace SaturnGame.RhythmGame
             foreach (Note note in notes)
             {
                 note.Time = CalculateTime(note);
+                note.ScaledVisualTime = CalculateScaledTime(note);
+            }
+
+            foreach (ChartObject obj in barLines)
+            {
+                obj.Time = CalculateTime(obj);
+                obj.ScaledVisualTime = CalculateScaledTime(obj);
             }
 
             foreach (Note note in masks)
             {
                 note.Time = CalculateTime(note);
+                note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
             // especially this makes me want to shoot myself
@@ -452,26 +502,24 @@ namespace SaturnGame.RhythmGame
                 foreach (Note note in hold.Notes)
                 {
                     note.Time = CalculateTime(note);
+                    note.ScaledVisualTime = CalculateScaledTime(note);
                 }
-            }
-
-            // maybe TODO move this somewhere else. Need to figure out how to handle hispeed first.
-            foreach (Gimmick gimmick in hiSpeedGimmicks)
-            {
-                gimmick.Time = CalculateTime(gimmick);
             }
 
             foreach (Gimmick gimmick in stopGimmicks)
             {
                 gimmick.Time = CalculateTime(gimmick);
+                gimmick.ScaledVisualTime = CalculateScaledTime(gimmick);
             }
 
             foreach (Gimmick gimmick in reverseGimmicks)
             {
                 gimmick.Time = CalculateTime(gimmick);
+                gimmick.ScaledVisualTime = CalculateScaledTime(gimmick);
             }
 
             endOfChart.Time = CalculateTime(endOfChart);
+            endOfChart.ScaledVisualTime = CalculateScaledTime(endOfChart);
         }
 
 
@@ -479,8 +527,6 @@ namespace SaturnGame.RhythmGame
         /// Calculates the object's time in milliseconds <br />
         /// according to all BPM and TimeSignature changes.
         /// </summary>
-        /// <param name="chartObject"></param>
-        /// <returns></returns>
         private float CalculateTime(ChartObject chartObject)
         {
             if (bgmDataGimmicks.Count == 0)
@@ -503,6 +549,29 @@ namespace SaturnGame.RhythmGame
         }
 
 
+        /// <summary>
+        /// Calculates a scaled timestamp for a chartObject. <br />
+        /// <b>This is slow and should not run every frame!</b>
+        /// </summary>
+        /// <remarks>
+        /// This function also relies on scaled HiSpeed timestamps to already be calculated. <br />
+        /// Make sure <c>CreateHiSpeedData()</c> has already been called before this.
+        /// </remarks>
+        private float CalculateScaledTime(ChartObject chartObject)
+        {
+            if (hiSpeedGimmicks.Count == 0)
+                return chartObject.Time;
+
+            Gimmick lastHiSpeed = hiSpeedGimmicks.LastOrDefault(x => x.Time <= chartObject.Time);
+            float hiSpeedScaledTime = lastHiSpeed != null ? lastHiSpeed.ScaledVisualTime : 0;
+            float hiSpeedTime = lastHiSpeed != null ? lastHiSpeed.Time : 0;
+            float hiSpeed = lastHiSpeed != null ? lastHiSpeed.HiSpeed : 1;
+
+            float scaledTime = hiSpeedScaledTime + ((chartObject.Time - hiSpeedTime) * hiSpeed);
+            return scaledTime;
+        }
+
+
 
 
         // DELETE THIS ON SIGHT THANKS
@@ -510,7 +579,7 @@ namespace SaturnGame.RhythmGame
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/test2.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/03_INF_Rebuff.mer");
                 if (File.Exists(filepath))
                 {
                     FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);
