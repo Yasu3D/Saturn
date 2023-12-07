@@ -300,8 +300,18 @@ namespace SaturnGame.RhythmGame
                             hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.StopStart:
+                            //stopGimmicks.Add(tempGimmick);
+                            // Convert Stops to 0/1 HiSpeed changes internally since they're functionally identical(?)
+                            tempGimmick.GimmickType = ObjectEnums.GimmickType.HiSpeed;
+                            tempGimmick.HiSpeed = 0;
+                            hiSpeedGimmicks.Add(tempGimmick);
+                            break;
                         case ObjectEnums.GimmickType.StopEnd:
-                            stopGimmicks.Add(tempGimmick);
+                            //stopGimmicks.Add(tempGimmick);
+                            // Same as above.
+                            tempGimmick.GimmickType = ObjectEnums.GimmickType.HiSpeed;
+                            tempGimmick.HiSpeed = 1;
+                            hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.ReverseEffectStart:
                         case ObjectEnums.GimmickType.ReverseEffectEnd:
