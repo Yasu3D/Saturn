@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
+using SaturnGame.Settings;
 
 namespace SaturnGame.RhythmGame
 {
@@ -29,6 +30,7 @@ namespace SaturnGame.RhythmGame
         public List<HoldNote> holdNotes;
         public List<Note> masks;
         public List<ChartObject> barLines;
+        public List<Note> syncs;
         public ChartObject endOfChart;
 
         private int readerIndex = 0;
@@ -74,6 +76,12 @@ namespace SaturnGame.RhythmGame
             await Task.Run(() => CreateHiSpeedData());
             Debug.Log("[Chart Load] Calculating Time...");
             await Task.Run(() => SetTime());
+
+            if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes)
+            {
+                Debug.Log("[Chart Load] Mirroring Chart...");
+                await Task.Run(() => MirrorChart());
+            }
 
             Debug.Log("[Chart Load] Checking for errors...");
 
@@ -357,6 +365,85 @@ namespace SaturnGame.RhythmGame
             {
                 last.IsSync = true;
                 current.IsSync = true;
+
+                GenerateSync(current, last);
+            }
+        }
+
+
+        /// <summary>
+        /// Finds shortest distance between two notes and <br />
+        /// generates a sync object connecting them
+        /// </summary>
+        private void GenerateSync(Note note0, Note note1)
+        {
+            int measure = note0.Measure;
+            int tick = note0.Tick;
+
+            // Instead of finding the shortest path between 4 points,
+            // think of two "imaginary" notes between note0 and note1 that fill the gaps.
+            // Check which of these two imaginary notes is smaller, then return that note.
+
+            // The somewhat "random" math here is explainable. Trust me.
+            // For the sizes, it subtracts 1 in the modulo, then adds back 1 after to "shift" the range from 0-60 to 1-59.
+            // The notes are also shrunk by 1 on each side, so [pos + 1] and [size - 2].
+            // These two are then simplified because they cancel each other out.
+            // The comments after each line show what it was before the simplification.
+            // Thanks for coming to my ted talk. Happy contributing.
+            
+            int position0 = SaturnMath.Modulo(note0.Position + note0.Size - 1, 60); // pos + 1 // size  - 2
+            int size0 = SaturnMath.Modulo(note1.Position - position0, 60) + 1;  // pos + 1 // shift - 1
+
+            int position1 = SaturnMath.Modulo(note1.Position + note1.Size - 1, 60); // pos + 1 // size  - 2
+            int size1 = SaturnMath.Modulo(note0.Position - position1, 60) + 1;  // pos + 1 // shift - 1
+
+            int finalPosition = size0 > size1 ? position1 : position0;
+            int finalSize = Mathf.Min(size0, size1);
+
+            Note sync = new(measure, tick, ObjectEnums.NoteType.None, ObjectEnums.BonusType.None, finalPosition, finalSize);
+            syncs.Add(sync);
+        }
+
+
+        /// <summary>
+        /// Mirrors a note along an axis.
+        /// </summary>
+        /// <remarks>
+        /// Axis 30 = horizontal mirror <br/>
+        /// Axis 0 = vertical mirror
+        /// </remarks>
+        private void MirrorObject(Note note, int axis = 30)
+        {
+            int newPos = SaturnMath.Modulo(axis - note.Size - note.Position, 60);
+
+            if (note.NoteType is ObjectEnums.NoteType.SwipeClockwise)
+                note.NoteType = ObjectEnums.NoteType.SwipeCounterclockwise;
+
+            else if (note.NoteType is ObjectEnums.NoteType.SwipeCounterclockwise)
+                note.NoteType = ObjectEnums.NoteType.SwipeClockwise;
+
+            note.Position = newPos;
+        }
+
+
+        /// <summary>
+        /// Mirrors an entire chart.
+        /// </summary>
+        private void MirrorChart()
+        {
+            foreach (Note note in notes)
+                MirrorObject(note);
+
+            foreach (Note mask in masks)
+                MirrorObject(mask);
+
+            foreach (Note sync in syncs)
+                MirrorObject(sync);
+
+            foreach (HoldNote hold in holdNotes)
+            {
+                foreach (Note note in hold.Notes)
+                    MirrorObject(note);
             }
         }
 
@@ -443,6 +530,7 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+
         /// <summary>
         /// Calculates scaled timestamps for HiSpeed changes.
         /// </summary>
@@ -482,6 +570,12 @@ namespace SaturnGame.RhythmGame
             {
                 note.Time = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
+            }
+
+            foreach (Note sync in syncs)
+            {
+                sync.Time = CalculateTime(sync);
+                sync.ScaledVisualTime = CalculateScaledTime(sync);
             }
 
             foreach (ChartObject obj in barLines)
@@ -579,7 +673,7 @@ namespace SaturnGame.RhythmGame
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/03_INF_Rebuff.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/test2.mer");
                 if (File.Exists(filepath))
                 {
                     FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);

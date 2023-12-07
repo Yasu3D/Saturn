@@ -33,6 +33,7 @@ namespace SaturnGame.RhythmGame
         private List<SwipeContainer> swipeGarbage = new();
         private List<GenericContainer> r_EffectGarbage = new();
         private List<BarLineContainer> barLineGarbage = new();
+        private List<GenericContainer> syncGarbage = new();
 
         private int maskIndex = 0;
         private void ProcessMasks()
@@ -83,6 +84,18 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        private int syncIndex = 0;
+        private void ProcessSync()
+        {
+            if (syncIndex > chart.syncs.Count - 1) return;
+
+            while (syncIndex < chart.syncs.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.syncs[syncIndex].ScaledVisualTime)
+            {
+                GetSync(chart.syncs[syncIndex]);
+                syncIndex++;
+            }
+        }
+
         private Gimmick bgmData;
         private int bgmDataIndex = 0;
         private void ProcessBgmData()
@@ -127,6 +140,9 @@ namespace SaturnGame.RhythmGame
 
             foreach (BarLineContainer container in barLinePool.ActiveObjects)
                 AnimateObject(container, barLineGarbage, container.time, container.transform, 0);
+
+            foreach (GenericContainer container in syncPool.ActiveObjects)
+                AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.renderer.transform, ScrollDuration());
         }
 
         private void ReleaseObjects()
@@ -163,7 +179,6 @@ namespace SaturnGame.RhythmGame
             r_EffectGarbage.Clear();
             barLineGarbage.Clear();
         }
-
 
         private float GetScaledTime(float input)
         {
@@ -262,6 +277,19 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
+        private GenericContainer GetSync(Note input)
+        {
+            GenericContainer container = syncPool.GetObject();
+
+            container.note = input;
+            container.renderer.SetRenderer(input.Size, input.Position);
+
+            container.transform.SetParent(activeObjectsContainer);
+            container.gameObject.SetActive(true);
+
+            return container;
+        }
+
         void Update()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
@@ -270,6 +298,7 @@ namespace SaturnGame.RhythmGame
             ProcessHiSpeed();
             ProcessMasks();
             ProcessNotes();
+            ProcessSync();
             ProcessBarLines();
             UpdateObjects();
             ReleaseObjects();

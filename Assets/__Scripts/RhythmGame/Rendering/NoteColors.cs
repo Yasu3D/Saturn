@@ -31,7 +31,7 @@ namespace SaturnGame.Rendering
             {
                 case 0:
                     // Light Magenta
-                    return (new Color (1.0f, 0.22f, 0.93f), 0.3f);
+                    return (new Color (1.0f, 0.22f, 0.93f), 0.48f);
                 
                 case 1:
                     // Light Yellow
@@ -39,15 +39,15 @@ namespace SaturnGame.Rendering
                 
                 case 2:
                     // Orange
-                    return (new Color (1.0f, 0.6f, 0.0f), 0.3f);
+                    return (new Color (1.0f, 0.6f, 0.0f), 0.25f);
                 
                 case 3:
                     // Lime
-                    return (new Color (0.14f, 0.82f, 0.11f), 0.3f);
+                    return (new Color (0.14f, 0.82f, 0.11f), 0.33f);
                 
                 case 4:
                     // Red
-                    return (new Color (0.87f, 0.09f, 0.09f), 0.3f);
+                    return (new Color (0.87f, 0.09f, 0.09f), 0.45f);
 
                 case 5:
                     // Sky Blue
@@ -55,11 +55,11 @@ namespace SaturnGame.Rendering
                 
                 case 6:
                     // Dark Yellow
-                    return (new Color (0.6f, 0.54f, 0.0f), 0.3f);
+                    return (new Color (0.6f, 0.54f, 0.0f), 0.2f);
                 
                 case 7:
                     // Light Red
-                    return (new Color (1.0f, 0.3f, 0.0f), 0.3f);
+                    return (new Color (1.0f, 0.3f, 0.0f), 0.4f);
                 
                 case 8:
                     // Yellow
@@ -67,7 +67,7 @@ namespace SaturnGame.Rendering
                 
                 case 9:
                     // Pure Green
-                    return (new Color (0.22f, 0.62f, 0.42f), 0.3f);
+                    return (new Color (0.22f, 0.62f, 0.42f), 0.2f);
                 
                 case 10:
                     // Bright Blue
@@ -171,10 +171,12 @@ namespace SaturnGame.Rendering
                     id = settings.NoteColorID_Chain;
                     break;
                 case ObjectEnums.NoteType.SwipeClockwise:
-                    id = settings.NoteColorID_SwipeClockwise;
+                    if (settings.InvertSlideColor) id = settings.NoteColorID_SwipeCounterclockwise;
+                    else id = settings.NoteColorID_SwipeClockwise;
                     break;
                 case ObjectEnums.NoteType.SwipeCounterclockwise:
-                    id = settings.NoteColorID_SwipeCounterclockwise;
+                    if (settings.InvertSlideColor) id = settings.NoteColorID_SwipeClockwise;
+                    else id = settings.NoteColorID_SwipeCounterclockwise;
                     break;
                 case ObjectEnums.NoteType.SnapForward:
                     id = settings.NoteColorID_SnapForward;

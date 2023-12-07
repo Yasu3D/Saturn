@@ -86,7 +86,7 @@ namespace SaturnGame.RhythmGame
             
             if (Input.GetKeyDown(KeyCode.P))
             {
-                bgmManager.UpdateBgmData(160, TimeSignature.Default);
+                bgmManager.UpdateBgmData(181, TimeSignature.Default);
                 bgmManager.bgmPlayer.clip = bgmManager.bgmClip;
                 bgmManager.Play();
             }
