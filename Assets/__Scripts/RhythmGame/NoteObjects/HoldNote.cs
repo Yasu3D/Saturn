@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -45,6 +46,20 @@ namespace SaturnGame.RhythmGame
                         MaxSize = note.Size;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns a "deep copy" of a Hold Note, where both the <br />
+        /// Hold Note and all Child Notes are new objects.
+        /// </summary>
+        public static HoldNote DeepCopy(HoldNote hold)
+        {
+            List<Note> segments = new();
+
+            foreach (Note note in hold.Notes)
+                segments.Add(new(note));
+
+            return new(segments.ToArray());
         }
 
         public Note Start;

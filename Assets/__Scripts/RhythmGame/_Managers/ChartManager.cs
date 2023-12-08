@@ -33,6 +33,11 @@ namespace SaturnGame.RhythmGame
         public List<Note> syncs;
         public ChartObject endOfChart;
 
+        [Header("REVERSE")]
+        public List<Note> reverseNotes;
+        public List<HoldNote> reverseHoldNotes;
+        
+
         private int readerIndex = 0;
 
 
@@ -61,6 +66,11 @@ namespace SaturnGame.RhythmGame
             notes.Clear();
             holdNotes.Clear();
             masks.Clear();
+            barLines.Clear();
+            syncs.Clear();
+            endOfChart = null;
+            reverseNotes.Clear();
+            reverseHoldNotes.Clear();
 
             Debug.Log("[Chart Load] Resetting reader index...");
             readerIndex = 0;
@@ -78,6 +88,12 @@ namespace SaturnGame.RhythmGame
             Debug.Log("[Chart Load] Calculating Time...");
             await Task.Run(() => SetTime());
 
+            if (reverseGimmicks.Count != 0)
+            {
+                Debug.Log("[Chart Load] Creating Reverse Sections");
+                await Task.Run(() => GenerateReverseLists());
+            }
+
             if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes)
             {
                 Debug.Log("[Chart Load] Mirroring Chart...");
@@ -86,14 +102,14 @@ namespace SaturnGame.RhythmGame
 
             Debug.Log("[Chart Load] Checking for errors...");
 
-            if (CheckLoadErrors().passed)
+            if (!CheckLoadErrors().passed)
             {
-                Debug.Log("[Chart Load] Chart loaded successfully!");
-                return true;
+                Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
+                return false; 
             }
 
-            Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
-            return false;
+            Debug.Log("[Chart Load] Chart loaded successfully!");
+            return true;
         }
 
 
@@ -338,6 +354,9 @@ namespace SaturnGame.RhythmGame
             if (endOfChart is null)
                 return (false, "Chart is missing End of Chart note!");
 
+            if (notes.Last().Time > endOfChart.Time)
+                return (false, "Notes behind end of Chart note!");
+
             if (notes.Last().Time > bgmManager.bgmClip.length * 1000) // conv. to ms
                 return (false, "Chart is longer than audio!");
 
@@ -347,9 +366,116 @@ namespace SaturnGame.RhythmGame
             if (bgmDataGimmicks.Count == 0)
                 return (false, "Chart is missing BPM and TimeSignature data!");
 
+            if (reverseGimmicks.Count % 3 != 0) // Reverses always come in groups of 3 gimmicks. If the count is not divisible by 3 something's wrong.
+                return (false, "Invalid reverse gimmicks! Every reverse must have these segments: [Effect Start] [Effect End] [Note End]");
+
+            // Loop through all reverses to find any overlapping/out of order/broken ones.
+            // The order must always be Effect Start > Effect End > Note End.
+            ObjectEnums.GimmickType lastReverse = ObjectEnums.GimmickType.ReverseNoteEnd;
+            for (int i = 0; i < reverseGimmicks.Count; i++) 
+            {
+                switch (reverseGimmicks[i].GimmickType)
+                {
+                    case ObjectEnums.GimmickType.ReverseEffectStart:
+                        if (lastReverse is not ObjectEnums.GimmickType.ReverseNoteEnd)
+                        {
+                            return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
+                        }
+                        else
+                        {
+                            lastReverse = ObjectEnums.GimmickType.ReverseEffectStart;
+                        }
+                        break;
+                    
+                    case ObjectEnums.GimmickType.ReverseEffectEnd:
+                        if (lastReverse is not ObjectEnums.GimmickType.ReverseEffectStart)
+                        {
+                            return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
+                        }
+                        else
+                        {
+                            lastReverse = ObjectEnums.GimmickType.ReverseEffectEnd;
+                        }
+                        break;
+
+                    case ObjectEnums.GimmickType.ReverseNoteEnd:
+                        if (lastReverse is not ObjectEnums.GimmickType.ReverseEffectEnd)
+                        {
+                            return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
+                        }
+                        else
+                        {
+                            lastReverse = ObjectEnums.GimmickType.ReverseNoteEnd;
+                        }
+                        break;
+                    
+                    default:
+                        return (false, "Invalid reverse gimmicks! GimmickType does not match.");
+                }
+            }
+
             return (true, "");
         }
 
+
+        /// <summary>
+        /// Adds reversed notes to a list for Reverse Gimmick animations.
+        /// </summary>
+        private void GenerateReverseLists()
+        {
+            // Loop over all Reverse Gimmicks except the last two to avoid an ArrayIndexOutOfBoundsException
+            for (int i = 0; i < reverseGimmicks.Count - 2; i++)
+            {
+                if (reverseGimmicks[i].GimmickType is not ObjectEnums.GimmickType.ReverseEffectStart)
+                    continue;
+
+                // If [i] is EffectStart, then [i + 1] must be EffectEnd and [i + 2] must be NoteEnd
+                float effectStartTime = reverseGimmicks[i].ScaledVisualTime;
+                float effectEndTime = reverseGimmicks[i + 1].ScaledVisualTime;
+                float noteEndTime = reverseGimmicks[i + 2].ScaledVisualTime;
+
+                List<Note> notesToReverse = notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
+                List<HoldNote> holdsToReverse = holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
+                
+                foreach (Note note in notesToReverse)
+                    ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
+                
+                foreach (HoldNote hold in holdsToReverse)
+                    ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
+            }
+        }
+
+        
+        /// <summary>
+        /// Creates a copy of a Note, remaps it's position in time, <br />
+        /// then adds a copy of it to <c>reverseNotes</c>
+        /// </summary>
+        /// <param name="note">The Note to reverse</param>
+        /// <param name="timeAxis">The axis to reverse around.</param>      
+        private void ReverseNote(Note note, float startTime, float midTime, float endTime)
+        {
+            Note copy = new(note);
+            copy.ScaledVisualTime = SaturnMath.Remap(copy.ScaledVisualTime, midTime, endTime, midTime, startTime);
+
+            reverseNotes.Insert(0, copy);
+        }
+
+        /// <summary>
+        /// Reverses a Hold Note by creating a deep copy of it, <br />
+        /// then remapping each segment note's position in time.
+        /// </summary>
+        /// <param name="note">The Note to reverse</param>
+        /// <param name="timeAxis">The axis to reverse around.</param>  
+        private void ReverseHold(HoldNote hold, float startTime, float midTime, float endTime)
+        {
+            HoldNote copy = HoldNote.DeepCopy(hold);
+
+            foreach (Note note in copy.Notes)
+                note.ScaledVisualTime = SaturnMath.Remap(note.ScaledVisualTime, midTime, endTime, midTime, startTime);
+
+            copy.Notes.Reverse();
+            reverseHoldNotes.Add(copy);
+        }
 
 
         /// <summary>
@@ -371,8 +497,8 @@ namespace SaturnGame.RhythmGame
         private void CheckSync(Note current, Note last)
         {
             if (last == null) return;
-            if (last.NoteType is ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove) return;
-            if (current.NoteType is ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove) return;
+            if (last.NoteType is ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove or ObjectEnums.NoteType.Chain) return;
+            if (current.NoteType is ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove or ObjectEnums.NoteType.Chain) return;
 
             if (current.Measure == last.Measure && current.Tick == last.Tick)
             {
@@ -686,7 +812,7 @@ namespace SaturnGame.RhythmGame
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/test2.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/miserable.mer");
                 if (File.Exists(filepath))
                 {
                     FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);

@@ -18,9 +18,9 @@ namespace SaturnGame.RhythmGame
         [SerializeField] private float timeWarpMultiplier = 1.0f;
         [SerializeField] private float forceSyncDiscrepancy = 50f;
         
-        public void SetPlaybackSpeed(float speed)
+        public void SetPlaybackSpeed(float speed, bool clamp = true)
         {
-            float clampedSpeed = Mathf.Clamp01(speed);
+            float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
             PlaybackSpeed = clampedSpeed;
             bgmManager.bgmPlayer.pitch = clampedSpeed;
         }
@@ -83,16 +83,22 @@ namespace SaturnGame.RhythmGame
         {
             UpdateVisualTime();
             ReSync();
-            
+
             if (Input.GetKeyDown(KeyCode.P))
             {
-                bgmManager.UpdateBgmData(181, TimeSignature.Default);
+                bgmManager.UpdateBgmData(163, TimeSignature.Default);
                 bgmManager.bgmPlayer.clip = bgmManager.bgmClip;
                 bgmManager.Play();
             }
 
+            if (Input.GetKey(KeyCode.M) && VisualTime > 94000)
+                SetPlaybackSpeed(1);
+
             if (Input.GetKeyDown(KeyCode.I))
-                SetPlaybackSpeed(0.5f);
+                SetPlaybackSpeed(2 * PlaybackSpeed, false);
+
+            if (Input.GetKeyDown(KeyCode.J))
+                SetPlaybackSpeed(0.5f * PlaybackSpeed, false);
         }
     }
 }

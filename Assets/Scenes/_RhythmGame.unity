@@ -182,6 +182,8 @@ MonoBehaviour:
     Tick: 0
     Time: 0
     ScaledVisualTime: 0
+  reverseNotes: []
+  reverseHoldNotes: []
 --- !u!4 &516312208
 Transform:
   m_ObjectHideFlags: 0
@@ -513,6 +515,8 @@ MonoBehaviour:
   swipePool: {fileID: 1564455300}
   syncPool: {fileID: 586643893}
   guideLaneRenderer: {fileID: 421236484}
+  spawnOffset: -0.5
+  scrollOffset: 2
 --- !u!4 &1447861043
 Transform:
   m_ObjectHideFlags: 0
@@ -976,7 +980,7 @@ MonoBehaviour:
     Lower: 4
     Ratio: 1
   bgmPlayer: {fileID: 1534859774}
-  bgmClip: {fileID: 8300000, guid: 544cd4bdc34336d44b75b4b0f2394f18, type: 3}
+  bgmClip: {fileID: 8300000, guid: 56bb55bcd77598c41b1143186b2faa29, type: 3}
 --- !u!4 &1783936257
 Transform:
   m_ObjectHideFlags: 0

@@ -124,26 +124,121 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        private int reverseNoteIndex = 0;
+        private int reverseHoldNoteIndex = 0;
+        private int reverseGimmickIndex = 0;
+        private bool reverseActive = false;
+        private void ProcessReverseGimmicks()
+        {
+            if (reverseNoteIndex > chart.reverseNotes.Count) return;
+
+            if (reverseGimmickIndex < chart.reverseGimmicks.Count && chart.reverseGimmicks[reverseGimmickIndex].Time <= timeManager.VisualTime)
+            {
+                switch (chart.reverseGimmicks[reverseGimmickIndex].GimmickType)
+                {
+                    case ObjectEnums.GimmickType.ReverseEffectStart:
+                        reverseActive = true;
+                        break;
+                    
+                    case ObjectEnums.GimmickType.ReverseEffectEnd:
+                        reverseActive = false;
+                        break;
+                }
+
+                reverseGimmickIndex++;
+            }
+
+            if (reverseHoldNoteIndex > chart.reverseHoldNotes.Count - 1) return;
+
+            while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && GetScaledTime(timeManager.VisualTime) - (spawnOffset * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
+            {
+                Note currentNote = chart.reverseNotes[reverseNoteIndex];
+
+                GetNote(currentNote, true);
+
+                if (currentNote.NoteType is ObjectEnums.NoteType.SnapForward or ObjectEnums.NoteType.SnapBackward)
+                    GetSnap(currentNote, true);
+                
+                if (currentNote.NoteType is ObjectEnums.NoteType.SwipeClockwise or ObjectEnums.NoteType.SwipeCounterclockwise)
+                    GetSwipe(currentNote, true);
+
+                if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
+                    GetR_Effect(currentNote, true);
+
+                reverseNoteIndex++;
+            }
+
+            if (reverseGimmickIndex > chart.reverseGimmicks.Count - 1) return;
+
+            /*while (reverseActive && reverseHoldNoteIndex < chart.reverseHoldNotes.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
+            {
+                // hold note stuff here
+            }*/
+        }
+
+
+        [SerializeField] private float spawnOffset = 0.25f;
+        [SerializeField] private float scrollOffset = 2.0f;
 
         private void UpdateObjects()
         {
             foreach (NoteContainer container in notePool.ActiveObjects)
-                AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, ScrollDuration());
+            {
+                // Set only reverse containers active during a reverse.
+                if (reverseActive)
+                    container.gameObject.SetActive(container.reverse);
+                else
+                    container.gameObject.SetActive(!container.reverse);
+
+                if (!container.reverse)
+                    AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
+                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 1f);
+            }
 
             foreach (SnapContainer container in snapPool.ActiveObjects)
-                AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, ScrollDuration());
+            {
+                // Set only reverse containers active during a reverse.
+                if (reverseActive)
+                    container.gameObject.SetActive(container.reverse);
+                else
+                    container.gameObject.SetActive(!container.reverse);
+
+                if (!container.reverse)
+                    AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
+                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+            }
 
             foreach (SwipeContainer container in swipePool.ActiveObjects)
-                AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, ScrollDuration());
+            {
+                // Set only reverse containers active during a reverse.
+                if (reverseActive)
+                    container.gameObject.SetActive(container.reverse);
+                else
+                    container.gameObject.SetActive(!container.reverse);
+
+                if (!container.reverse)
+                    AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
+                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+            }
 
             foreach (GenericContainer container in r_EffectPool.ActiveObjects)
-                AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, ScrollDuration());
+            {
+                // Set only reverse containers active during a reverse.
+                if (reverseActive)
+                    container.gameObject.SetActive(container.reverse);
+                else
+                    container.gameObject.SetActive(!container.reverse);
+
+                if (!container.reverse)
+                    AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
+                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+            }
+
+            foreach (GenericContainer container in syncPool.ActiveObjects)
+                AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
 
             foreach (BarLineContainer container in barLinePool.ActiveObjects)
                 AnimateObject(container, barLineGarbage, container.time, container.transform, 0);
-
-            foreach (GenericContainer container in syncPool.ActiveObjects)
-                AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.renderer.transform, ScrollDuration());
         }
 
         private void ReleaseObjects()
@@ -174,12 +269,18 @@ namespace SaturnGame.RhythmGame
                 barLinePool.ReleaseObject(barLine);
             }
 
+            foreach (GenericContainer sync in syncGarbage)
+            {
+                syncPool.ReleaseObject(sync);
+            }
+
             // Clear the garbage lists
             noteGarbage.Clear();
             snapGarbage.Clear();
             swipeGarbage.Clear();
             r_EffectGarbage.Clear();
             barLineGarbage.Clear();
+            syncGarbage.Clear();
         }
 
 
@@ -192,20 +293,36 @@ namespace SaturnGame.RhythmGame
             transform.localScale = new Vector3(scroll, scroll, scroll);
 
             // Collect all objects after passing the judgement line to return them to their pool.
-            if (GetScaledTime(timeManager.VisualTime) - despawnTime * 0.25f >= time)
+            if (GetScaledTime(timeManager.VisualTime) - ScrollDuration() * despawnTime >= time)
+            {
+                garbage.Add(obj);
+            }
+        }
+
+        private void ReverseAnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
+        {
+            float distance = time - GetScaledTime(timeManager.VisualTime);
+            float scroll = scrollOffset - SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
+
+            transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
+            transform.localScale = new Vector3(scroll, scroll, scroll);
+
+            // Collect all objects after passing the judgement line to return them to their pool.
+            if (GetScaledTime(timeManager.VisualTime) - ScrollDuration() * despawnTime >= time)
             {
                 garbage.Add(obj);
             }
         }
 
 
-        private NoteContainer GetNote(Note input)
+        private NoteContainer GetNote(Note input, bool reverse = false)
         {
             NoteContainer container = notePool.GetObject();
             
             container.note = input;
             int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
             container.renderer.SetRenderer(input, noteWidth);
+            container.reverse = reverse;
 
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
@@ -213,12 +330,13 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private SnapContainer GetSnap(Note input)
+        private SnapContainer GetSnap(Note input, bool reverse = false)
         {
             SnapContainer container = snapPool.GetObject();
 
             container.note = input;
             container.renderer.SetRenderer(input);
+            container.reverse = reverse;
 
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
@@ -226,12 +344,27 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private SwipeContainer GetSwipe(Note input)
+        private SwipeContainer GetSwipe(Note input, bool reverse = false)
         {
             SwipeContainer container = swipePool.GetObject();
 
             container.note = input;
             container.renderer.SetRenderer(input);
+            container.reverse = reverse;
+
+            container.transform.SetParent(activeObjectsContainer);
+            container.gameObject.SetActive(true);
+
+            return container;
+        }
+
+        private GenericContainer GetR_Effect(Note input, bool reverse = false)
+        {
+            GenericContainer container = r_EffectPool.GetObject();
+
+            container.note = input;
+            container.renderer.SetRenderer(input.Size, input.Position);
+            container.reverse = reverse;
 
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
@@ -244,19 +377,6 @@ namespace SaturnGame.RhythmGame
             BarLineContainer container = barLinePool.GetObject();
             
             container.time = timestamp;
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
-        }
-
-        private GenericContainer GetR_Effect(Note input)
-        {
-            GenericContainer container = r_EffectPool.GetObject();
-
-            container.note = input;
-            container.renderer.SetRenderer(input.Size, input.Position);
-
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
 
@@ -300,9 +420,13 @@ namespace SaturnGame.RhythmGame
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
             ProcessBgmData();
+
             ProcessHiSpeed();
+            ProcessReverseGimmicks();
+
             ProcessMasks();
             ProcessNotes();
+
             ProcessSync();
             ProcessBarLines();
             

@@ -8,5 +8,6 @@ namespace SaturnGame.RhythmGame
     {
         public Note note;
         new public NoteRenderer renderer;
+        public bool reverse = false;
     }
 }

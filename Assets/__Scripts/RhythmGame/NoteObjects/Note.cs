@@ -5,6 +5,20 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public class Note : ChartObject
     {
+        public Note (Note note) : base(note.Measure, note.Tick)
+        {
+            Measure = note.Measure;
+            Tick = note.Tick;
+            Time = note.Time;
+            ScaledVisualTime = note.ScaledVisualTime;
+            Position = note.Position;
+            Size = note.Size;
+            NoteType = note.NoteType;
+            BonusType = note.BonusType;
+            RenderFlag = note.RenderFlag;
+            MaskDirection = note.MaskDirection;
+            IsSync = note.IsSync;
+        }
 
         public Note (int measure, int tick, ObjectEnums.NoteType noteType, ObjectEnums.BonusType bonusType, int position, int size, bool renderFlag = true, bool isSync = false, ObjectEnums.MaskDirection maskDirection = ObjectEnums.MaskDirection.None) : base(measure, tick)
         {

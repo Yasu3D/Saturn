@@ -37,5 +37,17 @@ namespace SaturnGame
         {
             return (x % m + m) % m;
         }
+
+        /// <summary>
+        /// Remaps a value from range <c>inMin - inMax</c> to <c>outMin - outMax</c>
+        /// </summary>
+        public static float Remap(float input, float inMin, float inMax, float outMin, float outMax, bool clamp = false)
+        {
+            if (inMin == inMax || outMin == outMax) return 0;
+            if (inMin == outMin && inMax == outMax) return input;
+
+            float result = outMin + (input - inMin) * (outMax - outMin) / (inMax - inMin);
+            return clamp ? Mathf.Clamp(result, outMin, outMax) : result;
+        }
     }
 }
