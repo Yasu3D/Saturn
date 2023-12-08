@@ -150,7 +150,7 @@ namespace SaturnGame.RhythmGame
 
             if (reverseHoldNoteIndex > chart.reverseHoldNotes.Count - 1) return;
 
-            while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && GetScaledTime(timeManager.VisualTime) - (spawnOffset * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
+            while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && GetScaledTime(timeManager.VisualTime) + (0.25f * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
             {
                 Note currentNote = chart.reverseNotes[reverseNoteIndex];
 
@@ -176,10 +176,6 @@ namespace SaturnGame.RhythmGame
             }*/
         }
 
-
-        [SerializeField] private float spawnOffset = 0.25f;
-        [SerializeField] private float scrollOffset = 2.0f;
-
         private void UpdateObjects()
         {
             foreach (NoteContainer container in notePool.ActiveObjects)
@@ -192,7 +188,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
-                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 1f);
+                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 4f);
             }
 
             foreach (SnapContainer container in snapPool.ActiveObjects)
@@ -205,7 +201,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 4f);
             }
 
             foreach (SwipeContainer container in swipePool.ActiveObjects)
@@ -218,7 +214,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 4f);
             }
 
             foreach (GenericContainer container in r_EffectPool.ActiveObjects)
@@ -231,7 +227,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 4f);
             }
 
             foreach (GenericContainer container in syncPool.ActiveObjects)
@@ -302,10 +298,11 @@ namespace SaturnGame.RhythmGame
         private void ReverseAnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
         {
             float distance = time - GetScaledTime(timeManager.VisualTime);
-            float scroll = scrollOffset - SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
+            float scroll = SaturnMath.InverseLerp(0.25f * ScrollDuration(), 0, distance);
+            float scale = Mathf.LerpUnclamped(1.25f, 1, scroll);
 
-            transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
-            transform.localScale = new Vector3(scroll, scroll, scroll);
+            transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(1.5f, 0, scroll));
+            transform.localScale = new Vector3(scale, scale, scale);
 
             // Collect all objects after passing the judgement line to return them to their pool.
             if (GetScaledTime(timeManager.VisualTime) - ScrollDuration() * despawnTime >= time)

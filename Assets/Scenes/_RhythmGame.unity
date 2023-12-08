@@ -515,8 +515,6 @@ MonoBehaviour:
   swipePool: {fileID: 1564455300}
   syncPool: {fileID: 586643893}
   guideLaneRenderer: {fileID: 421236484}
-  spawnOffset: -0.5
-  scrollOffset: 2
 --- !u!4 &1447861043
 Transform:
   m_ObjectHideFlags: 0
