@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
 using SaturnGame.Settings;
+using SaturnGame.Loading;
 
 namespace SaturnGame.RhythmGame
 {
@@ -15,6 +16,7 @@ namespace SaturnGame.RhythmGame
 
         [Header("METADATA")]
         public string musicFilePath = "";
+        public float difficulty = 0;
         public float audioOffset = 0;
         public float movieOffset = 0;
 
@@ -54,7 +56,7 @@ namespace SaturnGame.RhythmGame
                 return false;
             }
 
-            List<string> merFile = GetFileFromStream(merStream);
+            List<string> merFile = MerLoader.LoadMer(merStream);
 
             Debug.Log("[Chart Load] Clearing lists...");
             beatsPerMinuteGimmicks.Clear();
@@ -115,36 +117,6 @@ namespace SaturnGame.RhythmGame
 
 
         /// <summary>
-        /// Converts a Stream into a List of strings for parsing.
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        private List<string> GetFileFromStream(Stream stream)
-        {
-            List<string> lines = new List<string>();
-            StreamReader reader = new StreamReader(stream);
-            while (!reader.EndOfStream)
-                lines.Add(reader.ReadLine() ?? "");
-            return lines;
-        }
-
-
-        /// <summary>
-        /// Parses Metadata tags like "#OFFSET"
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="tag"></param>
-        /// <returns></returns>
-        private string GetMetadata(string input, string tag)
-        {
-            if (input.Contains(tag))
-                return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length);
-
-            return null;;
-        }
-
-
-        /// <summary>
         /// Loops through a .mer file's metadata tags until it<br />
         /// either finds a <c>#BODY</c> tag or runs out of lines to parse.
         /// </summary>
@@ -158,13 +130,16 @@ namespace SaturnGame.RhythmGame
             {
                 string merLine = merFile[readerIndex];
 
-                var tempMusicFilePath = GetMetadata(merLine, "#MUSIC_FILE_PATH ");
+                string tempMusicFilePath = MerLoader.GetMetadata(merLine, "#MUSIC_FILE_PATH ");
                 if (tempMusicFilePath != null) musicFilePath = tempMusicFilePath;
 
-                var tempAudioOffset = GetMetadata(merLine, "#OFFSET ");
+                string tempDifficulty = MerLoader.GetMetadata(merLine, "#DIFFICULTY");
+                if (tempDifficulty != null) difficulty = Convert.ToSingle(difficulty);
+
+                string tempAudioOffset = MerLoader.GetMetadata(merLine, "#OFFSET ");
                 if (tempAudioOffset != null) audioOffset = Convert.ToSingle(tempAudioOffset);
 
-                var tempMovieOffset = GetMetadata(merLine, "#MOVIEOFFSET ");
+                string tempMovieOffset = MerLoader.GetMetadata(merLine, "#MOVIEOFFSET ");
                 if (tempMovieOffset != null) movieOffset = Convert.ToSingle(tempMovieOffset);
 
                 if (merLine.Contains("#BODY"))
@@ -437,9 +412,11 @@ namespace SaturnGame.RhythmGame
                 List<Note> notesToReverse = notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
                 List<HoldNote> holdsToReverse = holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
                 
-                foreach (Note note in notesToReverse)
-                    ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
-                
+                for (int j = 0; j < notesToReverse.Count; j++)
+                {
+                    ReverseNote(notesToReverse[j], effectStartTime, effectEndTime, noteEndTime, j, notesToReverse.Count);
+                }
+
                 foreach (HoldNote hold in holdsToReverse)
                     ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
             }
@@ -452,10 +429,19 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         /// <param name="note">The Note to reverse</param>
         /// <param name="timeAxis">The axis to reverse around.</param>      
-        private void ReverseNote(Note note, float startTime, float midTime, float endTime)
+        private void ReverseNote(Note note, float startTime, float midTime, float endTime, int index, int length)
         {
+            // TODO: DONT DO THIS!!!!!!
+            // This is hacky as fuck and doesn't work right for hold notes.
+            // It also doesn't look right. It lines up, but it's still not correct.
+
             Note copy = new(note);
-            copy.ScaledVisualTime = SaturnMath.Remap(copy.ScaledVisualTime, midTime, endTime, midTime, startTime);
+            float remap = SaturnMath.Remap(copy.ScaledVisualTime, midTime, endTime, midTime, startTime);
+            float mirror = copy.ScaledVisualTime - 2 * (copy.ScaledVisualTime - midTime);
+
+            float progress = Mathf.Pow((float) index / length, 0.1f);
+
+            copy.ScaledVisualTime = Mathf.Lerp(mirror, remap, progress);
 
             reverseNotes.Insert(0, copy);
         }
