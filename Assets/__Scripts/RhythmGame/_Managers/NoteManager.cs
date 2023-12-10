@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using SaturnGame.Rendering;
 using SaturnGame.Settings;
@@ -53,7 +51,7 @@ namespace SaturnGame.RhythmGame
             if (noteIndex > chart.notes.Count - 1) return;
 
             // Scans through the chart note by note.
-            while (noteIndex < chart.notes.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.notes[noteIndex].ScaledVisualTime)
+            while (noteIndex < chart.notes.Count && ScaledVisualTime() + ScrollDuration() >= chart.notes[noteIndex].ScaledVisualTime)
             {
                 Note currentNote = chart.notes[noteIndex];
 
@@ -77,7 +75,7 @@ namespace SaturnGame.RhythmGame
         {
             if (barLineIndex > chart.barLines.Count - 1) return;
 
-            while (barLineIndex < chart.barLines.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.barLines[barLineIndex].ScaledVisualTime)
+            while (barLineIndex < chart.barLines.Count && ScaledVisualTime() + ScrollDuration() >= chart.barLines[barLineIndex].ScaledVisualTime)
             {
                 GetBarLine(chart.barLines[barLineIndex].ScaledVisualTime);
                 barLineIndex++;
@@ -89,7 +87,7 @@ namespace SaturnGame.RhythmGame
         {
             if (syncIndex > chart.syncs.Count - 1) return;
 
-            while (syncIndex < chart.syncs.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.syncs[syncIndex].ScaledVisualTime)
+            while (syncIndex < chart.syncs.Count && ScaledVisualTime() + ScrollDuration() >= chart.syncs[syncIndex].ScaledVisualTime)
             {
                 GetSync(chart.syncs[syncIndex]);
                 syncIndex++;
@@ -127,20 +125,32 @@ namespace SaturnGame.RhythmGame
         private int reverseNoteIndex = 0;
         private int reverseHoldNoteIndex = 0;
         private int reverseGimmickIndex = 0;
+
         private bool reverseActive = false;
+        private float reverseStartTime = 0;
+        private float reverseMidTime = 0;
+        private float reverseEndTime = 0;
+        private float reverseMirrorTime = 0;
         private void ProcessReverseGimmicks()
         {
             if (reverseNoteIndex > chart.reverseNotes.Count) return;
 
-            if (reverseGimmickIndex < chart.reverseGimmicks.Count && chart.reverseGimmicks[reverseGimmickIndex].Time <= timeManager.VisualTime)
+            if (reverseGimmickIndex < chart.reverseGimmicks.Count - 1 && chart.reverseGimmicks[reverseGimmickIndex].Time <= timeManager.VisualTime)
             {
                 switch (chart.reverseGimmicks[reverseGimmickIndex].GimmickType)
                 {
                     case ObjectEnums.GimmickType.ReverseEffectStart:
+                        reverseStartTime = chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
+                        reverseMidTime = chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
+                        reverseEndTime = chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
+                        reverseMirrorTime = reverseStartTime + (reverseEndTime - reverseMidTime);
                         reverseActive = true;
                         break;
                     
                     case ObjectEnums.GimmickType.ReverseEffectEnd:
+                        reverseStartTime = 0;
+                        reverseMidTime = 0;
+                        reverseEndTime = 0;
                         reverseActive = false;
                         break;
                 }
@@ -148,10 +158,9 @@ namespace SaturnGame.RhythmGame
                 reverseGimmickIndex++;
             }
 
-            if (reverseHoldNoteIndex > chart.reverseHoldNotes.Count - 1) return;
-
-            while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && GetScaledTime(timeManager.VisualTime) + (0.25f * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
+            while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
             {
+                
                 Note currentNote = chart.reverseNotes[reverseNoteIndex];
 
                 GetNote(currentNote, true);
@@ -168,9 +177,9 @@ namespace SaturnGame.RhythmGame
                 reverseNoteIndex++;
             }
 
-            if (reverseGimmickIndex > chart.reverseGimmicks.Count - 1) return;
+            if (reverseHoldNoteIndex != 0 && reverseHoldNoteIndex > chart.reverseHoldNotes.Count - 1) return;
 
-            /*while (reverseActive && reverseHoldNoteIndex < chart.reverseHoldNotes.Count && GetScaledTime(timeManager.VisualTime) + ScrollDuration() >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
+            /*while (reverseActive && reverseHoldNoteIndex < chart.reverseHoldNotes.Count && ScaledVisualTime() + ScrollDuration() >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
             {
                 // hold note stuff here
             }*/
@@ -282,14 +291,14 @@ namespace SaturnGame.RhythmGame
 
         private void AnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
         {
-            float distance = time - GetScaledTime(timeManager.VisualTime);
+            float distance = time - ScaledVisualTime();
             float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
 
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
             transform.localScale = new Vector3(scroll, scroll, scroll);
 
             // Collect all objects after passing the judgement line to return them to their pool.
-            if (GetScaledTime(timeManager.VisualTime) - ScrollDuration() * despawnTime >= time)
+            if (ScaledVisualTime() - ScrollDuration() * despawnTime >= time)
             {
                 garbage.Add(obj);
             }
@@ -297,7 +306,7 @@ namespace SaturnGame.RhythmGame
 
         private void ReverseAnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
         {
-            float distance = time - GetScaledTime(timeManager.VisualTime);
+            float distance = time - ScaledVisualTime();
             float scroll = SaturnMath.InverseLerp(0.25f * ScrollDuration(), 0, distance);
             float scale = Mathf.LerpUnclamped(1.25f, 1, scroll);
 
@@ -305,7 +314,7 @@ namespace SaturnGame.RhythmGame
             transform.localScale = new Vector3(scale, scale, scale);
 
             // Collect all objects after passing the judgement line to return them to their pool.
-            if (GetScaledTime(timeManager.VisualTime) - ScrollDuration() * despawnTime >= time)
+            if (ScaledVisualTime() - ScrollDuration() * despawnTime >= time)
             {
                 garbage.Add(obj);
             }
@@ -405,16 +414,30 @@ namespace SaturnGame.RhythmGame
 
         private float ScrollDuration()
         {
-            // A Note scrolling from it's spawn point to the judgement line takes
+            // A Note scrolling from it's spawn point to the judgement line at NoteSpeed 1.0 takes
             // approximately 3266.667 milliseconds. This is 10x that, because
             // NoteSpeed is stored as an integer that's 10x the actual value.
             return 32660.667f / SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
         }
 
+        private float ScaledVisualTime()
+        {
+            if (reverseActive)
+            {
+                float progress = SaturnMath.InverseLerp(reverseStartTime, reverseMidTime, GetScaledTime(timeManager.VisualTime));
+                float ease = SaturnMath.Ease.Reverse(progress);
+                return Mathf.Lerp(reverseStartTime, reverseMirrorTime, ease);
+            }
 
+            return GetScaledTime(timeManager.VisualTime);
+        }
+
+        [SerializeField] TMPro.TextMeshProUGUI text;
         void Update()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
+
+            text.text = ScaledVisualTime().ToString();
 
             ProcessBgmData();
 
@@ -422,7 +445,8 @@ namespace SaturnGame.RhythmGame
             ProcessReverseGimmicks();
 
             ProcessMasks();
-            ProcessNotes();
+
+            if (!reverseActive) ProcessNotes();
 
             ProcessSync();
             ProcessBarLines();

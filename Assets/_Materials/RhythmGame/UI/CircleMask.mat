@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CircleMask
-  m_Shader: {fileID: 4800000, guid: 400830bcecf026f469adfb98358ab850, type: 3}
+  m_Shader: {fileID: 4800000, guid: 337ce006183fce7489b0aa095aa53e5f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -60,7 +60,7 @@ Material:
     - _OuterRadius: 0.978
     - _Outer_Radius: 0.969
     - _Progress: 0
-    - _Radius: 0.985
+    - _Radius: 0.989
     - _StartAngle: -90
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
