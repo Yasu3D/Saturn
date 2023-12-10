@@ -1291,7 +1291,7 @@ MonoBehaviour:
   ActiveObjects: []
   prefab: {fileID: 1639821649052849141, guid: da17f1d932687734690ea32a95583871, type: 3}
   startSize: 10
-  objectStartPosition: {x: 0, y: 0, z: -6}
+  objectStartPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1685748590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1416,7 +1416,7 @@ MonoBehaviour:
     Lower: 4
     Ratio: 1
   bgmPlayer: {fileID: 1534859774}
-  bgmClip: {fileID: 8300000, guid: 56bb55bcd77598c41b1143186b2faa29, type: 3}
+  bgmClip: {fileID: 8300000, guid: 544cd4bdc34336d44b75b4b0f2394f18, type: 3}
 --- !u!4 &1783936257
 Transform:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ namespace SaturnGame.RhythmGame
             Notes = new Note[] { start }.Concat(segments).Concat(new Note[] { end }).ToArray();
             RenderedNotes = Notes.Where(x => x.RenderFlag).ToArray();
 
-            foreach (Note note in Segments)
+            foreach (Note note in Notes)
             {
                 if (note.Size > MaxSize)
                     MaxSize = note.Size;
@@ -40,11 +40,12 @@ namespace SaturnGame.RhythmGame
             else if (segments.Length > 3)  
             {
                 Segments = segments.Skip(1).Take(segments.Length - 2).ToArray();
-                foreach (Note note in Segments)
-                {
-                    if (note.Size > MaxSize)
-                        MaxSize = note.Size;
-                }
+            }
+
+            foreach (Note note in Notes)
+            {
+                if (note.Size > MaxSize)
+                    MaxSize = note.Size;
             }
         }
 

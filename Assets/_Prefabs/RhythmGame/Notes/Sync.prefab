@@ -51,6 +51,7 @@ MonoBehaviour:
     Measure: 0
     Tick: 0
     Time: 0
+    ScaledVisualTime: 0
     Position: 0
     Size: 0
     NoteType: 0
@@ -59,6 +60,7 @@ MonoBehaviour:
     RenderFlag: 0
     IsSync: 0
   renderer: {fileID: 8372065561835169554}
+  reverse: 0
 --- !u!114 &8372065561835169554
 MonoBehaviour:
   m_ObjectHideFlags: 0

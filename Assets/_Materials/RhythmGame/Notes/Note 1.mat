@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Note
+  m_Name: Note 1
   m_Shader: {fileID: -6465566751694194690, guid: 33604ebf0b46e9c409956dcbbde4165a,
     type: 3}
   m_Parent: {fileID: 0}
@@ -30,7 +30,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: 2443
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -128,7 +128,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
-    - _QueueOffset: 0
+    - _QueueOffset: -7
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -145,7 +145,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _NoteColor: {r: 1, g: 0.21960784, b: 0.92941177, a: 1}
+    - _NoteColor: {r: 0.4716981, g: 0.3581542, b: 0.10902457, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _WidthBounds: {r: 0, g: 0.365, b: 0, a: 0}
   m_BuildTextureStacks: []

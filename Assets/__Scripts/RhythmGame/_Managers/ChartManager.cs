@@ -524,6 +524,8 @@ namespace SaturnGame.RhythmGame
             int finalPosition = size0 > size1 ? position1 : position0;
             int finalSize = Mathf.Min(size0, size1);
 
+            if (finalSize > 30) return;
+
             Note sync = new(measure, tick, ObjectEnums.NoteType.None, ObjectEnums.BonusType.None, finalPosition, finalSize);
             syncs.Add(sync);
         }
@@ -806,7 +808,7 @@ namespace SaturnGame.RhythmGame
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/miserable.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/genocider.mer");
                 if (File.Exists(filepath))
                 {
                     FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);

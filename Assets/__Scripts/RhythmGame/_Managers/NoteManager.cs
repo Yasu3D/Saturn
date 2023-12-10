@@ -32,6 +32,8 @@ namespace SaturnGame.RhythmGame
         private List<GenericContainer> r_EffectGarbage = new();
         private List<BarLineContainer> barLineGarbage = new();
         private List<GenericContainer> syncGarbage = new();
+        private List<HoldEndContainer> holdEndGarbage = new();
+        private List<HoldSurfaceRenderer> holdSurfaceGarbage = new();
 
         private int maskIndex = 0;
         private void ProcessMasks()
@@ -67,6 +69,26 @@ namespace SaturnGame.RhythmGame
                     GetR_Effect(currentNote);
 
                 noteIndex++;
+            }
+        }
+
+        private int holdIndex = 0;
+        private void ProcessHolds()
+        {
+            if (holdIndex > chart.holdNotes.Count - 1) return;
+
+            while (holdIndex < chart.holdNotes.Count && ScaledVisualTime() + ScrollDuration() >= chart.holdNotes[holdIndex].Start.ScaledVisualTime)
+            {
+                HoldNote currentHold = chart.holdNotes[holdIndex];
+            
+                GetNote(currentHold.Start);
+                GetHoldEnd(currentHold.End);
+                GetHoldSurface(currentHold);
+                
+                if (currentHold.Start.BonusType is ObjectEnums.BonusType.R_Note)
+                    GetR_Effect(currentHold.Start);
+
+                holdIndex++;
             }
         }
 
@@ -160,7 +182,6 @@ namespace SaturnGame.RhythmGame
 
             while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
             {
-                
                 Note currentNote = chart.reverseNotes[reverseNoteIndex];
 
                 GetNote(currentNote, true);
@@ -239,6 +260,29 @@ namespace SaturnGame.RhythmGame
                 else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 4f);
             }
 
+            foreach (HoldEndContainer container in holdEndPool.ActiveObjects)
+            {
+                // Set only reverse containers active during a reverse.
+                if (reverseActive)
+                    container.gameObject.SetActive(container.reverse);
+                else
+                    container.gameObject.SetActive(!container.reverse);
+
+                if (!container.reverse)
+                    AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
+                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 4f);
+            }
+
+            foreach (HoldSurfaceRenderer renderer in holdSurfacePool.ActiveObjects)
+            {
+                renderer.GenerateMesh(ScaledVisualTime(), ScrollDuration());
+                
+                if (renderer.holdNote.End.ScaledVisualTime <= ScaledVisualTime() - ScrollDuration() * 0.25f)
+                {
+                    holdSurfaceGarbage.Add(renderer);
+                }
+            }
+
             foreach (GenericContainer container in syncPool.ActiveObjects)
                 AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
 
@@ -279,6 +323,16 @@ namespace SaturnGame.RhythmGame
                 syncPool.ReleaseObject(sync);
             }
 
+            foreach (HoldEndContainer holdEnd in holdEndGarbage)
+            {
+                holdEndPool.ReleaseObject(holdEnd);
+            }
+
+            foreach (HoldSurfaceRenderer holdSurface in holdSurfaceGarbage)
+            {
+                holdSurfacePool.ReleaseObject(holdSurface);
+            }
+
             // Clear the garbage lists
             noteGarbage.Clear();
             snapGarbage.Clear();
@@ -286,6 +340,8 @@ namespace SaturnGame.RhythmGame
             r_EffectGarbage.Clear();
             barLineGarbage.Clear();
             syncGarbage.Clear();
+            holdEndGarbage.Clear();
+            holdSurfaceGarbage.Clear();
         }
 
 
@@ -293,9 +349,10 @@ namespace SaturnGame.RhythmGame
         {
             float distance = time - ScaledVisualTime();
             float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
+            float clampedScroll = Mathf.Max(0, scroll);
 
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
-            transform.localScale = new Vector3(scroll, scroll, scroll);
+            transform.localScale = new Vector3(clampedScroll, clampedScroll, clampedScroll);
 
             // Collect all objects after passing the judgement line to return them to their pool.
             if (ScaledVisualTime() - ScrollDuration() * despawnTime >= time)
@@ -362,6 +419,34 @@ namespace SaturnGame.RhythmGame
             container.gameObject.SetActive(true);
 
             return container;
+        }
+
+        private HoldEndContainer GetHoldEnd(Note input, bool reverse = false)
+        {
+            HoldEndContainer container = holdEndPool.GetObject();
+            
+            container.note = input;
+            container.renderer.SetRenderer(input);
+            container.reverse = reverse;
+
+            container.transform.SetParent(activeObjectsContainer);
+            container.gameObject.SetActive(true);
+
+            return container;
+        }
+
+        private HoldSurfaceRenderer GetHoldSurface(HoldNote input, bool reverse = false)
+        {
+            HoldSurfaceRenderer renderer = holdSurfacePool.GetObject();
+
+            renderer.SetRenderer(input);
+            renderer.reverse = reverse;
+
+            renderer.transform.SetParent(activeObjectsContainer);
+            renderer.transform.localScale = Vector3.one;
+            renderer.gameObject.SetActive(true);
+
+            return renderer;
         }
 
         private GenericContainer GetR_Effect(Note input, bool reverse = false)
@@ -446,7 +531,11 @@ namespace SaturnGame.RhythmGame
 
             ProcessMasks();
 
-            if (!reverseActive) ProcessNotes();
+            if (!reverseActive)
+            {
+                ProcessNotes();
+                ProcessHolds();
+            }
 
             ProcessSync();
             ProcessBarLines();

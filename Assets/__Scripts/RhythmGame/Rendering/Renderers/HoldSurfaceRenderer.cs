@@ -9,8 +9,9 @@ namespace SaturnGame.Rendering
     [AddComponentMenu("SaturnGame/Rendering/Hold Surface Renderer")]
     public class HoldSurfaceRenderer : MonoBehaviour
     {
-        private const float tunnelRadius = 1.75f;
-        private const float tunnelLength = 6f;
+        private const float tunnelRadius = 1.72f; // 1.75 by default.
+        private const float tunnelLength = -6f;
+
         // ==== MESH ====
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
@@ -23,49 +24,95 @@ namespace SaturnGame.Rendering
         private Vector2[] uv;
         private int[] triangles;
 
-        public int ColorID { get; private set; }
+        private int ColorID;
+        public HoldNote holdNote;
+
+        public bool reverse;
 
         void Awake()
         {
             materialInstance = new(materialTemplate);
+            holdMesh = new();
+            meshFilter.mesh = holdMesh;
         }
 
-        void SetRenderer(Note note)
+        public void SetRenderer(HoldNote hold)
         {
-            ColorID = NoteColors.GetColorID(note.NoteType);
+            ColorID = NoteColors.GetColorID(hold.Start.NoteType);
+            holdNote = hold;
 
             if (materialInstance.HasFloat("_ColorID"))
                 materialInstance.SetFloat("_ColorID", ColorID);
 
             meshRenderer.material = materialInstance;
-        }
-
-        void Update()
-        {
             meshFilter.mesh = holdMesh;
         }
 
-        void GenerateMesh(HoldNote holdNote)
+        public void GenerateMesh(float visualTime, float scrollDuration)
         {
-            int holdDivisions = GetMaxDivisions(10);
-            vertices = new Vector3[(holdNote.MaxSize + 1) * holdDivisions];
-            uv = new Vector2[(holdNote.MaxSize + 1) * holdDivisions];
+            int maxWidth = holdNote.MaxSize;
+            int maxLength = holdNote.RenderedNotes.Length;
+
+            vertices = new Vector3[(maxWidth + 1) * maxLength];
+            uv = new Vector2[(maxWidth + 1) * maxLength];
 
             int vertexID = 0;
-            for (int x = 0; x <= holdNote.MaxSize; x++)
+            for (int x = 0; x <= maxWidth; x++)
             {
-                for (int y = 0; y < holdDivisions; y++)
+                for (int y = 0; y < maxLength; y++)
                 {
-                    float stepSize = holdNote.Distance[y] / holdDivisions;
+                    float noteSize = holdNote.RenderedNotes[y].Size;
+                    float notePosition = holdNote.RenderedNotes[y].Position;
 
-                    float sizeMultiplier = GetAngleInterval(holdNote.Notes[y].Size, holdNote.MaxSize);
-                    float currentAngle = (sizeMultiplier * x + holdNote.Notes[y].Position) * 6;
-                    
-                    vertices[vertexID] = GetPointOnCone(Vector2.zero, tunnelRadius, tunnelLength, currentAngle, y);
-                    uv[vertexID] = GetUV(x, holdNote.MaxSize, y, holdDivisions);
+                    if (noteSize < 60)
+                    {
+                        noteSize -= 1.6f;
+                        notePosition += 0.8f;
+                    }
+
+                    float sizeMultiplier = GetAngleInterval(noteSize, maxWidth);
+                    float currentAngle = (sizeMultiplier * x + notePosition) * 6;
+
+                    float time = holdNote.RenderedNotes[y].ScaledVisualTime;
+                    float distance = time - visualTime;
+                    float depth = SaturnMath.InverseLerp(0, scrollDuration, distance);
+
+                    vertices[vertexID] = GetPointOnCone(Vector2.zero, tunnelRadius, tunnelLength, currentAngle, depth);
+                    uv[vertexID] = GetUV(x, maxWidth, y, maxLength);
                     vertexID++;
                 }
             }
+
+            triangles = new int[maxWidth * maxLength * 6]; 
+
+            int vert = 0;
+            int tris = 0;
+
+            for (int y = 0; y < maxWidth; y++)
+            {
+                for (int x = 0; x < (maxLength - 1); x++)
+                {
+                    // Draw triangles counterclockwise to flip normals
+                    triangles[tris + 2] = vert + 0;
+                    triangles[tris + 1] = vert + (maxLength - 1) + 1;
+                    triangles[tris + 0] = vert + 1;
+                    
+                    triangles[tris + 5] = vert + 1;
+                    triangles[tris + 4] = vert + (maxLength - 1) + 1;
+                    triangles[tris + 3] = vert + (maxLength - 1) + 2;
+
+                    vert ++;
+                    tris += 6;
+                }
+
+                vert++;
+            }
+
+            holdMesh.Clear();
+
+            holdMesh.vertices = vertices;
+            holdMesh.triangles = triangles;
+            holdMesh.uv = uv;
         }
 
         private int GetMaxDivisions(float distance)
@@ -79,16 +126,20 @@ namespace SaturnGame.Rendering
             return divisor;
         }
 
-        Vector3 GetPointOnCone(Vector2 centerPoint, float radius, float length, float angle, float depth)
+        Vector3 GetPointOnCone(Vector2 centerPoint, float coneRadius, float coneLength, float angle, float depth, bool clamp = true)
         {
-            float scaledDepth = depth * 0.12f;
-            float scale = Mathf.InverseLerp(length, 0, scaledDepth);
-
             angle = 180 - angle;
 
-            float x = radius * scale * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
-            float y = radius * scale * Mathf.Sin(Mathf.Deg2Rad * angle) + centerPoint.y;
-            float z = -scaledDepth;
+            float x = coneRadius * (1 - depth) * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
+            float y = coneRadius * (1 - depth) * Mathf.Sin(Mathf.Deg2Rad * angle) + centerPoint.y;
+            float z = coneLength * depth;
+
+            if (clamp && z <= coneLength)
+            {
+                x = 0;
+                y = 0;
+                z = coneLength;
+            }
 
             return new Vector3 (x, y, z);
         }
@@ -100,9 +151,17 @@ namespace SaturnGame.Rendering
             return new Vector2 (u,v);
         }
 
-        float GetAngleInterval(int currentNoteSize, int maxNoteSize)
+        float GetAngleInterval(float currentNoteSize, int maxNoteSize)
         {
-            return (float) currentNoteSize / (float) maxNoteSize;
+            return (float) currentNoteSize / maxNoteSize;
+        }
+    
+        void OnDrawGizmos()
+        {
+            foreach (Vector3 vert in vertices)
+            {
+                Gizmos.DrawSphere(vert, 0.1f);
+            }
         }
     }
 }

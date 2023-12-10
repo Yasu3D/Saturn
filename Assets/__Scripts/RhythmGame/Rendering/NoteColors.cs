@@ -188,8 +188,7 @@ namespace SaturnGame.Rendering
                     id = settings.NoteColorID_SnapBackward;
                     break;
                 case ObjectEnums.NoteType.HoldStart:
-                    id = settings.NoteColorID_Hold;
-                    break;
+                case ObjectEnums.NoteType.HoldSegment:
                 case ObjectEnums.NoteType.HoldEnd:
                     id = settings.NoteColorID_Hold;
                     break;
