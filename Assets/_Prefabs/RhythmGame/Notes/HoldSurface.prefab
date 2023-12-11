@@ -46,10 +46,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2490f7ae0147a40b1a723f0c83527a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdMesh: {fileID: 0}
+  materialTemplate: {fileID: 2100000, guid: 41b5294aeacf87a4e8cceae2def70dca, type: 2}
   meshFilter: {fileID: 4059135156454620076}
   meshRenderer: {fileID: 8242334217347113592}
-  materialTemplate: {fileID: 2100000, guid: 185978123b588794b8ed0a84b69b501d, type: 2}
+  holdMesh: {fileID: 0}
+  holdNote:
+    Start:
+      Measure: 0
+      Tick: 0
+      Time: 0
+      ScaledVisualTime: 0
+      Position: 0
+      Size: 0
+      NoteType: 0
+      BonusType: 0
+      MaskDirection: 0
+      RenderFlag: 0
+      IsSync: 0
+    End:
+      Measure: 0
+      Tick: 0
+      Time: 0
+      ScaledVisualTime: 0
+      Position: 0
+      Size: 0
+      NoteType: 0
+      BonusType: 0
+      MaskDirection: 0
+      RenderFlag: 0
+      IsSync: 0
+    Segments: []
+    Notes: []
+    RenderedNotes: []
+    MaxSize: 0
+    Distance: 
+  reverse: 0
+  debugGizmos: 0
 --- !u!33 &4059135156454620076
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -78,7 +110,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 185978123b588794b8ed0a84b69b501d, type: 2}
+  - {fileID: 2100000, guid: 41b5294aeacf87a4e8cceae2def70dca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

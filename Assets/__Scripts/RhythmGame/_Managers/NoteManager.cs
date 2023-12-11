@@ -202,7 +202,6 @@ namespace SaturnGame.RhythmGame
 
             while (reverseHoldNoteIndex < chart.reverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
             {
-                Debug.Log("Spawning Reverse Hold!");
                 HoldNote currentHold = chart.reverseHoldNotes[reverseHoldNoteIndex];
             
                 GetNote(currentHold.Start, true);
@@ -227,8 +226,8 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
-                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 1f);
+                    AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (SnapContainer container in snapPool.ActiveObjects)
@@ -240,8 +239,8 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                    AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (SwipeContainer container in swipePool.ActiveObjects)
@@ -253,8 +252,8 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                    AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (GenericContainer container in r_EffectPool.ActiveObjects)
@@ -266,8 +265,8 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                    AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (HoldEndContainer container in holdEndPool.ActiveObjects)
@@ -279,27 +278,28 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 1f);
+                    AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (HoldSurfaceRenderer renderer in holdSurfacePool.ActiveObjects)
             {
-                renderer.GenerateMesh(ScaledVisualTime(), ScrollDuration());
-                
-                float despawnTime = renderer.reverse ? ScaledVisualTime() - ScrollDuration() * 1f : ScaledVisualTime() - ScrollDuration() * 0.25f;
+                // Set only reverse renderers active during a reverse.
+                if (reverseActive)
+                    renderer.gameObject.SetActive(renderer.reverse);
+                else
+                    renderer.gameObject.SetActive(!renderer.reverse);
 
-                if (renderer.holdNote.End.ScaledVisualTime <= despawnTime)
-                {
-                    holdSurfaceGarbage.Add(renderer);
-                }
+                if (!renderer.reverse)
+                    AnimateObject(renderer, holdSurfaceGarbage, renderer.holdNote.Start.ScaledVisualTime, renderer.holdNote.End.ScaledVisualTime, 0.25f, renderer.transform, false);
+                else ReverseAnimateObject(renderer, holdSurfaceGarbage, renderer.holdNote.Start.ScaledVisualTime, renderer.holdNote.End.ScaledVisualTime, 1.0f, renderer.transform, false);
             }
 
             foreach (GenericContainer container in syncPool.ActiveObjects)
-                AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
+                AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.renderer.transform, true);
 
             foreach (BarLineContainer container in barLinePool.ActiveObjects)
-                AnimateObject(container, barLineGarbage, container.time, container.transform, 0);
+                AnimateObject(container, barLineGarbage, container.time, container.time, 0, container.transform, true);
         }
 
         private void ReleaseObjects()
@@ -357,33 +357,40 @@ namespace SaturnGame.RhythmGame
         }
 
 
-        private void AnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
+        private void AnimateObject<T> (T obj, List<T> garbage, float time, float despawnTime, float despawnTimeMultiplier, Transform transform, bool scale)
         {
             float distance = time - ScaledVisualTime();
             float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
-            float clampedScroll = Mathf.Max(0, scroll);
 
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
-            transform.localScale = new Vector3(clampedScroll, clampedScroll, clampedScroll);
+            if (scale)
+            {
+                float clampedScroll = Mathf.Max(0, scroll);
+                transform.localScale = new Vector3(clampedScroll, clampedScroll, clampedScroll);
+            }
 
             // Collect all objects after passing the judgement line to return them to their pool.
-            if (ScaledVisualTime() - ScrollDuration() * despawnTime >= time)
+            if (ScaledVisualTime() - ScrollDuration() * despawnTimeMultiplier >= despawnTime)
             {
                 garbage.Add(obj);
             }
         }
 
-        private void ReverseAnimateObject<T> (T obj, List<T> garbage, float time, Transform transform, float despawnTime)
+        private void ReverseAnimateObject<T> (T obj, List<T> garbage, float time, float despawnTime, float despawnTimeMultiplier, Transform transform, bool scale)
         {
             float distance = time - ScaledVisualTime();
             float scroll = SaturnMath.InverseLerp(0.25f * ScrollDuration(), 0, distance);
-            float scale = Mathf.LerpUnclamped(1.25f, 1, scroll);
-
+            
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(1.5f, 0, scroll));
-            transform.localScale = new Vector3(scale, scale, scale);
+
+            if (scale)
+            {
+                float scaledScroll = Mathf.LerpUnclamped(1.25f, 1, scroll);
+                transform.localScale = new Vector3(scaledScroll, scaledScroll, scaledScroll);
+            }
 
             // Collect all objects after passing the judgement line to return them to their pool.
-            if (ScaledVisualTime() - ScrollDuration() * despawnTime >= time)
+            if (ScaledVisualTime() - ScrollDuration() * despawnTimeMultiplier >= despawnTime)
             {
                 garbage.Add(obj);
             }
@@ -452,6 +459,7 @@ namespace SaturnGame.RhythmGame
             HoldSurfaceRenderer renderer = holdSurfacePool.GetObject();
 
             renderer.SetRenderer(input);
+            renderer.GenerateMesh(ScrollDuration());
             renderer.reverse = reverse;
 
             renderer.transform.SetParent(activeObjectsContainer);
