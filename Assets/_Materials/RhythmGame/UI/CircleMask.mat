@@ -60,7 +60,7 @@ Material:
     - _OuterRadius: 0.978
     - _Outer_Radius: 0.969
     - _Progress: 0
-    - _Radius: 0.989
+    - _Radius: 0.899
     - _StartAngle: -90
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

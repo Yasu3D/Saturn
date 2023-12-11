@@ -54,6 +54,17 @@ namespace SaturnGame
             return clamp ? Mathf.Clamp(result, outMin, outMax) : result;
         }
 
+        public static float LerpRound(int a, int b, float t, int m)
+        {
+            if (Mathf.Abs(a - b) > m * 0.5f)
+            {
+                if (a > b) b += m;
+                else a += m;
+            }
+            
+            return Mathf.Lerp(a, b, t);
+        }
+
         public static class Ease
         {
             // This is kinda wrong but looks "good enough".

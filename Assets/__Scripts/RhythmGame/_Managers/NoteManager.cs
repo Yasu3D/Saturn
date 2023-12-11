@@ -200,10 +200,20 @@ namespace SaturnGame.RhythmGame
 
             if (reverseHoldNoteIndex != 0 && reverseHoldNoteIndex > chart.reverseHoldNotes.Count - 1) return;
 
-            /*while (reverseActive && reverseHoldNoteIndex < chart.reverseHoldNotes.Count && ScaledVisualTime() + ScrollDuration() >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
+            while (reverseHoldNoteIndex < chart.reverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
             {
-                // hold note stuff here
-            }*/
+                Debug.Log("Spawning Reverse Hold!");
+                HoldNote currentHold = chart.reverseHoldNotes[reverseHoldNoteIndex];
+            
+                GetNote(currentHold.Start, true);
+                GetHoldEnd(currentHold.End, true);
+                GetHoldSurface(currentHold, true);
+                
+                if (currentHold.Start.BonusType is ObjectEnums.BonusType.R_Note)
+                    GetR_Effect(currentHold.Start);
+
+                reverseHoldNoteIndex++;
+            }
         }
 
         private void UpdateObjects()
@@ -218,7 +228,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 0.25f);
-                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 4f);
+                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.renderer.transform, 1f);
             }
 
             foreach (SnapContainer container in snapPool.ActiveObjects)
@@ -231,7 +241,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 4f);
+                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.transform, 1f);
             }
 
             foreach (SwipeContainer container in swipePool.ActiveObjects)
@@ -244,7 +254,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 4f);
+                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.transform, 1f);
             }
 
             foreach (GenericContainer container in r_EffectPool.ActiveObjects)
@@ -257,7 +267,7 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 4f);
+                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.transform, 1f);
             }
 
             foreach (HoldEndContainer container in holdEndPool.ActiveObjects)
@@ -270,14 +280,16 @@ namespace SaturnGame.RhythmGame
 
                 if (!container.reverse)
                     AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 0.25f);
-                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 4f);
+                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.transform, 1f);
             }
 
             foreach (HoldSurfaceRenderer renderer in holdSurfacePool.ActiveObjects)
             {
                 renderer.GenerateMesh(ScaledVisualTime(), ScrollDuration());
                 
-                if (renderer.holdNote.End.ScaledVisualTime <= ScaledVisualTime() - ScrollDuration() * 0.25f)
+                float despawnTime = renderer.reverse ? ScaledVisualTime() - ScrollDuration() * 1f : ScaledVisualTime() - ScrollDuration() * 0.25f;
+
+                if (renderer.holdNote.End.ScaledVisualTime <= despawnTime)
                 {
                     holdSurfaceGarbage.Add(renderer);
                 }

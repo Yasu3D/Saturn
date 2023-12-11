@@ -418,6 +418,8 @@ namespace SaturnGame.RhythmGame
 
                 foreach (HoldNote hold in holdsToReverse)
                     ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
+                
+                reverseHoldNotes.Reverse();
 
                 foreach (ChartObject barLine in barLinesToRemove)
                     barLines.Remove(barLine);
@@ -808,7 +810,7 @@ namespace SaturnGame.RhythmGame
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/genocider.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/S03-062_03.mer");
                 if (File.Exists(filepath))
                 {
                     FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);

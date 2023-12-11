@@ -20,8 +20,8 @@ namespace SaturnGame.Rendering
         [SerializeField] private MeshRenderer meshRenderer;
 
         [SerializeField] private Mesh holdMesh;
-        private Vector3[] vertices;
-        private Vector2[] uv;
+        private List<Vector3> vertList = new();
+        private List<Vector2> uvList = new();
         private int[] triangles;
 
         private int ColorID;
@@ -48,58 +48,98 @@ namespace SaturnGame.Rendering
             meshFilter.mesh = holdMesh;
         }
 
+        /// <summary>
+        /// Generates a Hold Note Mesh.
+        /// This still needs A LOT of optimizing/cleanup!!!
+        /// </summary>
         public void GenerateMesh(float visualTime, float scrollDuration)
         {
-            int maxWidth = holdNote.MaxSize;
-            int maxLength = holdNote.RenderedNotes.Length;
-
-            vertices = new Vector3[(maxWidth + 1) * maxLength];
-            uv = new Vector2[(maxWidth + 1) * maxLength];
+            int holdWidth = holdNote.MaxSize;
+            int holdLength = holdNote.RenderedNotes.Length;
+            int trueLength = 0; // To keep track of all sub-segments as well
 
             int vertexID = 0;
-            for (int x = 0; x <= maxWidth; x++)
-            {
-                for (int y = 0; y < maxLength; y++)
-                {
-                    float noteSize = holdNote.RenderedNotes[y].Size;
-                    float notePosition = holdNote.RenderedNotes[y].Position;
 
+            vertList.Clear();
+            uvList.Clear();
+
+            // For every Rendered Segment
+            for (int y = 0; y < holdLength; y++)
+            {
+                Note note0 = holdNote.RenderedNotes[y];
+
+                int startNoteSize = note0.Size;
+                int startNotePos = note0.Position;
+
+                int endNoteSize = startNoteSize;
+                int endNotePos = startNotePos;
+
+                float start = note0.ScaledVisualTime;
+                float end = start + 1;
+                float interval = 20;
+
+                // Get proper values for sub-segment generation
+                if (y != holdLength - 1)
+                {
+                    Note note1 = holdNote.RenderedNotes[y + 1];
+                    endNoteSize = note1.Size;
+                    endNotePos = note1.Position;
+
+                    // Update end only if hold is not straight.
+                    if (startNotePos != endNotePos || startNoteSize != endNoteSize)
+                        end = note1.ScaledVisualTime;
+                }
+
+                // For every sub-segment between real segments.
+                for (float i = start; i < end; i += interval)
+                {
+                    float progress = Mathf.InverseLerp(start, end, i);
+                    float noteSize = Mathf.Lerp(startNoteSize, endNoteSize, progress);
+                    float notePos = SaturnMath.LerpRound(startNotePos, endNotePos, progress, 60);
+
+                    // Shrink hold sizes to fit note mesh
                     if (noteSize < 60)
                     {
                         noteSize -= 1.6f;
-                        notePosition += 0.8f;
+                        notePos += 0.8f;
                     }
 
-                    float sizeMultiplier = GetAngleInterval(noteSize, maxWidth);
-                    float currentAngle = (sizeMultiplier * x + notePosition) * 6;
+                    float sizeMultiplier = GetAngleInterval(noteSize, holdWidth);
+                    float distance = i - visualTime;
+                    float depth = SaturnMath.InverseLerp(scrollDuration, 0, distance);
 
-                    float time = holdNote.RenderedNotes[y].ScaledVisualTime;
-                    float distance = time - visualTime;
-                    float depth = SaturnMath.InverseLerp(0, scrollDuration, distance);
+                    // Generate an arc of verts
+                    for (int x = 0; x <= holdWidth; x++)
+                    {
+                        float currentAngle = (sizeMultiplier * x + notePos) * 6;
 
-                    vertices[vertexID] = GetPointOnCone(Vector2.zero, tunnelRadius, tunnelLength, currentAngle, depth);
-                    uv[vertexID] = GetUV(x, maxWidth, y, maxLength);
-                    vertexID++;
+                        vertList.Add(GetPointOnCone(Vector2.zero, tunnelRadius, tunnelLength, currentAngle, depth));
+                        uvList.Add(GetUV(x, holdWidth, y + progress, holdLength));
+                        vertexID++;
+                    }
+
+                    // We've generated one segment. Increment for triangle gen.
+                    trueLength++;
                 }
             }
 
-            triangles = new int[maxWidth * maxLength * 6]; 
+            triangles = new int[holdWidth * trueLength * 6]; 
 
             int vert = 0;
             int tris = 0;
 
-            for (int y = 0; y < maxWidth; y++)
+            for (int y = 0; y < (trueLength - 1); y++)
             {
-                for (int x = 0; x < (maxLength - 1); x++)
+                for (int x = 0; x < holdWidth; x++)
                 {
                     // Draw triangles counterclockwise to flip normals
-                    triangles[tris + 2] = vert + 0;
-                    triangles[tris + 1] = vert + (maxLength - 1) + 1;
-                    triangles[tris + 0] = vert + 1;
-                    
-                    triangles[tris + 5] = vert + 1;
-                    triangles[tris + 4] = vert + (maxLength - 1) + 1;
-                    triangles[tris + 3] = vert + (maxLength - 1) + 2;
+                    triangles[tris + 2] = vert;
+                    triangles[tris + 1] = vert + 1;
+                    triangles[tris + 0] = vert + holdWidth + 1;
+
+                    triangles[tris + 3] = vert + 1;
+                    triangles[tris + 4] = vert + holdWidth + 1;
+                    triangles[tris + 5] = vert + holdWidth + 2;
 
                     vert ++;
                     tris += 6;
@@ -110,29 +150,20 @@ namespace SaturnGame.Rendering
 
             holdMesh.Clear();
 
-            holdMesh.vertices = vertices;
+            holdMesh.vertices = vertList.ToArray();
+            holdMesh.uv = uvList.ToArray();
             holdMesh.triangles = triangles;
-            holdMesh.uv = uv;
-        }
-
-        private int GetMaxDivisions(float distance)
-        {
-            int divisor = 1;
-            while (distance / divisor > 0.12f)
-            {
-                divisor++;
-            }
-
-            return divisor;
         }
 
         Vector3 GetPointOnCone(Vector2 centerPoint, float coneRadius, float coneLength, float angle, float depth, bool clamp = true)
         {
             angle = 180 - angle;
+            
+            if (reverse) depth = 2 - depth;
 
-            float x = coneRadius * (1 - depth) * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
-            float y = coneRadius * (1 - depth) * Mathf.Sin(Mathf.Deg2Rad * angle) + centerPoint.y;
-            float z = coneLength * depth;
+            float x = coneRadius * depth * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
+            float y = coneRadius * depth * Mathf.Sin(Mathf.Deg2Rad * angle) + centerPoint.y;
+            float z = coneLength * (1 - depth);
 
             if (clamp && z <= coneLength)
             {
@@ -158,9 +189,9 @@ namespace SaturnGame.Rendering
     
         void OnDrawGizmos()
         {
-            foreach (Vector3 vert in vertices)
+            for (int i = 0; i < holdMesh.vertices.Length; i++)
             {
-                Gizmos.DrawSphere(vert, 0.1f);
+                Gizmos.DrawSphere(holdMesh.vertices[i], 0.1f);
             }
         }
     }
