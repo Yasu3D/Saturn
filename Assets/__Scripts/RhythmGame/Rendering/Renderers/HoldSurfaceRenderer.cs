@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using Unity.VisualScripting;
@@ -92,7 +93,7 @@ namespace SaturnGame.Rendering
                     if (startNoteSize == endNoteSize && startNotePos == endNotePos)
                         interval = endNote.ScaledVisualTime - startNote.ScaledVisualTime;
                 }
-
+                
                 // For every sub-segment between RenderedNotes.
                 for (float i = start; i < end; i += interval)
                 {
@@ -117,7 +118,7 @@ namespace SaturnGame.Rendering
                         float currentAngle = (sizeMultiplier * x + notePos) * 6;
 
                         vertList.Add(GetPointOnCylinder(Vector2.zero, tunnelRadius, tunnelLength, currentAngle, depth));
-                        uvList.Add(GetUV(x, holdWidth, y + progress, holdLength));
+                        uvList.Add(GetUV(x, holdWidth, y + progress, holdLength - 1));
                         vertexID++;
                     }
 
@@ -135,7 +136,7 @@ namespace SaturnGame.Rendering
             {
                 for (int x = 0; x < holdWidth; x++)
                 {
-                    // Draw triangles counterclockwise to flip normals
+                    // Draw triangles in this order to control normals
                     triangles[tris + 2] = vert;
                     triangles[tris + 1] = vert + 1;
                     triangles[tris + 0] = vert + holdWidth + 1;
@@ -162,7 +163,7 @@ namespace SaturnGame.Rendering
         {
             angle = 180 - angle;
             
-            //if (reverse) depth = depth;
+            //if (reverse) depth *= -1;
 
             float x = coneRadius * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
             float y = coneRadius * Mathf.Sin(Mathf.Deg2Rad * angle) + centerPoint.y;
@@ -175,6 +176,7 @@ namespace SaturnGame.Rendering
         {
             float u = Mathf.InverseLerp(0, noteSize, x);
             float v = Mathf.InverseLerp(0, depth, y);
+
             return new Vector2 (u,v);
         }
 
@@ -190,6 +192,14 @@ namespace SaturnGame.Rendering
             for (int i = 0; i < debugGizmos; i++)
             {
                 Gizmos.DrawSphere(holdMesh.vertices[i], 0.1f);
+            }
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                GenerateMesh(800);
             }
         }
     }

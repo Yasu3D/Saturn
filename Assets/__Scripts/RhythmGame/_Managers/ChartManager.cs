@@ -411,18 +411,15 @@ namespace SaturnGame.RhythmGame
 
                 List<Note> notesToReverse = notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
                 List<HoldNote> holdsToReverse = holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
-                List<ChartObject> barLinesToRemove = barLines.Where(x => x.ScaledVisualTime > effectStartTime && x.ScaledVisualTime < effectEndTime).ToList();
-                
+
                 foreach (Note note in notesToReverse)
                     ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
 
                 foreach (HoldNote hold in holdsToReverse)
                     ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
                 
+                // List.Reverse() from Linq
                 reverseHoldNotes.Reverse();
-
-                foreach (ChartObject barLine in barLinesToRemove)
-                    barLines.Remove(barLine);
             }
         }
 
@@ -460,7 +457,10 @@ namespace SaturnGame.RhythmGame
             foreach (Note note in copy.Notes)
                 note.ScaledVisualTime = SaturnMath.Remap(note.ScaledVisualTime, midTime, endTime, mirrorTime, startTime);
 
-            copy.Notes.Reverse();
+            // Array.Reverse from System.
+            Array.Reverse(copy.Notes);
+            Array.Reverse(copy.RenderedNotes);
+
             reverseHoldNotes.Add(copy);
         }
 
@@ -818,6 +818,24 @@ namespace SaturnGame.RhythmGame
                     await LoadChart(fileStream);
                 }
                 else Debug.Log("File not found");
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                foreach (HoldNote hold in reverseHoldNotes)
+                {
+                    // This is a method from System.LINQ
+                    // It doesn't set the array to the reversed one,
+                    // but instead returns a *new* array that's reversed.
+                    // The correct way to do this would be:
+                    // `hold.RenderedNotes = hold.RenderedNotes.Reverse();`
+                    hold.RenderedNotes.Reverse();
+
+                    // This is a method from System
+                    // This is what I thought I was using.
+                    // I have been troubleshooting this for an hour.
+                    Array.Reverse(hold.RenderedNotes);
+                }
             }
         }
     }

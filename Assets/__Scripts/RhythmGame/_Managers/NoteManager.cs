@@ -209,7 +209,7 @@ namespace SaturnGame.RhythmGame
                 GetHoldSurface(currentHold, true);
                 
                 if (currentHold.Start.BonusType is ObjectEnums.BonusType.R_Note)
-                    GetR_Effect(currentHold.Start);
+                    GetR_Effect(currentHold.Start, true);
 
                 reverseHoldNoteIndex++;
             }
@@ -292,14 +292,17 @@ namespace SaturnGame.RhythmGame
 
                 if (!renderer.reverse)
                     AnimateObject(renderer, holdSurfaceGarbage, renderer.holdNote.Start.ScaledVisualTime, renderer.holdNote.End.ScaledVisualTime, 0.25f, renderer.transform, false);
-                else ReverseAnimateObject(renderer, holdSurfaceGarbage, renderer.holdNote.Start.ScaledVisualTime, renderer.holdNote.End.ScaledVisualTime, 1.0f, renderer.transform, false);
+                else ReverseAnimateObject(renderer, holdSurfaceGarbage, renderer.holdNote.End.ScaledVisualTime, renderer.holdNote.Start.ScaledVisualTime, 1.0f, renderer.transform, false);
             }
 
             foreach (GenericContainer container in syncPool.ActiveObjects)
                 AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.renderer.transform, true);
 
             foreach (BarLineContainer container in barLinePool.ActiveObjects)
+            {
+                container.gameObject.SetActive(!reverseActive);
                 AnimateObject(container, barLineGarbage, container.time, container.time, 0, container.transform, true);
+            }
         }
 
         private void ReleaseObjects()

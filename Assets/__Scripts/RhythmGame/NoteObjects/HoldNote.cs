@@ -71,6 +71,5 @@ namespace SaturnGame.RhythmGame
         public Note[] RenderedNotes;
 
         public int MaxSize;
-        public int[] Distance;
     }
 }
