@@ -366,6 +366,7 @@ namespace SaturnGame.RhythmGame
             float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
 
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
+
             if (scale)
             {
                 float clampedScroll = Mathf.Max(0, scroll);

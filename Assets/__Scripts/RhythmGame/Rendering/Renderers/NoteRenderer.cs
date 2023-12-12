@@ -62,6 +62,12 @@ namespace SaturnGame.Rendering
             if (materialInstance.HasFloat("_SubStrength"))
                 materialInstance.SetFloat("_SubStrength", SubStrength);
 
+            if (materialInstance.HasFloat("_Z_Offset"))
+            {
+                int state = note.NoteType is ObjectEnums.NoteType.HoldStart ? 1 : 0;
+                materialInstance.SetFloat("_Z_Offset", state);
+            }
+
             meshFilter.mesh = meshes[Size - 1];
             meshRenderer.material = materialInstance;
 
