@@ -541,12 +541,9 @@ namespace SaturnGame.RhythmGame
             return GetScaledTime(timeManager.VisualTime);
         }
 
-        [SerializeField] TMPro.TextMeshProUGUI text;
         void Update()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
-
-            text.text = ScaledVisualTime().ToString();
 
             ProcessBgmData();
 

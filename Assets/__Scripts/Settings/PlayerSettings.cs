@@ -7,7 +7,7 @@ namespace SaturnGame.Settings
     [System.Serializable] public class PlayerSettings
     {
         public GameSettings GameSettings = new();
-        public DisplaySettings DisplaySettings = new();
+        public UISettings DisplaySettings = new();
         public DesignSettings DesignSettings = new();
         public SoundSettings SoundSettings = new();
     }
@@ -23,7 +23,7 @@ namespace SaturnGame.Settings
         public int GiveUpSetting;
     }
 
-    [System.Serializable] public class DisplaySettings
+    [System.Serializable] public class UISettings
     {
         public int JudgementDisplayPosition;
         public bool ShowJudgementDetails;
