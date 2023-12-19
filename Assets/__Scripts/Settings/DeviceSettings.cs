@@ -12,6 +12,7 @@ namespace SaturnGame.Settings
     [System.Serializable] public class DisplaySettings
     {
         [Range(0, 100)] public int ViewRectPosition = 50;
-        [Range(0, 100)] public int ViewRectScale = 100;
+        [Range(50, 100)] public int ViewRectScale = 100;
+        public int TargetFramerate = 120;
     }
 }

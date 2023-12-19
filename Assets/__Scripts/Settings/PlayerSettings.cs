@@ -7,7 +7,7 @@ namespace SaturnGame.Settings
     [System.Serializable] public class PlayerSettings
     {
         public GameSettings GameSettings = new();
-        public UISettings DisplaySettings = new();
+        public UISettings UISettings = new();
         public DesignSettings DesignSettings = new();
         public SoundSettings SoundSettings = new();
     }

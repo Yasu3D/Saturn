@@ -121,9 +121,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -168,9 +168,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Jost-BlackItalic SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: -1481177597
   material: {fileID: -6519663718286262119}
-  materialHashCode: 0
+  materialHashCode: 1086967235
   m_Version: 1.1.0
   m_SourceFontFileGUID: 387914e21ca2a3f44a3b4ff0fe01d2ae
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 387914e21ca2a3f44a3b4ff0fe01d2ae,

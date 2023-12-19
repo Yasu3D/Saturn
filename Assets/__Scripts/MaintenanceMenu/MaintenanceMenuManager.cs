@@ -4,6 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using SaturnGame.Settings;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace SaturnGame.UI
 {
@@ -28,6 +31,7 @@ namespace SaturnGame.UI
         [SerializeField] private List<Button> inputSettingsButtons;
         [SerializeField] private List<Button> lightSettingsButtons;
         [SerializeField] private List<Button> displaySettingsButtons;
+        [SerializeField] private List<Button> displaySettingsValueButtons;
         [SerializeField] private List<Button> networkSettingsButtons;
         [SerializeField] private List<Button> graphicsSettingsButtons;
 
@@ -41,6 +45,9 @@ namespace SaturnGame.UI
         private int mainMenuIndex = 0;
         private int settingsMenuIndex = 0;
         private int hardwareTestIndex = 0;
+
+        private bool changingNumericValue;
+        private int numericIndex = 0;
 
         void Awake()
         {
@@ -100,11 +107,15 @@ namespace SaturnGame.UI
 
             lightSettingsButtons[0].onClick.AddListener(OpenSystemSettings);
 
-            //displaySettingsButtons[0].onClick.AddListener();
-            //displaySettingsButtons[1].onClick.AddListener();
-            //displaySettingsButtons[2].onClick.AddListener();
-            //displaySettingsButtons[3].onClick.AddListener();
+            displaySettingsButtons[0].onClick.AddListener(delegate{SelectDisplayValueButton(0);});
+            displaySettingsButtons[1].onClick.AddListener(delegate{SelectDisplayValueButton(1);});
+            displaySettingsButtons[2].onClick.AddListener(delegate{SelectDisplayValueButton(2);});
+            displaySettingsButtons[3].onClick.AddListener(delegate{SelectDisplayValueButton(3);});
             displaySettingsButtons[4].onClick.AddListener(OpenSystemSettings);
+            displaySettingsValueButtons[0].onClick.AddListener(delegate{SelectDisplayButton(0);});
+            displaySettingsValueButtons[1].onClick.AddListener(delegate{SelectDisplayButton(1);});
+            displaySettingsValueButtons[2].onClick.AddListener(delegate{SelectDisplayButton(2);});
+            displaySettingsValueButtons[3].onClick.AddListener(delegate{SelectDisplayButton(3);});
 
             networkSettingsButtons[0].onClick.AddListener(OpenSystemSettings);
 
@@ -125,7 +136,18 @@ namespace SaturnGame.UI
 
         void ReturnToGame()
         {
+            SceneManager.LoadSceneAsync("_RhythmGame");
+        }
 
+        void Update()
+        {
+            if (!changingNumericValue) return;
+
+            if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical") > 0)
+                NumericValueUp();
+
+            if (Input.GetButtonDown("Vertical") && Input.GetAxis("Vertical") < 0)
+                NumericValueDown();
         }
 
         // ==== MAIN MENUS
@@ -167,7 +189,7 @@ namespace SaturnGame.UI
             EventSystem.current.SetSelectedGameObject(systemSettingsButtons[settingsMenuIndex].gameObject);
         }
 
-        // ==== SETTINGS SUBMENUS
+        // ==== SUBMENUS
         void OpenSettingsSubMenu(int id)
         {
             CloseAll();
@@ -180,6 +202,76 @@ namespace SaturnGame.UI
             CloseAll();
             hardwareTestMenus[id].SetActive(true);
             hardwareTestIndex = id;
+        }
+    
+        // ==== VALUE ADJUSTMENTS
+        void SelectDisplayValueButton(int id)
+        {
+            changingNumericValue = true;
+            numericIndex = id;
+            EventSystem.current.SetSelectedGameObject(displaySettingsValueButtons[id].gameObject);
+        }
+
+        void SelectDisplayButton(int id)
+        {
+            changingNumericValue = false;
+            EventSystem.current.SetSelectedGameObject(displaySettingsButtons[id].gameObject);
+        }
+
+        void NumericValueUp()
+        {
+            DisplaySettings display = SettingsManager.Instance.DeviceSettings.DisplaySettings;
+
+            switch (numericIndex)
+            {
+                case 0:
+                    display.ViewRectPosition++;
+                    if (display.ViewRectPosition > 100)
+                        display.ViewRectPosition -= 101;
+                    EventManager.InvokeEvent("UpdateViewRect");
+                    break;
+
+                case 1:
+                    display.ViewRectScale++;
+                    if (display.ViewRectScale > 100)
+                        display.ViewRectScale -= 51;
+                    EventManager.InvokeEvent("UpdateViewRect");
+                    break;
+
+                case 2:
+                    break;
+                
+                case 3:
+                    break;
+            }
+        }
+
+        void NumericValueDown()
+        {
+            DisplaySettings display = SettingsManager.Instance.DeviceSettings.DisplaySettings;
+
+            switch (numericIndex)
+            {
+                case 0:
+                    display.ViewRectPosition--;
+                    if (display.ViewRectPosition < 0)
+                        display.ViewRectPosition += 101;
+                    EventManager.InvokeEvent("UpdateViewRect");
+                    break;
+
+                case 1:
+                    display.ViewRectScale--;
+                    if (display.ViewRectScale < 50)
+                        display.ViewRectScale += 51;
+                    EventManager.InvokeEvent("UpdateViewRect");
+                    break;
+
+                case 2:
+                    break;
+                
+                case 3:
+                    break;
+            }
         }
     }
 }

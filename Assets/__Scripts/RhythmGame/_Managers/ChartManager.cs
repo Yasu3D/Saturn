@@ -133,7 +133,7 @@ namespace SaturnGame.RhythmGame
                 string tempMusicFilePath = MerLoader.GetMetadata(merLine, "#MUSIC_FILE_PATH ");
                 if (tempMusicFilePath != null) musicFilePath = tempMusicFilePath;
 
-                string tempDifficulty = MerLoader.GetMetadata(merLine, "#DIFFICULTY");
+                string tempDifficulty = MerLoader.GetMetadata(merLine, "#DIFFICULTY ");
                 if (tempDifficulty != null) difficulty = Convert.ToSingle(difficulty);
 
                 string tempAudioOffset = MerLoader.GetMetadata(merLine, "#OFFSET ");
@@ -818,24 +818,6 @@ namespace SaturnGame.RhythmGame
                     await LoadChart(fileStream);
                 }
                 else Debug.Log("File not found");
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                foreach (HoldNote hold in reverseHoldNotes)
-                {
-                    // This is a method from System.LINQ
-                    // It doesn't set the array to the reversed one,
-                    // but instead returns a *new* array that's reversed.
-                    // The correct way to do this would be:
-                    // `hold.RenderedNotes = hold.RenderedNotes.Reverse();`
-                    hold.RenderedNotes.Reverse();
-
-                    // This is a method from System
-                    // This is what I thought I was using.
-                    // I have been troubleshooting this for an hour.
-                    Array.Reverse(hold.RenderedNotes);
-                }
             }
         }
     }
