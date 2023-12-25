@@ -35,18 +35,21 @@ namespace SaturnGame.UI
         [SerializeField] private float letterSpacing;
         [SerializeField] private float radius;
         [SerializeField] private float angleOffset;
+        [SerializeField] private bool flipText;
 
         private float prevLetterSpacing;
         private float prevRadius;
         private float prevAngleOffset;
+        private bool prevFlipText;
 
         private bool ParametersChanged()
         {
-            bool value = prevLetterSpacing != letterSpacing || prevRadius != radius || prevAngleOffset != angleOffset;
+            bool value = prevLetterSpacing != letterSpacing || prevRadius != radius || prevAngleOffset != angleOffset || prevFlipText != flipText;
 
             prevLetterSpacing = letterSpacing;
             prevRadius = radius;
             prevAngleOffset = angleOffset;
+            prevFlipText = flipText;
             return value;
         }
 
@@ -55,6 +58,11 @@ namespace SaturnGame.UI
             if (textComponent == null)
                 textComponent = gameObject.GetComponent<TMP_Text>();
 
+            UpdateText();
+        }
+
+        void OnEnable()
+        {
             UpdateText();
         }
 
@@ -77,8 +85,6 @@ namespace SaturnGame.UI
 
             if (characterCount == 0) return;
 
-            //float boundsMin = textComponent.rectTransform.rect.xMin;
-            //float boundsMax = textComponent.rectTransform.rect.xMax;
             float boundsMin = textComponent.bounds.min.x;
             float boundsMax = textComponent.bounds.max.x;
 
@@ -86,20 +92,26 @@ namespace SaturnGame.UI
             {
                 if (!textInfo.characterInfo[i].isVisible) continue;
 
-
-
                 int vertexIndex = textInfo.characterInfo[i].vertexIndex;
                 int materialIndex = textInfo.characterInfo[i].materialReferenceIndex;
                 vertices = textInfo.meshInfo[materialIndex].vertices;
 
-                Vector3 charMidBaselinePos = new Vector2((vertices[vertexIndex + 0].x + vertices[vertexIndex + 2].x) / 2, textInfo.characterInfo[i].baseLine);
-                //textInfo.characterInfo[i].origin
+                Vector3 charMidBaselinePos = new Vector2((vertices[vertexIndex + 0].x + vertices[vertexIndex + 2].x) * 0.5f, textInfo.characterInfo[i].baseLine);
                 float zeroToOnePos = Mathf.InverseLerp(boundsMin, boundsMax, charMidBaselinePos.x);
 
-                vertices[vertexIndex + 0] += -charMidBaselinePos;
-                vertices[vertexIndex + 1] += -charMidBaselinePos;
-                vertices[vertexIndex + 2] += -charMidBaselinePos;
-                vertices[vertexIndex + 3] += -charMidBaselinePos;
+                if (flipText)
+                {
+                    Vector3 centerPos = new(charMidBaselinePos.x, textComponent.bounds.center.y, 0);
+                    vertices[vertexIndex + 0] -= (vertices[vertexIndex + 0] - centerPos) * 2;
+                    vertices[vertexIndex + 1] -= (vertices[vertexIndex + 1] - centerPos) * 2;
+                    vertices[vertexIndex + 2] -= (vertices[vertexIndex + 2] - centerPos) * 2;
+                    vertices[vertexIndex + 3] -= (vertices[vertexIndex + 3] - centerPos) * 2;
+                }
+
+                vertices[vertexIndex + 0] -= charMidBaselinePos;
+                vertices[vertexIndex + 1] -= charMidBaselinePos;
+                vertices[vertexIndex + 2] -= charMidBaselinePos;
+                vertices[vertexIndex + 3] -= charMidBaselinePos;
 
                 matrix = GetMatrix(zeroToOnePos, textInfo, i);
 
@@ -116,6 +128,7 @@ namespace SaturnGame.UI
         {
             float scaledLetterSpacing = letterSpacing * textComponent.rectTransform.rect.width * 0.15f;
             float angle = ((zeroToOnePos * scaledLetterSpacing) + angleOffset) * Mathf.Deg2Rad;
+            if (flipText) angle = -angle;
 
             float x0 = Mathf.Cos(angle);
             float y0 = Mathf.Sin(angle);

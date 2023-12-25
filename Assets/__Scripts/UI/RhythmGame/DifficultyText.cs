@@ -8,22 +8,23 @@ public class DifficultyText : MonoBehaviour
     [SerializeField] private ArcTextMeshPro arc;
 
     [Space(10)]
-    [SerializeField] private Color normalColor = new();
-    [SerializeField] private Color hardColor = new();
-    [SerializeField] private Color expertColor = new();
-    [SerializeField] private Color infernoColor = new(0.2509f, 0, 0.2627f, 1);
-    [SerializeField] private Color beyondColor = new();
+    [SerializeField] private Color normalColor = new(0.1019f, 0.4823f, 1f, 1f);
+    [SerializeField] private Color hardColor = new(1f, 0.7647f, 0f, 1f);
+    [SerializeField] private Color expertColor = new(1f, 0f, 0.5176f, 1f);
+    [SerializeField] private Color infernoColor = new(0.2509f, 0f, 0.2627f, 1f);
+    [SerializeField] private Color beyondColor = new(0f, 0f, 0f, 1f);
 
     [SerializeField] private int difficultyIndex = 0;
-    [SerializeField] private int difficultyLevel = 0;
+    [SerializeField] private float difficultyLevel = 0;
     void Update()
     {
         SetDifficultyText(difficultyIndex, difficultyLevel);
     }
 
-    void SetDifficultyText(int index, int level)
+    void SetDifficultyText(int index, float level)
     {
         string diffName;
+        string diffLevel;
         Color color;
         switch (index)
         {
@@ -53,7 +54,11 @@ public class DifficultyText : MonoBehaviour
                 break;
         }
 
-        text.text = $"{diffName}/Lv.{level}";
+        // Convert level to string and add a plus if it's above 0.6
+        diffLevel = Mathf.Floor(level).ToString();
+        if (level % 1 > 0.6f) diffLevel += "+";
+
+        text.text = $"{diffName}/Lv.{diffLevel}";
         text.color = color;
         arc.UpdateText();
     }

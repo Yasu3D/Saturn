@@ -298,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerSettings:
     GameSettings:
-      NoteSpeed: 45
+      NoteSpeed: 40
       JudgementOffset: 0
       MaskDensity: 4
       BackgroundVideoSetting: 0
@@ -330,7 +330,7 @@ MonoBehaviour:
       NoteColorID_SwipeCounterclockwise: 3
       NoteColorID_SnapForward: 4
       NoteColorID_SnapBackward: 5
-      NoteColorID_Hold: 6
+      NoteColorID_Hold: 12
       InvertSlideColor: 0
       TouchEffect: 0
       ShootEffect: 1
@@ -350,6 +350,6 @@ MonoBehaviour:
       RNoteEffectVolume: 80
   DeviceSettings:
     DisplaySettings:
-      ViewRectPosition: 63
+      ViewRectPosition: 50
       ViewRectScale: 100
       TargetFramerate: 120

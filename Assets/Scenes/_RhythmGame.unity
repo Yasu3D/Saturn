@@ -368,6 +368,7 @@ MonoBehaviour:
   letterSpacing: 0.45
   radius: 474
   angleOffset: -75
+  flipText: 0
 --- !u!114 &664073624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +494,7 @@ MonoBehaviour:
   letterSpacing: 0.5
   radius: 474
   angleOffset: -99.1
+  flipText: 0
 --- !u!114 &1183298166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,6 +1027,7 @@ MonoBehaviour:
   letterSpacing: 0.5
   radius: 474
   angleOffset: -40
+  flipText: 0
 --- !u!1 &1534859773
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,7 +1428,7 @@ MonoBehaviour:
     Lower: 4
     Ratio: 1
   bgmPlayer: {fileID: 1534859774}
-  bgmClip: {fileID: 8300000, guid: 62254b1d1ca9701439e6780caabdc0f0, type: 3}
+  bgmClip: {fileID: 8300000, guid: 3a18e2ab7cafc7d49a54ec2c965af7aa, type: 3}
 --- !u!4 &1783936257
 Transform:
   m_ObjectHideFlags: 0
@@ -1615,6 +1618,7 @@ MonoBehaviour:
   letterSpacing: 0.5
   radius: 475
   angleOffset: -111
+  flipText: 0
 --- !u!114 &1960380083
 MonoBehaviour:
   m_ObjectHideFlags: 0
