@@ -60,7 +60,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - MASK_HARD
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -132,8 +133,8 @@ Material:
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
+    - _StencilReadMask: 1
+    - _StencilWriteMask: 0
     - _TextureHeight: 1024
     - _TextureWidth: 1024
     - _UnderlayDilate: 0
@@ -5669,7 +5670,7 @@ MonoBehaviour:
     Padding: 0
     AtlasWidth: 0
     AtlasHeight: 0
-  atlas: {fileID: 0}
+  atlas: {fileID: -4289103799171998913}
   m_AtlasWidth: 1024
   m_AtlasHeight: 1024
   m_AtlasPadding: 5

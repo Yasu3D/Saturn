@@ -7,17 +7,6 @@ namespace SaturnGame.UI
 {
     public class SongInfoDisplay : MonoBehaviour
     {
-        [SerializeField] private string testTitle;
-        [SerializeField] private string testArtist;
-        [SerializeField] private string testCharter;
-        [SerializeField] private float testBpm;
-        [SerializeField] private int testIndex = 0;
-        [SerializeField] private float testLevel = 1;
-        void Update()
-        {
-            //SetSongInfo(testTitle, testArtist, testCharter, testBpm, testIndex, testLevel);
-        }
-
         [Header("Colors")]
         [SerializeField] private Color normalColor = new(0.1019f, 0.4823f, 1f, 1f);
         [SerializeField] private Color hardColor = new(1f, 0.7647f, 0f, 1f);
