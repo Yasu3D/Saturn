@@ -43,6 +43,17 @@ namespace SaturnGame
         }
 
         /// <summary>
+        /// Similar to Modulo. Loops a value within a specified range. <br />
+        /// For example: if x is 1 greater than max, it'll "loop back around" and return min.
+        /// </summary>
+        public static int Loop(int x, int min, int max)
+        {
+            if (min < x && x < max) return x;
+
+            return Modulo(x - min, max - min + 1) + min;
+        }
+
+        /// <summary>
         /// Remaps a value from range <c>inMin - inMax</c> to <c>outMin - outMax</c>
         /// </summary>
         public static float Remap(float input, float inMin, float inMax, float outMin, float outMax, bool clamp = false)

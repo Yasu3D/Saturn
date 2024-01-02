@@ -41,15 +41,17 @@ namespace SaturnGame.UI
         private float prevRadius;
         private float prevAngleOffset;
         private bool prevFlipText;
+        private bool hasResized;
 
         private bool ParametersChanged()
         {
-            bool value = prevLetterSpacing != letterSpacing || prevRadius != radius || prevAngleOffset != angleOffset || prevFlipText != flipText;
+            bool value = hasResized || prevLetterSpacing != letterSpacing || prevRadius != radius || prevAngleOffset != angleOffset || prevFlipText != flipText;
 
             prevLetterSpacing = letterSpacing;
             prevRadius = radius;
             prevAngleOffset = angleOffset;
             prevFlipText = flipText;
+            hasResized = false;
             return value;
         }
 
@@ -66,7 +68,12 @@ namespace SaturnGame.UI
             UpdateText();
         }
 
-        void Update()
+        void OnRectTransformDimensionsChange()
+        {
+            hasResized = true;
+        }
+
+        void LateUpdate()
         {
             if (!ParametersChanged() && !textComponent.havePropertiesChanged) return;
 

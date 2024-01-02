@@ -810,7 +810,7 @@ namespace SaturnGame.RhythmGame
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/02_HRD_Rebuff.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/crossfireEXP.mer");
                 //string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/MER_03_044/03.mer");
                 if (File.Exists(filepath))
                 {

@@ -1428,7 +1428,7 @@ MonoBehaviour:
     Lower: 4
     Ratio: 1
   bgmPlayer: {fileID: 1534859774}
-  bgmClip: {fileID: 8300000, guid: 3a18e2ab7cafc7d49a54ec2c965af7aa, type: 3}
+  bgmClip: {fileID: 8300000, guid: c9054469222aab84d89ff3fae235c1b7, type: 3}
 --- !u!4 &1783936257
 Transform:
   m_ObjectHideFlags: 0

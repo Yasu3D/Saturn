@@ -54,7 +54,7 @@ public class DifficultyText : MonoBehaviour
                 break;
         }
 
-        // Convert level to string and add a plus if it's above 0.6
+        // TODO: Eventually replace with SongData.GetDifficultyString();
         diffLevel = Mathf.Floor(level).ToString();
         if (level % 1 > 0.6f) diffLevel += "+";
 
