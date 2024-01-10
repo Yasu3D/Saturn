@@ -805,12 +805,13 @@ namespace SaturnGame.RhythmGame
 
 
 
+        [SerializeField] private string path = "SongPacks/DONOTSHIP/";
         // DELETE THIS ON SIGHT THANKS
         async void Update()
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/crossfireEXP.mer");
+                string filepath = Path.Combine(Application.streamingAssetsPath, path);
                 //string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/MER_03_044/03.mer");
                 if (File.Exists(filepath))
                 {

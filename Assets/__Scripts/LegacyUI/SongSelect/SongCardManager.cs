@@ -1,25 +1,29 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
+using SaturnGame.Loading;
 
 namespace SaturnGame.UI
 {
     public class SongCardManager : MonoBehaviour
     {
+        public int selectedSongIndex = 0;
+        [SerializeField] private SongInfoDisplay infoDisplay;
+        [SerializeField] private SongLoader songLoader;
+        
         [Header("Cards")]
         [SerializeField] private List<SongCard> songCards;
         [SerializeField] private List<PreviewCard> previewCards;
 
         [Header("Animation")]
-        private const float songCardScaleA = 1.0f;
+        private const float songCardPos = -56;
+        private const float songCardScaleA = 0.6f;
         private const float songCardScaleB = 0.8f;
-        private const float songCardPosA = -75;
-        private const float songCardPosB = -56;
         private const float songCardOffsetA = 290;
         private const float songCardOffsetB = 250;
         private const float previewCardOffset = 100;
-        [SerializeField] private float tweenDuration = 0.1f;
-        [SerializeField] private Ease tweenEase = Ease.InOutSine;
+        private const float tweenDuration = 0.1f;
+        private Ease tweenEase = Ease.OutQuad;
 
         /// <summary>
         /// Index of the card that's currently in the center.
@@ -38,12 +42,6 @@ namespace SaturnGame.UI
 
             cardHalfCount = (int)(songCards.Count * 0.5f);
             centerCardIndex = cardHalfCount;
-
-            for (int i = 0; i < songCards.Count; i++)
-            {
-                bool isCenter = i == centerCardIndex;
-                songCards[i].SetFocus(isCenter);
-            }
         }
 
         // ==== DEBUG ONLY!!! DELETE PLS!!!
@@ -59,6 +57,7 @@ namespace SaturnGame.UI
         /// </summary>
         public void MoveCards(MoveDirection direction)
         {
+            selectedSongIndex += (int)direction;
             centerCardIndex = SaturnMath.Modulo(centerCardIndex + (int)direction, songCards.Count);
             int wrapCardIndex = SaturnMath.Loop(centerCardIndex + cardHalfCount * (int)direction, 0, songCards.Count - 1);
 
@@ -66,24 +65,25 @@ namespace SaturnGame.UI
             {
                 bool isCenter = i == centerCardIndex;
                 bool wrap = i == wrapCardIndex;
-                songCards[i].SetFocus(isCenter);
 
                 float x1 = GetNewSongCardPosition(i, cardHalfCount, isCenter);
-                float y1 = isCenter ? songCardPosA : songCardPosB;
-                float scale = isCenter ? songCardScaleA : songCardScaleB;
+                float y1 = songCardPos;
 
                 float x2 = GetNewPreviewCardPosition(i, cardHalfCount, isCenter);
                 float y2 = previewCards[i].rect.anchoredPosition.y;
 
+                float scale = isCenter ? songCardScaleA : songCardScaleB;
+
                 if (wrap)
                 {
+                    songCards[i].rect.localScale = Vector3.one * scale;
                     songCards[i].rect.anchoredPosition = new(x1, y1);
                     previewCards[i].rect.anchoredPosition = new(x2, y2);
                 }
                 else
                 {
-                    songCards[i].rect.DOAnchorPos(new(x1, y1), tweenDuration).SetEase(tweenEase);
                     songCards[i].rect.DOScale(scale, tweenDuration).SetEase(tweenEase);
+                    songCards[i].rect.DOAnchorPos(new(x1, y1), tweenDuration).SetEase(tweenEase);
                     previewCards[i].rect.DOAnchorPos(new(x2, y2), tweenDuration).SetEase(tweenEase);
                 }
             }
@@ -106,6 +106,14 @@ namespace SaturnGame.UI
 
             int multiplier = SaturnMath.Loop(centerCardIndex - index, -halfCount, halfCount);
             return previewCardOffset * multiplier;
+        }
+    
+        private void SetSongData(int cardIndex)
+        {
+            int relativeIndex = 0;
+
+            SongCard card = songCards[cardIndex];
+            card.SetData(songLoader.songs[selectedSongIndex]);
         }
     }
 }

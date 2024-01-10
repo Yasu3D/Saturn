@@ -15,33 +15,18 @@ namespace SaturnGame.UI
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI artistText;
         [SerializeField] private TextMeshProUGUI difficultyText;
-        [SerializeField] private Image jacketImage;
+        [SerializeField] private RawImage jacketImage;
 
         [Space(10)]
         [SerializeField] private GameObject cardData;
-        [SerializeField] private Sprite emptyJacket;
-
-        [Header("UI Elements")]
-        [SerializeField] private CanvasGroup dataGroup;
-
-        [Header("Animation")]
-        [SerializeField] private float animDuration = 0.15f;
-        [SerializeField] private Ease animEase = Ease.OutQuad;
-
-        /// <summary>
-        /// Hides all content of a card except for the jacket.
-        /// </summary>
-        public void SetFocus(bool state)
-        {
-            dataGroup.DOFade(state ? 0 : 1, animDuration).SetEase(animEase);
-        }
+        [SerializeField] private Texture2D emptyJacket;
 
         /// <summary>
         /// Set SongData of a card to be empty.
         /// </summary>
         public void SetEmpty()
         {
-            jacketImage.sprite = emptyJacket;
+            jacketImage.texture = emptyJacket;
             cardData.SetActive(false);
         }
 
@@ -54,8 +39,8 @@ namespace SaturnGame.UI
 
             titleText.text = data.title;
             artistText.text = data.artist;
-            difficultyText.text = data.GetDifficultyString();
-            jacketImage.sprite = data.jacket;
+            //difficultyText.text = data.GetDifficultyString();
+            //jacketImage.texture = data.jacket;
         }
     }
 }

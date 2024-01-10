@@ -1,19 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SaturnGame.Data
 {
+    [System.Serializable]
     public class SongData
     {
-        public Sprite jacket;
+        public SongData(string title, string artist, string bpm, string folderPath,  string jacketPath)
+        {
+            this.title = title;
+            this.artist = artist;
+            this.bpm = bpm;
+            this.folderPath = folderPath;
+            this.jacketPath = jacketPath;
+        }
+
+        public Texture2D jacket;
         public string title;
         public string artist;
-        public string charter;
-        public float difficulty;
+        public string bpm;
+        public string folderPath;
+        public string jacketPath;
 
-        public string GetDifficultyString()
+        /*public string GetDifficultyString()
         {
             return ((int)difficulty).ToString() + (difficulty % 1 > 0.6f ? "+" : "");
         }
@@ -21,6 +29,6 @@ namespace SaturnGame.Data
         public string GetDifficultyString(float difficulty)
         {
             return ((int)difficulty).ToString() + (difficulty % 1 > 0.6f ? "+" : "");
-        }
+        }*/
     }
 }

@@ -40,8 +40,8 @@ namespace SaturnGame.UI
         [SerializeField] private List<Image> foregroundImages = new();
         [SerializeField] private List<Image> backgroundImages = new();
         [SerializeField] private List<Image> backgroundCheckerImages = new();
-        [SerializeField] private float colorAnimDuration = 0.5f;
-        [SerializeField] private Ease colorAnimEase = Ease.OutExpo;
+        private const float colorAnimDuration = 0.2f;
+        private Ease colorAnimEase = Ease.OutExpo;
 
         [Header("Text")]
         [SerializeField] private TextMeshProUGUI titleText;
@@ -50,19 +50,6 @@ namespace SaturnGame.UI
         [SerializeField] private TextMeshProUGUI bpmText;
         [SerializeField] private TextMeshProUGUI difficultyNameText;
         [SerializeField] private TextMeshProUGUI difficultyLevelText;
-
-        [SerializeField] private int diffId;
-        private int prevDiffId;
-        void Update()
-        {
-            bool diffChanged = diffId != prevDiffId;
-
-            if (diffChanged)
-            {
-                SetDifficulty(diffId, 10.7f);
-                prevDiffId = diffId;
-            }
-        }
 
         public void SetSongInfo(string title, string artist, string charter, float bpm, int diffIndex, float diffLevel)
         {
@@ -131,19 +118,16 @@ namespace SaturnGame.UI
 
             foreach (Image img in foregroundImages)
             {
-                //img.color = foregroundColors[clampedIndex];
                 img.DOColor(foregroundColors[clampedIndex], colorAnimDuration).SetEase(colorAnimEase);
             }
 
             foreach (Image img in backgroundImages)
             {
-                //img.color = backgroundColors[clampedIndex];
                 img.DOColor(backgroundColors[clampedIndex], colorAnimDuration).SetEase(colorAnimEase);
             }
 
             foreach (Image img in backgroundCheckerImages)
             {
-                //img.color = backgroundCheckerColors[clampedIndex];
                 img.DOColor(backgroundCheckerColors[clampedIndex], colorAnimDuration).SetEase(colorAnimEase);
             }
         }

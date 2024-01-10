@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
-using System.IO.Enumeration;
-using Microsoft.Unity.VisualStudio.Editor;
 
 namespace SaturnGame.Loading
 {
@@ -63,16 +61,12 @@ namespace SaturnGame.Loading
             
             try
             {
-                using(UnityWebRequest audioWebRequest = UnityWebRequestMultimedia.GetAudioClip(path, type))
+                using(UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(path, type))
                 {
-                    #pragma warning disable CS4014 // shut up the await warning
-                    audioWebRequest.SendWebRequest();
-                    #pragma warning restore CS4014
+                    await webRequest.SendWebRequest();
 
-                    while(!audioWebRequest.isDone) await Task.Yield();
-
-                    if (audioWebRequest.result == UnityWebRequest.Result.Success)
-                        return DownloadHandlerAudioClip.GetContent(audioWebRequest);
+                    if (webRequest.result == UnityWebRequest.Result.Success)
+                        return DownloadHandlerAudioClip.GetContent(webRequest);
                 }
             }
             catch(Exception error)
@@ -103,12 +97,17 @@ namespace SaturnGame.Loading
 
     public class ImageLoader
     {
+        /// <summary>
+        /// <b>THIS BLOCKS THE MAIN THREAD!</b><br/>
+        /// Loads an image file and converts it to a texture.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Texture2D LoadJacket(string path)
         {
             if (!File.Exists(path)) return null;
-
-            Texture2D jacket = null;
-
+            Texture2D jacket = new(256, 256);
+            
             using (Stream stream = File.OpenRead(path))
             {
                 MemoryStream memory = new();
@@ -119,6 +118,26 @@ namespace SaturnGame.Loading
             }
 
             return jacket;
+        }
+        
+        /// <summary>
+        /// Similar to <c>LoadJacket<c/>
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async static Task<Texture2D> LoadJacketWebRequest(string path)
+        {
+            if (!File.Exists(path)) return null;
+            
+            using UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(path);
+            await uwr.SendWebRequest();
+
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                return DownloadHandlerTexture.GetContent(uwr);
+            }
+
+            return null;
         }
     }
 }

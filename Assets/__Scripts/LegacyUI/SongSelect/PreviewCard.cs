@@ -7,15 +7,15 @@ namespace SaturnGame.UI
     public class PreviewCard : MonoBehaviour
     {
         public RectTransform rect;
-        [SerializeField] private Image jacketImage;
-        [SerializeField] private Sprite emptyJacket;
+        [SerializeField] private RawImage jacketImage;
+        [SerializeField] private Texture2D emptyJacket;
 
         /// <summary>
         /// Set SongData of a card to be empty.
         /// </summary>
         public void SetEmpty()
         {
-            jacketImage.sprite = emptyJacket;
+            jacketImage.texture = emptyJacket;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SaturnGame.UI
         /// </summary>
         public void SetData(SongData data)
         {
-            jacketImage.sprite = data.jacket;
+            jacketImage.texture = data.jacket;
         }
     }
 }
