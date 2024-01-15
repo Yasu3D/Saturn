@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using SaturnGame.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
 {
-    [SerializeField] private MenuTransition menuTransition;
+    [SerializeField] private MenuWipeAnimator menuWipe;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Delete))
@@ -15,11 +13,11 @@ public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
         }
     }
 
-    private async void LoadScene(string scenePath)
+    public async void LoadScene(string scenePath)
     {
-        menuTransition.StartTransition();
+        menuWipe.StartTransition();
         await Awaitable.WaitForSecondsAsync(1f);
         await SceneManager.LoadSceneAsync(scenePath);
-        menuTransition.EndTransition();
+        menuWipe.EndTransition();
     }
 }

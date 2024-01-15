@@ -954,7 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 1}
+  m_Color: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1018,7 +1018,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4136679620223543326}
-  - component: {fileID: 5391226025186872116}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -1048,18 +1047,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!225 &5391226025186872116
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7267277544431199722}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &8072582028934751907
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,8 +1269,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3470604888072715699}
-  - component: {fileID: 4420118785447319574}
   - component: {fileID: 2936072241718545089}
+  - component: {fileID: 7919148063426540149}
   m_Layer: 5
   m_Name: SongCard
   m_TagString: Untagged
@@ -1312,28 +1299,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0.00012207031}
   m_SizeDelta: {x: 300, y: 390}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4420118785447319574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8491432504204635703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3813946c94ca71a40a928fed6dd32155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rect: {fileID: 3470604888072715699}
-  titleText: {fileID: 8578688337042133740}
-  artistText: {fileID: 289606473864722743}
-  difficultyText: {fileID: 5574123797634028416}
-  jacketImage: {fileID: 0}
-  cardData: {fileID: 6881778648977395083}
-  emptyJacket: {fileID: 21300000, guid: 97c8837298803d94499df9107234fa2c, type: 3}
-  dataGroup: {fileID: 5391226025186872116}
-  animDuration: 0.1
-  animEase: 4
 --- !u!223 &2936072241718545089
 Canvas:
   m_ObjectHideFlags: 0
@@ -1357,6 +1322,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &7919148063426540149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491432504204635703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a1df51008ef6d043abfb7a57b8bc01b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rect: {fileID: 3470604888072715699}
+  titleText: {fileID: 8578688337042133740}
+  artistText: {fileID: 289606473864722743}
+  difficultyText: {fileID: 5574123797634028416}
+  jacketImage: {fileID: 2860582878354993813}
 --- !u!1 &9061558751820417428
 GameObject:
   m_ObjectHideFlags: 0

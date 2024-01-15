@@ -65,6 +65,9 @@ namespace SaturnGame
             return clamp ? Mathf.Clamp(result, outMin, outMax) : result;
         }
 
+        /// <summary>
+        /// Linearly Interpolate around a circle/clock, where <c>m</c> is the maximum value before it loops back to 0.
+        /// </summary>
         public static float LerpRound(int a, int b, float t, int m)
         {
             if (Mathf.Abs(a - b) > m * 0.5f)
@@ -74,6 +77,11 @@ namespace SaturnGame
             }
             
             return Mathf.Lerp(a, b, t);
+        }
+
+        public static string GetDifficultyString(float difficulty)
+        {
+            return ((int)difficulty).ToString() + (difficulty % 1 > 0.6f ? "+" : "");
         }
 
         public static class Ease

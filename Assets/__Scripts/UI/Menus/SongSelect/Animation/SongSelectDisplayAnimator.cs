@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using SaturnGame.Data;
+using TMPro;
 using DG.Tweening;
+
 
 namespace SaturnGame.UI
 {
-    public class SongInfoDisplay : MonoBehaviour
+    public class SongSelectDisplayAnimator : MonoBehaviour
     {
         [Header("Colors")]
         [SerializeField] private List<Color> foregroundColors = new List<Color>
@@ -41,7 +42,7 @@ namespace SaturnGame.UI
         [SerializeField] private List<Image> backgroundImages = new();
         [SerializeField] private List<Image> backgroundCheckerImages = new();
         private const float colorAnimDuration = 0.2f;
-        private Ease colorAnimEase = Ease.OutExpo;
+        private readonly Ease colorAnimEase = Ease.OutExpo;
 
         [Header("Text")]
         [SerializeField] private TextMeshProUGUI titleText;
@@ -51,70 +52,39 @@ namespace SaturnGame.UI
         [SerializeField] private TextMeshProUGUI difficultyNameText;
         [SerializeField] private TextMeshProUGUI difficultyLevelText;
 
-        public void SetSongInfo(string title, string artist, string charter, float bpm, int diffIndex, float diffLevel)
+        public void SetSongData(SongData data, int difficultyIndex)
         {
-            SetTitle(title);
-            SetArtist(artist);
-            SetCharter(charter);
-            SetBPM(bpm);
-            SetDifficulty(diffIndex, diffLevel);
-        }
+            SongDifficulty diff = data.songDiffs[difficultyIndex];
+            titleText.text = data.title;
+            artistText.text = data.artist;
+            bpmText.text = data.bpm;
 
-        public void SetTitle(string title)
-        {
-            titleText.text = title;
-        }
-
-        public void SetArtist(string artist)
-        {
-            artistText.text = artist;
-        }
-
-        public void SetCharter(string charter)
-        {
-            charterText.text = charter;
-        }
-
-        public void SetBPM(float bpm)
-        {
-            bpmText.text = bpm.ToString();
-        }
-
-        public void SetDifficulty(int index, float level)
-        {
-            string diffName;
-            string diffLevel;
-            int clampedIndex = Mathf.Clamp(index, 0, 4);
-
-            switch (index)
+            if (!diff.exists)
             {
-                case 0:
-                    diffName = "NORMAL";
-                    break;
-
-                case 1:
-                    diffName = "HARD";
-                    break;
-
-                case 2:
-                    diffName = "EXPERT";
-                    break;
-
-                case 3:
-                    diffName = "INFERNO";
-                    break;
-
-                default:
-                    diffName = "BEYOND";
-                    break;
+                charterText.text = "";
+                SetDifficulty(difficultyIndex, -1);
             }
+            else
+            {
+                charterText.text = diff.charter;
+                SetDifficulty(difficultyIndex, diff.diffLevel);
+            }
+        }
 
-            // Convert level to string and add a plus if it's above 0.6
-            diffLevel = Mathf.Floor(level).ToString();
-            if (level % 1 > 0.6f) diffLevel += "+";
+        void SetDifficulty(int index, float level)
+        {
+            int clampedIndex = Mathf.Clamp(index, 0, 4);
+            string diffName = index switch
+            {
+                0 => "NORMAL",
+                1 => "HARD",
+                2 => "EXPERT",
+                3 => "INFERNO",
+                _ => "BEYOND",
+            };
 
             difficultyNameText.text = diffName;
-            difficultyLevelText.text = diffLevel;
+            difficultyLevelText.text = level == -1 ? "?" : SaturnMath.GetDifficultyString(level);
 
             foreach (Image img in foregroundImages)
             {

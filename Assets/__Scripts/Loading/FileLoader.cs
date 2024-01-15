@@ -36,12 +36,12 @@ namespace SaturnGame.Loading
 
 
         /// <summary>
-        /// Finds Metadata tags like "#OFFSET" in a string.
+        /// Finds Metadata tags like "#OFFSET" in a string and return whatever value comes after.
         /// </summary>
         public static string GetMetadata(string input, string tag)
         {
             if (input.Contains(tag))
-                return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length);
+                return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length).TrimStart();
 
             return null;
         }
@@ -96,36 +96,13 @@ namespace SaturnGame.Loading
     }
 
     public class ImageLoader
-    {
-        /// <summary>
-        /// <b>THIS BLOCKS THE MAIN THREAD!</b><br/>
-        /// Loads an image file and converts it to a texture.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static Texture2D LoadJacket(string path)
-        {
-            if (!File.Exists(path)) return null;
-            Texture2D jacket = new(256, 256);
-            
-            using (Stream stream = File.OpenRead(path))
-            {
-                MemoryStream memory = new();
-                stream.CopyTo(memory);
-                byte[] imageData = memory.ToArray();
-
-                ImageConversion.LoadImage(jacket, memory.ToArray(), false);
-            }
-
-            return jacket;
-        }
-        
+    {        
         /// <summary>
         /// Similar to <c>LoadJacket<c/>
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async static Task<Texture2D> LoadJacketWebRequest(string path)
+        public async static Task<Texture2D> LoadImageWebRequest(string path)
         {
             if (!File.Exists(path)) return null;
             

@@ -5,30 +5,23 @@ namespace SaturnGame.Data
     [System.Serializable]
     public class SongData
     {
-        public SongData(string title, string artist, string bpm, string folderPath,  string jacketPath)
+        public SongData(string title, string rubi, string artist, string bpm, string folderPath,  string jacketPath, SongDifficulty[] songDiffs)
         {
             this.title = title;
+            this.rubi = rubi;
             this.artist = artist;
             this.bpm = bpm;
             this.folderPath = folderPath;
             this.jacketPath = jacketPath;
+            this.songDiffs = songDiffs;
         }
 
-        public Texture2D jacket;
         public string title;
+        public string rubi;
         public string artist;
         public string bpm;
         public string folderPath;
         public string jacketPath;
-
-        /*public string GetDifficultyString()
-        {
-            return ((int)difficulty).ToString() + (difficulty % 1 > 0.6f ? "+" : "");
-        }
-
-        public string GetDifficultyString(float difficulty)
-        {
-            return ((int)difficulty).ToString() + (difficulty % 1 > 0.6f ? "+" : "");
-        }*/
+        public SongDifficulty[] songDiffs;
     }
 }
