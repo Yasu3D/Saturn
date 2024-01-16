@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 16995157, guid: cf3b2600710f1d04983afd11f47002af, type: 3}
   m_Name: DOTweenSettings
   m_EditorClassIdentifier: 
-  useSafeMode: 1
+  useSafeMode: 0
   safeModeOptions:
-    logBehaviour: 2
+    logBehaviour: 3
     nestedTweenFailureBehaviour: 0
   timeScale: 1
   unscaledTimeScale: 1
@@ -22,7 +22,7 @@ MonoBehaviour:
   maxSmoothUnscaledTime: 0.15
   rewindCallbackMode: 0
   showUnityEditorReport: 0
-  logBehaviour: 0
+  logBehaviour: 1
   drawGizmos: 1
   defaultRecyclable: 0
   defaultAutoPlay: 3

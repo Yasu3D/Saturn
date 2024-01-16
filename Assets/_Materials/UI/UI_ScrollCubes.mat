@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ScrollCubes
+  m_Name: UI_ScrollCubes
   m_Shader: {fileID: 4800000, guid: 3cbc0c00ea3df0d40a687948a940bb7a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

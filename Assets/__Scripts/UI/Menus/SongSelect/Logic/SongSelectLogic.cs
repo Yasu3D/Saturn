@@ -73,7 +73,7 @@ public class SongSelectLogic : MonoBehaviour
     {
         if (page is MenuPage.SongSelect)
         {
-            // Go to Main Menu here
+            SceneSwitcher.Instance.LoadScene("_TitleScreen");
             return;
         }
 

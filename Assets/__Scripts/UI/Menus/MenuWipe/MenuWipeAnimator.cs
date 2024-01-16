@@ -77,5 +77,18 @@ namespace SaturnGame.UI
                 }
             );
         }
+
+        public void Anim_ForceEnd()
+        {
+            currentSequence.Kill(true);
+
+            viewMask.sizeDelta = viewMaskMax;
+            textMask.sizeDelta = textMaskMin;
+            ring1.sizeDelta = ring1Min;
+            ring2.sizeDelta = ring2Min;
+            ring3.sizeDelta = ring3Min;
+            viewMask.gameObject.SetActive(false);
+            textMask.gameObject.SetActive(false);
+        }
     }
 }

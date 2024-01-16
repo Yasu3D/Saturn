@@ -27,6 +27,7 @@ namespace SaturnGame.UI
         private const float tweenDuration = 0.1f;
         private readonly Ease tweenEase = Ease.OutQuad;
         private const float glowPulseDuration = 0.75f;
+        private Tween glowPulseTween;
 
         /// <summary>
         /// Index of the card that's currently in the center.
@@ -51,7 +52,12 @@ namespace SaturnGame.UI
             CenterCardIndex = cardHalfCount;
 
             // Maybe offload this to a shader?
-            backgroundGlow.DOFade(0.5f, glowPulseDuration).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InCubic);
+            glowPulseTween = backgroundGlow.DOFade(0.5f, glowPulseDuration).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InCubic);
+        }
+
+        void OnDestroy()
+        {
+            glowPulseTween.Kill();
         }
 
         public void Anim_ShiftCards(MoveDirection direction)
