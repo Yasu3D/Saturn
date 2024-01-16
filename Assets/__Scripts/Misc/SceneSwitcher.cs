@@ -15,9 +15,9 @@ public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
 
     public async void LoadScene(string scenePath)
     {
-        menuWipe.StartTransition();
+        menuWipe.Anim_StartTransition();
         await Awaitable.WaitForSecondsAsync(1f);
         await SceneManager.LoadSceneAsync(scenePath);
-        menuWipe.EndTransition();
+        menuWipe.Anim_EndTransition();
     }
 }

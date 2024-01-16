@@ -5,83 +5,77 @@ namespace SaturnGame.UI
 {
     public class MenuWipeAnimator : MonoBehaviour
     {
-        [SerializeField] private GameObject group;
-        [SerializeField] private CanvasGroup logoGroup;
-        [SerializeField] private RectTransform logoRect;
-        [SerializeField] private float logoScaleDuration = 0.5f;
-        [SerializeField] private Ease logoScaleEase = Ease.OutBack;
-        [SerializeField] private float logoSpinDuration = 0.5f;
-        [SerializeField] private Ease logoSpinEase = Ease.OutCubic;
+        [SerializeField] private RectTransform viewMask;
+        [SerializeField] private RectTransform textMask;
+        [SerializeField] private RectTransform ring1;
+        [SerializeField] private RectTransform ring2;
+        [SerializeField] private RectTransform ring3;
+        private const float maskDuration = 0.65f;
+        private const float ring1Duration = 0.12f;
+        private const float ring2Duration = 0.12f;
+        private const float ring3Duration = 0.12f;
+        private readonly Vector2 viewMaskMin = new(0, 0);
+        private readonly Vector2 viewMaskMed = new(350, 350);
+        private readonly Vector2 viewMaskMax = new(1080, 1080);
+        private readonly Vector2 textMaskMin = new(0, 120);
+        private readonly Vector2 textMaskMax = new(500, 120);
+        private readonly Vector2 ring1Max = new(500, 500);
+        private readonly Vector2 ring1Min = new(0, 0);
+        private readonly Vector2 ring2Max = new(450, 450);
+        private readonly Vector2 ring2Min = new(0, 0);
+        private readonly Vector2 ring3Max = new(400, 400);
+        private readonly Vector2 ring3Min = new(0, 0);
+        private readonly Ease viewEase = Ease.InOutBack;
+        private readonly Ease ringEase = Ease.InOutQuad;
 
-        [Space(10)]
+        private Sequence currentSequence;
 
-        [SerializeField] private RectTransform background;
-        [SerializeField] private RectTransform panelLayer1A;
-        [SerializeField] private RectTransform panelLayer2A;
-        [SerializeField] private RectTransform panelLayer1B;
-        [SerializeField] private RectTransform panelLayer2B;
-
-        [SerializeField] private float panelExtendDuration = 0.5f;
-        [SerializeField] private float panelReturnDuration = 0.6f;
-        [SerializeField] private Ease panelEase = Ease.OutQuart;
-
-        private bool isActive = false;
-
-        public void StartTransition()
+        public void Anim_StartTransition()
         {
-            if (isActive) return;
-            isActive = true;
+            currentSequence.Kill(true);
+            currentSequence = DOTween.Sequence();
 
-            group.SetActive(true);
+            viewMask.gameObject.SetActive(true);
+            textMask.gameObject.SetActive(true);
+            viewMask.sizeDelta = viewMaskMax;
+            textMask.sizeDelta = textMaskMin;
+            ring1.sizeDelta = ring1Min;
+            ring2.sizeDelta = ring2Min;
+            ring3.sizeDelta = ring3Min;
 
-            // Logo
-            logoRect.localScale = new(5, 5, 1);
-            logoRect.eulerAngles = new(0, 0, 180);
-            logoGroup.alpha = 1;
-            logoRect.DOScale(1, logoScaleDuration).SetEase(logoScaleEase);
-            logoRect.DORotate(new Vector3(0,0,0), logoSpinDuration).SetEase(logoSpinEase);
+            currentSequence.Append(viewMask.DOSizeDelta(viewMaskMed, maskDuration).SetEase(viewEase));
+            currentSequence.Insert(0.3f, ring1.DOSizeDelta(ring1Max, ring1Duration).SetEase(ringEase));
+            currentSequence.Insert(0.4f, ring2.DOSizeDelta(ring2Max, ring2Duration).SetEase(ringEase));
+            currentSequence.Insert(0.45f, ring3.DOSizeDelta(ring3Max, ring3Duration).SetEase(ringEase));
 
-            // Background
-            background.sizeDelta = new(0, 1080);
-            background.DOSizeDelta(new(1080, 1080), panelExtendDuration).SetEase(panelEase);
-
-            // Panels
-            panelLayer1A.anchoredPosition = new(-500, 0);
-            panelLayer1B.anchoredPosition = new(-500, 0);
-            panelLayer2A.anchoredPosition = new(-375, 0);
-            panelLayer2B.anchoredPosition = new(-375, 0);
-
-            panelLayer1A.DOAnchorPosX(-125, panelExtendDuration + 0.1f).SetEase(panelEase);
-            panelLayer1B.DOAnchorPosX(-125, panelExtendDuration + 0.1f).SetEase(panelEase);
-            panelLayer2A.DOAnchorPosX(-125, panelExtendDuration).SetEase(panelEase);
-            panelLayer2B.DOAnchorPosX(-125, panelExtendDuration).SetEase(panelEase);
+            currentSequence.Insert(0.9f, viewMask.DOSizeDelta(viewMaskMin, 0.12f));
+            currentSequence.Insert(0.95f, ring3.DOSizeDelta(ring3Min, 0.12f));
+            currentSequence.Insert(1.0f, ring2.DOSizeDelta(ring2Min, 0.12f));
+            currentSequence.Insert(1.0f, ring1.DOSizeDelta(ring1Min, 0.12f));
+            currentSequence.Insert(1.0f, textMask.DOSizeDelta(textMaskMax, 0.12f).SetEase(Ease.OutQuad));
         }
 
-        public void EndTransition()
+        public void Anim_EndTransition()
         {
-            if (!isActive) return;
-            isActive = false;
+            currentSequence.Kill(true);
+            currentSequence = DOTween.Sequence();
 
-            // Logo
-            logoRect.localScale = Vector3.one;
-            logoRect.eulerAngles = Vector3.zero;
-            logoRect.DOScale(5, logoScaleDuration).SetEase(Ease.InBack);
-            logoGroup.DOFade(0, 0.5f).SetEase(Ease.InExpo);
+            viewMask.sizeDelta = viewMaskMin;
+            textMask.sizeDelta = textMaskMax;
+            ring1.sizeDelta = ring1Min;
+            ring2.sizeDelta = ring2Min;
+            ring3.sizeDelta = ring3Min;
 
-            // Background
-            background.sizeDelta = new(1080, 1080);
-            background.DOSizeDelta(new(0, 1080), panelExtendDuration).SetEase(Ease.InBack);
-
-            // Panels
-            panelLayer1A.anchoredPosition = new(-125, 0);
-            panelLayer1B.anchoredPosition = new(-125, 0);
-            panelLayer2A.anchoredPosition = new(-125, 0);
-            panelLayer2B.anchoredPosition = new(-125, 0);
-
-            panelLayer1A.DOAnchorPosX(-500, panelReturnDuration).SetEase(Ease.InBack);
-            panelLayer1B.DOAnchorPosX(-500, panelReturnDuration).SetEase(Ease.InBack);
-            panelLayer2A.DOAnchorPosX(-375, panelReturnDuration).SetEase(Ease.InBack);
-            panelLayer2B.DOAnchorPosX(-375, panelReturnDuration).SetEase(Ease.InBack).OnComplete(() => group.SetActive(false));
+            currentSequence.Insert(0.0f, ring1.DOSizeDelta(viewMaskMax, 0.55f).SetEase(ringEase));
+            currentSequence.Insert(0.0f, textMask.DOSizeDelta(textMaskMin, 0.12f).SetEase(Ease.OutQuad));
+            currentSequence.Insert(0.025f, ring2.DOSizeDelta(viewMaskMax, 0.65f).SetEase(ringEase));
+            currentSequence.Insert(0.05f, ring3.DOSizeDelta(viewMaskMax, 0.65f).SetEase(ringEase));
+            currentSequence.Insert(0.075f, viewMask.DOSizeDelta(viewMaskMax, 0.65f).SetEase(viewEase)).OnComplete(() =>
+                {
+                    viewMask.gameObject.SetActive(false);
+                    textMask.gameObject.SetActive(false);
+                }
+            );
         }
     }
 }

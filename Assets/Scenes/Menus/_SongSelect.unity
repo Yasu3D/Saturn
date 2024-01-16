@@ -2510,6 +2510,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378232375}
   m_CullTransparentMesh: 1
+--- !u!1 &384459520 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1828511896380885339, guid: 49e144987333b964ebb180bad7db68dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 246035789}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &396826570 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3470604888072715699, guid: 49ef2578e68cbb046a9e53b6fe15d9ad,
@@ -4390,6 +4396,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3470604888072715699, guid: 49ef2578e68cbb046a9e53b6fe15d9ad,
     type: 3}
   m_PrefabInstance: {fileID: 1806142942}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &834683027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1828511896380885339, guid: 49e144987333b964ebb180bad7db68dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1872927333}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &856292000
 PrefabInstance:
@@ -8063,6 +8075,10 @@ MonoBehaviour:
   songList: {fileID: 1410557166}
   buttonManager: {fileID: 1410557164}
   page: 0
+  diffPlusButton0: {fileID: 384459520}
+  diffPlusButton1: {fileID: 834683027}
+  diffMinusButton0: {fileID: 1431526211}
+  diffMinusButton1: {fileID: 2113008842}
 --- !u!114 &1410557162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8235,6 +8251,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 43.4}
   m_SizeDelta: {x: 370, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1431526211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1828511896380885339, guid: 49e144987333b964ebb180bad7db68dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1943311111}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1438618631
 GameObject:
   m_ObjectHideFlags: 0
@@ -10722,7 +10744,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1849362853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12855,6 +12877,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f72f1e2cb89b0134785ce83d7f9ab86a, type: 3}
+--- !u!1 &2113008842 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1828511896380885339, guid: 49e144987333b964ebb180bad7db68dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 544208926}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2122651378
 GameObject:
   m_ObjectHideFlags: 0

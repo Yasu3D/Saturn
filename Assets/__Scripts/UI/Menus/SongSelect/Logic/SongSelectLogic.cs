@@ -17,6 +17,11 @@ public class SongSelectLogic : MonoBehaviour
     public enum MenuPage { SongSelect = 0, ChartPreview = 1 }
     public MenuPage page = MenuPage.SongSelect;
 
+    [SerializeField] private GameObject diffPlusButton0;
+    [SerializeField] private GameObject diffPlusButton1;
+    [SerializeField] private GameObject diffMinusButton0;
+    [SerializeField] private GameObject diffMinusButton1;
+
     void Awake()
     {
         songList.LoadAllSongData();
@@ -31,7 +36,16 @@ public class SongSelectLogic : MonoBehaviour
         // many difficulties a chart has.
 
         if (SelectedDifficulty >= 4) return;
-        SelectedDifficulty ++;
+
+        SongDifficulty[] diffs = songList.songs[SelectedSongIndex].songDiffs;
+        int index = SelectedDifficulty + 1;
+        SelectedDifficulty = FindNearestDifficulty(diffs, index);
+
+        diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+
         displayAnimator.SetSongData(songList.songs[SelectedSongIndex], SelectedDifficulty);
     }
 
@@ -42,7 +56,16 @@ public class SongSelectLogic : MonoBehaviour
         // many difficulties a chart has.
 
         if (SelectedDifficulty <= 0) return;
-        SelectedDifficulty --;
+        
+        SongDifficulty[] diffs = songList.songs[SelectedSongIndex].songDiffs;
+        int index = SelectedDifficulty - 1;
+        SelectedDifficulty = FindNearestDifficulty(diffs, index);
+
+        diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+
         displayAnimator.SetSongData(songList.songs[SelectedSongIndex], SelectedDifficulty);
     }
     
@@ -86,6 +109,8 @@ public class SongSelectLogic : MonoBehaviour
 
         // Selected Song Index - 1
 
+        // Find closest diff of new song
+
         // Set Song Data to new selected song
         // Move Cards to the right by 1
         // Set Preview Jackets to new selected song
@@ -94,6 +119,14 @@ public class SongSelectLogic : MonoBehaviour
         // Load new Jacket for wrapping card (rightmost card)
 
         SelectedSongIndex = SaturnMath.Modulo(SelectedSongIndex - 1, songList.songs.Count);
+
+        SongDifficulty[] diffs = songList.songs[SelectedSongIndex].songDiffs;
+        SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
+
+        diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
 
         displayAnimator.SetSongData(songList.songs[SelectedSongIndex], SelectedDifficulty);
         cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Right);
@@ -110,6 +143,8 @@ public class SongSelectLogic : MonoBehaviour
 
         // Selected Song Index + 1
 
+        // Find closest diff of new song
+
         // Set Song Data to new selected song
         // Move Cards to the left by 1
         // Set Preview Jackets to new selected song
@@ -119,6 +154,14 @@ public class SongSelectLogic : MonoBehaviour
 
 
         SelectedSongIndex = SaturnMath.Modulo(SelectedSongIndex + 1, songList.songs.Count);
+
+        SongDifficulty[] diffs = songList.songs[SelectedSongIndex].songDiffs;
+        SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
+
+        diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+        diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
 
         displayAnimator.SetSongData(songList.songs[SelectedSongIndex], SelectedDifficulty);
         cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Left);
@@ -144,6 +187,46 @@ public class SongSelectLogic : MonoBehaviour
         }
 
         cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
+    }
+
+    private int FindNearestDifficulty(SongDifficulty[] diffs, int selectedIndex)
+    {
+        if (diffs[selectedIndex].exists) return selectedIndex;
+
+        int leftIndex = selectedIndex - 1;
+        int rightIndex = selectedIndex + 1;
+
+        while (leftIndex >= 0 || rightIndex < diffs.Length)
+        {
+            
+            if (leftIndex >= 0 && diffs[leftIndex].exists) return leftIndex;
+            if (rightIndex < diffs.Length && diffs[rightIndex].exists) return rightIndex;
+
+            leftIndex--;
+            rightIndex++;
+        }
+
+        return 0;
+    }
+
+    private bool HigherDiffExists(SongDifficulty[] diffs, int selectedIndex)
+    {
+        for (int i = selectedIndex + 1; i < diffs.Length; i++)
+        {
+            if (diffs[i].exists) return true;
+        }
+
+        return false;
+    }
+
+    private bool LowerDiffExists(SongDifficulty[] diffs, int selectedIndex)
+    {
+        for (int i = selectedIndex - 1; i >= 0; i--)
+        {
+            if (diffs[i].exists) return true;
+        }
+
+        return false;
     }
 
     // ==== Features ====================
