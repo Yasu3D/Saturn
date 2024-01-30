@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Rendering.Universal;
 using UnityEngine;
 
@@ -41,6 +42,12 @@ namespace SaturnGame.RhythmGame
 
         bool segmentsOverlap(ScoringNote note1, ScoringNote note2)
         {
+			if (note1.Left == note1.Right || note2.Left == note2.Right)
+			{
+				// Full circle notes always overlap
+				return true;
+			}
+
             // Returns x%m that is always between 0 and m-1 inclusive.
             int saneMod(int x, int m)
             {
@@ -104,69 +111,88 @@ namespace SaturnGame.RhythmGame
         // minNoteIndex tracks the first note that we need to care about when judging future inputs. It should be greater than
         // all notes whose windows have already fully passed or who have been hit.
         int minNoteIndex = 0;
-        // TODO: This is currently super basic and assumes all the notes are touch notes and all the inputs cover all segments.
-        void HandleInput(float hitTimeMs)
+		TouchState prevTouchState;
+        // TODO: This is currently super basic and assumes all the notes are touch notes.
+        void HandleInput(float hitTimeMs, TouchState touchState)
         {
-            // State that we care about:
-            // - previously active segments
-            // - notes that have already been judged
             if (notes is null)
             {
                 Debug.LogError("Tried to judge an input, but no chart loaded");
                 return;
             }
 
-            // Warning: this maybe requires all notes to be hit in order. E.g. if note 2 is one tick after note 1,
-            // you cannot hit note 2 before note 1, even if they are on opposite sides of the ring.
-            // This should probably be fixed when we add segment awareness.
-
-            int noteScanIndex = minNoteIndex;
-            // Scan forward, looking for a note that can be hit by this input.
-            while (noteScanIndex < notes.Count)
+            try
             {
-                ScoringNote note = notes[noteScanIndex];
+                var newSegments = touchState.SegmentsPressedSince(prevTouchState);
 
-                if (note.Note.TimeMs + IgnorePastNotesThreshold < hitTimeMs)
+                int noteScanIndex = minNoteIndex;
+                // Scan forward, looking for a note that can be hit by this input.
+                while (noteScanIndex < notes.Count)
                 {
-                    // This note can no longer be hit, we don't need to ever look at it or any notes before it again.
-                    minNoteIndex = noteScanIndex + 1;
-                    if (note.JudgementResult is null)
-                    {
-                        Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.Note.TimeMs + IgnorePastNotesThreshold}");
-                        note.JudgementResult = new(Judgement.Miss, null, note.Note);
-                    }
-                }
-                else if (hitTimeMs + IgnoreFutureNotesThreshold < note.Note.TimeMs)
-                {
-                    // We can stop scanning since this note or any future notes cannot be hit by this input.
-                    break;
-                }
-                // TODO: add segment checks here
-                else if (note.EarliestTimeMs <= hitTimeMs && hitTimeMs < note.LatestTimeMs && note.JudgementResult is null)
-                {
-                    float errorMs = hitTimeMs - note.Note.TimeMs;
-                    Debug.Log($"Note {noteScanIndex}: judging with offset {errorMs}");
+                    ScoringNote note = notes[noteScanIndex];
 
-                    foreach (var judgementWindow in TouchNoteJudgementWindows)
+                    if (note.Note.TimeMs + IgnorePastNotesThreshold < hitTimeMs)
                     {
-                        if (errorMs >= judgementWindow.left && errorMs < judgementWindow.right)
+                        // This note can no longer be hit, we don't need to ever look at it or any notes before it again.
+                        minNoteIndex = noteScanIndex + 1;
+                        if (note.JudgementResult is null)
                         {
-                            note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
-                            Debug.Log($"result: {note.JudgementResult.Judgement}");
-                            break;
+                            Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.Note.TimeMs + IgnorePastNotesThreshold}");
+                            note.JudgementResult = new(Judgement.Miss, null, note.Note);
                         }
                     }
-                } 
-                else if (hitTimeMs >= note.LatestTimeMs && note.JudgementResult is null)
-                {
-                    // The note can no longer be hit.
-                    Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestTimeMs}");
-                    note.JudgementResult = new(Judgement.Miss, null, note.Note);
-                }
+                    else if (hitTimeMs + IgnoreFutureNotesThreshold < note.Note.TimeMs)
+                    {
+                        // We can stop scanning since this note or any future notes cannot be hit by this input.
+                        break;
+                    }
+                    else if (note.EarliestTimeMs <= hitTimeMs && hitTimeMs < note.LatestTimeMs && note.JudgementResult is null)
+                    {
+                        bool noteTouched = false;
+                        foreach (int offset in Enumerable.Range(0, note.Note.Size))
+                        {
+                            int rotation = (note.Left + offset) % 60;
+                            if (newSegments.RotationPressedAtAnyDepth(rotation))
+                            {
+                                noteTouched = true;
+                                break;
+                            }
+                        }
+                        if (noteTouched)
+                        {
+                            float errorMs = hitTimeMs - note.Note.TimeMs;
+                            Debug.Log($"Note {noteScanIndex}: judging with offset {errorMs}");
 
-                noteScanIndex++;
+                            foreach (var judgementWindow in TouchNoteJudgementWindows)
+                            {
+                                if (errorMs >= judgementWindow.left && errorMs < judgementWindow.right)
+                                {
+                                    note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
+                                    Debug.Log($"result: {note.JudgementResult.Judgement}");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (hitTimeMs >= note.LatestTimeMs && note.JudgementResult is null)
+                    {
+                        // The note can no longer be hit.
+                        Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestTimeMs}");
+                        note.JudgementResult = new(Judgement.Miss, null, note.Note);
+                    }
+
+                    noteScanIndex++;
+                }
+            }
+			finally
+			{
+                prevTouchState = touchState;
             }
         }
+
+		public void NewTouchState(TouchState touchState) {
+			HandleInput(timeManager.RawVisualTime, touchState);
+		}
 
         void Update()
         {
@@ -179,7 +205,7 @@ namespace SaturnGame.RhythmGame
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                HandleInput(timeManager.RawVisualTime);
+                HandleInput(timeManager.RawVisualTime, null);
                 Debug.Log("judgements:");
                 foreach (var note in notes)
                 {
