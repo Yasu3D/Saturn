@@ -20,9 +20,63 @@ namespace SaturnGame.RhythmGame
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
 
+        public Judgement LastJudgement { get; private set; } = Judgement.None;
+        public float? LastJudgementTimeMs { get; private set; } = null;
+
         private string loadedChart;
         // Notes must be sorted by note TimeMs
         private List<ScoringNote> notes;
+
+		public int CurrentScore() {
+			if (notes is null || notes.Count() == 0)
+			{
+                return 0;
+            }
+
+            long maxScoreBeforeNormalization = 0;
+            long scoreBeforeNormalization = 0;
+			foreach (ScoringNote note in notes)
+            {
+                maxScoreBeforeNormalization += 100;
+                if (note.JudgementResult is null)
+                {
+                    continue;
+                }
+                switch (note.JudgementResult.Judgement)
+                {
+                    case Judgement.None:
+                    case Judgement.Miss:
+                        break;
+                    case Judgement.Good:
+                        scoreBeforeNormalization += 50;
+                        break;
+                    case Judgement.Great:
+                        scoreBeforeNormalization += 70;
+                        break;
+                    case Judgement.Marvelous:
+                        scoreBeforeNormalization += 100;
+                        break;
+                }
+            }
+
+			if (maxScoreBeforeNormalization == 0)
+			{
+				// Not sure how this should be possible but ok
+                return 0;
+            }
+
+			// debug
+			if (scoreBeforeNormalization != 0)
+			{
+                Debug.Log(scoreBeforeNormalization);
+                Debug.Log(maxScoreBeforeNormalization);
+                Debug.Log(scoreBeforeNormalization * 1_000_000 / maxScoreBeforeNormalization);
+            }
+
+			// Int conversion should be safe as max score is 1,000,000
+			// (unless we fucked something up, then exception is appropriate anyway)
+            return Convert.ToInt32((scoreBeforeNormalization * 1_000_000L) / maxScoreBeforeNormalization);
+        }
 
         // A list of judgement windows, from smallest to largest.
         // Each judgement window is tuple of minimum error in ms, maximum error in ms, and the earned Judgement
@@ -139,6 +193,8 @@ namespace SaturnGame.RhythmGame
                         {
                             Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.Note.TimeMs + IgnorePastNotesThreshold}");
                             note.JudgementResult = new(Judgement.Miss, null, note.Note);
+                            LastJudgement = Judgement.Miss;
+                            LastJudgementTimeMs = hitTimeMs;
                         }
                     }
                     else if (hitTimeMs + IgnoreFutureNotesThreshold < note.Note.TimeMs)
@@ -169,6 +225,8 @@ namespace SaturnGame.RhythmGame
                                 {
                                     note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
                                     Debug.Log($"result: {note.JudgementResult.Judgement}");
+									LastJudgement = judgementWindow.judgement;
+									LastJudgementTimeMs = hitTimeMs;
                                     break;
                                 }
                             }
@@ -179,6 +237,8 @@ namespace SaturnGame.RhythmGame
                         // The note can no longer be hit.
                         Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestTimeMs}");
                         note.JudgementResult = new(Judgement.Miss, null, note.Note);
+						LastJudgement = Judgement.Miss;
+						LastJudgementTimeMs = hitTimeMs;
                     }
 
                     noteScanIndex++;
@@ -275,7 +335,7 @@ namespace SaturnGame.RhythmGame
         }
     }
 
-    enum Judgement
+    public enum Judgement
     {
         None, // Represents cases where the judgement is missing entirely, e.g. for a note that did not receive any judgement.
         Miss,
