@@ -1,7 +1,7 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using SaturnGame.Settings;
@@ -9,111 +9,55 @@ using SaturnGame.Loading;
 
 namespace SaturnGame.RhythmGame
 {
-    public class ChartManager : MonoBehaviour
+    public class ChartManager : PersistentSingleton<ChartManager>
     {
-        [Header("REFERENCES")]
-        [SerializeField] private BgmManager bgmManager;
+        public AudioClip bgmClip;
+        public Chart chart;
 
-        [Header("METADATA")]
-        public string musicFilePath = "";
-        public float difficulty = 0;
-        public float audioOffset = 0;
-        public float movieOffset = 0;
-
-        [Header("NOTES")]
-        [SerializeField] private List<Gimmick> beatsPerMinuteGimmicks;
-        [SerializeField] private List<Gimmick> timeSignatureGimmicks;
-        [Space(10)]
-        public List<Gimmick> bgmDataGimmicks; // BgmData = BeatsPerMinute *and* TimeSignature.
-        public List<Gimmick> hiSpeedGimmicks;
-        public List<Gimmick> stopGimmicks;
-        public List<Gimmick> reverseGimmicks;
-        public List<Note> notes;
-        public List<HoldNote> holdNotes;
-        public List<Note> masks;
-        public List<ChartObject> barLines;
-        public List<Note> syncs;
-        public ChartObject endOfChart;
-
-        [Header("REVERSE")]
-        public List<Note> reverseNotes;
-        public List<HoldNote> reverseHoldNotes;
-        
-
+        private List<Gimmick> bpmGimmicks = new();
+        private List<Gimmick> timeSigGimmicks = new();
         private int readerIndex = 0;
-
-
+        
         /// <summary>
         /// Parses a <c>.mer</c> file and creates lists of objects from it.
         /// </summary>
         /// <param name="merStream"></param>
         /// <returns></returns>
-        public async Task<bool> LoadChart(Stream merStream)
+        public async Task<Chart> LoadChart(string path)
         {
-            if (merStream == null)
-            {
-                Debug.LogWarning("[Chart Load] File stream is null! Aborting...");
-                return false;
-            }
+            if (!File.Exists(path)) return null;
 
-            List<string> merFile = MerLoader.LoadMer(merStream);
+            FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
+            List<string> merFile = MerLoader.LoadMer(fileStream);
 
-            Debug.Log("[Chart Load] Clearing lists...");
-            beatsPerMinuteGimmicks.Clear();
-            timeSignatureGimmicks.Clear();
-            bgmDataGimmicks.Clear();
-            hiSpeedGimmicks.Clear();
-            stopGimmicks.Clear();
-            reverseGimmicks.Clear();
-            notes.Clear();
-            holdNotes.Clear();
-            masks.Clear();
-            barLines.Clear();
-            syncs.Clear();
-            endOfChart = null;
-            reverseNotes.Clear();
-            reverseHoldNotes.Clear();
-
-            Debug.Log("[Chart Load] Resetting reader index...");
             readerIndex = 0;
+            bpmGimmicks.Clear();
+            timeSigGimmicks.Clear();
 
-            Debug.Log("[Chart Load] Parsing Metadata...");
+            chart = new();
+
             await Task.Run(() => ParseMetadata(merFile));
-            Debug.Log("[Chart Load] Parsing Chart...");
             await Task.Run(() => ParseChart(merFile));
-            Debug.Log("[Chart Load] Generating Bar Lines...");
             await Task.Run(() => GenerateBarLines());
-            Debug.Log("[Chart Load] Creating BgmData...");
             await Task.Run(() => CreateBgmData());
-            Debug.Log("[Chart Load] Creating HiSpeedData...");
             await Task.Run(() => CreateHiSpeedData());
-            Debug.Log("[Chart Load] Calculating Time...");
             await Task.Run(() => SetTime());
 
-            if (reverseGimmicks.Count != 0)
-            {
-                Debug.Log("[Chart Load] Creating Reverse Sections");
+            if (chart.reverseGimmicks.Count != 0)
                 await Task.Run(() => GenerateReverseLists());
-            }
 
             if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes)
-            {
-                Debug.Log("[Chart Load] Mirroring Chart...");
                 await Task.Run(() => MirrorChart());
-            }
-
-            Debug.Log("[Chart Load] Checking for errors...");
 
             if (!CheckLoadErrors().passed)
             {
                 Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
-                return false; 
+                return null; 
             }
 
             Debug.Log("[Chart Load] Chart loaded successfully!");
-            return true;
+            return chart;
         }
-
 
 
         /// <summary>
@@ -130,17 +74,17 @@ namespace SaturnGame.RhythmGame
             {
                 string merLine = merFile[readerIndex];
 
-                string tempMusicFilePath = MerLoader.GetMetadata(merLine, "#MUSIC_FILE_PATH ");
-                if (tempMusicFilePath != null) musicFilePath = tempMusicFilePath;
+                string tempDifficultyString = MerLoader.GetMetadata(merLine, "#DIFFICULTY ");
+                if (tempDifficultyString != null) chart.difficulty = Convert.ToSingle(tempDifficultyString);
 
-                string tempDifficulty = MerLoader.GetMetadata(merLine, "#DIFFICULTY ");
-                if (tempDifficulty != null) difficulty = Convert.ToSingle(difficulty);
+                string tempClearThresholdString = MerLoader.GetMetadata(merLine, "#CLEAR_THRESHOLD");
+                if (tempClearThresholdString != null) chart.clearThreshold = Convert.ToSingle(tempClearThresholdString);
 
-                string tempAudioOffset = MerLoader.GetMetadata(merLine, "#OFFSET ");
-                if (tempAudioOffset != null) audioOffset = Convert.ToSingle(tempAudioOffset);
+                string tempAudioOffsetString = MerLoader.GetMetadata(merLine, "#OFFSET ");
+                if (tempAudioOffsetString != null) chart.audioOffset = Convert.ToSingle(tempAudioOffsetString);
 
-                string tempMovieOffset = MerLoader.GetMetadata(merLine, "#MOVIEOFFSET ");
-                if (tempMovieOffset != null) movieOffset = Convert.ToSingle(tempMovieOffset);
+                string tempMovieOffsetString = MerLoader.GetMetadata(merLine, "#MOVIEOFFSET ");
+                if (tempMovieOffsetString != null) chart.movieOffset = Convert.ToSingle(tempMovieOffsetString);
 
                 if (merLine.Contains("#BODY"))
                 {
@@ -151,7 +95,6 @@ namespace SaturnGame.RhythmGame
             while (++readerIndex < merFile.Count);
         }
         
-
         /// <summary>
         /// Loops through a .mer file's body and adds chartObjects to appropriate lists.
         /// </summary>
@@ -184,7 +127,7 @@ namespace SaturnGame.RhythmGame
                     // end of chart note
                     if (noteTypeID is 14)
                     {
-                        endOfChart = new(measure, tick);
+                        chart.endOfChart = new(measure, tick);
                         continue;
                     }
 
@@ -240,7 +183,7 @@ namespace SaturnGame.RhythmGame
                         }
 
                         HoldNote hold = new(holdSegments.ToArray());
-                        holdNotes.Add(hold);
+                        chart.holdNotes.Add(hold);
                         
                         continue;
                     }
@@ -250,13 +193,13 @@ namespace SaturnGame.RhythmGame
                     {
                         int dir = Convert.ToInt32(splitLine[8]);
                         tempNote.MaskDirection = (ObjectEnums.MaskDirection) dir;
-                        masks.Add(tempNote);
+                        chart.masks.Add(tempNote);
                         continue;
                     }
                     
                     // all other notes
                     lastNote = tempNote;
-                    notes.Add(tempNote);
+                    chart.notes.Add(tempNote);
                 }
 
                 // Gimmick
@@ -282,38 +225,35 @@ namespace SaturnGame.RhythmGame
                     switch (tempGimmick.GimmickType)
                     {
                         case ObjectEnums.GimmickType.BeatsPerMinute:
-                            beatsPerMinuteGimmicks.Add(tempGimmick);
+                            bpmGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.TimeSignature:
-                            timeSignatureGimmicks.Add(tempGimmick);
+                            timeSigGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.HiSpeed:
-                            hiSpeedGimmicks.Add(tempGimmick);
+                            chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.StopStart:
-                            //stopGimmicks.Add(tempGimmick);
                             // Convert Stops to 0/1 HiSpeed changes internally since they're functionally identical(?)
                             tempGimmick.GimmickType = ObjectEnums.GimmickType.HiSpeed;
                             tempGimmick.HiSpeed = 0;
-                            hiSpeedGimmicks.Add(tempGimmick);
+                            chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.StopEnd:
-                            //stopGimmicks.Add(tempGimmick);
                             // Same as above.
                             tempGimmick.GimmickType = ObjectEnums.GimmickType.HiSpeed;
                             tempGimmick.HiSpeed = 1;
-                            hiSpeedGimmicks.Add(tempGimmick);
+                            chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case ObjectEnums.GimmickType.ReverseEffectStart:
                         case ObjectEnums.GimmickType.ReverseEffectEnd:
                         case ObjectEnums.GimmickType.ReverseNoteEnd:
-                            reverseGimmicks.Add(tempGimmick);
+                            chart.reverseGimmicks.Add(tempGimmick);
                             break;
                     }
                 }
             }
         }
-
 
         /// <summary>
         /// Check for common errors that may happen during a chart load.
@@ -323,33 +263,27 @@ namespace SaturnGame.RhythmGame
         {
             // I made the checks separate to spare the next person reading this an aneyurism.
             // It's also organized from most likely to least likely, so it doesn't matter much.
-            if (bgmManager.bgmClip is null)
-                return (false, "BgmClip not found!");
-
-            if (endOfChart is null)
+            if (chart.endOfChart is null)
                 return (false, "Chart is missing End of Chart note!");
 
-            if (notes.Last().Time > endOfChart.Time)
+            if (chart.notes.Last().Time > chart.endOfChart.Time)
                 return (false, "Notes behind end of Chart note!");
 
-            if (notes.Last().Time > bgmManager.bgmClip.length * 1000) // conv. to ms
+            if (chart.notes.Last().Time > bgmClip.length * 1000) // conv. to ms
                 return (false, "Chart is longer than audio!");
 
-            if (musicFilePath is "")
-                return (false, "Music file path is missing!");
-
-            if (bgmDataGimmicks.Count == 0)
+            if (chart.bgmDataGimmicks.Count == 0)
                 return (false, "Chart is missing BPM and TimeSignature data!");
 
-            if (reverseGimmicks.Count % 3 != 0) // Reverses always come in groups of 3 gimmicks. If the count is not divisible by 3 something's wrong.
+            if (chart.reverseGimmicks.Count % 3 != 0) // Reverses always come in groups of 3 gimmicks. If the count is not divisible by 3 something's wrong.
                 return (false, "Invalid reverse gimmicks! Every reverse must have these segments: [Effect Start] [Effect End] [Note End]");
 
             // Loop through all reverses to find any overlapping/out of order/broken ones.
             // The order must always be Effect Start > Effect End > Note End.
             ObjectEnums.GimmickType lastReverse = ObjectEnums.GimmickType.ReverseNoteEnd;
-            for (int i = 0; i < reverseGimmicks.Count; i++) 
+            for (int i = 0; i < chart.reverseGimmicks.Count; i++)
             {
-                switch (reverseGimmicks[i].GimmickType)
+                switch (chart.reverseGimmicks[i].GimmickType)
                 {
                     case ObjectEnums.GimmickType.ReverseEffectStart:
                         if (lastReverse is not ObjectEnums.GimmickType.ReverseNoteEnd)
@@ -392,25 +326,24 @@ namespace SaturnGame.RhythmGame
             return (true, "");
         }
 
-
         /// <summary>
         /// Adds reversed notes to a list for Reverse Gimmick animations.
         /// </summary>
         private void GenerateReverseLists()
         {
             // Loop over all Reverse Gimmicks except the last two to avoid an ArrayIndexOutOfBoundsException
-            for (int i = 0; i < reverseGimmicks.Count - 2; i++)
+            for (int i = 0; i < chart.reverseGimmicks.Count - 2; i++)
             {
-                if (reverseGimmicks[i].GimmickType is not ObjectEnums.GimmickType.ReverseEffectStart)
+                if (chart.reverseGimmicks[i].GimmickType is not ObjectEnums.GimmickType.ReverseEffectStart)
                     continue;
 
                 // If [i] is EffectStart, then [i + 1] must be EffectEnd and [i + 2] must be NoteEnd
-                float effectStartTime = reverseGimmicks[i].ScaledVisualTime;
-                float effectEndTime = reverseGimmicks[i + 1].ScaledVisualTime;
-                float noteEndTime = reverseGimmicks[i + 2].ScaledVisualTime;
+                float effectStartTime = chart.reverseGimmicks[i].ScaledVisualTime;
+                float effectEndTime = chart.reverseGimmicks[i + 1].ScaledVisualTime;
+                float noteEndTime = chart.reverseGimmicks[i + 2].ScaledVisualTime;
 
-                List<Note> notesToReverse = notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
-                List<HoldNote> holdsToReverse = holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
+                List<Note> notesToReverse = chart.notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
+                List<HoldNote> holdsToReverse = chart.holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
 
                 foreach (Note note in notesToReverse)
                     ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
@@ -419,11 +352,10 @@ namespace SaturnGame.RhythmGame
                     ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
                 
                 // List.Reverse() from Linq
-                reverseHoldNotes.Reverse();
+                chart.reverseHoldNotes.Reverse();
             }
         }
 
-        
         /// <summary>
         /// Creates a copy of a Note, remaps it's position in time, <br />
         /// then adds a copy of it to <c>reverseNotes</c>
@@ -440,7 +372,7 @@ namespace SaturnGame.RhythmGame
 
             copy.ScaledVisualTime = remap;
 
-            reverseNotes.Insert(0, copy);
+            chart.reverseNotes.Insert(0, copy);
         }
 
         /// <summary>
@@ -461,19 +393,17 @@ namespace SaturnGame.RhythmGame
             Array.Reverse(copy.Notes);
             Array.Reverse(copy.RenderedNotes);
 
-            reverseHoldNotes.Add(copy);
+            chart.reverseHoldNotes.Add(copy);
         }
-
 
         /// <summary>
         /// Generates a Bar Line every Measure.
         /// </summary>
         private void GenerateBarLines()
         {
-            for (int i = 0; i <= endOfChart.Measure; i++)
-                barLines.Add(new ChartObject(i, 0));
+            for (int i = 0; i <= chart.endOfChart.Measure; i++)
+                chart.barLines.Add(new ChartObject(i, 0));
         }
-
 
         /// <summary>
         /// Check if the last parsed note is on the same timestamp as the current note. <br />
@@ -495,7 +425,6 @@ namespace SaturnGame.RhythmGame
                 GenerateSync(current, last);
             }
         }
-
 
         /// <summary>
         /// Finds shortest distance between two notes and <br />
@@ -529,9 +458,8 @@ namespace SaturnGame.RhythmGame
             if (finalSize > 30) return;
 
             Note sync = new(measure, tick, ObjectEnums.NoteType.None, ObjectEnums.BonusType.None, finalPosition, finalSize);
-            syncs.Add(sync);
+            chart.syncs.Add(sync);
         }
-
 
         /// <summary>
         /// Mirrors a note along an axis.
@@ -553,37 +481,35 @@ namespace SaturnGame.RhythmGame
             note.Position = newPos;
         }
 
-
         /// <summary>
         /// Mirrors an entire chart.
         /// </summary>
         private void MirrorChart()
         {
-            foreach (Note note in notes)
+            foreach (Note note in chart.notes)
                 MirrorObject(note);
 
-            foreach (Note mask in masks)
+            foreach (Note mask in chart.masks)
                 MirrorObject(mask);
 
-            foreach (Note sync in syncs)
+            foreach (Note sync in chart.syncs)
                 MirrorObject(sync);
 
-            foreach (HoldNote hold in holdNotes)
+            foreach (HoldNote hold in chart.holdNotes)
             {
                 foreach (Note note in hold.Notes)
                     MirrorObject(note);
             }
 
-            foreach (Note note in reverseNotes)
+            foreach (Note note in chart.reverseNotes)
                 MirrorObject(note);
 
-            foreach (HoldNote hold in reverseHoldNotes)
+            foreach (HoldNote hold in chart.reverseHoldNotes)
             {
                 foreach (Note note in hold.Notes)
                     MirrorObject(note);
             }
         }
-
 
         /// <summary>
         /// A rather bulky function that ""cleanly"" merges BeatsPerMinuteGimmicks <br />
@@ -592,56 +518,56 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void CreateBgmData()
         {
-            if (beatsPerMinuteGimmicks.Count == 0 || timeSignatureGimmicks.Count == 0) return;
+            if (bpmGimmicks.Count == 0 || timeSigGimmicks.Count == 0) return;
 
-            float lastBpm = beatsPerMinuteGimmicks[0].BeatsPerMinute;
-            TimeSignature lastTimeSig = timeSignatureGimmicks[0].TimeSig;
+            float lastBpm = bpmGimmicks[0].BeatsPerMinute;
+            TimeSignature lastTimeSig = timeSigGimmicks[0].TimeSig;
 
             // merge both lists and sort by timestamp
-            bgmDataGimmicks = beatsPerMinuteGimmicks.Concat(timeSignatureGimmicks).OrderBy(x => x.Measure * 1920 + x.Tick).ToList();
+            chart.bgmDataGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.Measure * 1920 + x.Tick).ToList();
             
-            bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
-            bgmDataGimmicks[0].TimeSig = lastTimeSig;
+            chart.bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
+            chart.bgmDataGimmicks[0].TimeSig = lastTimeSig;
 
             int lastTick = 0;
 
             List<Gimmick> obsoleteGimmicks = new();
 
-            for (int i = 1; i < bgmDataGimmicks.Count; i++)
+            for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
             {
-                int currentTick = bgmDataGimmicks[i].Measure * 1920 + bgmDataGimmicks[i].Tick;
+                int currentTick = chart.bgmDataGimmicks[i].Measure * 1920 + chart.bgmDataGimmicks[i].Tick;
 
                 // Handles two gimmicks at the same time, in case a chart changes
                 // BeatsPerMinute and TimeSignature simultaneously.
                 if (currentTick == lastTick)
                 {
                     // if this is a bpm change, then last change must've been a time sig change.
-                    if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
+                    if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
                     {
-                        bgmDataGimmicks[i - 1].BeatsPerMinute = bgmDataGimmicks[i].BeatsPerMinute;
-                        lastBpm = bgmDataGimmicks[i].BeatsPerMinute;
+                        chart.bgmDataGimmicks[i - 1].BeatsPerMinute = chart.bgmDataGimmicks[i].BeatsPerMinute;
+                        lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
                     }
-                    if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
+                    if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
                     {
-                        bgmDataGimmicks[i - 1].TimeSig = bgmDataGimmicks[i].TimeSig;
-                        lastTimeSig = bgmDataGimmicks[i].TimeSig;
+                        chart.bgmDataGimmicks[i - 1].TimeSig = chart.bgmDataGimmicks[i].TimeSig;
+                        lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
                     }
 
                     // send gimmick to list for removal later
-                    obsoleteGimmicks.Add(bgmDataGimmicks[i]);
+                    obsoleteGimmicks.Add(chart.bgmDataGimmicks[i]);
                     continue;
                 }
 
-                if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
+                if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
                 {
-                    bgmDataGimmicks[i].TimeSig = lastTimeSig;
-                    lastBpm = bgmDataGimmicks[i].BeatsPerMinute;
+                    chart.bgmDataGimmicks[i].TimeSig = lastTimeSig;
+                    lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
                 }
 
-                if (bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
+                if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
                 {
-                    bgmDataGimmicks[i].BeatsPerMinute = lastBpm;
-                    lastTimeSig = bgmDataGimmicks[i].TimeSig;
+                    chart.bgmDataGimmicks[i].BeatsPerMinute = lastBpm;
+                    lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
                 }
 
                 lastTick = currentTick;
@@ -649,31 +575,30 @@ namespace SaturnGame.RhythmGame
 
             // clear obsolete gimmicks
             foreach (Gimmick gimmick in obsoleteGimmicks)
-                bgmDataGimmicks.Remove(gimmick);
+                chart.bgmDataGimmicks.Remove(gimmick);
 
             obsoleteGimmicks.Clear();
 
-            bgmDataGimmicks[0].Time = 0;
-            for (int i = 1; i < bgmDataGimmicks.Count; i++)
+            chart.bgmDataGimmicks[0].Time = 0;
+            for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
             {
-                float lastTime = bgmDataGimmicks[i - 1].Time;
-                float currentMeasure = (bgmDataGimmicks[i].Measure * 1920 + bgmDataGimmicks[i].Tick) * SaturnMath.tickToMeasure;
-                float lastMeasure = (bgmDataGimmicks[i - 1].Measure * 1920 + bgmDataGimmicks[i - 1].Tick) * SaturnMath.tickToMeasure;
-                float timeSig = bgmDataGimmicks[i - 1].TimeSig.Ratio;
-                float bpm = bgmDataGimmicks[i - 1].BeatsPerMinute;
+                float lastTime = chart.bgmDataGimmicks[i - 1].Time;
+                float currentMeasure = (chart.bgmDataGimmicks[i].Measure * 1920 + chart.bgmDataGimmicks[i].Tick) * SaturnMath.tickToMeasure;
+                float lastMeasure = (chart.bgmDataGimmicks[i - 1].Measure * 1920 + chart.bgmDataGimmicks[i - 1].Tick) * SaturnMath.tickToMeasure;
+                float timeSig = chart.bgmDataGimmicks[i - 1].TimeSig.Ratio;
+                float bpm = chart.bgmDataGimmicks[i - 1].BeatsPerMinute;
 
                 float time = lastTime + ((currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm)));
-                bgmDataGimmicks[i].Time = time;
+                chart.bgmDataGimmicks[i].Time = time;
             }
         }
-
 
         /// <summary>
         /// Calculates scaled timestamps for HiSpeed changes.
         /// </summary>
         private void CreateHiSpeedData()
         {
-            foreach (Gimmick gimmick in hiSpeedGimmicks)
+            foreach (Gimmick gimmick in chart.hiSpeedGimmicks)
             {
                 gimmick.Time = CalculateTime(gimmick);
             }
@@ -682,19 +607,17 @@ namespace SaturnGame.RhythmGame
             float lastTime = 0;
             float lastHiSpeed = 1;
             
-            for (int i = 0; i < hiSpeedGimmicks.Count; i++)
+            for (int i = 0; i < chart.hiSpeedGimmicks.Count; i++)
             {
-                float currentTime = hiSpeedGimmicks[i].Time;
+                float currentTime = chart.hiSpeedGimmicks[i].Time;
                 float scaledTime = lastScaledTime + (Mathf.Abs(currentTime - lastTime) * lastHiSpeed);
-                hiSpeedGimmicks[i].ScaledVisualTime = scaledTime;
+                chart.hiSpeedGimmicks[i].ScaledVisualTime = scaledTime;
 
                 lastScaledTime = scaledTime;
-                lastTime = hiSpeedGimmicks[i].Time;
-                lastHiSpeed = hiSpeedGimmicks[i].HiSpeed;
+                lastTime = chart.hiSpeedGimmicks[i].Time;
+                lastHiSpeed = chart.hiSpeedGimmicks[i].HiSpeed;
             }
         }
-
-
 
         /// <summary>
         /// Loops through every ChartObject in every list <br />
@@ -703,32 +626,32 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void SetTime()
         {
-            foreach (Note note in notes)
+            foreach (Note note in chart.notes)
             {
                 note.Time = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
-            foreach (Note sync in syncs)
+            foreach (Note sync in chart.syncs)
             {
                 sync.Time = CalculateTime(sync);
                 sync.ScaledVisualTime = CalculateScaledTime(sync);
             }
 
-            foreach (ChartObject obj in barLines)
+            foreach (ChartObject obj in chart.barLines)
             {
                 obj.Time = CalculateTime(obj);
                 obj.ScaledVisualTime = CalculateScaledTime(obj);
             }
 
-            foreach (Note note in masks)
+            foreach (Note note in chart.masks)
             {
                 note.Time = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
             // especially this makes me want to shoot myself
-            foreach (HoldNote hold in holdNotes)
+            foreach (HoldNote hold in chart.holdNotes)
             {
                 foreach (Note note in hold.Notes)
                 {
@@ -737,22 +660,15 @@ namespace SaturnGame.RhythmGame
                 }
             }
 
-            foreach (Gimmick gimmick in stopGimmicks)
+            foreach (Gimmick gimmick in chart.reverseGimmicks)
             {
                 gimmick.Time = CalculateTime(gimmick);
                 gimmick.ScaledVisualTime = CalculateScaledTime(gimmick);
             }
 
-            foreach (Gimmick gimmick in reverseGimmicks)
-            {
-                gimmick.Time = CalculateTime(gimmick);
-                gimmick.ScaledVisualTime = CalculateScaledTime(gimmick);
-            }
-
-            endOfChart.Time = CalculateTime(endOfChart);
-            endOfChart.ScaledVisualTime = CalculateScaledTime(endOfChart);
+            chart.endOfChart.Time = CalculateTime(chart.endOfChart);
+            chart.endOfChart.ScaledVisualTime = CalculateScaledTime(chart.endOfChart);
         }
-
 
         /// <summary>
         /// Calculates the object's time in milliseconds <br />
@@ -760,14 +676,14 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private float CalculateTime(ChartObject chartObject)
         {
-            if (bgmDataGimmicks.Count == 0)
+            if (chart.bgmDataGimmicks.Count == 0)
             {
                 Debug.LogError($"Cannot calculate Time of {chartObject} because no bgmData has been set! Use CreateBgmData() to generate bgmData.");
                 return -1;
             }
 
             int timeStamp = chartObject.Measure * 1920 + chartObject.Tick;
-            Gimmick lastBgmData = bgmDataGimmicks.LastOrDefault(x => x.Measure * 1920 + x.Tick < timeStamp) ?? bgmDataGimmicks[0];
+            Gimmick lastBgmData = chart.bgmDataGimmicks.LastOrDefault(x => x.Measure * 1920 + x.Tick < timeStamp) ?? chart.bgmDataGimmicks[0];
 
             float lastTime = lastBgmData.Time;
             float currentMeasure = (chartObject.Measure * 1920 + chartObject.Tick) * SaturnMath.tickToMeasure;
@@ -779,7 +695,6 @@ namespace SaturnGame.RhythmGame
             return time;
         }
 
-
         /// <summary>
         /// Calculates a scaled timestamp for a chartObject. <br />
         /// <b>This is slow and should not run every frame!</b>
@@ -790,36 +705,16 @@ namespace SaturnGame.RhythmGame
         /// </remarks>
         private float CalculateScaledTime(ChartObject chartObject)
         {
-            if (hiSpeedGimmicks.Count == 0)
+            if (chart.hiSpeedGimmicks.Count == 0)
                 return chartObject.Time;
 
-            Gimmick lastHiSpeed = hiSpeedGimmicks.LastOrDefault(x => x.Time <= chartObject.Time);
+            Gimmick lastHiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.Time <= chartObject.Time);
             float hiSpeedScaledTime = lastHiSpeed != null ? lastHiSpeed.ScaledVisualTime : 0;
             float hiSpeedTime = lastHiSpeed != null ? lastHiSpeed.Time : 0;
             float hiSpeed = lastHiSpeed != null ? lastHiSpeed.HiSpeed : 1;
 
             float scaledTime = hiSpeedScaledTime + ((chartObject.Time - hiSpeedTime) * hiSpeed);
             return scaledTime;
-        }
-
-
-
-
-        [SerializeField] private string path = "SongPacks/DONOTSHIP/";
-        // DELETE THIS ON SIGHT THANKS
-        async void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                string filepath = Path.Combine(Application.streamingAssetsPath, path);
-                //string filepath = Path.Combine(Application.streamingAssetsPath, "SongPacks/DONOTSHIP/MER_03_044/03.mer");
-                if (File.Exists(filepath))
-                {
-                    FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);
-                    await LoadChart(fileStream);
-                }
-                else Debug.Log("File not found");
-            }
         }
     }
 }

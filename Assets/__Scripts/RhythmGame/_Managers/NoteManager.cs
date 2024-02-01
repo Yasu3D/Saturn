@@ -8,7 +8,6 @@ namespace SaturnGame.RhythmGame
     public class NoteManager : MonoBehaviour
     {
         [Header("MANAGERS")]
-        [SerializeField] private ChartManager chart;
         [SerializeField] private TimeManager timeManager;
         [SerializeField] private BgmManager bgmManager;
 
@@ -38,11 +37,11 @@ namespace SaturnGame.RhythmGame
         private int maskIndex = 0;
         private void ProcessMasks()
         {
-            if (maskIndex > chart.masks.Count - 1) return;
+            if (maskIndex > ChartManager.Instance.chart.masks.Count - 1) return;
 
-            while (maskIndex < chart.masks.Count && timeManager.VisualTime >= chart.masks[maskIndex].Time)
+            while (maskIndex < ChartManager.Instance.chart.masks.Count && timeManager.VisualTime >= ChartManager.Instance.chart.masks[maskIndex].Time)
             {
-                guideLaneRenderer.SetMask(chart.masks[maskIndex], timeManager.PlaybackSpeed);
+                guideLaneRenderer.SetMask(ChartManager.Instance.chart.masks[maskIndex], timeManager.PlaybackSpeed);
                 maskIndex++;
             }
         }
@@ -50,12 +49,12 @@ namespace SaturnGame.RhythmGame
         private int noteIndex = 0;
         private void ProcessNotes()
         {
-            if (noteIndex > chart.notes.Count - 1) return;
+            if (noteIndex > ChartManager.Instance.chart.notes.Count - 1) return;
 
             // Scans through the chart note by note.
-            while (noteIndex < chart.notes.Count && ScaledVisualTime() + ScrollDuration() >= chart.notes[noteIndex].ScaledVisualTime)
+            while (noteIndex < ChartManager.Instance.chart.notes.Count && ScaledVisualTime() + ScrollDuration() >= ChartManager.Instance.chart.notes[noteIndex].ScaledVisualTime)
             {
-                Note currentNote = chart.notes[noteIndex];
+                Note currentNote = ChartManager.Instance.chart.notes[noteIndex];
 
                 GetNote(currentNote);
 
@@ -75,11 +74,11 @@ namespace SaturnGame.RhythmGame
         private int holdIndex = 0;
         private void ProcessHolds()
         {
-            if (holdIndex > chart.holdNotes.Count - 1) return;
+            if (holdIndex > ChartManager.Instance.chart.holdNotes.Count - 1) return;
 
-            while (holdIndex < chart.holdNotes.Count && ScaledVisualTime() + ScrollDuration() >= chart.holdNotes[holdIndex].Start.ScaledVisualTime)
+            while (holdIndex < ChartManager.Instance.chart.holdNotes.Count && ScaledVisualTime() + ScrollDuration() >= ChartManager.Instance.chart.holdNotes[holdIndex].Start.ScaledVisualTime)
             {
-                HoldNote currentHold = chart.holdNotes[holdIndex];
+                HoldNote currentHold = ChartManager.Instance.chart.holdNotes[holdIndex];
             
                 GetNote(currentHold.Start);
                 GetHoldEnd(currentHold.End);
@@ -95,11 +94,11 @@ namespace SaturnGame.RhythmGame
         private int barLineIndex = 0;
         private void ProcessBarLines()
         {
-            if (barLineIndex > chart.barLines.Count - 1) return;
+            if (barLineIndex > ChartManager.Instance.chart.barLines.Count - 1) return;
 
-            while (barLineIndex < chart.barLines.Count && ScaledVisualTime() + ScrollDuration() >= chart.barLines[barLineIndex].ScaledVisualTime)
+            while (barLineIndex < ChartManager.Instance.chart.barLines.Count && ScaledVisualTime() + ScrollDuration() >= ChartManager.Instance.chart.barLines[barLineIndex].ScaledVisualTime)
             {
-                GetBarLine(chart.barLines[barLineIndex].ScaledVisualTime);
+                GetBarLine(ChartManager.Instance.chart.barLines[barLineIndex].ScaledVisualTime);
                 barLineIndex++;
             }
         }
@@ -107,11 +106,11 @@ namespace SaturnGame.RhythmGame
         private int syncIndex = 0;
         private void ProcessSync()
         {
-            if (syncIndex > chart.syncs.Count - 1) return;
+            if (syncIndex > ChartManager.Instance.chart.syncs.Count - 1) return;
 
-            while (syncIndex < chart.syncs.Count && ScaledVisualTime() + ScrollDuration() >= chart.syncs[syncIndex].ScaledVisualTime)
+            while (syncIndex < ChartManager.Instance.chart.syncs.Count && ScaledVisualTime() + ScrollDuration() >= ChartManager.Instance.chart.syncs[syncIndex].ScaledVisualTime)
             {
-                GetSync(chart.syncs[syncIndex]);
+                GetSync(ChartManager.Instance.chart.syncs[syncIndex]);
                 syncIndex++;
             }
         }
@@ -120,11 +119,11 @@ namespace SaturnGame.RhythmGame
         private int bgmDataIndex = 0;
         private void ProcessBgmData()
         {
-            if (bgmDataIndex > chart.notes.Count - 1) return;
+            if (bgmDataIndex > ChartManager.Instance.chart.notes.Count - 1) return;
 
-            while (bgmDataIndex < chart.bgmDataGimmicks.Count && chart.bgmDataGimmicks[bgmDataIndex].Time <= timeManager.VisualTime)
+            while (bgmDataIndex < ChartManager.Instance.chart.bgmDataGimmicks.Count && ChartManager.Instance.chart.bgmDataGimmicks[bgmDataIndex].Time <= timeManager.VisualTime)
             {
-                bgmData = chart.bgmDataGimmicks[bgmDataIndex];
+                bgmData = ChartManager.Instance.chart.bgmDataGimmicks[bgmDataIndex];
 
                 if (bgmData != null) bgmManager.UpdateBgmData(bgmData.BeatsPerMinute, bgmData.TimeSig);
                 bgmDataIndex++;
@@ -135,11 +134,11 @@ namespace SaturnGame.RhythmGame
         private int hiSpeedIndex = 0;
         private void ProcessHiSpeed()
         {
-            if (hiSpeedIndex > chart.notes.Count - 1) return;
+            if (hiSpeedIndex > ChartManager.Instance.chart.notes.Count - 1) return;
 
-            while (hiSpeedIndex < chart.hiSpeedGimmicks.Count && chart.hiSpeedGimmicks[hiSpeedIndex].Time <= timeManager.VisualTime)
+            while (hiSpeedIndex < ChartManager.Instance.chart.hiSpeedGimmicks.Count && ChartManager.Instance.chart.hiSpeedGimmicks[hiSpeedIndex].Time <= timeManager.VisualTime)
             {
-                lastHiSpeedChange = chart.hiSpeedGimmicks[hiSpeedIndex];
+                lastHiSpeedChange = ChartManager.Instance.chart.hiSpeedGimmicks[hiSpeedIndex];
                 hiSpeedIndex++;
             }
         }
@@ -155,16 +154,16 @@ namespace SaturnGame.RhythmGame
         private float reverseMirrorTime = 0;
         private void ProcessReverseGimmicks()
         {
-            if (reverseNoteIndex > chart.reverseNotes.Count) return;
+            if (reverseNoteIndex > ChartManager.Instance.chart.reverseNotes.Count) return;
 
-            if (reverseGimmickIndex < chart.reverseGimmicks.Count - 1 && chart.reverseGimmicks[reverseGimmickIndex].Time <= timeManager.VisualTime)
+            if (reverseGimmickIndex < ChartManager.Instance.chart.reverseGimmicks.Count - 1 && ChartManager.Instance.chart.reverseGimmicks[reverseGimmickIndex].Time <= timeManager.VisualTime)
             {
-                switch (chart.reverseGimmicks[reverseGimmickIndex].GimmickType)
+                switch (ChartManager.Instance.chart.reverseGimmicks[reverseGimmickIndex].GimmickType)
                 {
                     case ObjectEnums.GimmickType.ReverseEffectStart:
-                        reverseStartTime = chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
-                        reverseMidTime = chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
-                        reverseEndTime = chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
+                        reverseStartTime = ChartManager.Instance.chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
+                        reverseMidTime = ChartManager.Instance.chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
+                        reverseEndTime = ChartManager.Instance.chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
                         reverseMirrorTime = reverseStartTime + (reverseEndTime - reverseMidTime);
                         reverseActive = true;
                         break;
@@ -180,9 +179,9 @@ namespace SaturnGame.RhythmGame
                 reverseGimmickIndex++;
             }
 
-            while (reverseActive && reverseNoteIndex < chart.reverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
+            while (reverseActive && reverseNoteIndex < ChartManager.Instance.chart.reverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= ChartManager.Instance.chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
             {
-                Note currentNote = chart.reverseNotes[reverseNoteIndex];
+                Note currentNote = ChartManager.Instance.chart.reverseNotes[reverseNoteIndex];
 
                 GetNote(currentNote, true);
 
@@ -198,11 +197,11 @@ namespace SaturnGame.RhythmGame
                 reverseNoteIndex++;
             }
 
-            if (reverseHoldNoteIndex != 0 && reverseHoldNoteIndex > chart.reverseHoldNotes.Count - 1) return;
+            if (reverseHoldNoteIndex != 0 && reverseHoldNoteIndex > ChartManager.Instance.chart.reverseHoldNotes.Count - 1) return;
 
-            while (reverseHoldNoteIndex < chart.reverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
+            while (reverseHoldNoteIndex < ChartManager.Instance.chart.reverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= ChartManager.Instance.chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
             {
-                HoldNote currentHold = chart.reverseHoldNotes[reverseHoldNoteIndex];
+                HoldNote currentHold = ChartManager.Instance.chart.reverseHoldNotes[reverseHoldNoteIndex];
             
                 GetNote(currentHold.Start, true);
                 GetHoldEnd(currentHold.End, true);
@@ -543,6 +542,9 @@ namespace SaturnGame.RhythmGame
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.P)) bgmManager.Play();
+            if (Input.GetKeyDown(KeyCode.L)) ChartManager.Instance.LoadChart(System.IO.Path.Combine(Application.streamingAssetsPath, "Songpacks/DONOTSHIP/TestCharts/03_INF_Wavetapper.mer"));
+
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
             ProcessBgmData();

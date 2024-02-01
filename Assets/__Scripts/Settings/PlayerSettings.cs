@@ -33,12 +33,6 @@ namespace SaturnGame.Settings
         public bool ShowBarLines = true;
         public int CenterDisplayInfo;
         public int ScoreDisplayMethod;
-        public bool DisplayMultiplayerRank;
-        public bool DisplayStageUpEmblems;
-        public bool DisplayRate;
-        public bool DisplayLevel;
-        public bool SkipGate;
-        public bool SkipBingo;
     }
 
     [System.Serializable] public class DesignSettings

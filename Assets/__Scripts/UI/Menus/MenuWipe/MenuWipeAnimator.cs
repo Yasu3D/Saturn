@@ -1,10 +1,12 @@
 using UnityEngine;
+using TMPro;
 using DG.Tweening;
 
 namespace SaturnGame.UI
 {
     public class MenuWipeAnimator : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI splashText;
         [SerializeField] private RectTransform viewMask;
         [SerializeField] private RectTransform textMask;
         [SerializeField] private RectTransform ring1;
@@ -35,6 +37,7 @@ namespace SaturnGame.UI
             currentSequence.Kill(true);
             currentSequence = DOTween.Sequence();
 
+            RandomizeSplashText();
             viewMask.gameObject.SetActive(true);
             textMask.gameObject.SetActive(true);
             viewMask.sizeDelta = viewMaskMax;
@@ -89,6 +92,55 @@ namespace SaturnGame.UI
             ring3.sizeDelta = ring3Min;
             viewMask.gameObject.SetActive(false);
             textMask.gameObject.SetActive(false);
+        }
+    
+        public void RandomizeSplashText()
+        {
+            string[] messages =
+            {
+                ":3",
+                ":3c",
+                ">:3",
+                ">:3c",
+                "100% Artificial!",
+                "100% Organic!",
+                "ALL Marvelous!",
+                "Also try AstroDX!",
+                "Also try Umiguri!",
+                "Carg!",
+                "Closing game... just kidding.",
+                "Don't forget to hydrate!",
+                "Drink some water!",
+                "Dude that's fucking crazy yo",
+                "Entering Dive Realm...",
+                "Everybody fucking jump!",
+                "Every Night, Every Day, Every Night, E",
+                "Fixing bugs...",
+                "Fixing memory leaks...",
+                "Full Combo!",
+                "Good Luck! :]",
+                "Have Fun! :]",
+                "HELP IM TRAPPED IN THE MACHINE LET ME OUT",
+                "Here comes the bass",
+                "You should totally play MNK Inferno",
+                "It's behind you.",
+                "It's not a touchscreen!",
+                "KILL KILL KILL KILL KILL KILL",
+                "MASTER",
+                "Missless!",
+                "nihao bro wo ai SaturnGame.exe",
+                "Not a washing machine!",
+                "Okay let's do this thing!",
+                "Removing herobrine...",
+                "R-Notes are worth double!",
+                "SSS+",
+                "Support your local arcades!",
+                "Thank you for playing! :]",
+                "Unexpected item in bagging area"
+            };
+
+            int randomID = Random.Range(0, messages.Length - 1);
+            splashText.text = messages[randomID];
         }
     }
 }

@@ -236,6 +236,7 @@ GameObject:
   - component: {fileID: 6924869204272902904}
   - component: {fileID: 6976755023825410440}
   - component: {fileID: 6970803184567568333}
+  - component: {fileID: 7917270714834881232}
   - component: {fileID: 5486481827663078258}
   m_Layer: 0
   m_Name: Startup
@@ -286,6 +287,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fa7efec36bd3c4f91786a35acb91bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7917270714834881232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9093408435962310463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d3428c0837032c4aa76a61a5da4f8c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmClip: {fileID: 0}
+  chart: {fileID: 0}
 --- !u!114 &5486481827663078258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,12 +331,6 @@ MonoBehaviour:
       ShowBarLines: 1
       CenterDisplayInfo: 0
       ScoreDisplayMethod: 0
-      DisplayMultiplayerRank: 0
-      DisplayStageUpEmblems: 0
-      DisplayRate: 0
-      DisplayLevel: 0
-      SkipGate: 0
-      SkipBingo: 0
     DesignSettings:
       RingColor: 0
       JudgeLineColor: 2

@@ -61,7 +61,7 @@ namespace SaturnGame.Data
 
             for (int i = 0; i < 5; i++)
             {
-                string chartFilepath = Path.Combine(Path.GetDirectoryName(path), merIDs[i]);
+                string chartFilepath = Path.Combine(folderPath, merIDs[i]);
                 diffs[i].diffName = (DifficultyName) i;
 
                 if (!File.Exists(chartFilepath))
@@ -89,7 +89,7 @@ namespace SaturnGame.Data
                     if (tempLevel != null) diffs[i].diffLevel = Convert.ToSingle(tempLevel);
 
                     string tempAudioFilepath = MerLoader.GetMetadata(merLine, "#MUSIC_FILE_PATH");
-                    if (tempAudioFilepath != null) diffs[i].audioFilepath = tempAudioFilepath;
+                    if (tempAudioFilepath != null) diffs[i].audioFilepath = Path.Combine(folderPath, tempAudioFilepath);
 
                     string tempAudioOffset = MerLoader.GetMetadata(merLine, "#OFFSET");
                     if (tempAudioOffset != null) diffs[i].audioOffset = Convert.ToSingle(tempAudioOffset);
@@ -99,9 +99,11 @@ namespace SaturnGame.Data
 
                     string tempPreviewStart = MerLoader.GetMetadata(merLine, "#PREVIEW_TIME");
                     if (tempPreviewStart != null) diffs[i].previewStart = Convert.ToSingle(tempPreviewStart);
+                    if (tempPreviewStart == "") diffs[i].previewStart = 0;
 
                     string tempPreviewDuration = MerLoader.GetMetadata(merLine, "#PREVIEW_DURATION");
                     if (tempPreviewDuration != null) diffs[i].previewDuration = Convert.ToSingle(tempPreviewDuration);
+                    if (tempPreviewDuration == "") diffs[i].previewDuration = 10;
                 }
                 while (++readerIndex < merFile.Count);
             }

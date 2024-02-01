@@ -5591,7 +5591,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -8035,6 +8035,7 @@ GameObject:
   - component: {fileID: 1410557163}
   - component: {fileID: 1410557165}
   - component: {fileID: 1410557164}
+  - component: {fileID: 1410557167}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -8072,8 +8073,9 @@ MonoBehaviour:
   cardAnimator: {fileID: 1410557162}
   pageAnimator: {fileID: 1410557163}
   displayAnimator: {fileID: 1410557165}
-  songList: {fileID: 1410557166}
+  songDatabase: {fileID: 1410557166}
   buttonManager: {fileID: 1410557164}
+  bgmPreview: {fileID: 1410557167}
   page: 0
   diffPlusButton0: {fileID: 384459520}
   diffPlusButton1: {fileID: 834683027}
@@ -8214,6 +8216,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songs: []
+--- !u!114 &1410557167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410557158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7333968c26b443042af6972ab5960e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmSource: {fileID: 1015856777}
 --- !u!1 &1413121446
 GameObject:
   m_ObjectHideFlags: 0

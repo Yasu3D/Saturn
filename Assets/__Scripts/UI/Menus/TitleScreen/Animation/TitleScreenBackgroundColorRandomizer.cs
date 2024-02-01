@@ -7,18 +7,7 @@ public class TitleScreenBackgroundColorRandomizer : MonoBehaviour
     [SerializeField] private Image background;
     [SerializeField] private Image checkers;
 
-    void Awake()
-    {
-        RandomizeColor();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-            RandomizeColor();
-    }
-
-    void RandomizeColor()
+    public void RandomizeColor()
     {
         float bgHue = Random.value;
         float checkerHue = (bgHue + 0.111111f) % 1;

@@ -10,19 +10,6 @@ namespace SaturnGame.Loading
     public class MerLoader
     {
         /// <summary>
-        /// Reads a <c>.mer</c> file at <c>path</c> and converts<br />
-        /// it into a List of strings for parsing.
-        /// </summary>
-        public static List<string> LoadMer(string path)
-        {
-            if (!File.Exists(path)) return null;
-
-            Stream stream = File.OpenRead(path);
-            return LoadMer(stream);
-        }
-
-
-        /// <summary>
         /// Converts a Stream into a List of strings for parsing.
         /// </summary>
         public static List<string> LoadMer(Stream stream)
@@ -53,20 +40,30 @@ namespace SaturnGame.Loading
         {
             if (!File.Exists(path)) return null;
 
-            AudioType type = await Task.Run(() => GetAudioType(path));
-            
+            System.Diagnostics.Stopwatch time = System.Diagnostics.Stopwatch.StartNew();
+
+            AudioType type = GetAudioType(path);
+
+            Debug.Log($"0 - {time.ElapsedMilliseconds}");
+
             if (type is AudioType.UNKNOWN) return null;
 
             Uri uri = new ("file://" + path);
             
             try
             {
-                using(UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(path, type))
+                using(UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(uri, type))
                 {
                     await webRequest.SendWebRequest();
 
+                    Debug.Log($"1 - {time.ElapsedMilliseconds}");
+
                     if (webRequest.result == UnityWebRequest.Result.Success)
-                        return DownloadHandlerAudioClip.GetContent(webRequest);
+                    {
+                        var test = DownloadHandlerAudioClip.GetContent(webRequest);
+                        Debug.Log($"2 - {time.ElapsedMilliseconds}");
+                        return test;
+                    }
                 }
             }
             catch(Exception error)

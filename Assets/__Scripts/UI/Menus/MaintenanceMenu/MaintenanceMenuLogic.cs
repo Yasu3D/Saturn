@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 namespace SaturnGame.UI
 {
-    public class MaintenanceMenuManager : MonoBehaviour
+    public class MaintenanceMenuLogic : MonoBehaviour
     {
         [Header("BUTTONS")]
         [SerializeField] private List<Button> mainMenuButtons;

@@ -28,9 +28,8 @@ public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
 
         LoadInProgress = true;
         menuWipe.Anim_StartTransition();
-        await Awaitable.WaitForSecondsAsync(2f);
-        await SceneManager.LoadSceneAsync(scenePath
-        );
+        await Awaitable.WaitForSecondsAsync(1.5f);
+        await SceneManager.LoadSceneAsync(scenePath);
         menuWipe.Anim_EndTransition();
         LoadInProgress = false;
     }

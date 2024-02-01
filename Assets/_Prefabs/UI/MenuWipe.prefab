@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f15c0d0b64a7754890087723f8cdc9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  splashText: {fileID: 1669647198827056342}
   viewMask: {fileID: 8260113185844982729}
   textMask: {fileID: 6176246155259130988}
   ring1: {fileID: 4722563296500614948}
@@ -716,7 +717,7 @@ GameObject:
   - component: {fileID: 9065884720234158167}
   - component: {fileID: 1669647198827056342}
   m_Layer: 5
-  m_Name: HaveFun
+  m_Name: SplashText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -738,8 +739,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 145.5, y: -45.1}
-  m_SizeDelta: {x: 120, y: 30}
+  m_AnchoredPosition: {x: 253, y: -45}
+  m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9065884720234158167
 CanvasRenderer:
@@ -769,7 +770,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Have Fun! :]'
+  m_text: Splash Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c2b45d4ef04a4f41be459c1616e7766, type: 2}
   m_sharedMaterial: {fileID: -1958097785745564949, guid: 6c2b45d4ef04a4f41be459c1616e7766,
@@ -804,7 +805,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 34
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1049,7 +1050,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9093360691452320433}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
   m_Name: 
