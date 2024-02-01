@@ -9,7 +9,7 @@ namespace SaturnGame.RhythmGame
         {
             Measure = note.Measure;
             Tick = note.Tick;
-            Time = note.Time;
+            TimeMs = note.TimeMs;
             ScaledVisualTime = note.ScaledVisualTime;
             Position = note.Position;
             Size = note.Size;

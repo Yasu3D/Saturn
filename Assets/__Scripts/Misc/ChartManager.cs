@@ -16,6 +16,11 @@ namespace SaturnGame.RhythmGame
 
         private List<Gimmick> bpmGimmicks = new();
         private List<Gimmick> timeSigGimmicks = new();
+
+        // Any modifications to Loading or LoadedChart should hold the lock.
+        public readonly object LoadingLock = new();
+        public bool Loading { get; private set; } = false;
+        public string LoadedChart { get; private set; } = null;
         private int readerIndex = 0;
         
         /// <summary>
@@ -23,40 +28,67 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         /// <param name="merStream"></param>
         /// <returns></returns>
-        public async Task<Chart> LoadChart(string path)
+        public async Task<bool> LoadChart(string filepath)
         {
-            if (!File.Exists(path)) return null;
-
-            FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
-            List<string> merFile = MerLoader.LoadMer(fileStream);
-
-            readerIndex = 0;
-            bpmGimmicks.Clear();
-            timeSigGimmicks.Clear();
-
-            chart = new();
-
-            await Task.Run(() => ParseMetadata(merFile));
-            await Task.Run(() => ParseChart(merFile));
-            await Task.Run(() => GenerateBarLines());
-            await Task.Run(() => CreateBgmData());
-            await Task.Run(() => CreateHiSpeedData());
-            await Task.Run(() => SetTime());
-
-            if (chart.reverseGimmicks.Count != 0)
-                await Task.Run(() => GenerateReverseLists());
-
-            if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes)
-                await Task.Run(() => MirrorChart());
-
-            if (!CheckLoadErrors().passed)
+            lock(LoadingLock)
             {
-                Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
-                return null; 
+                if (Loading)
+                {
+                    Debug.LogWarning("A chart is already loading. Stopping to avoid multiple loads running at the same time.");
+                    return false;
+                }
+                else
+                {
+                    Loading = true;
+                }
             }
 
-            Debug.Log("[Chart Load] Chart loaded successfully!");
-            return chart;
+            try
+            {
+                if (!File.Exists(filepath)) return false;
+
+                FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);
+                List<string> merFile = MerLoader.LoadMer(fileStream);
+
+                readerIndex = 0;
+                bpmGimmicks.Clear();
+                timeSigGimmicks.Clear();
+
+                chart = new();
+
+                await Task.Run(() => ParseMetadata(merFile));
+                await Task.Run(() => ParseChart(merFile));
+                await Task.Run(() => GenerateBarLines());
+                await Task.Run(() => CreateBgmData());
+                await Task.Run(() => CreateHiSpeedData());
+                await Task.Run(() => SetTime());
+
+                if (chart.reverseGimmicks.Count != 0)
+                    await Task.Run(() => GenerateReverseLists());
+
+                if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes)
+                    await Task.Run(() => MirrorChart());
+
+                if (!CheckLoadErrors().passed)
+                {
+                    Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
+                    return false; 
+                }
+
+                Debug.Log("[Chart Load] Chart loaded successfully!");
+                return true;
+            }
+            finally
+            {
+                lock (LoadingLock)
+                {
+                    if (!Loading)
+                    {
+                        Debug.LogError("Incorrect loading state.");
+                    }
+                    Loading = false;
+                }
+            }
         }
 
 
@@ -266,10 +298,10 @@ namespace SaturnGame.RhythmGame
             if (chart.endOfChart is null)
                 return (false, "Chart is missing End of Chart note!");
 
-            if (chart.notes.Last().Time > chart.endOfChart.Time)
+            if (chart.notes.Last().TimeMs > chart.endOfChart.TimeMs)
                 return (false, "Notes behind end of Chart note!");
 
-            if (chart.notes.Last().Time > bgmClip.length * 1000) // conv. to ms
+            if (chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
                 return (false, "Chart is longer than audio!");
 
             if (chart.bgmDataGimmicks.Count == 0)
@@ -579,17 +611,17 @@ namespace SaturnGame.RhythmGame
 
             obsoleteGimmicks.Clear();
 
-            chart.bgmDataGimmicks[0].Time = 0;
+            chart.bgmDataGimmicks[0].TimeMs = 0;
             for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
             {
-                float lastTime = chart.bgmDataGimmicks[i - 1].Time;
+                float lastTime = chart.bgmDataGimmicks[i - 1].TimeMs;
                 float currentMeasure = (chart.bgmDataGimmicks[i].Measure * 1920 + chart.bgmDataGimmicks[i].Tick) * SaturnMath.tickToMeasure;
                 float lastMeasure = (chart.bgmDataGimmicks[i - 1].Measure * 1920 + chart.bgmDataGimmicks[i - 1].Tick) * SaturnMath.tickToMeasure;
                 float timeSig = chart.bgmDataGimmicks[i - 1].TimeSig.Ratio;
                 float bpm = chart.bgmDataGimmicks[i - 1].BeatsPerMinute;
 
                 float time = lastTime + ((currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm)));
-                chart.bgmDataGimmicks[i].Time = time;
+                chart.bgmDataGimmicks[i].TimeMs = time;
             }
         }
 
@@ -600,7 +632,7 @@ namespace SaturnGame.RhythmGame
         {
             foreach (Gimmick gimmick in chart.hiSpeedGimmicks)
             {
-                gimmick.Time = CalculateTime(gimmick);
+                gimmick.TimeMs = CalculateTime(gimmick);
             }
 
             float lastScaledTime = 0;
@@ -609,12 +641,12 @@ namespace SaturnGame.RhythmGame
             
             for (int i = 0; i < chart.hiSpeedGimmicks.Count; i++)
             {
-                float currentTime = chart.hiSpeedGimmicks[i].Time;
+                float currentTime = chart.hiSpeedGimmicks[i].TimeMs;
                 float scaledTime = lastScaledTime + (Mathf.Abs(currentTime - lastTime) * lastHiSpeed);
                 chart.hiSpeedGimmicks[i].ScaledVisualTime = scaledTime;
 
                 lastScaledTime = scaledTime;
-                lastTime = chart.hiSpeedGimmicks[i].Time;
+                lastTime = chart.hiSpeedGimmicks[i].TimeMs;
                 lastHiSpeed = chart.hiSpeedGimmicks[i].HiSpeed;
             }
         }
@@ -628,25 +660,25 @@ namespace SaturnGame.RhythmGame
         {
             foreach (Note note in chart.notes)
             {
-                note.Time = CalculateTime(note);
+                note.TimeMs = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
             foreach (Note sync in chart.syncs)
             {
-                sync.Time = CalculateTime(sync);
+                sync.TimeMs = CalculateTime(sync);
                 sync.ScaledVisualTime = CalculateScaledTime(sync);
             }
 
             foreach (ChartObject obj in chart.barLines)
             {
-                obj.Time = CalculateTime(obj);
+                obj.TimeMs = CalculateTime(obj);
                 obj.ScaledVisualTime = CalculateScaledTime(obj);
             }
 
             foreach (Note note in chart.masks)
             {
-                note.Time = CalculateTime(note);
+                note.TimeMs = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
@@ -655,18 +687,18 @@ namespace SaturnGame.RhythmGame
             {
                 foreach (Note note in hold.Notes)
                 {
-                    note.Time = CalculateTime(note);
+                    note.TimeMs = CalculateTime(note);
                     note.ScaledVisualTime = CalculateScaledTime(note);
                 }
             }
 
             foreach (Gimmick gimmick in chart.reverseGimmicks)
             {
-                gimmick.Time = CalculateTime(gimmick);
+                gimmick.TimeMs = CalculateTime(gimmick);
                 gimmick.ScaledVisualTime = CalculateScaledTime(gimmick);
             }
 
-            chart.endOfChart.Time = CalculateTime(chart.endOfChart);
+            chart.endOfChart.TimeMs = CalculateTime(chart.endOfChart);
             chart.endOfChart.ScaledVisualTime = CalculateScaledTime(chart.endOfChart);
         }
 
@@ -685,7 +717,7 @@ namespace SaturnGame.RhythmGame
             int timeStamp = chartObject.Measure * 1920 + chartObject.Tick;
             Gimmick lastBgmData = chart.bgmDataGimmicks.LastOrDefault(x => x.Measure * 1920 + x.Tick < timeStamp) ?? chart.bgmDataGimmicks[0];
 
-            float lastTime = lastBgmData.Time;
+            float lastTime = lastBgmData.TimeMs;
             float currentMeasure = (chartObject.Measure * 1920 + chartObject.Tick) * SaturnMath.tickToMeasure;
             float lastMeasure = (lastBgmData.Measure * 1920 + lastBgmData.Tick) * SaturnMath.tickToMeasure;
             float timeSig = lastBgmData.TimeSig.Ratio;
@@ -706,14 +738,14 @@ namespace SaturnGame.RhythmGame
         private float CalculateScaledTime(ChartObject chartObject)
         {
             if (chart.hiSpeedGimmicks.Count == 0)
-                return chartObject.Time;
+                return chartObject.TimeMs;
 
-            Gimmick lastHiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.Time <= chartObject.Time);
+            Gimmick lastHiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.TimeMs <= chartObject.TimeMs);
             float hiSpeedScaledTime = lastHiSpeed != null ? lastHiSpeed.ScaledVisualTime : 0;
-            float hiSpeedTime = lastHiSpeed != null ? lastHiSpeed.Time : 0;
+            float hiSpeedTime = lastHiSpeed != null ? lastHiSpeed.TimeMs : 0;
             float hiSpeed = lastHiSpeed != null ? lastHiSpeed.HiSpeed : 1;
 
-            float scaledTime = hiSpeedScaledTime + ((chartObject.Time - hiSpeedTime) * hiSpeed);
+            float scaledTime = hiSpeedScaledTime + ((chartObject.TimeMs - hiSpeedTime) * hiSpeed);
             return scaledTime;
         }
     }

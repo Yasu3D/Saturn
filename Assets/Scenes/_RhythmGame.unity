@@ -809,7 +809,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa3f905a5f427b4e923a628a2f1f552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chart: {fileID: 1495675954}
   timeManager: {fileID: 1783936258}
 --- !u!4 &1472638033
 Transform:
@@ -835,10 +834,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1495675955}
-  - component: {fileID: 1495675954}
   - component: {fileID: 1495675953}
   m_Layer: 0
-  m_Name: Objects
+  m_Name: NoteVisuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -856,7 +854,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e940b6c113596641bd443e0b92b70da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chart: {fileID: 1495675954}
   timeManager: {fileID: 1783936258}
   bgmManager: {fileID: 1783936256}
   activeObjectsContainer: {fileID: 1217854417}
@@ -869,41 +866,6 @@ MonoBehaviour:
   swipePool: {fileID: 1564455300}
   syncPool: {fileID: 586643893}
   guideLaneRenderer: {fileID: 421236484}
---- !u!114 &1495675954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495675952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13a7d16b3ae3da340bdfe75c92d06c45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgmManager: {fileID: 1783936256}
-  musicFilePath: 
-  difficulty: 0
-  audioOffset: 0
-  movieOffset: 0
-  beatsPerMinuteGimmicks: []
-  timeSignatureGimmicks: []
-  bgmDataGimmicks: []
-  hiSpeedGimmicks: []
-  stopGimmicks: []
-  reverseGimmicks: []
-  notes: []
-  holdNotes: []
-  masks: []
-  barLines: []
-  syncs: []
-  endOfChart:
-    Measure: 0
-    Tick: 0
-    TimeMs: 0
-    ScaledVisualTime: 0
-  reverseNotes: []
-  reverseHoldNotes: []
 --- !u!4 &1495675955
 Transform:
   m_ObjectHideFlags: 0
@@ -2499,9 +2461,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 3870019641924301977}
+  - {fileID: 1472638033}
   - {fileID: 1495675955}
   - {fileID: 469441216}
   - {fileID: 1850381202}
   - {fileID: 1783936257}
   - {fileID: 1994888665}
-  - {fileID: 1472638033}

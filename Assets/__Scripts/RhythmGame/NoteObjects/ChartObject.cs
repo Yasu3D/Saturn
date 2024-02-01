@@ -15,7 +15,7 @@ namespace SaturnGame.RhythmGame
         
         public int Measure;
         [Range(0, 1919)] public int Tick;
-        public float Time;
+        public float TimeMs;
         public float ScaledVisualTime;
     }
 
