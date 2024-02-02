@@ -173,7 +173,6 @@ namespace SaturnGame.RhythmGame
                     // hold notes
                     if (noteTypeID is 9 or 25)
                     {
-                        // TODO: get bonus/r note status
                         HoldSegment holdStart = new HoldSegment(measure, tick, position, size, true);
                         // .... it ain't pretty but it does the job. I hope.
                         // start another loop that begins at the hold start
@@ -214,6 +213,7 @@ namespace SaturnGame.RhythmGame
                         }
 
                         HoldNote hold = new(holdSegments.ToArray());
+                        hold.SetBonusTypeFromNoteID(noteTypeID);
                         tempNote = hold;
                         chart.holdNotes.Add(hold);
                     }

@@ -27,12 +27,50 @@ namespace SaturnGame.RhythmGame
             IsSync = isSync;
         }
 
+        public void SetBonusTypeFromNoteID(int noteID)
+        {
+            switch (noteID)
+            {
+                case 1:
+                case 3:
+                case 4:
+                case 5:
+                case 7:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                case 16:
+                    BonusType = NoteBonusType.None;
+                    break;
+
+                case 2:
+                case 6:
+                case 8:
+                    BonusType = NoteBonusType.Bonus;
+                    break;
+
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                    BonusType = NoteBonusType.R_Note;
+                    break;
+
+                default:
+                    throw new ArgumentException($"Unkown note ID {noteID}", "noteID");
+            }
+        }
+
         public static Note CreateFromNoteID(int measure, int tick, int noteID, int position, int size, bool renderFlag = true, bool isSync = false)
         {
-            // TODO: remove null assignment
-            Note note = null;
+            Note note;
 
-            // TODO: fix this stuff
             switch (noteID)
             {
                 case 1:
@@ -63,84 +101,28 @@ namespace SaturnGame.RhythmGame
                     note = new SwipeNote(measure, tick, position, size, SwipeNote.SwipeDirection.Counterclockwise);
                     break;
 
-                // case 9:
-                // case 25:
-                //     NoteType = ObjectEnums.NoteType.HoldStart;
-                //     break;
-
-                // case 10:
-                //     NoteType = ObjectEnums.NoteType.HoldSegment;
-                //     break;
-
-                // case 11:
-                //     NoteType = ObjectEnums.NoteType.HoldEnd;
-                //     break;
-
-                // case 12:
-                //     NoteType = ObjectEnums.NoteType.MaskAdd;
-                //     break;
-
-                // case 13:
-                //     NoteType = ObjectEnums.NoteType.MaskRemove;
-                //     break;
-
-                // case 14:
-                //     NoteType = ObjectEnums.NoteType.EndChart;
-                //     break;
 
                 case 16:
                 case 26:
                     note = new ChainNote(measure, tick, position, size);
                     break;
 
-                default:
-                    // NoteType = ObjectEnums.NoteType.None;
-                    break;
-            }
-
-            if (note is null)
-            {
-                throw new Exception($"wrong simplenote typeid {noteID}");
-            }
-
-            // assign bonusType
-            switch (noteID)
-            {
-                case 1:
-                case 3:
-                case 4:
-                case 5:
-                case 7:
                 case 9:
+                case 25:
                 case 10:
                 case 11:
+                    throw new ArgumentException($"Note ID {noteID} represents a HoldNote component which is unsupported by this function", "noteID");
+
                 case 12:
                 case 13:
                 case 14:
-                case 16:
-                    note.BonusType = NoteBonusType.None;
-                    break;
-
-                case 2:
-                case 6:
-                case 8:
-                    note.BonusType = NoteBonusType.Bonus;
-                    break;
-
-                case 20:
-                case 21:
-                case 22:
-                case 23:
-                case 24:
-                case 25:
-                case 26:
-                    note.BonusType = NoteBonusType.R_Note;
-                    break;
+                    throw new ArgumentException($"Note ID {noteID} does not represent a Note", "noteID");
 
                 default:
-                    note.BonusType = NoteBonusType.None;
-                    break;
+                    throw new ArgumentException($"Unkown note ID {noteID}", "noteID");
             }
+
+            note.SetBonusTypeFromNoteID(noteID);
 
             return note;
         }

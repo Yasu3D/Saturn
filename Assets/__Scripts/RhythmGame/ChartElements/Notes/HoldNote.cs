@@ -8,7 +8,6 @@ namespace SaturnGame.RhythmGame
     [Serializable]
     public class HoldNote : Note
     {
-        // TODO: check bonus type thingy
         public HoldNote(HoldSegment start, HoldSegment[] segments, HoldSegment end) : base(start.Measure, start.Tick, start.Position, start.Size, NoteBonusType.None)
         {
             Start = start;
@@ -25,7 +24,6 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-        // TODO: check bonus type thingy
         public HoldNote(HoldSegment[] segments) : base(segments[0].Measure, segments[0].Tick, segments[0].Position, segments[0].Size, NoteBonusType.None)
         {
             Start = segments[0];
