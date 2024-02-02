@@ -7,7 +7,7 @@ namespace SaturnGame.RhythmGame
     /// </summary>
     /// TODO: Split out start and end?
     [System.Serializable]
-    public class HoldSegment : PositionedChartObject
+    public class HoldSegment : PositionedChartElement
     {
         public bool RenderFlag;
 

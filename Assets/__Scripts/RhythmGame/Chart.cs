@@ -23,6 +23,5 @@ namespace SaturnGame.RhythmGame
         public List<SimpleNote> reverseNotes = new();
         public List<HoldNote> reverseHoldNotes = new();
 
-
     }
 }

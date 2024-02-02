@@ -7,7 +7,7 @@ namespace SaturnGame.RhythmGame
     /// </summary>
     /// Note (pun intended): For hold notes, the "position" is the the position of the start.
     [System.Serializable]
-    public abstract class Note : PositionedChartObject
+    public abstract class Note : PositionedChartElement
     {
         public ObjectEnums.BonusType BonusType;
         // IsSync is true if this note is a "sync" note, that is,

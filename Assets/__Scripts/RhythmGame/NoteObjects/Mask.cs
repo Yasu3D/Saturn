@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public class Mask : PositionedChartObject
+    public class Mask : PositionedChartElement
     {
         public MaskDirection Direction;
         // Add is true if this the mask is being added, and false if it's being removed.

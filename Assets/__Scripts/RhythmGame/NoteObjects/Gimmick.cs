@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public class Gimmick : ChartObject
+    public class Gimmick : TimedChartElement
     {
         public Gimmick (int measure, int tick, ObjectEnums.GimmickType gimmickType, object value1 = null, object value2 = null) : base(measure, tick)
         {

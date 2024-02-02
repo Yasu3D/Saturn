@@ -510,7 +510,7 @@ namespace SaturnGame.RhythmGame
         /// Axis 30 = horizontal mirror <br/>
         /// Axis 0 = vertical mirror
         /// </remarks>
-        private void MirrorObject(PositionedChartObject note, int axis = 30)
+        private void MirrorObject(PositionedChartElement note, int axis = 30)
         {
             int newPos = SaturnMath.Modulo(axis - note.Size - note.Position, 60);
 
@@ -726,7 +726,7 @@ namespace SaturnGame.RhythmGame
         /// Calculates the object's time in milliseconds <br />
         /// according to all BPM and TimeSignature changes.
         /// </summary>
-        private float CalculateTime(ChartObject chartObject)
+        private float CalculateTime(TimedChartElement chartObject)
         {
             if (chart.bgmDataGimmicks.Count == 0)
             {
@@ -755,7 +755,7 @@ namespace SaturnGame.RhythmGame
         /// This function also relies on scaled HiSpeed timestamps to already be calculated. <br />
         /// Make sure <c>CreateHiSpeedData()</c> has already been called before this.
         /// </remarks>
-        private float CalculateScaledTime(ChartObject chartObject)
+        private float CalculateScaledTime(TimedChartElement chartObject)
         {
             if (chart.hiSpeedGimmicks.Count == 0)
                 return chartObject.TimeMs;
