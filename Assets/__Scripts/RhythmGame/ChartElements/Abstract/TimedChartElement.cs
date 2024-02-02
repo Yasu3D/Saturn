@@ -41,25 +41,5 @@ namespace SaturnGame.RhythmGame
             MaskRemove,
             EndChart
         }
-        public enum BonusType
-        {
-            None,
-            Bonus,
-            R_Note
-        }
-        // TODO: move into Gimmick class
-        public enum GimmickType
-        {
-            None,
-            Note,
-            BeatsPerMinute,
-            TimeSignature,
-            HiSpeed,
-            ReverseEffectStart,
-            ReverseEffectEnd,
-            ReverseNoteEnd,
-            StopStart,
-            StopEnd
-        }
     }
 }

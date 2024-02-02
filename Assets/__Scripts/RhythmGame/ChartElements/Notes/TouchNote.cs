@@ -10,7 +10,7 @@ namespace SaturnGame.RhythmGame
             int tick,
             int position,
             int size,
-            ObjectEnums.BonusType bonusType = ObjectEnums.BonusType.None,
+            NoteBonusType bonusType = NoteBonusType.None,
             bool isSync = false
             ) : base(measure, tick, position, size, bonusType, isSync)
         {

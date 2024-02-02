@@ -10,7 +10,7 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public abstract class Note : PositionedChartElement
     {
-        public ObjectEnums.BonusType BonusType;
+        public NoteBonusType BonusType;
         // IsSync is true if this note is a "sync" note, that is,
         // it is at the same time as another note and is highlighted
         public bool IsSync;
@@ -22,7 +22,7 @@ namespace SaturnGame.RhythmGame
             int tick,
             int position,
             int size,
-            ObjectEnums.BonusType bonusType,
+            NoteBonusType bonusType,
             bool isSync = false) : base(measure, tick, position, size)
         {
             BonusType = bonusType;
@@ -120,13 +120,13 @@ namespace SaturnGame.RhythmGame
                 case 13:
                 case 14:
                 case 16:
-                    note.BonusType = ObjectEnums.BonusType.None;
+                    note.BonusType = NoteBonusType.None;
                     break;
 
                 case 2:
                 case 6:
                 case 8:
-                    note.BonusType = ObjectEnums.BonusType.Bonus;
+                    note.BonusType = NoteBonusType.Bonus;
                     break;
 
                 case 20:
@@ -136,15 +136,22 @@ namespace SaturnGame.RhythmGame
                 case 24:
                 case 25:
                 case 26:
-                    note.BonusType = ObjectEnums.BonusType.R_Note;
+                    note.BonusType = NoteBonusType.R_Note;
                     break;
 
                 default:
-                    note.BonusType = ObjectEnums.BonusType.None;
+                    note.BonusType = NoteBonusType.None;
                     break;
             }
 
             return note;
+        }
+
+        public enum NoteBonusType
+        {
+            None,
+            Bonus,
+            R_Note,
         }
     }
 }

@@ -41,8 +41,8 @@ namespace SaturnGame.Rendering
             Width = width;
 
             IsSync = note.IsSync;
-            IsBonus = note.BonusType is ObjectEnums.BonusType.Bonus;
-            IsChain = note.NoteType is ObjectEnums.NoteType.Chain;
+            IsBonus = note.BonusType is Note.NoteBonusType.Bonus;
+            IsChain = note is ChainNote;
 
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);

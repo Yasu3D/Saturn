@@ -262,32 +262,32 @@ namespace SaturnGame.RhythmGame
                     tempGimmick = new Gimmick(measure, tick, objectID, value1, value2);
 
                     // sort gimmicks by type
-                    switch (tempGimmick.GimmickType)
+                    switch (tempGimmick.Type)
                     {
-                        case ObjectEnums.GimmickType.BeatsPerMinute:
+                        case Gimmick.GimmickType.BeatsPerMinute:
                             bpmGimmicks.Add(tempGimmick);
                             break;
-                        case ObjectEnums.GimmickType.TimeSignature:
+                        case Gimmick.GimmickType.TimeSignature:
                             timeSigGimmicks.Add(tempGimmick);
                             break;
-                        case ObjectEnums.GimmickType.HiSpeed:
+                        case Gimmick.GimmickType.HiSpeed:
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
-                        case ObjectEnums.GimmickType.StopStart:
+                        case Gimmick.GimmickType.StopStart:
                             // Convert Stops to 0/1 HiSpeed changes internally since they're functionally identical(?)
-                            tempGimmick.GimmickType = ObjectEnums.GimmickType.HiSpeed;
+                            tempGimmick.Type = Gimmick.GimmickType.HiSpeed;
                             tempGimmick.HiSpeed = 0;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
-                        case ObjectEnums.GimmickType.StopEnd:
+                        case Gimmick.GimmickType.StopEnd:
                             // Same as above.
-                            tempGimmick.GimmickType = ObjectEnums.GimmickType.HiSpeed;
+                            tempGimmick.Type = Gimmick.GimmickType.HiSpeed;
                             tempGimmick.HiSpeed = 1;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
-                        case ObjectEnums.GimmickType.ReverseEffectStart:
-                        case ObjectEnums.GimmickType.ReverseEffectEnd:
-                        case ObjectEnums.GimmickType.ReverseNoteEnd:
+                        case Gimmick.GimmickType.ReverseEffectStart:
+                        case Gimmick.GimmickType.ReverseEffectEnd:
+                        case Gimmick.GimmickType.ReverseNoteEnd:
                             chart.reverseGimmicks.Add(tempGimmick);
                             break;
                     }
@@ -320,41 +320,41 @@ namespace SaturnGame.RhythmGame
 
             // Loop through all reverses to find any overlapping/out of order/broken ones.
             // The order must always be Effect Start > Effect End > Note End.
-            ObjectEnums.GimmickType lastReverse = ObjectEnums.GimmickType.ReverseNoteEnd;
+            Gimmick.GimmickType lastReverse = Gimmick.GimmickType.ReverseNoteEnd;
             for (int i = 0; i < chart.reverseGimmicks.Count; i++)
             {
-                switch (chart.reverseGimmicks[i].GimmickType)
+                switch (chart.reverseGimmicks[i].Type)
                 {
-                    case ObjectEnums.GimmickType.ReverseEffectStart:
-                        if (lastReverse is not ObjectEnums.GimmickType.ReverseNoteEnd)
+                    case Gimmick.GimmickType.ReverseEffectStart:
+                        if (lastReverse is not Gimmick.GimmickType.ReverseNoteEnd)
                         {
                             return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
                         }
                         else
                         {
-                            lastReverse = ObjectEnums.GimmickType.ReverseEffectStart;
+                            lastReverse = Gimmick.GimmickType.ReverseEffectStart;
                         }
                         break;
 
-                    case ObjectEnums.GimmickType.ReverseEffectEnd:
-                        if (lastReverse is not ObjectEnums.GimmickType.ReverseEffectStart)
+                    case Gimmick.GimmickType.ReverseEffectEnd:
+                        if (lastReverse is not Gimmick.GimmickType.ReverseEffectStart)
                         {
                             return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
                         }
                         else
                         {
-                            lastReverse = ObjectEnums.GimmickType.ReverseEffectEnd;
+                            lastReverse = Gimmick.GimmickType.ReverseEffectEnd;
                         }
                         break;
 
-                    case ObjectEnums.GimmickType.ReverseNoteEnd:
-                        if (lastReverse is not ObjectEnums.GimmickType.ReverseEffectEnd)
+                    case Gimmick.GimmickType.ReverseNoteEnd:
+                        if (lastReverse is not Gimmick.GimmickType.ReverseEffectEnd)
                         {
                             return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
                         }
                         else
                         {
-                            lastReverse = ObjectEnums.GimmickType.ReverseNoteEnd;
+                            lastReverse = Gimmick.GimmickType.ReverseNoteEnd;
                         }
                         break;
 
@@ -374,7 +374,7 @@ namespace SaturnGame.RhythmGame
             // Loop over all Reverse Gimmicks except the last two to avoid an ArrayIndexOutOfBoundsException
             for (int i = 0; i < chart.reverseGimmicks.Count - 2; i++)
             {
-                if (chart.reverseGimmicks[i].GimmickType is not ObjectEnums.GimmickType.ReverseEffectStart)
+                if (chart.reverseGimmicks[i].Type is not Gimmick.GimmickType.ReverseEffectStart)
                     continue;
 
                 // If [i] is EffectStart, then [i + 1] must be EffectEnd and [i + 2] must be NoteEnd
@@ -591,12 +591,12 @@ namespace SaturnGame.RhythmGame
                 if (currentTick == lastTick)
                 {
                     // if this is a bpm change, then last change must've been a time sig change.
-                    if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
+                    if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.BeatsPerMinute)
                     {
                         chart.bgmDataGimmicks[i - 1].BeatsPerMinute = chart.bgmDataGimmicks[i].BeatsPerMinute;
                         lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
                     }
-                    if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
+                    if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.TimeSignature)
                     {
                         chart.bgmDataGimmicks[i - 1].TimeSig = chart.bgmDataGimmicks[i].TimeSig;
                         lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
@@ -607,13 +607,13 @@ namespace SaturnGame.RhythmGame
                     continue;
                 }
 
-                if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.BeatsPerMinute)
+                if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.BeatsPerMinute)
                 {
                     chart.bgmDataGimmicks[i].TimeSig = lastTimeSig;
                     lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
                 }
 
-                if (chart.bgmDataGimmicks[i].GimmickType is ObjectEnums.GimmickType.TimeSignature)
+                if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.TimeSignature)
                 {
                     chart.bgmDataGimmicks[i].BeatsPerMinute = lastBpm;
                     lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;

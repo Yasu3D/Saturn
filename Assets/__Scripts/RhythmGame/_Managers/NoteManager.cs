@@ -73,7 +73,7 @@ namespace SaturnGame.RhythmGame
                 if (currentNote is SwipeNote swipeNote)
                     GetSwipe(swipeNote);
 
-                if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
+                if (currentNote.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentNote);
 
                 noteIndex++;
@@ -93,7 +93,7 @@ namespace SaturnGame.RhythmGame
                 GetHoldEnd(currentHold.End);
                 GetHoldSurface(currentHold);
 
-                if (currentHold.BonusType is ObjectEnums.BonusType.R_Note)
+                if (currentHold.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentHold);
 
                 holdIndex++;
@@ -139,7 +139,7 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-        private Gimmick lastHiSpeedChange = new(0, 0, ObjectEnums.GimmickType.HiSpeed, 1, null);
+        private Gimmick lastHiSpeedChange = new(0, 0, Gimmick.GimmickType.HiSpeed, 1, null);
         private int hiSpeedIndex = 0;
         private void ProcessHiSpeed()
         {
@@ -167,9 +167,9 @@ namespace SaturnGame.RhythmGame
 
             if (reverseGimmickIndex < Chart.reverseGimmicks.Count - 1 && Chart.reverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTime)
             {
-                switch (Chart.reverseGimmicks[reverseGimmickIndex].GimmickType)
+                switch (Chart.reverseGimmicks[reverseGimmickIndex].Type)
                 {
-                    case ObjectEnums.GimmickType.ReverseEffectStart:
+                    case Gimmick.GimmickType.ReverseEffectStart:
                         reverseStartTime = Chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
                         reverseMidTime = Chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
                         reverseEndTime = Chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
@@ -177,7 +177,7 @@ namespace SaturnGame.RhythmGame
                         reverseActive = true;
                         break;
 
-                    case ObjectEnums.GimmickType.ReverseEffectEnd:
+                    case Gimmick.GimmickType.ReverseEffectEnd:
                         reverseStartTime = 0;
                         reverseMidTime = 0;
                         reverseEndTime = 0;
@@ -200,7 +200,7 @@ namespace SaturnGame.RhythmGame
                 if (currentNote is SwipeNote swipeNote)
                     GetSwipe(swipeNote);
 
-                if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
+                if (currentNote.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentNote, true);
 
                 reverseNoteIndex++;
@@ -216,7 +216,7 @@ namespace SaturnGame.RhythmGame
                 GetHoldEnd(currentHold.End, true);
                 GetHoldSurface(currentHold, true);
 
-                if (currentHold.BonusType is ObjectEnums.BonusType.R_Note)
+                if (currentHold.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentHold, true);
 
                 reverseHoldNoteIndex++;

@@ -14,7 +14,7 @@ namespace SaturnGame.RhythmGame
             int position,
             int size,
             SwipeDirection direction,
-            ObjectEnums.BonusType bonusType = ObjectEnums.BonusType.None,
+            NoteBonusType bonusType = NoteBonusType.None,
             bool isSync = false
             ) : base(measure, tick, position, size, bonusType, isSync)
         {

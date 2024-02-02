@@ -5,29 +5,30 @@ using UnityEngine;
 
 namespace SaturnGame.RhythmGame
 {
+    // TODO: create separate classes for HiSpeed, TimeSignature, and BeatsPerMinute as well
     [System.Serializable]
     public class Gimmick : TimedChartElement
     {
-        public Gimmick (int measure, int tick, ObjectEnums.GimmickType gimmickType, object value1 = null, object value2 = null) : base(measure, tick)
+        public Gimmick (int measure, int tick, GimmickType gimmickType, object value1 = null, object value2 = null) : base(measure, tick)
         {
             Measure = measure;
             Tick = tick;
-            GimmickType = gimmickType;
+            Type = gimmickType;
 
-            switch (GimmickType)
+            switch (Type)
             {
                 default:
                     break;
 
-                case ObjectEnums.GimmickType.BeatsPerMinute:
+                case GimmickType.BeatsPerMinute:
                     BeatsPerMinute = Convert.ToSingle(value1);
                     break;
 
-                case ObjectEnums.GimmickType.TimeSignature:
+                case GimmickType.TimeSignature:
                     TimeSig = new TimeSignature(Convert.ToInt32(value1), Convert.ToInt32(value2));
                     break;
 
-                case ObjectEnums.GimmickType.HiSpeed:
+                case GimmickType.HiSpeed:
                     HiSpeed = Convert.ToSingle(value1);
                     break;
             }
@@ -42,42 +43,42 @@ namespace SaturnGame.RhythmGame
             switch (gimmickID)
             {
                 case 2:
-                    GimmickType = ObjectEnums.GimmickType.BeatsPerMinute;
+                    Type = GimmickType.BeatsPerMinute;
                     BeatsPerMinute = Convert.ToSingle(value1);
                     break;
 
                 case 3:
-                    GimmickType = ObjectEnums.GimmickType.TimeSignature;
+                    Type = GimmickType.TimeSignature;
                     TimeSig = new TimeSignature(Convert.ToInt32(value1), Convert.ToInt32(value2));
                     break;
 
                 case 5:
-                    GimmickType = ObjectEnums.GimmickType.HiSpeed;
+                    Type = GimmickType.HiSpeed;
                     HiSpeed = Convert.ToSingle(value1);
                     break;
 
                 case 6:
-                    GimmickType = ObjectEnums.GimmickType.ReverseEffectStart;
+                    Type = GimmickType.ReverseEffectStart;
                     break;
 
                 case 7:
-                    GimmickType = ObjectEnums.GimmickType.ReverseEffectEnd;
+                    Type = GimmickType.ReverseEffectEnd;
                     break;
 
                 case 8:
-                    GimmickType = ObjectEnums.GimmickType.ReverseNoteEnd;
+                    Type = GimmickType.ReverseNoteEnd;
                     break;
 
                 case 9:
-                    GimmickType = ObjectEnums.GimmickType.StopStart;
+                    Type = GimmickType.StopStart;
                     break;
 
                 case 10:
-                    GimmickType = ObjectEnums.GimmickType.StopEnd;
+                    Type = GimmickType.StopEnd;
                     break;
 
                 default:
-                    GimmickType = ObjectEnums.GimmickType.None;
+                    Type = GimmickType.None;
                     break;
             }
         }
@@ -90,9 +91,23 @@ namespace SaturnGame.RhythmGame
             TimeSig = timeSig;
         }
 
-        public ObjectEnums.GimmickType GimmickType;
+        public GimmickType Type;
         public float BeatsPerMinute;
         public TimeSignature TimeSig;
         public float HiSpeed;
+
+        public enum GimmickType
+        {
+            None,
+            Note,
+            BeatsPerMinute,
+            TimeSignature,
+            HiSpeed,
+            ReverseEffectStart,
+            ReverseEffectEnd,
+            ReverseNoteEnd,
+            StopStart,
+            StopEnd,
+        }
     }
 }
