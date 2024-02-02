@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public class SwipeNote : SimpleNote
+    public class SwipeNote : Note
     {
         public SwipeDirection Direction;
 
@@ -16,7 +16,7 @@ namespace SaturnGame.RhythmGame
             SwipeDirection direction,
             ObjectEnums.BonusType bonusType = ObjectEnums.BonusType.None,
             bool isSync = false
-            ) : base(measure, tick, bonusType, position, size, isSync)
+            ) : base(measure, tick, position, size, bonusType, isSync)
         {
             Direction = direction;
         }

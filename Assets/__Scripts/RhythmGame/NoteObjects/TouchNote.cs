@@ -3,7 +3,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public class TouchNote : SimpleNote
+    public class TouchNote : Note
     {
         public TouchNote(
             int measure,
@@ -12,7 +12,7 @@ namespace SaturnGame.RhythmGame
             int size,
             ObjectEnums.BonusType bonusType = ObjectEnums.BonusType.None,
             bool isSync = false
-            ) : base(measure, tick, bonusType, position, size, isSync)
+            ) : base(measure, tick, position, size, bonusType, isSync)
         {
         }
 

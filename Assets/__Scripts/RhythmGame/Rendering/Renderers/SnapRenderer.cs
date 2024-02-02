@@ -26,7 +26,7 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRenderer(SimpleNote note)
+        public void SetRenderer(SnapNote note)
         {
             Size = note.Size;
             Position = note.Position;

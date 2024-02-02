@@ -63,15 +63,15 @@ namespace SaturnGame.RhythmGame
             // Scans through the chart note by note.
             while (noteIndex < Chart.notes.Count && ScaledVisualTime() + ScrollDuration() >= Chart.notes[noteIndex].ScaledVisualTime)
             {
-                SimpleNote currentNote = Chart.notes[noteIndex];
+                Note currentNote = Chart.notes[noteIndex];
 
                 GetNote(currentNote);
 
-                if (currentNote.NoteType is ObjectEnums.NoteType.SnapForward or ObjectEnums.NoteType.SnapBackward)
-                    GetSnap(currentNote);
+                if (currentNote is SnapNote snapNote)
+                    GetSnap(snapNote);
 
-                if (currentNote.NoteType is ObjectEnums.NoteType.SwipeClockwise or ObjectEnums.NoteType.SwipeCounterclockwise)
-                    GetSwipe(currentNote);
+                if (currentNote is SwipeNote swipeNote)
+                    GetSwipe(swipeNote);
 
                 if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
                     GetR_Effect(currentNote);
@@ -190,15 +190,15 @@ namespace SaturnGame.RhythmGame
 
             while (reverseActive && reverseNoteIndex < Chart.reverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= Chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
             {
-                SimpleNote currentNote = Chart.reverseNotes[reverseNoteIndex];
+                Note currentNote = Chart.reverseNotes[reverseNoteIndex];
 
                 GetNote(currentNote, true);
 
-                if (currentNote.NoteType is ObjectEnums.NoteType.SnapForward or ObjectEnums.NoteType.SnapBackward)
-                    GetSnap(currentNote, true);
+                if (currentNote is SnapNote snapNote)
+                    GetSnap(snapNote);
 
-                if (currentNote.NoteType is ObjectEnums.NoteType.SwipeClockwise or ObjectEnums.NoteType.SwipeCounterclockwise)
-                    GetSwipe(currentNote, true);
+                if (currentNote is SwipeNote swipeNote)
+                    GetSwipe(swipeNote);
 
                 if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
                     GetR_Effect(currentNote, true);
@@ -424,7 +424,7 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private SnapContainer GetSnap(SimpleNote input, bool reverse = false)
+        private SnapContainer GetSnap(SnapNote input, bool reverse = false)
         {
             SnapContainer container = snapPool.GetObject();
 
@@ -438,7 +438,7 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private SwipeContainer GetSwipe(SimpleNote input, bool reverse = false)
+        private SwipeContainer GetSwipe(SwipeNote input, bool reverse = false)
         {
             SwipeContainer container = swipePool.GetObject();
 

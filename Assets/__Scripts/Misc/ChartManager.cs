@@ -227,7 +227,7 @@ namespace SaturnGame.RhythmGame
                     }
                     else
                     {
-                        SimpleNote note = SimpleNote.CreateFromNoteID(measure, tick, noteTypeID, position, size);
+                        Note note = Note.CreateFromNoteID(measure, tick, noteTypeID, position, size);
                         chart.notes.Add(note);
                         tempNote = note;
                     }
@@ -382,12 +382,12 @@ namespace SaturnGame.RhythmGame
                 float effectEndTime = chart.reverseGimmicks[i + 1].ScaledVisualTime;
                 float noteEndTime = chart.reverseGimmicks[i + 2].ScaledVisualTime;
 
-                List<SimpleNote> notesToReverse = chart.notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
+                List<Note> notesToReverse = chart.notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
                 List<HoldNote> holdsToReverse = chart.holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
 
                 // TODO: reverse syncs?
 
-                foreach (SimpleNote note in notesToReverse)
+                foreach (Note note in notesToReverse)
                     ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
 
                 foreach (HoldNote hold in holdsToReverse)
@@ -404,11 +404,11 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         /// <param name="note">The Note to reverse</param>
         /// <param name="timeAxis">The axis to reverse around.</param>
-        private void ReverseNote(SimpleNote note, float startTime, float midTime, float endTime)
+        private void ReverseNote(Note note, float startTime, float midTime, float endTime)
         {
             // Remaps from [mid <> end] to [mirror <> start]
 
-            SimpleNote copy = (SimpleNote) note.Clone();
+            Note copy = (Note) note.Clone();
             float mirrorTime = startTime + (endTime - midTime);
             float remap = SaturnMath.Remap(copy.ScaledVisualTime, midTime, endTime, mirrorTime, startTime);
 
@@ -535,7 +535,7 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void MirrorChart()
         {
-            foreach (SimpleNote note in chart.notes)
+            foreach (Note note in chart.notes)
                 MirrorObject(note);
 
             foreach (Mask mask in chart.masks)
@@ -550,7 +550,7 @@ namespace SaturnGame.RhythmGame
                     MirrorObject(note);
             }
 
-            foreach (SimpleNote note in chart.reverseNotes)
+            foreach (Note note in chart.reverseNotes)
                 MirrorObject(note);
 
             foreach (HoldNote hold in chart.reverseHoldNotes)
@@ -675,7 +675,7 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void SetTime()
         {
-            foreach (SimpleNote note in chart.notes)
+            foreach (Note note in chart.notes)
             {
                 note.TimeMs = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);

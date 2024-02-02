@@ -72,7 +72,7 @@ namespace SaturnGame.RhythmGame
             // TOOD: notes on top of each other (may only be legal for hold notes)
             notes = new();
 
-            foreach (SimpleNote note in Chart.notes)
+            foreach (Note note in Chart.notes)
             {
                 ScoringNote scoringNote = new(note);
                 scoringNote.EarliestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].left;
@@ -197,7 +197,7 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private class ScoringNote
         {
-            public readonly SimpleNote Note;
+            public readonly Note Note;
             public JudgementResult JudgementResult;
             // We can define a note as an interval in mod 60, e.g. [40, 50) for a 10-size note at position 40.
             // If the note crosses 60, still use mod 60 integers, e.g. [55, 5) for a 10-size note at position 55.
@@ -208,7 +208,7 @@ namespace SaturnGame.RhythmGame
             public float? EarliestTimeMs;
             public float? LatestTimeMs;
 
-            public ScoringNote(SimpleNote note)
+            public ScoringNote(Note note)
             {
                 Note = note;
                 Left = note.Position;
@@ -226,7 +226,7 @@ namespace SaturnGame.RhythmGame
         public float? HitTimeMs { get; }
 
         // FIXME: HoldNote is not a Note, so this cannot capture HoldNotes
-        public SimpleNote Note { get; }
+        public Note Note { get; }
 
         // The error in ms of this input compared to a perfectly-timed input.
         // e.g. 5ms early will give a value of -5
@@ -241,7 +241,7 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-        public JudgementResult(Judgement judgement, float? hitTimeMs, SimpleNote note)
+        public JudgementResult(Judgement judgement, float? hitTimeMs, Note note)
         {
             Judgement = judgement;
             HitTimeMs = hitTimeMs;

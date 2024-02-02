@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public class SnapNote : SimpleNote
+    public class SnapNote : Note
     {
         public SnapDirection Direction;
 
@@ -16,7 +16,7 @@ namespace SaturnGame.RhythmGame
             SnapDirection direction,
             ObjectEnums.BonusType bonusType = ObjectEnums.BonusType.None,
             bool isSync = false
-            ) : base(measure, tick, bonusType, position, size, isSync)
+            ) : base(measure, tick, position, size, bonusType, isSync)
         {
             Direction = direction;
         }
