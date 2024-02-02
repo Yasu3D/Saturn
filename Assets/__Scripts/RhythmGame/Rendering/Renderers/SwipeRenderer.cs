@@ -27,11 +27,10 @@ namespace SaturnGame.Rendering
             Size = note.Size;
             Position = note.Position;
 
-            int colorID = NoteColors.GetColorID(note.NoteType);
+            int colorID = NoteColors.GetColorID(note);
             Color = NoteColors.GetSwipeColor(colorID);
 
-            bool dir = note.NoteType is ObjectEnums.NoteType.SwipeCounterclockwise;
-            Direction = dir ? "_COUNTERCLOCKWISE" : "_CLOCKWISE";
+            Direction = note.Direction is SwipeNote.SwipeDirection.Counterclockwise ? "_COUNTERCLOCKWISE" : "_CLOCKWISE";
 
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);

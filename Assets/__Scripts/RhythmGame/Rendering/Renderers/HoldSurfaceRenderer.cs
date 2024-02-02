@@ -39,7 +39,7 @@ namespace SaturnGame.Rendering
 
         public void SetRenderer(HoldNote hold)
         {
-            ColorID = NoteColors.GetColorID(ObjectEnums.NoteType.HoldStart);
+            ColorID = NoteColors.GetColorID(hold);
             holdNote = hold;
 
             if (materialInstance.HasFloat("_ColorID"))

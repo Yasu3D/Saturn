@@ -27,7 +27,7 @@ namespace SaturnGame.Rendering
             Size = note.Size;
             Position = note.Position;
 
-            ColorID = NoteColors.GetColorID(ObjectEnums.NoteType.HoldSegment);
+            ColorID = NoteColors.GetColorID(note);
 
             if (materialInstance.HasFloat("_ColorID"))
                 materialInstance.SetFloat("_ColorID", ColorID);

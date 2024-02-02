@@ -73,8 +73,5 @@ namespace SaturnGame.RhythmGame
         public HoldSegment[] RenderedNotes;
 
         public int MaxSize;
-
-        // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
-        public override ObjectEnums.NoteType NoteType => ObjectEnums.NoteType.HoldStart;
     }
 }

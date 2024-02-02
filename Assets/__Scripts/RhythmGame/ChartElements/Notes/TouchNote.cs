@@ -15,7 +15,5 @@ namespace SaturnGame.RhythmGame
             ) : base(measure, tick, position, size, bonusType, isSync)
         {
         }
-
-        public override ObjectEnums.NoteType NoteType => ObjectEnums.NoteType.Touch;
     }
 }

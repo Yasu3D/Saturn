@@ -456,8 +456,7 @@ namespace SaturnGame.RhythmGame
         private void CheckSync(Note current, Note last)
         {
             if (last == null) return;
-            if (last.NoteType is ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove or ObjectEnums.NoteType.Chain) return;
-            if (current.NoteType is ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove or ObjectEnums.NoteType.Chain) return;
+            if (last is ChainNote || current is ChainNote) return;
 
             if (current.Measure == last.Measure && current.Tick == last.Tick)
             {
@@ -487,6 +486,9 @@ namespace SaturnGame.RhythmGame
             // These two are then simplified because they cancel each other out.
             // The comments after each line show what it was before the simplification.
             // Thanks for coming to my ted talk. Happy contributing.
+
+            // cg505's note: This may not work when there are more than 2 simultaneous notes... but let's not
+            // get a headache over that at this point.
 
             int position0 = SaturnMath.Modulo(note0.Position + note0.Size - 1, 60); // pos + 1 // size  - 2
             int size0 = SaturnMath.Modulo(note1.Position - position0, 60) + 1;  // pos + 1 // shift - 1

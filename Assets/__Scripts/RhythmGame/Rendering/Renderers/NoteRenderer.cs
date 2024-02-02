@@ -34,7 +34,7 @@ namespace SaturnGame.Rendering
             Size = note.Size;
             Position = note.Position;
 
-            (Color color, float subStrength) = NoteColors.GetColor(note.NoteType);
+            (Color color, float subStrength) = NoteColors.GetColor(note);
 
             Color = color;
             SubStrength = subStrength;
@@ -64,7 +64,7 @@ namespace SaturnGame.Rendering
 
             if (materialInstance.HasFloat("_Z_Offset"))
             {
-                int state = note.NoteType is ObjectEnums.NoteType.HoldStart ? 1 : 0;
+                int state = note is HoldNote ? 1 : 0;
                 materialInstance.SetFloat("_Z_Offset", state);
             }
 

@@ -22,24 +22,4 @@ namespace SaturnGame.RhythmGame
         public float TimeMs;
         public float ScaledVisualTime;
     }
-
-    public class ObjectEnums
-    {
-        public enum NoteType
-        {
-            None,
-            Touch,
-            SnapForward,
-            SnapBackward,
-            SwipeClockwise,
-            SwipeCounterclockwise,
-            HoldStart,
-            HoldSegment,
-            HoldEnd,
-            Chain,
-            MaskAdd,
-            MaskRemove,
-            EndChart
-        }
-    }
 }

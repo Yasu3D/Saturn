@@ -15,8 +15,6 @@ namespace SaturnGame.RhythmGame
         // it is at the same time as another note and is highlighted
         public bool IsSync;
 
-        public abstract ObjectEnums.NoteType NoteType { get; }
-
         public Note (
             int measure,
             int tick,

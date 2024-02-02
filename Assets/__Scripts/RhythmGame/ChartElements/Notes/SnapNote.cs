@@ -21,22 +21,6 @@ namespace SaturnGame.RhythmGame
             Direction = direction;
         }
 
-        public override ObjectEnums.NoteType NoteType
-        {
-            get
-            {
-                switch (Direction)
-                {
-                    case SnapDirection.Forward:
-                        return ObjectEnums.NoteType.SnapForward;
-                    case SnapDirection.Backward:
-                        return ObjectEnums.NoteType.SnapBackward;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(Direction), $"Unexpected SnapDirection value {Direction}");
-                }
-            }
-        }
-
         public enum SnapDirection
         {
             Forward,

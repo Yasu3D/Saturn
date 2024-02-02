@@ -6,6 +6,7 @@ namespace SaturnGame.RhythmGame
     /// HoldSegment represents a part of a hold, including the start and end.
     /// </summary>
     /// TODO: Split out start and end?
+    /// Note: If you decide to make this a Note, update NoteColors.GetColorID to take a Note.
     [System.Serializable]
     public class HoldSegment : PositionedChartElement
     {
