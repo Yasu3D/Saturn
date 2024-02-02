@@ -22,7 +22,7 @@ namespace SaturnGame.RhythmGame
         public bool Loading { get; private set; } = false;
         public string LoadedChart { get; private set; } = null;
         private int readerIndex = 0;
-        
+
         /// <summary>
         /// Parses a <c>.mer</c> file and creates lists of objects from it.
         /// </summary>
@@ -72,9 +72,10 @@ namespace SaturnGame.RhythmGame
                 if (!CheckLoadErrors().passed)
                 {
                     Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
-                    return false; 
+                    return false;
                 }
 
+                LoadedChart = filepath;
                 Debug.Log("[Chart Load] Chart loaded successfully!");
                 return true;
             }
@@ -126,7 +127,7 @@ namespace SaturnGame.RhythmGame
             }
             while (++readerIndex < merFile.Count);
         }
-        
+
         /// <summary>
         /// Loops through a .mer file's body and adds chartObjects to appropriate lists.
         /// </summary>
@@ -143,7 +144,7 @@ namespace SaturnGame.RhythmGame
                 if (string.IsNullOrEmpty(merFile[i])) continue;
 
                 string[] splitLine = merFile[i].Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
-                
+
                 int measure = Convert.ToInt32(splitLine[0]);
                 int tick = Convert.ToInt32(splitLine[1]);
                 int objectID = Convert.ToInt32(splitLine[2]);
@@ -169,18 +170,16 @@ namespace SaturnGame.RhythmGame
                     int position = Convert.ToInt32(splitLine[5]);
                     int size = Convert.ToInt32(splitLine[6]);
 
-                    tempNote = new Note(measure, tick, noteTypeID, position, size);
-
-                    CheckSync(tempNote, lastNote);
-
                     // hold notes
                     if (noteTypeID is 9 or 25)
                     {
+                        // TODO: get bonus/r note status
+                        HoldSegment holdStart = new HoldSegment(measure, tick, position, size, true);
                         // .... it ain't pretty but it does the job. I hope.
                         // start another loop that begins at the hold start
                         // and looks for a referenced note.
                         int referencedNoteIndex = Convert.ToInt32(splitLine[8]);
-                        List<Note> holdSegments = new() { tempNote };
+                        List<HoldSegment> holdSegments = new() { holdStart };
 
                         for (int j = i; j < merFile.Count; j++)
                         {
@@ -198,14 +197,14 @@ namespace SaturnGame.RhythmGame
                                 int tempSize = Convert.ToInt32(tempSplitLine[6]);
                                 bool tempRenderFlag = Convert.ToInt32(tempSplitLine[7]) == 1;
 
-                                Note tempSegmentNote = new(tempMeasure, tempTick, tempNoteTypeID, tempPosition, tempSize, tempRenderFlag);
+                                HoldSegment tempSegmentNote = new(tempMeasure, tempTick, tempPosition, tempSize, tempRenderFlag);
                                 holdSegments.Add(tempSegmentNote);
-                                
+
                                 if (tempNoteTypeID == 10)
                                 {
                                     referencedNoteIndex = Convert.ToInt32(tempSplitLine[8]);
                                 }
-                                
+
                                 // noteType 11 = hold end
                                 if (tempNoteTypeID == 11)
                                 {
@@ -215,23 +214,32 @@ namespace SaturnGame.RhythmGame
                         }
 
                         HoldNote hold = new(holdSegments.ToArray());
+                        tempNote = hold;
                         chart.holdNotes.Add(hold);
-                        
-                        continue;
                     }
-
                     // mask notes
-                    if (noteTypeID is 12 or 13)
+                    else if (noteTypeID is 12 or 13)
                     {
                         int dir = Convert.ToInt32(splitLine[8]);
-                        tempNote.MaskDirection = (ObjectEnums.MaskDirection) dir;
-                        chart.masks.Add(tempNote);
+                        bool add = noteTypeID == 12;
+                        chart.masks.Add(new Mask(measure, tick, position, size, (Mask.MaskDirection) dir, add));
                         continue;
                     }
-                    
+                    else
+                    {
+                        SimpleNote note = SimpleNote.CreateFromNoteID(measure, tick, noteTypeID, position, size);
+                        chart.notes.Add(note);
+                        tempNote = note;
+                    }
+
+                    if (tempNote is null)
+                    {
+                        Debug.LogError($"null noteid {noteTypeID}");
+                    }
+
                     // all other notes
+                    CheckSync(tempNote, lastNote);
                     lastNote = tempNote;
-                    chart.notes.Add(tempNote);
                 }
 
                 // Gimmick
@@ -251,8 +259,8 @@ namespace SaturnGame.RhythmGame
                     if (objectID is 2 or 5 && splitLine.Length > 3)
                         value1 = Convert.ToSingle(splitLine[3]);
 
-                    tempGimmick = new Gimmick (measure, tick, objectID, value1, value2);
-                    
+                    tempGimmick = new Gimmick(measure, tick, objectID, value1, value2);
+
                     // sort gimmicks by type
                     switch (tempGimmick.GimmickType)
                     {
@@ -327,7 +335,7 @@ namespace SaturnGame.RhythmGame
                             lastReverse = ObjectEnums.GimmickType.ReverseEffectStart;
                         }
                         break;
-                    
+
                     case ObjectEnums.GimmickType.ReverseEffectEnd:
                         if (lastReverse is not ObjectEnums.GimmickType.ReverseEffectStart)
                         {
@@ -349,7 +357,7 @@ namespace SaturnGame.RhythmGame
                             lastReverse = ObjectEnums.GimmickType.ReverseNoteEnd;
                         }
                         break;
-                    
+
                     default:
                         return (false, "Invalid reverse gimmicks! GimmickType does not match.");
                 }
@@ -374,15 +382,17 @@ namespace SaturnGame.RhythmGame
                 float effectEndTime = chart.reverseGimmicks[i + 1].ScaledVisualTime;
                 float noteEndTime = chart.reverseGimmicks[i + 2].ScaledVisualTime;
 
-                List<Note> notesToReverse = chart.notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
+                List<SimpleNote> notesToReverse = chart.notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
                 List<HoldNote> holdsToReverse = chart.holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
 
-                foreach (Note note in notesToReverse)
+                // TODO: reverse syncs?
+
+                foreach (SimpleNote note in notesToReverse)
                     ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
 
                 foreach (HoldNote hold in holdsToReverse)
                     ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
-                
+
                 // List.Reverse() from Linq
                 chart.reverseHoldNotes.Reverse();
             }
@@ -393,12 +403,12 @@ namespace SaturnGame.RhythmGame
         /// then adds a copy of it to <c>reverseNotes</c>
         /// </summary>
         /// <param name="note">The Note to reverse</param>
-        /// <param name="timeAxis">The axis to reverse around.</param>      
-        private void ReverseNote(Note note, float startTime, float midTime, float endTime)
+        /// <param name="timeAxis">The axis to reverse around.</param>
+        private void ReverseNote(SimpleNote note, float startTime, float midTime, float endTime)
         {
             // Remaps from [mid <> end] to [mirror <> start]
 
-            Note copy = new(note);
+            SimpleNote copy = (SimpleNote) note.Clone();
             float mirrorTime = startTime + (endTime - midTime);
             float remap = SaturnMath.Remap(copy.ScaledVisualTime, midTime, endTime, mirrorTime, startTime);
 
@@ -412,13 +422,13 @@ namespace SaturnGame.RhythmGame
         /// then remapping each segment note's position in time.
         /// </summary>
         /// <param name="note">The Note to reverse</param>
-        /// <param name="timeAxis">The axis to reverse around.</param>  
+        /// <param name="timeAxis">The axis to reverse around.</param>
         private void ReverseHold(HoldNote hold, float startTime, float midTime, float endTime)
         {
             HoldNote copy = HoldNote.DeepCopy(hold);
             float mirrorTime = startTime + (endTime - midTime);
 
-            foreach (Note note in copy.Notes)
+            foreach (HoldSegment note in copy.Notes)
                 note.ScaledVisualTime = SaturnMath.Remap(note.ScaledVisualTime, midTime, endTime, mirrorTime, startTime);
 
             // Array.Reverse from System.
@@ -434,7 +444,7 @@ namespace SaturnGame.RhythmGame
         private void GenerateBarLines()
         {
             for (int i = 0; i <= chart.endOfChart.Measure; i++)
-                chart.barLines.Add(new ChartObject(i, 0));
+                chart.barLines.Add(new BarLine(i, 0));
         }
 
         /// <summary>
@@ -477,7 +487,7 @@ namespace SaturnGame.RhythmGame
             // These two are then simplified because they cancel each other out.
             // The comments after each line show what it was before the simplification.
             // Thanks for coming to my ted talk. Happy contributing.
-            
+
             int position0 = SaturnMath.Modulo(note0.Position + note0.Size - 1, 60); // pos + 1 // size  - 2
             int size0 = SaturnMath.Modulo(note1.Position - position0, 60) + 1;  // pos + 1 // shift - 1
 
@@ -489,7 +499,7 @@ namespace SaturnGame.RhythmGame
 
             if (finalSize > 30) return;
 
-            Note sync = new(measure, tick, ObjectEnums.NoteType.None, ObjectEnums.BonusType.None, finalPosition, finalSize);
+            SyncIndicator sync = new(measure, tick, finalPosition, finalSize);
             chart.syncs.Add(sync);
         }
 
@@ -500,15 +510,22 @@ namespace SaturnGame.RhythmGame
         /// Axis 30 = horizontal mirror <br/>
         /// Axis 0 = vertical mirror
         /// </remarks>
-        private void MirrorObject(Note note, int axis = 30)
+        private void MirrorObject(PositionedChartObject note, int axis = 30)
         {
             int newPos = SaturnMath.Modulo(axis - note.Size - note.Position, 60);
 
-            if (note.NoteType is ObjectEnums.NoteType.SwipeClockwise)
-                note.NoteType = ObjectEnums.NoteType.SwipeCounterclockwise;
-
-            else if (note.NoteType is ObjectEnums.NoteType.SwipeCounterclockwise)
-                note.NoteType = ObjectEnums.NoteType.SwipeClockwise;
+            if (note is SwipeNote swipeNote)
+            {
+                switch (swipeNote.Direction)
+                {
+                    case SwipeNote.SwipeDirection.Clockwise:
+                        swipeNote.Direction = SwipeNote.SwipeDirection.Counterclockwise;
+                        break;
+                    case SwipeNote.SwipeDirection.Counterclockwise:
+                        swipeNote.Direction = SwipeNote.SwipeDirection.Clockwise;
+                        break;
+                }
+            }
 
             note.Position = newPos;
         }
@@ -518,27 +535,27 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void MirrorChart()
         {
-            foreach (Note note in chart.notes)
+            foreach (SimpleNote note in chart.notes)
                 MirrorObject(note);
 
-            foreach (Note mask in chart.masks)
+            foreach (Mask mask in chart.masks)
                 MirrorObject(mask);
 
-            foreach (Note sync in chart.syncs)
+            foreach (SyncIndicator sync in chart.syncs)
                 MirrorObject(sync);
 
             foreach (HoldNote hold in chart.holdNotes)
             {
-                foreach (Note note in hold.Notes)
+                foreach (HoldSegment note in hold.Notes)
                     MirrorObject(note);
             }
 
-            foreach (Note note in chart.reverseNotes)
+            foreach (SimpleNote note in chart.reverseNotes)
                 MirrorObject(note);
 
             foreach (HoldNote hold in chart.reverseHoldNotes)
             {
-                foreach (Note note in hold.Notes)
+                foreach (HoldSegment note in hold.Notes)
                     MirrorObject(note);
             }
         }
@@ -557,7 +574,7 @@ namespace SaturnGame.RhythmGame
 
             // merge both lists and sort by timestamp
             chart.bgmDataGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.Measure * 1920 + x.Tick).ToList();
-            
+
             chart.bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
             chart.bgmDataGimmicks[0].TimeSig = lastTimeSig;
 
@@ -638,7 +655,7 @@ namespace SaturnGame.RhythmGame
             float lastScaledTime = 0;
             float lastTime = 0;
             float lastHiSpeed = 1;
-            
+
             for (int i = 0; i < chart.hiSpeedGimmicks.Count; i++)
             {
                 float currentTime = chart.hiSpeedGimmicks[i].TimeMs;
@@ -658,34 +675,37 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void SetTime()
         {
-            foreach (Note note in chart.notes)
+            foreach (SimpleNote note in chart.notes)
             {
                 note.TimeMs = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
-            foreach (Note sync in chart.syncs)
+            foreach (SyncIndicator sync in chart.syncs)
             {
                 sync.TimeMs = CalculateTime(sync);
                 sync.ScaledVisualTime = CalculateScaledTime(sync);
             }
 
-            foreach (ChartObject obj in chart.barLines)
+            foreach (BarLine obj in chart.barLines)
             {
                 obj.TimeMs = CalculateTime(obj);
                 obj.ScaledVisualTime = CalculateScaledTime(obj);
             }
 
-            foreach (Note note in chart.masks)
+            foreach (Mask note in chart.masks)
             {
                 note.TimeMs = CalculateTime(note);
                 note.ScaledVisualTime = CalculateScaledTime(note);
             }
 
             // especially this makes me want to shoot myself
+            // TODO: make CalculateTime / CalculateScaledTime a method on ChartObject, then HoldNote can override it.
             foreach (HoldNote hold in chart.holdNotes)
             {
-                foreach (Note note in hold.Notes)
+                hold.TimeMs = CalculateTime(hold);
+                hold.ScaledVisualTime = CalculateScaledTime(hold);
+                foreach (HoldSegment note in hold.Notes)
                 {
                     note.TimeMs = CalculateTime(note);
                     note.ScaledVisualTime = CalculateScaledTime(note);

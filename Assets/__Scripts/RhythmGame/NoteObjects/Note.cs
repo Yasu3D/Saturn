@@ -2,161 +2,30 @@ using UnityEngine;
 
 namespace SaturnGame.RhythmGame
 {
+    /// <summary>
+    /// Note represents any note type in the chart that needs to be hit and receives a judgement.
+    /// </summary>
+    /// Note (pun intended): For hold notes, the "position" is the the position of the start.
     [System.Serializable]
-    public class Note : ChartObject
+    public abstract class Note : PositionedChartObject
     {
-        public Note (Note note) : base(note.Measure, note.Tick)
-        {
-            Measure = note.Measure;
-            Tick = note.Tick;
-            TimeMs = note.TimeMs;
-            ScaledVisualTime = note.ScaledVisualTime;
-            Position = note.Position;
-            Size = note.Size;
-            NoteType = note.NoteType;
-            BonusType = note.BonusType;
-            RenderFlag = note.RenderFlag;
-            MaskDirection = note.MaskDirection;
-            IsSync = note.IsSync;
-        }
-
-        public Note (int measure, int tick, ObjectEnums.NoteType noteType, ObjectEnums.BonusType bonusType, int position, int size, bool renderFlag = true, bool isSync = false, ObjectEnums.MaskDirection maskDirection = ObjectEnums.MaskDirection.None) : base(measure, tick)
-        {
-            Measure = measure;
-            Tick = tick;
-            Position = position;
-            Size = size;
-            NoteType = noteType;
-            BonusType = bonusType;
-            RenderFlag = renderFlag;
-            MaskDirection = maskDirection;
-            IsSync = isSync;
-        }
-
-        public Note (int measure, int tick, int noteID, int position, int size, bool renderFlag = true, bool isSync = false, ObjectEnums.MaskDirection maskDirection = ObjectEnums.MaskDirection.None) : base(measure, tick)
-        {
-            Measure = measure;
-            Tick = tick;
-            Position = position;
-            Size = size;
-            RenderFlag = renderFlag;
-            MaskDirection = maskDirection;
-            IsSync = isSync;
-
-            // assign noteType
-            switch (noteID)
-            {
-                case 1:
-                case 2:
-                case 20:
-                    NoteType = ObjectEnums.NoteType.Touch;
-                    break;
-                
-                case 3:
-                case 21:
-                    NoteType = ObjectEnums.NoteType.SnapForward;
-                    break;
-
-                case 4:
-                case 22:
-                    NoteType = ObjectEnums.NoteType.SnapBackward;
-                    break;
-                
-                case 5:
-                case 6:
-                case 23:
-                    NoteType = ObjectEnums.NoteType.SwipeClockwise;
-                    break;
-
-                case 7:
-                case 8:
-                case 24:
-                    NoteType = ObjectEnums.NoteType.SwipeCounterclockwise;
-                    break;
-
-                case 9:
-                case 25:
-                    NoteType = ObjectEnums.NoteType.HoldStart;
-                    break;
-
-                case 10:
-                    NoteType = ObjectEnums.NoteType.HoldSegment;
-                    break;
-
-                case 11:
-                    NoteType = ObjectEnums.NoteType.HoldEnd;
-                    break;
-
-                case 12:
-                    NoteType = ObjectEnums.NoteType.MaskAdd;
-                    break;
-
-                case 13:
-                    NoteType = ObjectEnums.NoteType.MaskRemove;
-                    break;
-
-                case 14:
-                    NoteType = ObjectEnums.NoteType.EndChart;
-                    break;
-
-                case 16:
-                case 26:
-                    NoteType = ObjectEnums.NoteType.Chain;
-                    break;
-
-                default:
-                    NoteType = ObjectEnums.NoteType.None;
-                    break;
-            }
-
-            // assign bonusType
-            switch (noteID)
-            {
-                case 1:
-                case 3:
-                case 4:
-                case 5:
-                case 7:
-                case 9:
-                case 10:
-                case 11:
-                case 12:
-                case 13:
-                case 14:
-                case 16:
-                    BonusType = ObjectEnums.BonusType.None;
-                    break;
-                
-                case 2:
-                case 6:
-                case 8:
-                    BonusType = ObjectEnums.BonusType.Bonus;
-                    break;
-                
-                case 20:
-                case 21:
-                case 22:
-                case 23:
-                case 24:
-                case 25:
-                case 26:
-                    BonusType = ObjectEnums.BonusType.R_Note;
-                    break;
-
-                default:
-                    BonusType = ObjectEnums.BonusType.None;
-                    break;
-            }
-        }
-        
-        [Range(0, 59)] public int Position;
-        [Range(1, 60)] public int Size;
-        public ObjectEnums.NoteType NoteType;
         public ObjectEnums.BonusType BonusType;
-        public ObjectEnums.MaskDirection MaskDirection;
-        public bool RenderFlag;
+        // IsSync is true if this note is a "sync" note, that is,
+        // it is at the same time as another note and is highlighted
         public bool IsSync;
+
+        public abstract ObjectEnums.NoteType NoteType { get; }
+
+        public Note (
+            int measure,
+            int tick,
+            int position,
+            int size,
+            ObjectEnums.BonusType bonusType,
+            bool isSync = false) : base(measure, tick, position, size)
+        {
+            BonusType = bonusType;
+            IsSync = isSync;
+        }
     }
-
 }
-

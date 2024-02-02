@@ -39,7 +39,7 @@ namespace SaturnGame.Rendering
 
         public void SetRenderer(HoldNote hold)
         {
-            ColorID = NoteColors.GetColorID(hold.Start.NoteType);
+            ColorID = NoteColors.GetColorID(ObjectEnums.NoteType.HoldStart);
             holdNote = hold;
 
             if (materialInstance.HasFloat("_ColorID"))
@@ -70,7 +70,7 @@ namespace SaturnGame.Rendering
             // For every RenderedNote
             for (int y = 0; y < holdLength; y++)
             {
-                Note startNote = holdNote.RenderedNotes[y];
+                HoldSegment startNote = holdNote.RenderedNotes[y];
                 int startNoteSize = startNote.Size;
                 int startNotePos = startNote.Position;
 
@@ -83,7 +83,7 @@ namespace SaturnGame.Rendering
 
                 if (y != holdLength - 1)
                 {
-                    Note endNote = holdNote.RenderedNotes[y + 1];
+                    HoldSegment endNote = holdNote.RenderedNotes[y + 1];
                     endNoteSize = endNote.Size;
                     endNotePos = endNote.Position;
                     end = endNote.ScaledVisualTime;
@@ -93,7 +93,7 @@ namespace SaturnGame.Rendering
                     if (startNoteSize == endNoteSize && startNotePos == endNotePos)
                         interval = endNote.ScaledVisualTime - startNote.ScaledVisualTime;
                 }
-                
+
                 // For every sub-segment between RenderedNotes.
                 for (float i = start; i < end; i += interval)
                 {
@@ -127,7 +127,7 @@ namespace SaturnGame.Rendering
                 }
             }
 
-            triangles = new int[holdWidth * trueLength * 6]; 
+            triangles = new int[holdWidth * trueLength * 6];
 
             int vert = 0;
             int tris = 0;
@@ -162,7 +162,7 @@ namespace SaturnGame.Rendering
         Vector3 GetPointOnCylinder(Vector2 centerPoint, float coneRadius, float coneLength, float angle, float depth)
         {
             angle = 180 - angle;
-            
+
             //if (reverse) depth *= -1;
 
             float x = coneRadius * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
@@ -184,7 +184,7 @@ namespace SaturnGame.Rendering
         {
             return (float) currentNoteSize / maxNoteSize;
         }
-    
+
 
         [SerializeField] private int debugGizmos = 0;
         void OnDrawGizmos()

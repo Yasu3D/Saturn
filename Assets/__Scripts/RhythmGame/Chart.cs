@@ -14,15 +14,15 @@ namespace SaturnGame.RhythmGame
         public List<Gimmick> bgmDataGimmicks = new();
         public List<Gimmick> hiSpeedGimmicks = new();
         public List<Gimmick> reverseGimmicks = new();
-        public List<Note> notes = new();
+        public List<SimpleNote> notes = new();
         public List<HoldNote> holdNotes = new();
-        public List<Note> masks = new();
-        public List<ChartObject> barLines = new();
-        public List<Note> syncs = new();
-        public ChartObject endOfChart;
-        public List<Note> reverseNotes = new();
+        public List<Mask> masks = new();
+        public List<BarLine> barLines = new();
+        public List<SyncIndicator> syncs = new();
+        public EndOfChart endOfChart;
+        public List<SimpleNote> reverseNotes = new();
         public List<HoldNote> reverseHoldNotes = new();
-        
+
 
     }
 }

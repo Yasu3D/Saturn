@@ -5,14 +5,18 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public class ChartObject
+    public abstract class ChartObject
     {
         public ChartObject(int measure, int tick)
         {
             Measure = measure;
             Tick = tick;
         }
-        
+
+        public ChartObject Clone() {
+            return (ChartObject)MemberwiseClone();
+        }
+
         public int Measure;
         [Range(0, 1919)] public int Tick;
         public float TimeMs;
@@ -43,6 +47,7 @@ namespace SaturnGame.RhythmGame
             Bonus,
             R_Note
         }
+        // TODO: move into Gimmick class
         public enum GimmickType
         {
             None,
@@ -55,13 +60,6 @@ namespace SaturnGame.RhythmGame
             ReverseNoteEnd,
             StopStart,
             StopEnd
-        }
-        public enum MaskDirection
-        {
-            None = 3,
-            Counterclockwise = 0,
-            Clockwise = 1,
-            Center = 2
         }
     }
 }

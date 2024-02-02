@@ -6,25 +6,27 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [Serializable]
-    public class HoldNote
+    public class HoldNote : Note
     {
-        public HoldNote(Note start, Note[] segments, Note end)
+        // TODO: check bonus type thingy
+        public HoldNote(HoldSegment start, HoldSegment[] segments, HoldSegment end) : base(start.Measure, start.Tick, start.Position, start.Size, ObjectEnums.BonusType.None)
         {
             Start = start;
             Segments = segments;
             End = end;
 
-            Notes = new Note[] { start }.Concat(segments).Concat(new Note[] { end }).ToArray();
+            Notes = new HoldSegment[] { start }.Concat(segments).Concat(new HoldSegment[] { end }).ToArray();
             RenderedNotes = Notes.Where(x => x.RenderFlag).ToArray();
 
-            foreach (Note note in Notes)
+            foreach (HoldSegment note in Notes)
             {
                 if (note.Size > MaxSize)
                     MaxSize = note.Size;
             }
         }
 
-        public HoldNote(Note[] segments)
+        // TODO: check bonus type thingy
+        public HoldNote(HoldSegment[] segments) : base(segments[0].Measure, segments[0].Tick, segments[0].Position, segments[0].Size, ObjectEnums.BonusType.None)
         {
             Start = segments[0];
             End = segments[^1];
@@ -32,17 +34,17 @@ namespace SaturnGame.RhythmGame
             RenderedNotes = Notes.Where(x => x.RenderFlag).ToArray();
 
             if (segments.Length == 2)
-                Segments = new Note[0];
+                Segments = new HoldSegment[0];
 
             if (segments.Length == 3)
-                Segments = new Note[] { segments[1] };
+                Segments = new HoldSegment[] { segments[1] };
 
-            else if (segments.Length > 3)  
+            else if (segments.Length > 3)
             {
                 Segments = segments.Skip(1).Take(segments.Length - 2).ToArray();
             }
 
-            foreach (Note note in Notes)
+            foreach (HoldSegment note in Notes)
             {
                 if (note.Size > MaxSize)
                     MaxSize = note.Size;
@@ -55,21 +57,24 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         public static HoldNote DeepCopy(HoldNote hold)
         {
-            List<Note> segments = new();
+            List<HoldSegment> segments = new();
 
-            foreach (Note note in hold.Notes)
-                segments.Add(new(note));
+            foreach (HoldSegment note in hold.Notes)
+                segments.Add((HoldSegment) note.Clone());
 
             return new(segments.ToArray());
         }
 
-        public Note Start;
-        public Note End;
+        public HoldSegment Start;
+        public HoldSegment End;
 
-        public Note[] Segments;
-        public Note[] Notes;
-        public Note[] RenderedNotes;
+        public HoldSegment[] Segments;
+        public HoldSegment[] Notes;
+        public HoldSegment[] RenderedNotes;
 
         public int MaxSize;
+
+        // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
+        public override ObjectEnums.NoteType NoteType => ObjectEnums.NoteType.HoldStart;
     }
 }
