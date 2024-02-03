@@ -30,14 +30,14 @@ namespace SaturnGame.RhythmGame
         [Header("RENDERERS")]
         [SerializeField] private GuideLaneRenderer guideLaneRenderer;
 
-        private List<NoteContainer> noteGarbage = new();
-        private List<SnapContainer> snapGarbage = new();
-        private List<SwipeContainer> swipeGarbage = new();
-        private List<GenericContainer> r_EffectGarbage = new();
-        private List<BarLineContainer> barLineGarbage = new();
-        private List<GenericContainer> syncGarbage = new();
-        private List<HoldEndContainer> holdEndGarbage = new();
-        private List<HoldSurfaceRenderer> holdSurfaceGarbage = new();
+        private readonly List<NoteContainer> noteGarbage = new();
+        private readonly List<SnapContainer> snapGarbage = new();
+        private readonly List<SwipeContainer> swipeGarbage = new();
+        private readonly List<GenericContainer> r_EffectGarbage = new();
+        private readonly List<BarLineContainer> barLineGarbage = new();
+        private readonly List<GenericContainer> syncGarbage = new();
+        private readonly List<HoldEndContainer> holdEndGarbage = new();
+        private readonly List<HoldSurfaceRenderer> holdSurfaceGarbage = new();
 
         private int maskIndex = 0;
         private void ProcessMasks()
@@ -163,6 +163,8 @@ namespace SaturnGame.RhythmGame
         private float reverseMirrorTime = 0;
         private void ProcessReverseGimmicks()
         {
+            // TODO!!!!! Fix reverses AGAIN omegalul
+
             if (reverseNoteIndex > Chart.reverseNotes.Count) return;
 
             if (reverseGimmickIndex < Chart.reverseGimmicks.Count - 1 && Chart.reverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTime)
