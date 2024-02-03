@@ -406,13 +406,8 @@ namespace SaturnGame.RhythmGame
         /// <param name="timeAxis">The axis to reverse around.</param>
         private void ReverseNote(Note note, float startTime, float midTime, float endTime)
         {
-            // Remaps from [mid <> end] to [mirror <> start]
-
             Note copy = (Note) note.Clone();
-            float mirrorTime = startTime + (endTime - midTime);
-            float remap = SaturnMath.Remap(copy.ScaledVisualTime, midTime, endTime, mirrorTime, startTime);
-
-            copy.ScaledVisualTime = remap;
+            copy.ReverseTime(startTime, midTime, endTime);
 
             chart.reverseNotes.Insert(0, copy);
         }
@@ -426,14 +421,9 @@ namespace SaturnGame.RhythmGame
         private void ReverseHold(HoldNote hold, float startTime, float midTime, float endTime)
         {
             HoldNote copy = HoldNote.DeepCopy(hold);
-            float mirrorTime = startTime + (endTime - midTime);
+            copy.ReverseTime(startTime, midTime, endTime);
 
-            foreach (HoldSegment note in copy.Notes)
-                note.ScaledVisualTime = SaturnMath.Remap(note.ScaledVisualTime, midTime, endTime, mirrorTime, startTime);
 
-            // Array.Reverse from System.
-            Array.Reverse(copy.Notes);
-            Array.Reverse(copy.RenderedNotes);
 
             chart.reverseHoldNotes.Add(copy);
         }
@@ -651,7 +641,7 @@ namespace SaturnGame.RhythmGame
         {
             foreach (Gimmick gimmick in chart.hiSpeedGimmicks)
             {
-                gimmick.TimeMs = CalculateTime(gimmick);
+                gimmick.CalculateTime(chart.bgmDataGimmicks);
             }
 
             float lastScaledTime = 0;
@@ -679,96 +669,43 @@ namespace SaturnGame.RhythmGame
         {
             foreach (Note note in chart.notes)
             {
-                note.TimeMs = CalculateTime(note);
-                note.ScaledVisualTime = CalculateScaledTime(note);
+                note.CalculateTime(chart.bgmDataGimmicks);
+                note.CalculateScaledTime(chart.hiSpeedGimmicks);
             }
 
             foreach (SyncIndicator sync in chart.syncs)
             {
-                sync.TimeMs = CalculateTime(sync);
-                sync.ScaledVisualTime = CalculateScaledTime(sync);
+                sync.CalculateTime(chart.bgmDataGimmicks);
+                sync.CalculateScaledTime(chart.hiSpeedGimmicks);
             }
 
             foreach (BarLine obj in chart.barLines)
             {
-                obj.TimeMs = CalculateTime(obj);
-                obj.ScaledVisualTime = CalculateScaledTime(obj);
+                obj.CalculateTime(chart.bgmDataGimmicks);
+                obj.CalculateScaledTime(chart.hiSpeedGimmicks);
             }
 
             foreach (Mask note in chart.masks)
             {
-                note.TimeMs = CalculateTime(note);
-                note.ScaledVisualTime = CalculateScaledTime(note);
+                note.CalculateTime(chart.bgmDataGimmicks);
+                note.CalculateScaledTime(chart.hiSpeedGimmicks);
             }
 
-            // especially this makes me want to shoot myself
-            // TODO: make CalculateTime / CalculateScaledTime a method on ChartObject, then HoldNote can override it.
             foreach (HoldNote hold in chart.holdNotes)
             {
-                hold.TimeMs = CalculateTime(hold);
-                hold.ScaledVisualTime = CalculateScaledTime(hold);
-                foreach (HoldSegment note in hold.Notes)
-                {
-                    note.TimeMs = CalculateTime(note);
-                    note.ScaledVisualTime = CalculateScaledTime(note);
-                }
+                hold.CalculateTime(chart.bgmDataGimmicks);
+                hold.CalculateScaledTime(chart.hiSpeedGimmicks);
             }
 
             foreach (Gimmick gimmick in chart.reverseGimmicks)
             {
-                gimmick.TimeMs = CalculateTime(gimmick);
-                gimmick.ScaledVisualTime = CalculateScaledTime(gimmick);
+                gimmick.CalculateTime(chart.bgmDataGimmicks);
+                gimmick.CalculateScaledTime(chart.hiSpeedGimmicks);
             }
 
-            chart.endOfChart.TimeMs = CalculateTime(chart.endOfChart);
-            chart.endOfChart.ScaledVisualTime = CalculateScaledTime(chart.endOfChart);
+            chart.endOfChart.CalculateTime(chart.bgmDataGimmicks);
+            chart.endOfChart.CalculateScaledTime(chart.hiSpeedGimmicks);
         }
 
-        /// <summary>
-        /// Calculates the object's time in milliseconds <br />
-        /// according to all BPM and TimeSignature changes.
-        /// </summary>
-        private float CalculateTime(TimedChartElement chartObject)
-        {
-            if (chart.bgmDataGimmicks.Count == 0)
-            {
-                Debug.LogError($"Cannot calculate Time of {chartObject} because no bgmData has been set! Use CreateBgmData() to generate bgmData.");
-                return -1;
-            }
 
-            int timeStamp = chartObject.Measure * 1920 + chartObject.Tick;
-            Gimmick lastBgmData = chart.bgmDataGimmicks.LastOrDefault(x => x.Measure * 1920 + x.Tick < timeStamp) ?? chart.bgmDataGimmicks[0];
-
-            float lastTime = lastBgmData.TimeMs;
-            float currentMeasure = (chartObject.Measure * 1920 + chartObject.Tick) * SaturnMath.tickToMeasure;
-            float lastMeasure = (lastBgmData.Measure * 1920 + lastBgmData.Tick) * SaturnMath.tickToMeasure;
-            float timeSig = lastBgmData.TimeSig.Ratio;
-            float bpm = lastBgmData.BeatsPerMinute;
-
-            float time = lastTime + ((currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm)));
-            return time;
-        }
-
-        /// <summary>
-        /// Calculates a scaled timestamp for a chartObject. <br />
-        /// <b>This is slow and should not run every frame!</b>
-        /// </summary>
-        /// <remarks>
-        /// This function also relies on scaled HiSpeed timestamps to already be calculated. <br />
-        /// Make sure <c>CreateHiSpeedData()</c> has already been called before this.
-        /// </remarks>
-        private float CalculateScaledTime(TimedChartElement chartObject)
-        {
-            if (chart.hiSpeedGimmicks.Count == 0)
-                return chartObject.TimeMs;
-
-            Gimmick lastHiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.TimeMs <= chartObject.TimeMs);
-            float hiSpeedScaledTime = lastHiSpeed != null ? lastHiSpeed.ScaledVisualTime : 0;
-            float hiSpeedTime = lastHiSpeed != null ? lastHiSpeed.TimeMs : 0;
-            float hiSpeed = lastHiSpeed != null ? lastHiSpeed.HiSpeed : 1;
-
-            float scaledTime = hiSpeedScaledTime + ((chartObject.TimeMs - hiSpeedTime) * hiSpeed);
-            return scaledTime;
-        }
-    }
 }
