@@ -39,7 +39,8 @@ namespace SaturnGame
         /// </summary>
         public static int Modulo(int x, int m)
         {
-            return (x % m + m) % m;
+            int r = x % m;
+            return r < 0 ? r + m : r;
         }
 
         /// <summary>
