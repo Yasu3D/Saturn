@@ -156,7 +156,7 @@ namespace SaturnGame.RhythmGame
                             break;
                         }
                     }
-                } 
+                }
                 else if (hitTimeMs >= note.LatestTimeMs && note.JudgementResult is null)
                 {
                     // The note can no longer be hit.

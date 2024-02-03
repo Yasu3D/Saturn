@@ -26,16 +26,15 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRenderer(Note note)
+        public void SetRenderer(SnapNote note)
         {
             Size = note.Size;
             Position = note.Position;
 
-            Color = NoteColors.GetColor(note.NoteType).color;
-            ColorID = NoteColors.GetColorID(note.NoteType);
+            Color = NoteColors.GetColor(note).color;
+            ColorID = NoteColors.GetColorID(note);
 
-            bool dir = note.NoteType is ObjectEnums.NoteType.SnapForward;
-            Direction = dir ? "_FORWARD" : "_BACKWARD";
+            Direction = note.Direction is SnapNote.SnapDirection.Forward ? "_FORWARD" : "_BACKWARD";
 
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);

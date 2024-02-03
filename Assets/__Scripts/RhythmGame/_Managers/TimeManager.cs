@@ -14,10 +14,10 @@ namespace SaturnGame.RhythmGame
         public float PlaybackSpeed {get; private set; } = 1.0f;
 
         [Space(20)]
-        [SerializeField] private  float VisualTimeScale = 1.0f;
+        [SerializeField] private float VisualTimeScale = 1.0f;
         [SerializeField] private float timeWarpMultiplier = 1.0f;
         [SerializeField] private float forceSyncDiscrepancy = 50f;
-        
+
         public void SetPlaybackSpeed(float speed, bool clamp = true)
         {
             float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
@@ -39,7 +39,7 @@ namespace SaturnGame.RhythmGame
 
         /// <summary>
         /// <b>Use VisualTime! This does NOT include any offsets!</b><br />
-        /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps. 
+        /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
         /// </summary>
         public float RawVisualTime { get; private set; }
         /// <summary>
@@ -62,7 +62,7 @@ namespace SaturnGame.RhythmGame
         public void ReSync()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
-        
+
             float discrepancy = RawVisualTime - BgmTime();
             float absDiscrepancy = Mathf.Abs(discrepancy);
 

@@ -6,7 +6,7 @@ namespace SaturnGame.RhythmGame
     [AddComponentMenu("SaturnGame/Rendering/Containers/Swipe Container")]
     public class SwipeContainer : MonoBehaviour
     {
-        public Note note;
+        public SwipeNote note;
         new public SwipeRenderer renderer;
         public bool reverse = false;
     }

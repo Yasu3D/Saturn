@@ -22,12 +22,12 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRenderer(Note note)
+        public void SetRenderer(HoldSegment note)
         {
             Size = note.Size;
             Position = note.Position;
 
-            ColorID = NoteColors.GetColorID(note.NoteType);
+            ColorID = NoteColors.GetColorID(note);
 
             if (materialInstance.HasFloat("_ColorID"))
                 materialInstance.SetFloat("_ColorID", ColorID);

@@ -74,28 +74,25 @@ namespace SaturnGame.Rendering
         /// </summary>
         /// <param name="maskNote">Mask Note to animate from</param>
         /// <param name="speed">Animation speed multiplier</param>
-        public async void SetMask(Note maskNote, float speed = 1)
+        public async void SetMask(Mask maskNote, float speed = 1)
         {
-            if (maskNote.NoteType is not (ObjectEnums.NoteType.MaskAdd or ObjectEnums.NoteType.MaskRemove))
-                return;
-
             // Avoid division by zero as a failsafe.
             float clampedSpeed = Mathf.Max(0.00001f, speed);
 
             int position = maskNote.Position;
             int size = maskNote.Size;
-            bool state = maskNote.NoteType is ObjectEnums.NoteType.MaskAdd;
-            ObjectEnums.MaskDirection direction = maskNote.MaskDirection;
+            bool state = maskNote.Add;
+            Mask.MaskDirection direction = maskNote.Direction;
 
             switch (direction)
             {
-                case ObjectEnums.MaskDirection.Clockwise:
+                case Mask.MaskDirection.Clockwise:
                     await AnimateClockwise(position, size, state, clampedSpeed);
                     break;
-                case ObjectEnums.MaskDirection.Counterclockwise:
+                case Mask.MaskDirection.Counterclockwise:
                     await AnimateCounterclockwise(position, size, state, clampedSpeed);
                     break;
-                case ObjectEnums.MaskDirection.Center:
+                case Mask.MaskDirection.Center:
                     await AnimateCenter(position, size, state, clampedSpeed);
                     break;
             }
