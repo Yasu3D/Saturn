@@ -197,10 +197,10 @@ namespace SaturnGame.RhythmGame
                 GetNote(currentNote, true);
 
                 if (currentNote is SnapNote snapNote)
-                    GetSnap(snapNote);
+                    GetSnap(snapNote, true);
 
                 if (currentNote is SwipeNote swipeNote)
-                    GetSwipe(swipeNote);
+                    GetSwipe(swipeNote, true);
 
                 if (currentNote.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentNote, true);

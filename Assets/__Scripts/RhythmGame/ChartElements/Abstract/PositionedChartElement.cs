@@ -8,16 +8,22 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public abstract class PositionedChartElement : ChartElement
     {
+        [Range(0, 59)] private int _position;
         // Position of the note or start of hold note.
-        [Range(0, 59)] public int Position;
+        public virtual int Position { get => _position; set => _position = value; }
 
+        [Range(1, 60)] private int _size;
         // Size of the note or start of hold note.
-        [Range(1, 60)] public int Size;
+        public virtual int Size { get => _size; set => _size = value; }
         
         public PositionedChartElement(int measure, int tick, int position, int size) : base(measure, tick)
         {
-            Position = position;
-            Size = size;
+            _position = position;
+            _size = size;
+        }
+
+        protected PositionedChartElement()
+        {
         }
     }
 }
