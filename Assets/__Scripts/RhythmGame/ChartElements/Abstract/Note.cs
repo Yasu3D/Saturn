@@ -27,6 +27,10 @@ namespace SaturnGame.RhythmGame
             IsSync = isSync;
         }
 
+        protected Note()
+        {
+        }
+
         public void SetBonusTypeFromNoteID(int noteID)
         {
             switch (noteID)

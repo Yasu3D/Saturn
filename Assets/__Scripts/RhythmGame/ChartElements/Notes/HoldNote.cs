@@ -8,12 +8,12 @@ namespace SaturnGame.RhythmGame
     [Serializable]
     public class HoldNote : Note
     {
-        public HoldNote(HoldSegment start, HoldSegment[] segments, HoldSegment end) : base(start.Measure, start.Tick, start.Position, start.Size, NoteBonusType.None)
+        public HoldNote(HoldSegment start, HoldSegment[] segments, HoldSegment end)
         {
             Notes = new HoldSegment[] { start }.Concat(segments).Concat(new HoldSegment[] { end }).ToArray();
         }
 
-        public HoldNote(HoldSegment[] segments) : base(segments[0].Measure, segments[0].Tick, segments[0].Position, segments[0].Size, NoteBonusType.None)
+        public HoldNote(HoldSegment[] segments)
         {
             Notes = segments;
         }
@@ -24,12 +24,15 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         public static HoldNote DeepCopy(HoldNote hold)
         {
+            HoldNote copy = (HoldNote) hold.Clone();
+
             List<HoldSegment> segments = new();
 
             foreach (HoldSegment note in hold.Notes)
                 segments.Add((HoldSegment) note.Clone());
 
-            return new(segments.ToArray());
+            copy.Notes = segments.ToArray();
+            return copy;
         }
 
         public override void CalculateTime(List<Gimmick> bgmDataGimmicks)
@@ -54,10 +57,12 @@ namespace SaturnGame.RhythmGame
 
             foreach (HoldSegment note in Notes)
                 note.ReverseTime(startTime, midTime, endTime);
-
-            // Array.Reverse from System.
-            Array.Reverse(Notes);
         }
+
+        public override int Measure { get => Start.Measure; set => Start.Measure = value; }
+        public override int Tick { get => Start.Tick; set => Start.Tick = value; }
+        public override int Position { get => Start.Position; set => Start.Position = value; }
+        public override int Size { get => Start.Size; set => Start.Size = value; }
 
         public HoldSegment Start => Notes[0];
         public HoldSegment End => Notes[^1];

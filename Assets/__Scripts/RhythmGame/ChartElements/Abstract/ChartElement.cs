@@ -14,6 +14,10 @@ namespace SaturnGame.RhythmGame
             Tick = tick;
         }
 
+        protected ChartElement()
+        {
+        }
+
         public ChartElement Clone() {
             return (ChartElement)MemberwiseClone();
         }
@@ -74,8 +78,9 @@ namespace SaturnGame.RhythmGame
             ScaledVisualTime = remap;
         }
 
-        public int Measure;
-        [Range(0, 1919)] public int Tick;
+        public virtual int Measure { get; set; }
+        [Range(0, 1919)] private int _tick;
+        public virtual int Tick { get => _tick; set => _tick = value; }
         public float TimeMs;
         public float ScaledVisualTime;
     }
