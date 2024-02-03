@@ -161,7 +161,7 @@ namespace SaturnGame.Rendering
         /// </summary>
         /// <param name="note"></param>
         /// <returns></returns>
-        public static int GetColorID(TimedChartElement note)
+        public static int GetColorID(ChartElement note)
         {
             int id;
             DesignSettings settings = SettingsManager.Instance.PlayerSettings.DesignSettings;

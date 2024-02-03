@@ -6,16 +6,16 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
-    public abstract class TimedChartElement
+    public abstract class ChartElement
     {
-        public TimedChartElement(int measure, int tick)
+        public ChartElement(int measure, int tick)
         {
             Measure = measure;
             Tick = tick;
         }
 
-        public TimedChartElement Clone() {
-            return (TimedChartElement)MemberwiseClone();
+        public ChartElement Clone() {
+            return (ChartElement)MemberwiseClone();
         }
 
         /// <summary>

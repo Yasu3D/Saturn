@@ -7,7 +7,7 @@ namespace SaturnGame.RhythmGame
 {
     // TODO: create separate classes for HiSpeed, TimeSignature, and BeatsPerMinute as well
     [System.Serializable]
-    public class Gimmick : TimedChartElement
+    public class Gimmick : ChartElement
     {
         public Gimmick (int measure, int tick, GimmickType gimmickType, object value1 = null, object value2 = null) : base(measure, tick)
         {
