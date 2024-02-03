@@ -707,5 +707,5 @@ namespace SaturnGame.RhythmGame
             chart.endOfChart.CalculateScaledTime(chart.hiSpeedGimmicks);
         }
 
-
+    }
 }
