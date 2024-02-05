@@ -10,7 +10,6 @@ namespace SaturnGame.UI
     {
         public AudioSource bgmSource;
 
-
         private string bgmPath;
         private string prevBgmPath;
         private float startTime;
@@ -27,14 +26,16 @@ namespace SaturnGame.UI
         {
             lingerTimer += Time.deltaTime;
 
-            if (!isPlaying && IsLingering)
-                StartBgmPreview();
-
-            if (isPlaying && bgmSource.time >= FadeTime)
-                bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
-
-            if (isPlaying && bgmSource.time >= StopTime)
-                StopBgmPreview();
+            if (isPlaying)
+            {
+                if (bgmSource.time >= FadeTime) bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
+                if (bgmSource.time >= StopTime) StopBgmPreview();
+                if (!bgmSource.isPlaying) isPlaying = false;
+            }
+            else
+            {
+                if (IsLingering) StartBgmPreview();
+            }
         }
 
         public void SetBgmValues(string path, float start, float duration)
@@ -54,12 +55,15 @@ namespace SaturnGame.UI
             if (durationTime <= 0 || bgmSource.isPlaying) return; 
 
             isPlaying = true;
-            Debug.Log("Play");
 
             if (bgmPath != prevBgmPath)
             {
                 prevBgmPath = bgmPath;
-                await LoadBgm();
+                if (!await LoadBgm())
+                {
+                    isPlaying = false;
+                    return;
+                }
             }
 
             bgmSource.volume = 0;
@@ -76,13 +80,16 @@ namespace SaturnGame.UI
             bgmSource.Stop();
         }
 
-        private async Task LoadBgm()
+        private async Task<bool> LoadBgm()
         {
             // .ogg makes the game freeze because of decompression.
             // Please just use .wav... I beg you.
             AudioClip bgmClip = await AudioLoader.LoadBgm(bgmPath);
+
             ChartManager.Instance.bgmClip = bgmClip;
             bgmSource.clip = bgmClip;
+
+            return bgmClip != null;
         }
     }
 }
