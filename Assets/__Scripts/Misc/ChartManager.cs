@@ -309,7 +309,7 @@ namespace SaturnGame.RhythmGame
             if (chart.notes.Last().TimeMs > chart.endOfChart.TimeMs)
                 return (false, "Notes behind end of Chart note!");
 
-            if (chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
+            if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
                 return (false, "Chart is longer than audio!");
 
             if (chart.bgmDataGimmicks.Count == 0)
@@ -323,44 +323,14 @@ namespace SaturnGame.RhythmGame
             Gimmick.GimmickType lastReverse = Gimmick.GimmickType.ReverseNoteEnd;
             for (int i = 0; i < chart.reverseGimmicks.Count; i++)
             {
-                switch (chart.reverseGimmicks[i].Type)
-                {
-                    case Gimmick.GimmickType.ReverseEffectStart:
-                        if (lastReverse is not Gimmick.GimmickType.ReverseNoteEnd)
-                        {
-                            return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
-                        }
-                        else
-                        {
-                            lastReverse = Gimmick.GimmickType.ReverseEffectStart;
-                        }
-                        break;
+                var currentReverse = chart.reverseGimmicks[i].Type;
 
-                    case Gimmick.GimmickType.ReverseEffectEnd:
-                        if (lastReverse is not Gimmick.GimmickType.ReverseEffectStart)
-                        {
-                            return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
-                        }
-                        else
-                        {
-                            lastReverse = Gimmick.GimmickType.ReverseEffectEnd;
-                        }
-                        break;
-
-                    case Gimmick.GimmickType.ReverseNoteEnd:
-                        if (lastReverse is not Gimmick.GimmickType.ReverseEffectEnd)
-                        {
-                            return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
-                        }
-                        else
-                        {
-                            lastReverse = Gimmick.GimmickType.ReverseNoteEnd;
-                        }
-                        break;
-
-                    default:
-                        return (false, "Invalid reverse gimmicks! GimmickType does not match.");
-                }
+                if ((currentReverse is Gimmick.GimmickType.ReverseEffectStart && lastReverse is not Gimmick.GimmickType.ReverseNoteEnd) ||
+                    (currentReverse is Gimmick.GimmickType.ReverseEffectEnd && lastReverse is not Gimmick.GimmickType.ReverseEffectStart) ||
+                    (currentReverse is Gimmick.GimmickType.ReverseNoteEnd && lastReverse is not Gimmick.GimmickType.ReverseEffectEnd))
+                    return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
+                
+                lastReverse = currentReverse;
             }
 
             return (true, "");
