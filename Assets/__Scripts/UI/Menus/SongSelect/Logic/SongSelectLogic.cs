@@ -41,7 +41,7 @@ namespace SaturnGame.UI
 
 
             displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
-            LoadAllCardJackets();
+            LoadAllCards();
             SetBgmValues();
         }
 
@@ -145,15 +145,19 @@ namespace SaturnGame.UI
             diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
             diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
 
-            // SongData and Cards
+            // Update Selected Song
             displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
-            cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Right);
-            cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
-            // Jacket Loading
+            // Update Cards
+            cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Right);
             int newSongIndex = SaturnMath.Modulo(SelectedSongIndex - cardAnimator.cardHalfCount, songDatabase.songs.Count);
-            Texture2D newJacket = await ImageLoader.LoadImageWebRequest(songDatabase.songs[newSongIndex].jacketPath);
+            var newSong = songDatabase.songs[newSongIndex];
+            Texture2D newJacket = await ImageLoader.LoadImageWebRequest(newSong.jacketPath);
+
+            cardAnimator.SetSongData(cardAnimator.WrapCardIndex, SelectedDifficulty, newSong);
             cardAnimator.SetCardJacket(cardAnimator.WrapCardIndex, newJacket);
+
+            cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
             // Audio Preview
             SetBgmValues();
@@ -176,15 +180,20 @@ namespace SaturnGame.UI
             diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
             diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
 
-            // SongData and Cards
+            // Update Selected Song
             displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
+            
+            // Update Cards
             cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Left);
-            cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
-            // Jacket
             int newSongIndex = SaturnMath.Modulo(SelectedSongIndex + cardAnimator.cardHalfCount, songDatabase.songs.Count);
-            Texture2D newJacket = await ImageLoader.LoadImageWebRequest(songDatabase.songs[newSongIndex].jacketPath);
+            var newSong = songDatabase.songs[newSongIndex];
+            Texture2D newJacket = await ImageLoader.LoadImageWebRequest(newSong.jacketPath);
+            
+            cardAnimator.SetSongData(cardAnimator.WrapCardIndex, SelectedDifficulty, newSong);
             cardAnimator.SetCardJacket(cardAnimator.WrapCardIndex, newJacket);
+
+            cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
             // Audio Preview
             SetBgmValues();
@@ -198,14 +207,17 @@ namespace SaturnGame.UI
 
 
 
-        private async void LoadAllCardJackets()
+        private async void LoadAllCards()
         {
             for (int i = 0; i < cardAnimator.songCards.Count; i++)
             {
                 int index = SaturnMath.Modulo(i - cardAnimator.cardHalfCount, songDatabase.songs.Count);
-                string path = songDatabase.songs[index].jacketPath;
+                SongData data = songDatabase.songs[index];
+                string path = data.jacketPath;
+
                 Texture2D jacket = await ImageLoader.LoadImageWebRequest(path);
                 cardAnimator.SetCardJacket(i, jacket);
+                cardAnimator.SetSongData(i, SelectedDifficulty, data);
             }
 
             cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());

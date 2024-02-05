@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Threading.Tasks;
+using SaturnGame.Data;
 
 namespace SaturnGame.UI
 {
@@ -113,6 +114,14 @@ namespace SaturnGame.UI
 
             jacket0.texture = jacket;
             jacket1.texture = jacket;
+        }
+
+        public void SetSongData(int cardIndex, int diffIndex, SongData data)
+        {
+            var card = songCards[cardIndex];
+            card.artistText.text = data.artist;
+            card.titleText.text = data.title;
+            card.difficultyText.text = SaturnMath.GetDifficultyString(data.songDiffs[diffIndex].diffLevel);
         }
 
         public void SetSelectedJacket(Texture2D jacket)
