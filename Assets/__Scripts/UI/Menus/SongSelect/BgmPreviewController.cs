@@ -10,7 +10,6 @@ namespace SaturnGame.UI
     {
         public AudioSource bgmSource;
 
-
         private string bgmPath;
         private string prevBgmPath;
         private float startTime;
@@ -22,19 +21,22 @@ namespace SaturnGame.UI
         private float lingerTimer = 0.0f;
         private bool IsLingering { get => lingerTimer >= lingerThreshold; }
         private bool isPlaying = false; // can't use bgmSource.isPlaying because of async. -> race condition.
+        private bool songInvalid = false; // hacky? but works i guess.
 
         void Update()
         {
             lingerTimer += Time.deltaTime;
 
-            if (!isPlaying && IsLingering)
-                StartBgmPreview();
-
-            if (isPlaying && bgmSource.time >= FadeTime)
-                bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
-
-            if (isPlaying && bgmSource.time >= StopTime)
-                StopBgmPreview();
+            if (isPlaying)
+            {
+                if (bgmSource.time >= FadeTime) bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
+                if (bgmSource.time >= StopTime) StopBgmPreview();
+                if (!bgmSource.isPlaying) isPlaying = false;
+            }
+            else
+            {
+                if (IsLingering && !songInvalid) StartBgmPreview();
+            }
         }
 
         public void SetBgmValues(string path, float start, float duration)
@@ -42,6 +44,7 @@ namespace SaturnGame.UI
             bgmPath = path;
             startTime = start;
             durationTime = duration;
+            songInvalid = false;
         }
 
         public void ResetLingerTimer()
@@ -51,15 +54,22 @@ namespace SaturnGame.UI
 
         public async void StartBgmPreview()
         {
+            Debug.Log("Start");
             if (durationTime <= 0 || bgmSource.isPlaying) return; 
 
             isPlaying = true;
-            Debug.Log("Play");
 
             if (bgmPath != prevBgmPath)
             {
                 prevBgmPath = bgmPath;
                 await LoadBgm();
+            }
+
+            if (bgmSource.clip == null)
+            {
+                songInvalid = true;
+                isPlaying = false;
+                return;
             }
 
             bgmSource.volume = 0;
@@ -81,6 +91,7 @@ namespace SaturnGame.UI
             // .ogg makes the game freeze because of decompression.
             // Please just use .wav... I beg you.
             AudioClip bgmClip = await AudioLoader.LoadBgm(bgmPath);
+
             ChartManager.Instance.bgmClip = bgmClip;
             bgmSource.clip = bgmClip;
         }

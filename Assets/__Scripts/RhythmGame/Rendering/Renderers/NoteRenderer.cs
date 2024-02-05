@@ -34,22 +34,22 @@ namespace SaturnGame.Rendering
             Size = note.Size;
             Position = note.Position;
 
-            (Color color, float subStrength) = NoteColors.GetColor(note.NoteType);
+            (Color color, float subStrength) = NoteColors.GetColor(note);
 
             Color = color;
             SubStrength = subStrength;
             Width = width;
 
             IsSync = note.IsSync;
-            IsBonus = note.BonusType is ObjectEnums.BonusType.Bonus; 
-            IsChain = note.NoteType is ObjectEnums.NoteType.Chain;
+            IsBonus = note.BonusType is Note.NoteBonusType.Bonus;
+            IsChain = note is ChainNote;
 
             if (materialInstance.HasColor("_NoteColor"))
                 materialInstance.SetColor("_NoteColor", Color);
 
             if (materialInstance.HasFloat("_NoteWidth"))
                 materialInstance.SetFloat("_NoteWidth", Width);
-            
+
             if (materialInstance.HasFloat("_Sync"))
                 materialInstance.SetFloat("_Sync", Convert.ToInt32(IsSync));
 
@@ -64,7 +64,7 @@ namespace SaturnGame.Rendering
 
             if (materialInstance.HasFloat("_Z_Offset"))
             {
-                int state = note.NoteType is ObjectEnums.NoteType.HoldStart ? 1 : 0;
+                int state = note is HoldNote ? 1 : 0;
                 materialInstance.SetFloat("_Z_Offset", state);
             }
 

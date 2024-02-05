@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SaturnGame.RhythmGame;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace SaturnGame.Rendering
 
         public void SetRenderer(HoldNote hold)
         {
-            ColorID = NoteColors.GetColorID(hold.Start.NoteType);
+            ColorID = NoteColors.GetColorID(hold);
             holdNote = hold;
 
             if (materialInstance.HasFloat("_ColorID"))
@@ -52,7 +53,6 @@ namespace SaturnGame.Rendering
         /// <summary>
         /// Generates a Hold Note Mesh.
         /// This still needs A LOT of optimizing/cleanup!!!
-        /// Note to self: Reverse doesn't work because scaledVisualTime of reversed holds is reverse order.
         /// </summary>
         public void GenerateMesh(float scrollDuration)
         {
@@ -67,10 +67,13 @@ namespace SaturnGame.Rendering
             vertList.Clear();
             uvList.Clear();
 
+            // Sort so that this still works when the hold is reversed.
+            var sortedRenderedNotes = holdNote.RenderedNotes.OrderBy(seg => seg.ScaledVisualTime).ToArray();
+
             // For every RenderedNote
             for (int y = 0; y < holdLength; y++)
             {
-                Note startNote = holdNote.RenderedNotes[y];
+                HoldSegment startNote = sortedRenderedNotes[y];
                 int startNoteSize = startNote.Size;
                 int startNotePos = startNote.Position;
 
@@ -83,7 +86,7 @@ namespace SaturnGame.Rendering
 
                 if (y != holdLength - 1)
                 {
-                    Note endNote = holdNote.RenderedNotes[y + 1];
+                    HoldSegment endNote = sortedRenderedNotes[y + 1];
                     endNoteSize = endNote.Size;
                     endNotePos = endNote.Position;
                     end = endNote.ScaledVisualTime;
@@ -93,7 +96,7 @@ namespace SaturnGame.Rendering
                     if (startNoteSize == endNoteSize && startNotePos == endNotePos)
                         interval = endNote.ScaledVisualTime - startNote.ScaledVisualTime;
                 }
-                
+
                 // For every sub-segment between RenderedNotes.
                 for (float i = start; i < end; i += interval)
                 {
@@ -127,7 +130,7 @@ namespace SaturnGame.Rendering
                 }
             }
 
-            triangles = new int[holdWidth * trueLength * 6]; 
+            triangles = new int[holdWidth * trueLength * 6];
 
             int vert = 0;
             int tris = 0;
@@ -162,7 +165,7 @@ namespace SaturnGame.Rendering
         Vector3 GetPointOnCylinder(Vector2 centerPoint, float coneRadius, float coneLength, float angle, float depth)
         {
             angle = 180 - angle;
-            
+
             //if (reverse) depth *= -1;
 
             float x = coneRadius * Mathf.Cos(Mathf.Deg2Rad * angle) + centerPoint.x;
@@ -184,7 +187,7 @@ namespace SaturnGame.Rendering
         {
             return (float) currentNoteSize / maxNoteSize;
         }
-    
+
 
         [SerializeField] private int debugGizmos = 0;
         void OnDrawGizmos()

@@ -6,7 +6,7 @@ namespace SaturnGame.RhythmGame
     [AddComponentMenu("SaturnGame/Rendering/Containers/Snap Container")]
     public class SnapContainer : MonoBehaviour
     {
-        public Note note;
+        public SnapNote note;
         new public SnapRenderer renderer;
         public bool reverse = false;
     }

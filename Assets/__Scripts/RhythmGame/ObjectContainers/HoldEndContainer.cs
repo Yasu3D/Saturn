@@ -6,7 +6,7 @@ namespace SaturnGame.RhythmGame
     [AddComponentMenu("SaturnGame/Rendering/Containers/Hold End Container")]
     public class HoldEndContainer : MonoBehaviour
     {
-        public Note note;
+        public HoldSegment holdEnd;
         new public HoldEndRenderer renderer;
         public bool reverse = false;
     }

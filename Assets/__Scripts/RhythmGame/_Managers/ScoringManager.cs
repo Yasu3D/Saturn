@@ -102,14 +102,6 @@ namespace SaturnGame.RhythmGame
 				return true;
 			}
 
-            // Returns x%m that is always between 0 and m-1 inclusive.
-            int saneMod(int x, int m)
-            {
-                // https://stackoverflow.com/questions/1082917/mod-of-negative-number-is-melting-my-brain
-                int r = x % m;
-                return r < 0 ? r + m : r;
-            }
-
             // Given 3 positions mod 60, return true if these are in "ascending" order without going around the circle a full time.
             // 0 -> 15 -> 30: true
             // 0 -> 30 -> 15: false
@@ -119,7 +111,7 @@ namespace SaturnGame.RhythmGame
             // This is equivalent to "pos2 is in the interval (pos1, pos3)" in mod60 arithmetic.
             bool inOrder(int pos1, int pos2, int pos3)
             {
-                return saneMod(pos2 - pos1, 60) < saneMod(pos3 - pos1, 60);
+                return SaturnMath.Modulo(pos2 - pos1, 60) < SaturnMath.Modulo(pos3 - pos1, 60);
             }
 
             // To test for overlap, check to see if the left side of either note is within the other.
@@ -135,9 +127,11 @@ namespace SaturnGame.RhythmGame
 
             foreach (Note note in Chart.notes)
             {
-                ScoringNote scoringNote = new(note);
-                scoringNote.EarliestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].left;
-                scoringNote.LatestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].right;
+                ScoringNote scoringNote = new(note)
+                {
+                    EarliestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].left,
+                    LatestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].right
+                };
 
                 // Look backwards through the chart to see if any notes overlap with this.
                 // Potential optimization: once a note is out of range (for all possible note type windows!),
@@ -256,6 +250,9 @@ namespace SaturnGame.RhythmGame
 
         void Update()
         {
+            // Maybe find a way to not call this *every frame*. - yasu
+            // (It's not super problematic for now but I think it may make more sense to call this once when starting a song.)
+
             // note: maybe race if we don't hold LoadingLock here
             if (!ChartManager.Loading && ChartManager.LoadedChart is not null && ChartManager.LoadedChart != loadedChart)
             {

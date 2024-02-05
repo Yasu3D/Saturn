@@ -40,28 +40,19 @@ namespace SaturnGame.Loading
         {
             if (!File.Exists(path)) return null;
 
-            System.Diagnostics.Stopwatch time = System.Diagnostics.Stopwatch.StartNew();
-
             AudioType type = GetAudioType(path);
-
-            Debug.Log($"0 - {time.ElapsedMilliseconds}");
-
             if (type is AudioType.UNKNOWN) return null;
 
             Uri uri = new ("file://" + path);
-            
             try
             {
                 using(UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(uri, type))
                 {
                     await webRequest.SendWebRequest();
 
-                    Debug.Log($"1 - {time.ElapsedMilliseconds}");
-
                     if (webRequest.result == UnityWebRequest.Result.Success)
                     {
                         var test = DownloadHandlerAudioClip.GetContent(webRequest);
-                        Debug.Log($"2 - {time.ElapsedMilliseconds}");
                         return test;
                     }
                 }

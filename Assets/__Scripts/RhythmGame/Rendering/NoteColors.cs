@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using SaturnGame.RhythmGame;
@@ -9,13 +10,13 @@ namespace SaturnGame.Rendering
     public class NoteColors
     {
         /// <summary>
-        /// Returns user-selected colors and brightness values depending on NoteType
+        /// Returns user-selected colors and brightness values depending on Note
         /// </summary>
-        /// <param name="noteType"></param>
+        /// <param name="note"></param>
         /// <returns></returns>
-        public static (Color color, float subtract) GetColor(ObjectEnums.NoteType noteType)
+        public static (Color color, float subtract) GetColor(Note note)
         {
-            int id = GetColorID(noteType);
+            int id = GetColorID(note);
 
             return GetColor(id);
         }
@@ -158,38 +159,37 @@ namespace SaturnGame.Rendering
         /// <summary>
         /// Returns color ID from user settings.
         /// </summary>
-        /// <param name="noteType"></param>
+        /// <param name="note"></param>
         /// <returns></returns>
-        public static int GetColorID(ObjectEnums.NoteType noteType)
+        public static int GetColorID(ChartElement note)
         {
             int id;
             DesignSettings settings = SettingsManager.Instance.PlayerSettings.DesignSettings;
 
-            switch (noteType)
+            switch (note)
             {
-                case ObjectEnums.NoteType.Touch:
+                case TouchNote:
                     id = settings.NoteColorID_Touch;
                     break;
-                case ObjectEnums.NoteType.Chain:
+                case ChainNote:
                     id = settings.NoteColorID_Chain;
                     break;
-                case ObjectEnums.NoteType.SwipeClockwise:
+                case SwipeNote { Direction: SwipeNote.SwipeDirection.Clockwise }:
                     if (settings.InvertSlideColor) id = settings.NoteColorID_SwipeCounterclockwise;
                     else id = settings.NoteColorID_SwipeClockwise;
                     break;
-                case ObjectEnums.NoteType.SwipeCounterclockwise:
+                case SwipeNote { Direction: SwipeNote.SwipeDirection.Counterclockwise }:
                     if (settings.InvertSlideColor) id = settings.NoteColorID_SwipeClockwise;
                     else id = settings.NoteColorID_SwipeCounterclockwise;
                     break;
-                case ObjectEnums.NoteType.SnapForward:
+                case SnapNote { Direction: SnapNote.SnapDirection.Forward }:
                     id = settings.NoteColorID_SnapForward;
                     break;
-                case ObjectEnums.NoteType.SnapBackward:
+                case SnapNote { Direction: SnapNote.SnapDirection.Backward }:
                     id = settings.NoteColorID_SnapBackward;
                     break;
-                case ObjectEnums.NoteType.HoldStart:
-                case ObjectEnums.NoteType.HoldSegment:
-                case ObjectEnums.NoteType.HoldEnd:
+                case HoldNote:
+                case HoldSegment:
                     id = settings.NoteColorID_Hold;
                     break;
 

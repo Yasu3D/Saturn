@@ -11,7 +11,7 @@ namespace SaturnGame.RhythmGame
     public class NoteManager : MonoBehaviour
     {
         private Chart Chart => ChartManager.Instance.chart;
-        
+
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
         [SerializeField] private BgmManager bgmManager;
@@ -30,14 +30,14 @@ namespace SaturnGame.RhythmGame
         [Header("RENDERERS")]
         [SerializeField] private GuideLaneRenderer guideLaneRenderer;
 
-        private List<NoteContainer> noteGarbage = new();
-        private List<SnapContainer> snapGarbage = new();
-        private List<SwipeContainer> swipeGarbage = new();
-        private List<GenericContainer> r_EffectGarbage = new();
-        private List<BarLineContainer> barLineGarbage = new();
-        private List<GenericContainer> syncGarbage = new();
-        private List<HoldEndContainer> holdEndGarbage = new();
-        private List<HoldSurfaceRenderer> holdSurfaceGarbage = new();
+        private readonly List<NoteContainer> noteGarbage = new();
+        private readonly List<SnapContainer> snapGarbage = new();
+        private readonly List<SwipeContainer> swipeGarbage = new();
+        private readonly List<GenericContainer> r_EffectGarbage = new();
+        private readonly List<BarLineContainer> barLineGarbage = new();
+        private readonly List<GenericContainer> syncGarbage = new();
+        private readonly List<HoldEndContainer> holdEndGarbage = new();
+        private readonly List<HoldSurfaceRenderer> holdSurfaceGarbage = new();
 
         private int maskIndex = 0;
         private void ProcessMasks()
@@ -67,13 +67,13 @@ namespace SaturnGame.RhythmGame
 
                 GetNote(currentNote);
 
-                if (currentNote.NoteType is ObjectEnums.NoteType.SnapForward or ObjectEnums.NoteType.SnapBackward)
-                    GetSnap(currentNote);
-                
-                if (currentNote.NoteType is ObjectEnums.NoteType.SwipeClockwise or ObjectEnums.NoteType.SwipeCounterclockwise)
-                    GetSwipe(currentNote);
+                if (currentNote is SnapNote snapNote)
+                    GetSnap(snapNote);
 
-                if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
+                if (currentNote is SwipeNote swipeNote)
+                    GetSwipe(swipeNote);
+
+                if (currentNote.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentNote);
 
                 noteIndex++;
@@ -88,13 +88,13 @@ namespace SaturnGame.RhythmGame
             while (holdIndex < Chart.holdNotes.Count && ScaledVisualTime() + ScrollDuration() >= Chart.holdNotes[holdIndex].Start.ScaledVisualTime)
             {
                 HoldNote currentHold = Chart.holdNotes[holdIndex];
-            
-                GetNote(currentHold.Start);
+
+                GetNote(currentHold);
                 GetHoldEnd(currentHold.End);
                 GetHoldSurface(currentHold);
-                
-                if (currentHold.Start.BonusType is ObjectEnums.BonusType.R_Note)
-                    GetR_Effect(currentHold.Start);
+
+                if (currentHold.BonusType is Note.NoteBonusType.R_Note)
+                    GetR_Effect(currentHold);
 
                 holdIndex++;
             }
@@ -139,7 +139,7 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-        private Gimmick lastHiSpeedChange = new(0, 0, ObjectEnums.GimmickType.HiSpeed, 1, null);
+        private Gimmick lastHiSpeedChange = new(0, 0, Gimmick.GimmickType.HiSpeed, 1, null);
         private int hiSpeedIndex = 0;
         private void ProcessHiSpeed()
         {
@@ -163,21 +163,23 @@ namespace SaturnGame.RhythmGame
         private float reverseMirrorTime = 0;
         private void ProcessReverseGimmicks()
         {
+            // TODO!!!!! Fix reverses AGAIN omegalul
+
             if (reverseNoteIndex > Chart.reverseNotes.Count) return;
 
             if (reverseGimmickIndex < Chart.reverseGimmicks.Count - 1 && Chart.reverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTime)
             {
-                switch (Chart.reverseGimmicks[reverseGimmickIndex].GimmickType)
+                switch (Chart.reverseGimmicks[reverseGimmickIndex].Type)
                 {
-                    case ObjectEnums.GimmickType.ReverseEffectStart:
+                    case Gimmick.GimmickType.ReverseEffectStart:
                         reverseStartTime = Chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
                         reverseMidTime = Chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
                         reverseEndTime = Chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
                         reverseMirrorTime = reverseStartTime + (reverseEndTime - reverseMidTime);
                         reverseActive = true;
                         break;
-                    
-                    case ObjectEnums.GimmickType.ReverseEffectEnd:
+
+                    case Gimmick.GimmickType.ReverseEffectEnd:
                         reverseStartTime = 0;
                         reverseMidTime = 0;
                         reverseEndTime = 0;
@@ -194,13 +196,13 @@ namespace SaturnGame.RhythmGame
 
                 GetNote(currentNote, true);
 
-                if (currentNote.NoteType is ObjectEnums.NoteType.SnapForward or ObjectEnums.NoteType.SnapBackward)
-                    GetSnap(currentNote, true);
-                
-                if (currentNote.NoteType is ObjectEnums.NoteType.SwipeClockwise or ObjectEnums.NoteType.SwipeCounterclockwise)
-                    GetSwipe(currentNote, true);
+                if (currentNote is SnapNote snapNote)
+                    GetSnap(snapNote, true);
 
-                if (currentNote.BonusType is ObjectEnums.BonusType.R_Note)
+                if (currentNote is SwipeNote swipeNote)
+                    GetSwipe(swipeNote, true);
+
+                if (currentNote.BonusType is Note.NoteBonusType.R_Note)
                     GetR_Effect(currentNote, true);
 
                 reverseNoteIndex++;
@@ -211,13 +213,13 @@ namespace SaturnGame.RhythmGame
             while (reverseHoldNoteIndex < Chart.reverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= Chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
             {
                 HoldNote currentHold = Chart.reverseHoldNotes[reverseHoldNoteIndex];
-            
-                GetNote(currentHold.Start, true);
+
+                GetNote(currentHold, true);
                 GetHoldEnd(currentHold.End, true);
                 GetHoldSurface(currentHold, true);
-                
-                if (currentHold.Start.BonusType is ObjectEnums.BonusType.R_Note)
-                    GetR_Effect(currentHold.Start, true);
+
+                if (currentHold.BonusType is Note.NoteBonusType.R_Note)
+                    GetR_Effect(currentHold, true);
 
                 reverseHoldNoteIndex++;
             }
@@ -286,8 +288,8 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
+                    AnimateObject(container, holdEndGarbage, container.holdEnd.ScaledVisualTime, container.holdEnd.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, holdEndGarbage, container.holdEnd.ScaledVisualTime, container.holdEnd.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (HoldSurfaceRenderer renderer in holdSurfacePool.ActiveObjects)
@@ -392,7 +394,7 @@ namespace SaturnGame.RhythmGame
         {
             float distance = time - ScaledVisualTime();
             float scroll = SaturnMath.InverseLerp(0.25f * ScrollDuration(), 0, distance);
-            
+
             transform.position = new Vector3(0, 0, Mathf.LerpUnclamped(1.5f, 0, scroll));
 
             if (scale)
@@ -412,7 +414,7 @@ namespace SaturnGame.RhythmGame
         private NoteContainer GetNote(Note input, bool reverse = false)
         {
             NoteContainer container = notePool.GetObject();
-            
+
             container.note = input;
             int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
             container.renderer.SetRenderer(input, noteWidth);
@@ -424,7 +426,7 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private SnapContainer GetSnap(Note input, bool reverse = false)
+        private SnapContainer GetSnap(SnapNote input, bool reverse = false)
         {
             SnapContainer container = snapPool.GetObject();
 
@@ -438,7 +440,7 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private SwipeContainer GetSwipe(Note input, bool reverse = false)
+        private SwipeContainer GetSwipe(SwipeNote input, bool reverse = false)
         {
             SwipeContainer container = swipePool.GetObject();
 
@@ -452,11 +454,11 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private HoldEndContainer GetHoldEnd(Note input, bool reverse = false)
+        private HoldEndContainer GetHoldEnd(HoldSegment input, bool reverse = false)
         {
             HoldEndContainer container = holdEndPool.GetObject();
-            
-            container.note = input;
+
+            container.holdEnd = input;
             container.renderer.SetRenderer(input);
             container.reverse = reverse;
 
@@ -498,7 +500,7 @@ namespace SaturnGame.RhythmGame
         private BarLineContainer GetBarLine(float timestamp)
         {
             BarLineContainer container = barLinePool.GetObject();
-            
+
             container.time = timestamp;
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
@@ -506,7 +508,7 @@ namespace SaturnGame.RhythmGame
             return container;
         }
 
-        private GenericContainer GetSync(Note input)
+        private GenericContainer GetSync(SyncIndicator input)
         {
             GenericContainer container = syncPool.GetObject();
 
@@ -525,7 +527,7 @@ namespace SaturnGame.RhythmGame
             float hiSpeed = lastHiSpeedChange.HiSpeed;
             float hiSpeedTime = lastHiSpeedChange.TimeMs;
             float hiSpeedScaledTime = lastHiSpeedChange.ScaledVisualTime;
-            
+
             return hiSpeedScaledTime + ((input - hiSpeedTime) * hiSpeed);
         }
 
@@ -568,7 +570,7 @@ namespace SaturnGame.RhythmGame
 
             ProcessSync();
             ProcessBarLines();
-            
+
             UpdateObjects();
             ReleaseObjects();
         }

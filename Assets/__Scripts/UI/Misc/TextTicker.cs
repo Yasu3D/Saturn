@@ -13,6 +13,7 @@ namespace SaturnGame.UI
         private TextMeshProUGUI cloneText;
         private RectTransform cloneRect;
 
+        private string prevText = "";
         private bool enableScroll;
         private float startPos;
         private float textBounds;
@@ -24,6 +25,7 @@ namespace SaturnGame.UI
             startPos = rect.anchoredPosition.x;
             cloneText = Instantiate(text);
             cloneRect = cloneText.rectTransform;
+            cloneRect.localScale = Vector3.one;
             cloneRect.SetParent(rect);
 
             UpdateComponents();
@@ -31,14 +33,19 @@ namespace SaturnGame.UI
 
         void UpdateComponents()
         {
+            prevText = text.text;
+
             // Recalculate values
             textBounds = text.GetPreferredValues().x + textSpacing;
             enableScroll = rect.rect.width < textBounds;
+
+            Debug.Log($"{enableScroll} -- {text.text}");
             
             // Reset offset and text positions.
             offset = 0;
             rect.anchoredPosition = new(startPos + offset, 0);
             cloneRect.anchoredPosition = rect.anchoredPosition + new Vector2(textBounds, 0);
+            cloneRect.localScale = Vector3.one; // I hate this
             
             // Update cloned text and set visibility
             cloneText.text = text.text;
@@ -47,7 +54,7 @@ namespace SaturnGame.UI
 
         void Update()
         {
-            if (text.havePropertiesChanged) UpdateComponents();
+            if (text.text != prevText) UpdateComponents();
             
             if (enableScroll)
             {
