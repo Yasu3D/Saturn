@@ -21,6 +21,7 @@ namespace SaturnGame.UI
         private float lingerTimer = 0.0f;
         private bool IsLingering { get => lingerTimer >= lingerThreshold; }
         private bool isPlaying = false; // can't use bgmSource.isPlaying because of async. -> race condition.
+        private bool songInvalid = false; // hacky? but works i guess.
 
         void Update()
         {
@@ -34,7 +35,7 @@ namespace SaturnGame.UI
             }
             else
             {
-                if (IsLingering) StartBgmPreview();
+                if (IsLingering && !songInvalid) StartBgmPreview();
             }
         }
 
@@ -43,6 +44,7 @@ namespace SaturnGame.UI
             bgmPath = path;
             startTime = start;
             durationTime = duration;
+            songInvalid = false;
         }
 
         public void ResetLingerTimer()
@@ -52,6 +54,7 @@ namespace SaturnGame.UI
 
         public async void StartBgmPreview()
         {
+            Debug.Log("Start");
             if (durationTime <= 0 || bgmSource.isPlaying) return; 
 
             isPlaying = true;
@@ -59,11 +62,14 @@ namespace SaturnGame.UI
             if (bgmPath != prevBgmPath)
             {
                 prevBgmPath = bgmPath;
-                if (!await LoadBgm())
-                {
-                    isPlaying = false;
-                    return;
-                }
+                await LoadBgm();
+            }
+
+            if (bgmSource.clip == null)
+            {
+                songInvalid = true;
+                isPlaying = false;
+                return;
             }
 
             bgmSource.volume = 0;
@@ -80,7 +86,7 @@ namespace SaturnGame.UI
             bgmSource.Stop();
         }
 
-        private async Task<bool> LoadBgm()
+        private async Task LoadBgm()
         {
             // .ogg makes the game freeze because of decompression.
             // Please just use .wav... I beg you.
@@ -88,8 +94,6 @@ namespace SaturnGame.UI
 
             ChartManager.Instance.bgmClip = bgmClip;
             bgmSource.clip = bgmClip;
-
-            return bgmClip != null;
         }
     }
 }
