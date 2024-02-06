@@ -20,21 +20,30 @@ namespace SaturnGame.UI
         private const float lingerThreshold = 0.5f;
         private float lingerTimer = 0.0f;
         private bool IsLingering { get => lingerTimer >= lingerThreshold; }
-        private bool isPlaying = false; // can't use bgmSource.isPlaying because of async. -> race condition.
-        private bool songInvalid = false; // hacky? but works i guess.
+
+        private PreviewState state = PreviewState.Idle;
+        private enum PreviewState
+        {
+            Idle, // not playing, waiting for auto-start
+            Playing, // actively playing audio
+            FadingOut, // fading out audio
+            InvalidAudio, // audio invalid, won't auto-start but reactivated by song switch.
+            Stopped // stopped completely, won't auto-start.
+        }
+
 
         void Update()
         {
             lingerTimer += Time.deltaTime;
 
-            if (isPlaying)
+            if (state is PreviewState.Idle)
             {
-                if (bgmSource.time >= FadeTime) bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
-                if (bgmSource.time >= StopTime) StopBgmPreview();
+                if (IsLingering) StartBgmPreview();
             }
-            else
+
+            if (state is PreviewState.Playing)
             {
-                if (IsLingering && !songInvalid) StartBgmPreview();
+                if (bgmSource.time >= FadeTime) FadeoutBgmPreview();
             }
         }
 
@@ -43,7 +52,8 @@ namespace SaturnGame.UI
             bgmPath = path;
             startTime = start;
             durationTime = duration;
-            songInvalid = false;
+            if (state is PreviewState.InvalidAudio)
+                state = PreviewState.Idle;
         }
 
         public void ResetLingerTimer()
@@ -55,7 +65,7 @@ namespace SaturnGame.UI
         {
             if (durationTime <= 0 || bgmSource.isPlaying) return; 
 
-            isPlaying = true;
+            state = PreviewState.Playing;
 
             if (bgmPath != prevBgmPath)
             {
@@ -65,8 +75,7 @@ namespace SaturnGame.UI
 
             if (bgmSource.clip == null || startTime >= bgmSource.clip.length)
             {
-                songInvalid = true;
-                isPlaying = false;
+                state = PreviewState.InvalidAudio;
                 return;
             }
 
@@ -76,11 +85,23 @@ namespace SaturnGame.UI
             bgmSource.DOFade(1, fadeDuration).SetEase(Ease.Linear);
         }
 
-        public void StopBgmPreview()
+        public async void FadeoutBgmPreview(bool forceStop = false)
+        {
+            if (state is not PreviewState.Playing) return;
+
+            // a bit nervous about setting the state in an async function (code race maybe?)
+            // seems ok from quick testing tho...
+            state = PreviewState.FadingOut;
+            bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
+            await Awaitable.WaitForSecondsAsync(fadeDuration);
+            StopBgmPreview(forceStop);
+        }
+
+        public void StopBgmPreview(bool forceStop = false)
         {
             if (!bgmSource.isPlaying) return;
 
-            isPlaying = false;
+            state = forceStop ? PreviewState.Stopped : PreviewState.Idle;
             bgmSource.Stop();
         }
 
