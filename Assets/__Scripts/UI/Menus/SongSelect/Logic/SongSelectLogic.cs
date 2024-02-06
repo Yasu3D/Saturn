@@ -74,11 +74,12 @@ namespace SaturnGame.UI
 
             if (prevDifficulty != SelectedDifficulty)
             {
-                bgmPreview.FadeoutBgmPreview();
-                bgmPreview.ResetLingerTimer();
+                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
                 if (page is MenuPage.ChartPreview)
                 {
+                    bgmPreview.FadeoutBgmPreview();
+                    bgmPreview.ResetLingerTimer();
                     string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
                     LoadChart(chartPath);
                 }
@@ -107,11 +108,13 @@ namespace SaturnGame.UI
 
             if (prevDifficulty != SelectedDifficulty)
             {
-                bgmPreview.FadeoutBgmPreview();
-                bgmPreview.ResetLingerTimer();
-
+                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+                
                 if (page is MenuPage.ChartPreview)
                 {
+                    bgmPreview.FadeoutBgmPreview();
+                    bgmPreview.ResetLingerTimer();
+
                     string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
                     LoadChart(chartPath);
                 }
