@@ -31,7 +31,6 @@ namespace SaturnGame.UI
             {
                 if (bgmSource.time >= FadeTime) bgmSource.DOFade(0, fadeDuration).SetEase(Ease.Linear);
                 if (bgmSource.time >= StopTime) StopBgmPreview();
-                if (!bgmSource.isPlaying) isPlaying = false;
             }
             else
             {
