@@ -76,6 +76,8 @@ namespace SaturnGame.RhythmGame
                 }
 
                 LoadedChart = filepath;
+
+                // TODO: Remove this
                 Debug.Log("[Chart Load] Chart loaded successfully!");
                 return true;
             }

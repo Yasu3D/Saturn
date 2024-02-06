@@ -49,6 +49,8 @@ namespace SaturnGame.UI
         {
             if (SelectedDifficulty >= 4) return;
 
+            int prevDifficulty = SelectedDifficulty;
+
             SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
             int index = SelectedDifficulty + 1;
             SelectedDifficulty = FindNearestDifficulty(diffs, index);
@@ -62,7 +64,7 @@ namespace SaturnGame.UI
 
             SetBgmValues();
 
-            if (page is MenuPage.ChartPreview)
+            if (page is MenuPage.ChartPreview && prevDifficulty != SelectedDifficulty)
             {
                 string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
                 LoadChart(chartPath);
@@ -73,6 +75,8 @@ namespace SaturnGame.UI
         {
             if (SelectedDifficulty <= 0) return;
             
+            int prevDifficulty = SelectedDifficulty;
+
             SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
             int index = SelectedDifficulty - 1;
             SelectedDifficulty = FindNearestDifficulty(diffs, index);
@@ -86,7 +90,7 @@ namespace SaturnGame.UI
             
             SetBgmValues();
 
-            if (page is MenuPage.ChartPreview)
+            if (page is MenuPage.ChartPreview && prevDifficulty != SelectedDifficulty)
             {
                 string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
                 LoadChart(chartPath);
@@ -119,7 +123,7 @@ namespace SaturnGame.UI
                 buttonManager.SwitchButtons(1);
 
                 string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
-                //LoadChart(chartPath);
+                LoadChart(chartPath);
                 return;
             }
 

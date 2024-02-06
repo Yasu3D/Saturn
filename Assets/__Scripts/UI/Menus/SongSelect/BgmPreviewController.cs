@@ -53,7 +53,6 @@ namespace SaturnGame.UI
 
         public async void StartBgmPreview()
         {
-            Debug.Log("Start");
             if (durationTime <= 0 || bgmSource.isPlaying) return; 
 
             isPlaying = true;
