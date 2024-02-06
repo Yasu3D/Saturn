@@ -63,7 +63,7 @@ namespace SaturnGame.UI
                 await LoadBgm();
             }
 
-            if (bgmSource.clip == null)
+            if (bgmSource.clip == null || startTime >= bgmSource.clip.length)
             {
                 songInvalid = true;
                 isPlaying = false;
