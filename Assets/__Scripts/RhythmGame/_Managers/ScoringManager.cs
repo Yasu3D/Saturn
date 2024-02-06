@@ -65,14 +65,6 @@ namespace SaturnGame.RhythmGame
                 return 0;
             }
 
-			// debug
-			if (scoreBeforeNormalization != 0)
-			{
-                Debug.Log(scoreBeforeNormalization);
-                Debug.Log(maxScoreBeforeNormalization);
-                Debug.Log(scoreBeforeNormalization * 1_000_000 / maxScoreBeforeNormalization);
-            }
-
 			// Int conversion should be safe as max score is 1,000,000
 			// (unless we fucked something up, then exception is appropriate anyway)
             return Convert.ToInt32((scoreBeforeNormalization * 1_000_000L) / maxScoreBeforeNormalization);
@@ -122,7 +114,7 @@ namespace SaturnGame.RhythmGame
         void LoadChart()
         {
             // TODO: other types of notes (e.g. hold notes)
-            // TOOD: notes on top of each other (may only be legal for hold notes)
+            // TODO: notes on top of each other (may only be legal for hold notes)
             notes = new();
 
             foreach (Note note in Chart.notes)
