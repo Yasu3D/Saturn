@@ -190,32 +190,38 @@ namespace SaturnGame.RhythmGame
                     }
                     else if (note.EarliestTimeMs <= hitTimeMs && hitTimeMs < note.LatestTimeMs && note.JudgementResult is null)
                     {
-                        bool noteTouched = false;
-                        foreach (int offset in Enumerable.Range(0, note.Note.Size))
+                        switch (note.Note)
                         {
-                            int rotation = (note.Left + offset) % 60;
-                            if (newSegments.RotationPressedAtAnyDepth(rotation))
-                            {
-                                noteTouched = true;
-                                break;
-                            }
-                        }
-                        if (noteTouched)
-                        {
-                            float errorMs = hitTimeMs - note.Note.TimeMs;
-                            Debug.Log($"Note {noteScanIndex}: judging with offset {errorMs}");
-
-                            foreach (var judgementWindow in TouchNoteJudgementWindows)
-                            {
-                                if (errorMs >= judgementWindow.left && errorMs < judgementWindow.right)
+                            case TouchNote:
+                                if (note.Touched(newSegments))
                                 {
-                                    note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
-                                    Debug.Log($"result: {note.JudgementResult.Judgement}");
-									LastJudgement = judgementWindow.judgement;
-									LastJudgementTimeMs = hitTimeMs;
+                                    float errorMs = hitTimeMs - note.Note.TimeMs;
+                                    Debug.Log($"Note {noteScanIndex}: judging with offset {errorMs}");
+
+                                    foreach (var judgementWindow in TouchNoteJudgementWindows)
+                                    {
+                                        if (errorMs >= judgementWindow.left && errorMs < judgementWindow.right)
+                                        {
+                                            note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
+                                            Debug.Log($"result: {note.JudgementResult.Judgement}");
+                                            LastJudgement = judgementWindow.judgement;
+                                            LastJudgementTimeMs = hitTimeMs;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            case ChainNote:
+                                // Warning: need to adjust judgement and hitsounds to play at the exact time of the note, even if it is hit early.
+                                if (note.Touched(touchState))
+                                {
+                                    Debug.Log($"Note {noteScanIndex}: hit chain at {hitTimeMs}");
+                                    note.JudgementResult = new JudgementResult(Judgement.Marvelous, hitTimeMs, note.Note);
+                                    LastJudgement = Judgement.Marvelous;
+                                    LastJudgementTimeMs = hitTimeMs;
                                     break;
                                 }
-                            }
+                                break;
                         }
                     }
                     else if (hitTimeMs >= note.LatestTimeMs && note.JudgementResult is null)
@@ -270,6 +276,7 @@ namespace SaturnGame.RhythmGame
         /// This is a Note with some additional metadata used by the scoring manager.
         /// This is an internal class since it should only be used by the ScoringManager.
         /// </summary>
+        /// Probably this should be deleted and we should just move everything into Note.
         private class ScoringNote
         {
             public readonly Note Note;
@@ -288,6 +295,19 @@ namespace SaturnGame.RhythmGame
                 Note = note;
                 Left = note.Position;
                 Right = (note.Position + note.Size) % 60;
+            }
+
+            public bool Touched(TouchState touchState)
+            {
+                foreach (int offset in Enumerable.Range(0, Note.Size))
+                {
+                    int rotation = (Left + offset) % 60;
+                    if (touchState.RotationPressedAtAnyDepth(rotation))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     }

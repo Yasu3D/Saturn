@@ -15,7 +15,7 @@ namespace SaturnGame.RhythmGame
         [Range(1, 60)] private int _size;
         // Size of the note or start of hold note.
         public virtual int Size { get => _size; set => _size = value; }
-        
+
         public PositionedChartElement(int measure, int tick, int position, int size) : base(measure, tick)
         {
             _position = position;
