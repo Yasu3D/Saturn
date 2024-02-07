@@ -26,9 +26,16 @@ namespace SaturnGame.RhythmGame
 
 			// Initializes to all false.
             var segments = new bool[60, 4];
-            if (Input.GetKey("1"))
+            if (Input.GetKey("[6]"))
             {
-                foreach (int i in Enumerable.Range(30, 5))
+                foreach (int i in Enumerable.Range(56, 4))
+                {
+                    foreach (int j in Enumerable.Range(1, 2))
+                    {
+                        segments[i, j] = true;
+                    }
+                }
+                foreach (int i in Enumerable.Range(0, 4))
                 {
                     foreach (int j in Enumerable.Range(1, 2))
                     {
@@ -36,9 +43,9 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-            if (Input.GetKey("2"))
+            if (Input.GetKey("[9]"))
             {
-                foreach (int i in Enumerable.Range(35, 5))
+                foreach (int i in Enumerable.Range(3, 7))
                 {
                     foreach (int j in Enumerable.Range(1, 2))
                     {
@@ -46,9 +53,9 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-            if (Input.GetKey("3"))
+            if (Input.GetKey("[8]"))
             {
-                foreach (int i in Enumerable.Range(40, 5))
+                foreach (int i in Enumerable.Range(11, 8))
                 {
                     foreach (int j in Enumerable.Range(1, 2))
                     {
@@ -56,9 +63,9 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-            if (Input.GetKey("4"))
+            if (Input.GetKey("[7]"))
             {
-                foreach (int i in Enumerable.Range(45, 5))
+                foreach (int i in Enumerable.Range(19, 7))
                 {
                     foreach (int j in Enumerable.Range(1, 2))
                     {
@@ -66,9 +73,9 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-            if (Input.GetKey("5"))
+            if (Input.GetKey("[4]"))
             {
-                foreach (int i in Enumerable.Range(50, 5))
+                foreach (int i in Enumerable.Range(26, 8))
                 {
                     foreach (int j in Enumerable.Range(1, 2))
                     {
@@ -76,9 +83,29 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-            if (Input.GetKey("6"))
+            if (Input.GetKey("[1]"))
             {
-                foreach (int i in Enumerable.Range(55, 5))
+                foreach (int i in Enumerable.Range(34, 7))
+                {
+                    foreach (int j in Enumerable.Range(1, 2))
+                    {
+                        segments[i, j] = true;
+                    }
+                }
+            }
+            if (Input.GetKey("[2]"))
+            {
+                foreach (int i in Enumerable.Range(41, 8))
+                {
+                    foreach (int j in Enumerable.Range(1, 2))
+                    {
+                        segments[i, j] = true;
+                    }
+                }
+            }
+            if (Input.GetKey("[3]"))
+            {
+                foreach (int i in Enumerable.Range(49, 7))
                 {
                     foreach (int j in Enumerable.Range(1, 2))
                     {
