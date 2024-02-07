@@ -86,8 +86,6 @@ namespace SaturnGame.Data
                 {
                     string merLine = merFile[readerIndex];
 
-                    Debug.Log(merLine);
-
                     if (merLine == "#BODY") break;
 
                     string tempLevel = MerLoader.GetMetadata(merLine, "#LEVEL");
