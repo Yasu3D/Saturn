@@ -1,22 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Big thanks to AllPoland for pointing me towards ArcViewer's implementation.
 // This is nearly identical, as it's equally fitting for Saturn.
 // For the original code, see
-// https://github.com/AllPoland/ArcViewer/blob/main/Assets/__Scripts/Previewer/ObjectPools/ObjectPool.cs
+// https://github.com/AllPoland/ArcViewer/blob/main/Assets/__Scripts/Previewer/ObjectPools/MonobehaviorPool.cs
 
-namespace SaturnGame.RhythmGame
+namespace SaturnGame
 {
-    public abstract class ObjectPool : MonoBehaviour
+    public class UIObjectPool : MonoBehaviour
     {
-        public List<GameObject> AvailableObjects = new();
-        public List<GameObject> ActiveObjects = new();
+        public List<RectTransform> AvailableObjects = new List<RectTransform>();
+        public List<RectTransform> ActiveObjects = new List<RectTransform>();
 
         public int PoolSize { get; private set; }
-        [SerializeField] private GameObject prefab;
+        [SerializeField] private RectTransform prefab;
         [SerializeField] private int startSize;
-        [SerializeField] private Vector3 objectStartPosition = new Vector3 (0, 0, -6);
 
         public void SetPoolSize(int size)
         {
@@ -36,7 +36,9 @@ namespace SaturnGame.RhythmGame
                 {
                     if (deletedObjects >= difference) break;
 
-                    Destroy(AvailableObjects[i].gameObject);
+                    var test = AvailableObjects[i];
+
+                    Destroy(test.gameObject);
                     AvailableObjects.RemoveAt(i);
                     deletedObjects++;
                 }
@@ -45,28 +47,26 @@ namespace SaturnGame.RhythmGame
             {
                 for (int i = 0; i < Mathf.Abs(difference); i++)
                 {
-                    GameObject newObject = CreateNewObject();
+                    RectTransform newObject = CreateNewObject();
                     AvailableObjects.Add(newObject);
                 }
             }
         }
 
-        private GameObject CreateNewObject()
+        private RectTransform CreateNewObject()
         {
-            GameObject newObject = Instantiate(prefab);
-            newObject.transform.SetParent(transform);
-            newObject.transform.position = objectStartPosition;
-            newObject.transform.localScale = Vector3.zero;
-            newObject.SetActive(false);
+            RectTransform newObject = Instantiate(prefab);
+            newObject.SetParent(transform);
+            newObject.gameObject.SetActive(false);
 
             return newObject;
         }
 
-        public GameObject GetObject()
+        public RectTransform GetObject()
         {
             if (AvailableObjects.Count > 0)
             {
-                GameObject collectedObject = AvailableObjects[0];
+                RectTransform collectedObject = AvailableObjects[0];
 
                 AvailableObjects.RemoveAt(0);
                 ActiveObjects.Add(collectedObject);
@@ -74,7 +74,7 @@ namespace SaturnGame.RhythmGame
                 return collectedObject;
             }
 
-            GameObject newObject = CreateNewObject();
+            RectTransform newObject = CreateNewObject();
 
             ActiveObjects.Add(newObject);
             PoolSize++;
@@ -82,18 +82,16 @@ namespace SaturnGame.RhythmGame
             return newObject;
         }
 
-        public void ReleaseObject(GameObject target)
+        public void ReleaseObject(RectTransform target)
         {
             if (!ActiveObjects.Contains(target))
             {
-                Destroy(target);
+                Destroy(target.gameObject);
                 return;
             }
             
-            target.transform.SetParent(transform);
-            target.transform.position = objectStartPosition;
-            target.transform.localScale = Vector3.zero;
-            target.SetActive(false);
+            target.SetParent(transform);
+            target.gameObject.SetActive(false);
 
             ActiveObjects.Remove(target);
             AvailableObjects.Add(target);

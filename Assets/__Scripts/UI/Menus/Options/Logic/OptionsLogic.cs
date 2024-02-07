@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using SaturnGame;
 using UnityEngine;
 
 public class OptionsLogic : MonoBehaviour
 {
+    [SerializeField] private OptionsPanelAnimator panelAnimator;
+
     [SerializeField] private int layerIndex;
     [SerializeField] private int optionIndex;
-    [SerializeField] private Stack<int> optionIndexMemory = new();
+    private Stack<int> optionIndexMemory = new();
 
     public void OnConfirm()
     {
@@ -39,15 +42,16 @@ public class OptionsLogic : MonoBehaviour
         }
         
         optionIndex--;
+        panelAnimator.Anim_ShiftPanels(optionIndex);
     }
     
     public void OnNavigateRight()
     {
         optionIndex++;
+        panelAnimator.Anim_ShiftPanels(optionIndex);
     }
 
     public void OnDefault() {}
-
 
     void Update()
     {
@@ -55,5 +59,8 @@ public class OptionsLogic : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
         if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
         if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
+
+        if (Input.GetKeyDown(KeyCode.UpArrow)) panelAnimator.Anim_ShowPanels();
+        if (Input.GetKeyDown(KeyCode.DownArrow)) panelAnimator.Anim_HidePanels(optionIndex);
     }
 }

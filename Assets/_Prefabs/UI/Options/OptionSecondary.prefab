@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8925103705736097627}
   - component: {fileID: 6403365804804359536}
   m_Layer: 5
-  m_Name: SettingsTitle
+  m_Name: OptionTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PLACEHOLDER
+  m_text: '[TITLE]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c2b45d4ef04a4f41be459c1616e7766, type: 2}
   m_sharedMaterial: {fileID: -1958097785745564949, guid: 6c2b45d4ef04a4f41be459c1616e7766,
@@ -146,9 +146,9 @@ GameObject:
   - component: {fileID: 3980366800291579280}
   - component: {fileID: 1472643064697721854}
   - component: {fileID: 9184761897691648499}
-  - component: {fileID: 4342276803390702129}
+  - component: {fileID: 8488419772980996817}
   m_Layer: 5
-  m_Name: SettingsPanelA
+  m_Name: OptionSecondary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4342276803390702129
+--- !u!114 &8488419772980996817
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,9 +221,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4307412724180532120}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b076a989edf56e34ab99aecf9797455b, type: 3}
+  m_Script: {fileID: 11500000, guid: e26b55a79a33487459ecbe189e17bdde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleText: {fileID: 6403365804804359536}
-  descriptionText: {fileID: 0}
-  rect: {fileID: 3980366800291579280}
