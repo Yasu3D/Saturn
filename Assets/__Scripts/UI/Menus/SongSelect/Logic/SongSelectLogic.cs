@@ -128,6 +128,7 @@ namespace SaturnGame.UI
 
             if (page is MenuPage.SongSelect)
             {
+                bgmPreview.FadeoutBgmPreview(true);
                 SceneSwitcher.Instance.LoadScene("_TitleScreen");
                 return;
             }
