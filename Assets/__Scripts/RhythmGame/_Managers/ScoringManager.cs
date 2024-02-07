@@ -17,6 +17,7 @@ namespace SaturnGame.RhythmGame
     {
         private Chart Chart => ChartManager.Instance.chart;
         private ChartManager ChartManager => ChartManager.Instance;
+        private TMPro.TextMeshProUGUI debugText => ViewRectController.Instance?.DebugText;
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
 
@@ -26,6 +27,13 @@ namespace SaturnGame.RhythmGame
         private string loadedChart;
         // Notes must be sorted by note TimeMs
         private List<ScoringNote> notes;
+
+        private void ShowDebugText(string text) {
+            if (debugText is null)
+                return;
+
+            debugText.text = text;
+        }
 
 		public int CurrentScore() {
 			if (notes is null || notes.Count() == 0)
@@ -196,14 +204,13 @@ namespace SaturnGame.RhythmGame
                                 if (note.Touched(newSegments))
                                 {
                                     float errorMs = hitTimeMs - note.Note.TimeMs;
-                                    Debug.Log($"Note {noteScanIndex}: judging with offset {errorMs}");
+                                    ShowDebugText($"{noteScanIndex}: {errorMs}");
 
                                     foreach (var judgementWindow in TouchNoteJudgementWindows)
                                     {
                                         if (errorMs >= judgementWindow.left && errorMs < judgementWindow.right)
                                         {
                                             note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
-                                            Debug.Log($"result: {note.JudgementResult.Judgement}");
                                             LastJudgement = judgementWindow.judgement;
                                             LastJudgementTimeMs = hitTimeMs;
                                             break;
@@ -215,7 +222,7 @@ namespace SaturnGame.RhythmGame
                                 // Warning: need to adjust judgement and hitsounds to play at the exact time of the note, even if it is hit early.
                                 if (note.Touched(touchState))
                                 {
-                                    Debug.Log($"Note {noteScanIndex}: hit chain at {hitTimeMs}");
+                                    ShowDebugText($"{noteScanIndex}: chain");
                                     note.JudgementResult = new JudgementResult(Judgement.Marvelous, hitTimeMs, note.Note);
                                     LastJudgement = Judgement.Marvelous;
                                     LastJudgementTimeMs = hitTimeMs;
