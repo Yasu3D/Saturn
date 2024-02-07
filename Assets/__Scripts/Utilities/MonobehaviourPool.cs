@@ -5,7 +5,8 @@ using UnityEngine;
 // This is nearly identical, as it's equally fitting for Saturn.
 // For the original code, see
 // https://github.com/AllPoland/ArcViewer/blob/main/Assets/__Scripts/Previewer/ObjectPools/MonobehaviorPool.cs
-namespace SaturnGame.RhythmGame
+
+namespace SaturnGame
 {
     public abstract class MonobehaviourPool<T> : MonoBehaviour where T : MonoBehaviour
     {

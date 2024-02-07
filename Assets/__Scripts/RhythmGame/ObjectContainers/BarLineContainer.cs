@@ -1,5 +1,3 @@
-using SaturnGame.Rendering;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame

@@ -1,2 +1,4 @@
-using SaturnGame.RhythmGame;
-public class BarLineObjectPool : MonobehaviourPool<BarLineContainer> { }
+namespace SaturnGame.RhythmGame
+{
+    public class BarLineObjectPool : MonobehaviourPool<BarLineContainer> { }
+}

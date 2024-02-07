@@ -1,3 +1,4 @@
-using SaturnGame.Rendering;
-using SaturnGame.RhythmGame;
-public class HoldEndObjectPool : MonobehaviourPool<HoldEndContainer> { }
+namespace SaturnGame.RhythmGame
+{
+    public class HoldEndObjectPool : MonobehaviourPool<HoldEndContainer> { }
+}
