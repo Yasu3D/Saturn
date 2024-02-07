@@ -135,9 +135,6 @@ namespace SaturnGame.UI
             if (page is MenuPage.ChartPreview)
             {
                 page = MenuPage.SongSelect;
-                
-                bgmPreview.FadeoutBgmPreview();
-                bgmPreview.ResetLingerTimer();
 
                 pageAnimator.Anim_ToSongSelect();
                 buttonManager.SwitchButtons(0);
