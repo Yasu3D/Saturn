@@ -1,66 +1,85 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using SaturnGame;
 using UnityEngine;
 
-public class OptionsLogic : MonoBehaviour
+namespace SaturnGame.UI
 {
-    [SerializeField] private OptionsPanelAnimator panelAnimator;
-
-    [SerializeField] private int layerIndex;
-    [SerializeField] private int optionIndex;
-    private Stack<int> optionIndexMemory = new();
-
-    public void OnConfirm()
+    public class OptionsLogic : MonoBehaviour
     {
-        layerIndex++;
+        [SerializeField] private OptionsPanelAnimator panelAnimator;
+        [SerializeField] private UIScreen startScreen;
 
-        optionIndexMemory.Push(optionIndex);
-        optionIndex = 0;
-    }
-
-    public void OnBack()
-    {
-        if (layerIndex <= 0)
+        private Stack<UIScreen> screenStack = new();
+        private UIScreen currentScreen => screenStack.Peek();
+        private Stack<int> indexStack = new(new List<int>{0});
+        private int currentIndex
         {
-            layerIndex = 0;
-            return;
+            get => indexStack.Peek();
+            set
+            {
+                indexStack.Pop();
+                indexStack.Push(value);
+            }
         }
 
-        layerIndex--;
-
-        optionIndex = optionIndexMemory.Peek();
-        optionIndexMemory.Pop();
-    }
-
-    public void OnNavigateLeft()
-    {
-        if (optionIndex <= 0)
+        void Awake()
         {
-            optionIndex = 0;
-            return;
+            screenStack.Push(startScreen);
+            panelAnimator.GetPanels(startScreen.ListItems);
+            panelAnimator.SetSelectedPanel(startScreen.ListItems[currentIndex]);
+        }
+
+        public void OnConfirm()
+        {
+
+        }
+
+        public void OnBack()
+        {
+            screenStack.Pop();
+            indexStack.Pop();
+
+            if (screenStack.Count == 0)
+            {
+                SceneSwitcher.Instance.LoadScene("_SongSelect");
+            }
+        }
+
+        public void OnNavigateLeft()
+        {
+            if (screenStack.Count == 0 || indexStack.Count == 0) return;
+            currentIndex = Mathf.Max(currentIndex - 1, 0);
+            panelAnimator.Anim_ShiftPanels(currentIndex);
+            panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
         }
         
-        optionIndex--;
-        panelAnimator.Anim_ShiftPanels(optionIndex);
+        public void OnNavigateRight()
+        {
+            if (screenStack.Count == 0 || indexStack.Count == 0) return;
+            currentIndex = Mathf.Min(currentIndex + 1, currentScreen.ListItems.Count - 1);
+            panelAnimator.Anim_ShiftPanels(currentIndex);
+            panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
+        }
+
+        public void OnDefault() {}
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A)) OnNavigateLeft();
+            if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
+            if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
+            if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
+
+            if (Input.GetKeyDown(KeyCode.UpArrow)) panelAnimator.Anim_ShowPanels();
+            if (Input.GetKeyDown(KeyCode.DownArrow)) panelAnimator.Anim_HidePanels();
+        }
     }
-    
-    public void OnNavigateRight()
+
+    [Serializable]
+    public class UIListItem
     {
-        optionIndex++;
-        panelAnimator.Anim_ShiftPanels(optionIndex);
-    }
-
-    public void OnDefault() {}
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A)) OnNavigateLeft();
-        if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
-        if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
-        if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
-
-        if (Input.GetKeyDown(KeyCode.UpArrow)) panelAnimator.Anim_ShowPanels();
-        if (Input.GetKeyDown(KeyCode.DownArrow)) panelAnimator.Anim_HidePanels(optionIndex);
+        public string Title;
+        public string Subtitle;
     }
 }

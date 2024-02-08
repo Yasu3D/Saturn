@@ -1,21 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 // Big thanks to AllPoland for pointing me towards ArcViewer's implementation.
 // This is nearly identical, as it's equally fitting for Saturn.
 // For the original code, see
 // https://github.com/AllPoland/ArcViewer/blob/main/Assets/__Scripts/Previewer/ObjectPools/MonobehaviorPool.cs
 
-namespace SaturnGame
+namespace SaturnGame.UI
 {
-    public class UIObjectPool : MonoBehaviour
+    public class UIPanelObjectPool : MonoBehaviour
     {
-        public List<RectTransform> AvailableObjects = new List<RectTransform>();
-        public List<RectTransform> ActiveObjects = new List<RectTransform>();
+        public List<OptionPanel> AvailableObjects = new();
+        public List<OptionPanel> ActiveObjects = new();
 
         public int PoolSize { get; private set; }
-        [SerializeField] private RectTransform prefab;
+        [SerializeField] private OptionPanel prefab;
         [SerializeField] private int startSize;
 
         public void SetPoolSize(int size)
@@ -47,26 +46,26 @@ namespace SaturnGame
             {
                 for (int i = 0; i < Mathf.Abs(difference); i++)
                 {
-                    RectTransform newObject = CreateNewObject();
+                    OptionPanel newObject = CreateNewObject();
                     AvailableObjects.Add(newObject);
                 }
             }
         }
 
-        private RectTransform CreateNewObject()
+        private OptionPanel CreateNewObject()
         {
-            RectTransform newObject = Instantiate(prefab);
-            newObject.SetParent(transform);
+            OptionPanel newObject = Instantiate(prefab);
+            newObject.rect.SetParent(transform);
             newObject.gameObject.SetActive(false);
 
             return newObject;
         }
 
-        public RectTransform GetObject()
+        public OptionPanel GetObject()
         {
             if (AvailableObjects.Count > 0)
             {
-                RectTransform collectedObject = AvailableObjects[0];
+                OptionPanel collectedObject = AvailableObjects[0];
 
                 AvailableObjects.RemoveAt(0);
                 ActiveObjects.Add(collectedObject);
@@ -74,7 +73,7 @@ namespace SaturnGame
                 return collectedObject;
             }
 
-            RectTransform newObject = CreateNewObject();
+            OptionPanel newObject = CreateNewObject();
 
             ActiveObjects.Add(newObject);
             PoolSize++;
@@ -82,7 +81,7 @@ namespace SaturnGame
             return newObject;
         }
 
-        public void ReleaseObject(RectTransform target)
+        public void ReleaseObject(OptionPanel target)
         {
             if (!ActiveObjects.Contains(target))
             {
@@ -90,7 +89,7 @@ namespace SaturnGame
                 return;
             }
             
-            target.SetParent(transform);
+            target.rect.SetParent(transform);
             target.gameObject.SetActive(false);
 
             ActiveObjects.Remove(target);
