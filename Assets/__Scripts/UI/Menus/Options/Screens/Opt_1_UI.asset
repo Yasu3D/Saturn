@@ -9,16 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Options_Root
+  m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
+  m_Name: Opt_1_UI
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  Name: Root
+  Name: UI
   ListItems:
-  - Title: Element 0
-    Subtitle: Subtitle 0
-  - Title: Element 1
-    Subtitle: Subtitle 1
-  - Title: Element 2
-    Subtitle: Subtitle 2
-  - Title: Element 3
-    Subtitle: Subtitle 3
+  - Title: UI
+    Subtitle: 
+    NextScreen: {fileID: 0}

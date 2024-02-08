@@ -30,20 +30,38 @@ namespace SaturnGame.UI
             panelAnimator.SetSelectedPanel(startScreen.ListItems[currentIndex]);
         }
 
-        public void OnConfirm()
+        public async void OnConfirm()
         {
+            var nextScreen = currentScreen.ListItems[currentIndex].NextScreen;
+            if (nextScreen == null) return;
 
+            screenStack.Push(nextScreen);
+            indexStack.Push(0);
+
+            panelAnimator.Anim_HidePanels();
+            await Awaitable.WaitForSecondsAsync(0.1f);
+            panelAnimator.GetPanels(currentScreen.ListItems);
+            panelAnimator.SetSelectedPanel(currentScreen.ListItems[0]);
+            panelAnimator.Anim_ShowPanels();
         }
 
-        public void OnBack()
+        public async void OnBack()
         {
+            if (screenStack.Count <= 1 || indexStack.Count <= 1)
+            {
+                panelAnimator.Anim_HideAll();
+                SceneSwitcher.Instance.LoadScene("_SongSelect");
+                return;
+            }
+
             screenStack.Pop();
             indexStack.Pop();
 
-            if (screenStack.Count == 0)
-            {
-                SceneSwitcher.Instance.LoadScene("_SongSelect");
-            }
+            panelAnimator.Anim_HidePanels();
+            await Awaitable.WaitForSecondsAsync(0.1f);
+            panelAnimator.GetPanels(currentScreen.ListItems, currentIndex);
+            panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.Anim_ShowPanels();
         }
 
         public void OnNavigateLeft()
@@ -71,15 +89,7 @@ namespace SaturnGame.UI
             if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
             if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
 
-            if (Input.GetKeyDown(KeyCode.UpArrow)) panelAnimator.Anim_ShowPanels();
-            if (Input.GetKeyDown(KeyCode.DownArrow)) panelAnimator.Anim_HidePanels();
+            if (Input.GetKeyDown(KeyCode.X)) panelAnimator.Anim_HideAll();
         }
-    }
-
-    [Serializable]
-    public class UIListItem
-    {
-        public string Title;
-        public string Subtitle;
     }
 }
