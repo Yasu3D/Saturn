@@ -22,7 +22,7 @@ namespace SaturnGame.UI
         {
         SongSelect = 0,
         ChartPreview = 1,
-        StartingGame = 2
+        ExitingMenu = 2
         }
 
         public MenuPage page = MenuPage.SongSelect;
@@ -53,7 +53,7 @@ namespace SaturnGame.UI
 
         public void OnDifficulutyPlus() 
         {
-            if (page == MenuPage.StartingGame) return;
+            if (page == MenuPage.ExitingMenu) return;
             if (SelectedDifficulty >= 4) return;
 
             int prevDifficulty = SelectedDifficulty;
@@ -88,7 +88,7 @@ namespace SaturnGame.UI
 
         public void OnDifficultyMinus() 
         {
-            if (page == MenuPage.StartingGame) return;
+            if (page == MenuPage.ExitingMenu) return;
             if (SelectedDifficulty <= 0) return;
             
             int prevDifficulty = SelectedDifficulty;
@@ -123,11 +123,12 @@ namespace SaturnGame.UI
         
         public void OnBack()
         {
-            if (page == MenuPage.StartingGame) return;
+            if (page == MenuPage.ExitingMenu) return;
             UIAudio.PlaySound(UIAudioController.UISound.Back);
 
             if (page is MenuPage.SongSelect)
             {
+                page = MenuPage.ExitingMenu;
                 bgmPreview.FadeoutBgmPreview(true);
                 SceneSwitcher.Instance.LoadScene("_TitleScreen");
                 return;
@@ -145,7 +146,7 @@ namespace SaturnGame.UI
 
         public void OnConfirm()
         {
-            if (page == MenuPage.StartingGame) return;
+            if (page == MenuPage.ExitingMenu) return;
             if (page is MenuPage.SongSelect)
             {
                 UIAudio.PlaySound(UIAudioController.UISound.Impact);
@@ -166,7 +167,7 @@ namespace SaturnGame.UI
             {
                 UIAudio.PlaySound(UIAudioController.UISound.StartGame);
                 bgmPreview.FadeoutBgmPreview(true);
-                page = MenuPage.StartingGame;
+                page = MenuPage.ExitingMenu;
 
                 SceneSwitcher.Instance.LoadScene("_RhythmGame");
                 return;
@@ -175,7 +176,7 @@ namespace SaturnGame.UI
 
         public async void OnNavigateLeft()
         {
-            if (page == MenuPage.StartingGame) return;
+            if (page == MenuPage.ExitingMenu) return;
             if (page is not MenuPage.SongSelect) return;
 
             UIAudio.PlaySound(UIAudioController.UISound.Navigate);
@@ -213,7 +214,7 @@ namespace SaturnGame.UI
 
         public async void OnNavigateRight()
         {
-            if (page == MenuPage.StartingGame) return;
+            if (page == MenuPage.ExitingMenu) return;
             if (page is not MenuPage.SongSelect) return;
 
             UIAudio.PlaySound(UIAudioController.UISound.Navigate);
