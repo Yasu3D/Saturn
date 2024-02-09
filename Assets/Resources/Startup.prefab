@@ -522,9 +522,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e9eaa184578f36419f05b4f49783e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui_Back: {fileID: 8300000, guid: 4aacf62e75d49c544a0465695274bbfc, type: 3}
-  ui_Confirm: {fileID: 8300000, guid: 2256a01f05b999d4eb50f4102baaa608, type: 3}
-  ui_Impact: {fileID: 8300000, guid: d102b4d59d9bcf44fb4456992592d142, type: 3}
+  ui_Back: {fileID: 8300000, guid: 8d352342e44d84a4ca0877f5a3d27137, type: 3}
+  ui_Confirm: {fileID: 8300000, guid: a4d6f5a8b1acafa408c2338ba0972781, type: 3}
+  ui_Impact: {fileID: 8300000, guid: 5d30f27b51c44844caeea67302d8c615, type: 3}
   ui_StartGame: {fileID: 8300000, guid: 2ff4d896efa914a4f8b93802ffaa082f, type: 3}
   ui_Navigate: {fileID: 8300000, guid: 162d2bf806c67e2488cd21a6fef72ed0, type: 3}
   source: {fileID: 8911741170061980900}
