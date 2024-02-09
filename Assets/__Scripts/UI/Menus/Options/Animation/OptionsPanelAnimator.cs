@@ -111,8 +111,6 @@ namespace SaturnGame.UI
                     break;
             }
 
-            Debug.Log($"{difference}  {panelPool.ActiveObjects.Count}  {items.Count}");
-
             for (int i = 0; i < panelPool.ActiveObjects.Count; i++)
             {
                 var panel = panelPool.ActiveObjects[i];

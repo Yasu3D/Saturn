@@ -13,16 +13,33 @@ MonoBehaviour:
   m_Name: Opt_0_Root
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   Name: Root
+  ScreenType: 0
   ListItems:
   - Title: GAMEPLAY SETTINGS
     Subtitle: SET NOTE SPEED, MASK, ETC.
+    Type: 1
     NextScreen: {fileID: 11400000, guid: f62703ec9daf9794b9788f03366cd0db, type: 2}
+    Paramter: 
+    Value: 0
+    OptionPreviewSprite: {fileID: 0}
   - Title: UI SETTINGS
     Subtitle: SET JUDGEMENT INFO, LANE TYPE, ETC.
+    Type: 1
     NextScreen: {fileID: 11400000, guid: 25bbd3b8b48e4aa44a469a8aa70ecbe9, type: 2}
+    Paramter: 
+    Value: 0
+    OptionPreviewSprite: {fileID: 0}
   - Title: DESIGN SETTINGS
     Subtitle: SET NOTE COLOR, LIGHT COLOR, ETC.
+    Type: 1
     NextScreen: {fileID: 11400000, guid: 5fd7cb7cef866904b8c3034047e6a1b3, type: 2}
+    Paramter: 
+    Value: 0
+    OptionPreviewSprite: {fileID: 0}
   - Title: SOUND SETTINGS
     Subtitle: SET VOLUME, HITSOUNDS, ETC.
+    Type: 1
     NextScreen: {fileID: 11400000, guid: 5446df24b2aad9447a4fbfd96a6ebdd6, type: 2}
+    Paramter: 
+    Value: 0
+    OptionPreviewSprite: {fileID: 0}

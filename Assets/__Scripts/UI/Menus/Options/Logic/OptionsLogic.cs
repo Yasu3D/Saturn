@@ -9,6 +9,7 @@ namespace SaturnGame.UI
     {
         [SerializeField] private OptionsPanelAnimator panelAnimator;
         [SerializeField] private UIScreen startScreen;
+        private UIAudioController UIAudio => UIAudioController.Instance;
 
         private Stack<UIScreen> screenStack = new();
         private UIScreen currentScreen => screenStack.Peek();
@@ -32,6 +33,8 @@ namespace SaturnGame.UI
 
         public async void OnConfirm()
         {
+            UIAudio.PlaySound(UIAudioController.UISound.Confirm);
+
             var nextScreen = currentScreen.ListItems[currentIndex].NextScreen;
             if (nextScreen == null) return;
 
@@ -47,6 +50,8 @@ namespace SaturnGame.UI
 
         public async void OnBack()
         {
+            UIAudio.PlaySound(UIAudioController.UISound.Back);
+
             if (screenStack.Count <= 1 || indexStack.Count <= 1)
             {
                 panelAnimator.Anim_HideAll();
@@ -67,7 +72,14 @@ namespace SaturnGame.UI
         public void OnNavigateLeft()
         {
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
-            currentIndex = Mathf.Max(currentIndex - 1, 0);
+
+            int newIndex = Mathf.Max(currentIndex - 1, 0);
+            if (currentIndex != newIndex)
+            {
+                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+                currentIndex = newIndex;
+            }
+
             panelAnimator.Anim_ShiftPanels(currentIndex);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
         }
@@ -75,7 +87,14 @@ namespace SaturnGame.UI
         public void OnNavigateRight()
         {
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
-            currentIndex = Mathf.Min(currentIndex + 1, currentScreen.ListItems.Count - 1);
+
+            int newIndex = Mathf.Min(currentIndex + 1, currentScreen.ListItems.Count - 1);
+            if (currentIndex != newIndex)
+            {
+                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+                currentIndex = newIndex;
+            }
+
             panelAnimator.Anim_ShiftPanels(currentIndex);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
         }
