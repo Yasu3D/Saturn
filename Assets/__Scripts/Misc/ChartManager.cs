@@ -329,7 +329,7 @@ namespace SaturnGame.RhythmGame
                     (currentReverse is Gimmick.GimmickType.ReverseEffectEnd && lastReverse is not Gimmick.GimmickType.ReverseEffectStart) ||
                     (currentReverse is Gimmick.GimmickType.ReverseNoteEnd && lastReverse is not Gimmick.GimmickType.ReverseEffectEnd))
                     return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
-                
+
                 lastReverse = currentReverse;
             }
 
@@ -535,7 +535,7 @@ namespace SaturnGame.RhythmGame
             TimeSignature lastTimeSig = timeSigGimmicks[0].TimeSig;
 
             // merge both lists and sort by timestamp
-            chart.bgmDataGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.Measure * 1920 + x.Tick).ToList();
+            chart.bgmDataGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.ChartTick).ToList();
 
             chart.bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
             chart.bgmDataGimmicks[0].TimeSig = lastTimeSig;
@@ -546,7 +546,7 @@ namespace SaturnGame.RhythmGame
 
             for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
             {
-                int currentTick = chart.bgmDataGimmicks[i].Measure * 1920 + chart.bgmDataGimmicks[i].Tick;
+                int currentTick = chart.bgmDataGimmicks[i].ChartTick;
 
                 // Handles two gimmicks at the same time, in case a chart changes
                 // BeatsPerMinute and TimeSignature simultaneously.
@@ -594,8 +594,8 @@ namespace SaturnGame.RhythmGame
             for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
             {
                 float lastTime = chart.bgmDataGimmicks[i - 1].TimeMs;
-                float currentMeasure = (chart.bgmDataGimmicks[i].Measure * 1920 + chart.bgmDataGimmicks[i].Tick) * SaturnMath.tickToMeasure;
-                float lastMeasure = (chart.bgmDataGimmicks[i - 1].Measure * 1920 + chart.bgmDataGimmicks[i - 1].Tick) * SaturnMath.tickToMeasure;
+                float currentMeasure = (chart.bgmDataGimmicks[i].ChartTick) * SaturnMath.tickToMeasure;
+                float lastMeasure = (chart.bgmDataGimmicks[i - 1].ChartTick) * SaturnMath.tickToMeasure;
                 float timeSig = chart.bgmDataGimmicks[i - 1].TimeSig.Ratio;
                 float bpm = chart.bgmDataGimmicks[i - 1].BeatsPerMinute;
 

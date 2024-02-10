@@ -35,7 +35,7 @@ namespace SaturnGame
 
         /// <summary>
         /// Returns the Euclidean remainder ("true modulo") of a number. <br />
-        /// The result will always be positive, unlike using the <c>%</c> operator in C#.
+        /// The result will always be non-negative, unlike using the <c>%</c> operator in C#.
         /// </summary>
         public static int Modulo(int x, int m)
         {
@@ -76,7 +76,7 @@ namespace SaturnGame
                 if (a > b) b += m;
                 else a += m;
             }
-            
+
             return Mathf.Lerp(a, b, t);
         }
 
