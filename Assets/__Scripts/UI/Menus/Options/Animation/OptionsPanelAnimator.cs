@@ -16,16 +16,17 @@ namespace SaturnGame.UI
         [SerializeField] private CanvasGroup panelGroup;
         [SerializeField] private RectTransform panelGroupRect;
         [SerializeField] private RectTransform gradientRect;
-        [SerializeField] private RectTransform navigatorRect;
         [SerializeField] private RectTransform spinnyThingRect;
-        [SerializeField] private RectTransform glassRect;
         [SerializeField] private RectTransform headerRect;
+        [SerializeField] private RectTransform navigatorRect;
+
+        private Sequence currentSequence;
 
         private float[] positionsY = { 0, -150, -250, -350 };
         private float[] positionsX = { 20, 20, 55, 120 };
         private float[] scales = { 1, 1, 0.85f, 0.85f };
 
-        private float[] angles = { -99, -81, -63, -45, -27, 0, 27, 45, 63, 81, 99, 117, 135, 153, 171, 189, 207, 225};
+        private float[] angles = { -99, -81, -63, -45, -27, 0, 27, 45, 63, 81, 99, 117, 135, 153, 171, 189, 207, 225 };
         private Vector2 centerPoint = new(0, -12);
 
         public void Anim_ShiftPanels(int selectedIndex, UIScreen screen)
@@ -36,7 +37,7 @@ namespace SaturnGame.UI
             for (int i = 0; i < panelPool.ActiveObjects.Count; i++)
             {
                 int distance = i - selectedIndex;
-                int sign = (int) Mathf.Sign(distance);
+                int sign = (int)Mathf.Sign(distance);
                 var panel = panelPool.ActiveObjects[i];
 
                 if (screen.ScreenType is not UIScreen.UIScreenType.Radial)
@@ -62,38 +63,112 @@ namespace SaturnGame.UI
             }
         }
 
-        public void Anim_ShowPanels()
+        public void Anim_ShowPanels(UIScreen newScreen)
         {
-            const float duration = 0.075f;
-            Ease ease = Ease.InQuad;
+            switch (newScreen.ScreenType)
+            {
+                case UIScreen.UIScreenType.LinearSimple:
+                case UIScreen.UIScreenType.LinearDetailed:
+                    Anim_ShowPanelsLinear();
+                    break;
 
-            panelGroup.DOFade(1, duration).SetEase(ease);
-            panelGroupRect.DOAnchorPosX(0, duration).SetEase(ease);
-            //gradientRect.DOAnchorPosY(665, duration).SetEase(ease);
+                case UIScreen.UIScreenType.Radial:
+                    Anim_ShowPanelsRadial();
+                    break;
+            }
         }
 
-        public void Anim_HidePanels()
+        public void Anim_HidePanels(UIScreen lastScreen)
         {
-            const float duration = 0.075f;
-            Ease ease = Ease.InQuad;
+            switch (lastScreen.ScreenType)
+            {
+                case UIScreen.UIScreenType.LinearSimple:
+                case UIScreen.UIScreenType.LinearDetailed:
+                    Anim_HidePanelsLinear();
+                    break;
 
-            panelGroup.DOFade(0, duration).SetEase(ease);
-            panelGroupRect.DOAnchorPosX(-250, duration).SetEase(ease);
-            //gradientRect.DOAnchorPosY(400, duration).SetEase(ease);
+                case UIScreen.UIScreenType.Radial:
+                    Anim_HidePanelsRadial();
+                    break;
+            }
         }
 
-        public void Anim_HideAll()
+        public void Anim_ShowPanelsLinear()
         {
-            const float duration = 0.075f;
+            const float duration = 0.2f;
             Ease ease = Ease.InQuad;
 
-            panelGroup.DOFade(0, duration).SetEase(ease);
-            panelGroupRect.DOAnchorPosX(-250, duration).SetEase(ease);
-            gradientRect.DOAnchorPosY(400, duration).SetEase(ease);
-            navigatorRect.DOAnchorPosX(1250, duration).SetEase(ease);
-            headerRect.DOAnchorPosX(0, duration).SetEase(ease);
-            glassRect.DOScale(0, duration).SetEase(ease);
-            spinnyThingRect.DOScale(2, duration).SetEase(ease);
+            currentSequence.Kill(true);
+
+            panelGroup.alpha = 0;
+            panelGroupRect.anchoredPosition = new(-250, 12.5f);
+            gradientRect.anchoredPosition = new(0, 400);
+            headerRect.anchoredPosition = new(0, 250);
+            spinnyThingRect.localScale = Vector3.one * 2;
+            navigatorRect.anchoredPosition = new(1250, -400);
+
+            currentSequence = DOTween.Sequence();
+            currentSequence.Join(panelGroup.DOFade(1, duration).SetEase(ease));
+            currentSequence.Join(panelGroupRect.DOAnchorPosX(0, duration).SetEase(ease));
+            currentSequence.Join(gradientRect.DOAnchorPosY(665, duration).SetEase(ease));
+            currentSequence.Join(headerRect.DOAnchorPosX(-420, duration).SetEase(ease));
+            currentSequence.Join(spinnyThingRect.DOScale(1, duration).SetEase(ease));
+            currentSequence.Join(navigatorRect.DOAnchorPosX(270, duration).SetEase(ease));
+        }
+
+        public void Anim_ShowPanelsRadial()
+        {
+            const float duration = 0.2f;
+            Ease ease = Ease.InQuad;
+
+            currentSequence.Kill(true);
+
+            panelGroup.alpha = 0;
+            panelGroupRect.anchoredPosition = new(0, 12.5f);
+            panelGroupRect.localScale = Vector3.zero;
+
+            currentSequence = DOTween.Sequence();
+            currentSequence.Join(panelGroup.DOFade(1, duration).SetEase(ease));
+            currentSequence.Join(panelGroupRect.DOScale(1, duration).SetEase(ease));
+        }
+
+        public void Anim_HidePanelsLinear()
+        {
+            const float duration = 0.2f;
+            Ease ease = Ease.InQuad;
+
+            currentSequence.Kill(true);
+
+            panelGroup.alpha = 1;
+            panelGroupRect.anchoredPosition = new(0, 12.5f);
+            gradientRect.anchoredPosition = new(0, 665);
+            headerRect.anchoredPosition = new(-420, 250);
+            spinnyThingRect.localScale = Vector3.one;
+            navigatorRect.anchoredPosition = new(270, -400);
+
+            currentSequence = DOTween.Sequence();
+            currentSequence.Join(panelGroup.DOFade(0, duration).SetEase(ease));
+            currentSequence.Join(panelGroupRect.DOAnchorPosX(-250, duration).SetEase(ease));
+            currentSequence.Join(gradientRect.DOAnchorPosY(400, duration).SetEase(ease));
+            currentSequence.Join(headerRect.DOAnchorPosX(0, duration).SetEase(ease));
+            currentSequence.Join(spinnyThingRect.DOScale(2, duration).SetEase(ease));
+            currentSequence.Join(navigatorRect.DOAnchorPosX(1250, duration).SetEase(ease));
+        }
+
+        public void Anim_HidePanelsRadial()
+        {
+            const float duration = 0.2f;
+            Ease ease = Ease.InQuad;
+
+            currentSequence.Kill(true);
+
+            panelGroup.alpha = 1;
+            panelGroupRect.anchoredPosition = new(0, 12.5f);
+            panelGroupRect.localScale = Vector3.one;
+
+            currentSequence = DOTween.Sequence();
+            currentSequence.Join(panelGroup.DOFade(0, duration).SetEase(ease));
+            currentSequence.Join(panelGroupRect.DOScale(0, duration).SetEase(ease));
         }
 
         public void SetSelectedPanel(UIListItem item)

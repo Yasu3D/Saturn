@@ -993,10 +993,9 @@ MonoBehaviour:
   panelGroup: {fileID: 1865301257}
   panelGroupRect: {fileID: 1865301255}
   gradientRect: {fileID: 1969010238}
-  navigatorRect: {fileID: 1469718225}
   spinnyThingRect: {fileID: 812263472}
-  glassRect: {fileID: 892588333}
   headerRect: {fileID: 47622168}
+  navigatorRect: {fileID: 1469718225}
 --- !u!1 &812263471
 GameObject:
   m_ObjectHideFlags: 0
@@ -1123,7 +1122,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 970, y: 970}
+  m_SizeDelta: {x: 1080, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &892588334
 MonoBehaviour:
@@ -2401,7 +2400,7 @@ PrefabInstance:
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
@@ -2411,7 +2410,7 @@ PrefabInstance:
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
@@ -2421,7 +2420,7 @@ PrefabInstance:
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
@@ -2476,7 +2475,7 @@ PrefabInstance:
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 665
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 3721080658755230004, guid: dea881e2823dc354ba2aa92f58591f5a,
         type: 3}

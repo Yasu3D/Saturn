@@ -32,20 +32,20 @@ namespace SaturnGame.UI
         }
 
         public async void OnConfirm()
-        {
-            UIAudio.PlaySound(UIAudioController.UISound.Confirm);
-
+        {   
             var nextScreen = currentScreen.ListItems[currentIndex].NextScreen;
             if (nextScreen == null) return;
+
+            UIAudio.PlaySound(UIAudioController.UISound.Confirm);
+            panelAnimator.Anim_HidePanels(currentScreen);
 
             screenStack.Push(nextScreen);
             indexStack.Push(0);
 
-            panelAnimator.Anim_HidePanels();
-            await Awaitable.WaitForSecondsAsync(0.1f);
+            await Awaitable.WaitForSecondsAsync(0.15f);
             panelAnimator.GetPanels(currentScreen);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[0]);
-            panelAnimator.Anim_ShowPanels();
+            panelAnimator.Anim_ShowPanels(currentScreen);
         }
 
         public async void OnBack()
@@ -54,19 +54,20 @@ namespace SaturnGame.UI
 
             if (screenStack.Count <= 1 || indexStack.Count <= 1)
             {
-                panelAnimator.Anim_HideAll();
+                panelAnimator.Anim_HidePanels(currentScreen);
                 SceneSwitcher.Instance.LoadScene("_SongSelect");
                 return;
             }
 
+            panelAnimator.Anim_HidePanels(currentScreen);
+
             screenStack.Pop();
             indexStack.Pop();
 
-            panelAnimator.Anim_HidePanels();
-            await Awaitable.WaitForSecondsAsync(0.1f);
+            await Awaitable.WaitForSecondsAsync(0.15f);
             panelAnimator.GetPanels(currentScreen, currentIndex);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
-            panelAnimator.Anim_ShowPanels();
+            panelAnimator.Anim_ShowPanels(currentScreen);
         }
 
         public void OnNavigateLeft()
@@ -107,8 +108,6 @@ namespace SaturnGame.UI
             if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
             if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
             if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
-
-            if (Input.GetKeyDown(KeyCode.X)) panelAnimator.Anim_HideAll();
         }
     }
 }
