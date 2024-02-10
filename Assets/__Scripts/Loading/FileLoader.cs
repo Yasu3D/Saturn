@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web;
+
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading.Tasks;
 
 namespace SaturnGame.Loading
 {
@@ -38,12 +40,20 @@ namespace SaturnGame.Loading
     {
         public static async Task<AudioClip> LoadBgm(string path)
         {
-            if (!File.Exists(path)) return null;
+            if (!File.Exists(path))
+            {
+                Debug.Log("[BGM] Couldn't load; file not found!");
+                return null;
+            }
 
             AudioType type = GetAudioType(path);
-            if (type is AudioType.UNKNOWN) return null;
+            if (type is AudioType.UNKNOWN)
+            {
+                Debug.Log("[BGM] Couldn't load; unknown file type!");
+                return null;
+            }
 
-            Uri uri = new ("file://" + path);
+            Uri uri = new ("file:///" + HttpUtility.UrlEncode(path));
             try
             {
                 using(UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(uri, type))
@@ -55,13 +65,18 @@ namespace SaturnGame.Loading
                         var test = DownloadHandlerAudioClip.GetContent(webRequest);
                         return test;
                     }
+                    else
+                    {
+                        Debug.Log($"[BGM] Error loading: {webRequest.error}");
+                    }
                 }
             }
             catch(Exception error)
             {
-                Debug.LogWarning($"Audio load error! {error.Message}, {error.StackTrace}");
+                Debug.LogWarning($"[BGM] Audio load exception!\n{error.Message}, {error.StackTrace}");
             }
 
+            Debug.Log("[BGM] Could not load file for unknown reason...");
             return null;
         }
 

@@ -3,7 +3,6 @@ using UnityEngine;
 using SaturnGame.Loading;
 using SaturnGame.Data;
 using SaturnGame.RhythmGame;
-using System.Threading;
 
 namespace SaturnGame.UI
 {
@@ -19,13 +18,20 @@ namespace SaturnGame.UI
         public int SelectedSongIndex { get; private set; } = 0;
         public int SelectedDifficulty { get; private set; } = 0;
 
-        public enum MenuPage { SongSelect = 0, ChartPreview = 1 }
+        public enum MenuPage 
+        {
+        SongSelect = 0,
+        ChartPreview = 1,
+        ExitingMenu = 2
+        }
+
         public MenuPage page = MenuPage.SongSelect;
 
         [SerializeField] private GameObject diffPlusButton0;
         [SerializeField] private GameObject diffPlusButton1;
         [SerializeField] private GameObject diffMinusButton0;
         [SerializeField] private GameObject diffMinusButton1;
+        private UIAudioController UIAudio => UIAudioController.Instance;
 
         void Awake()
         {
@@ -47,7 +53,10 @@ namespace SaturnGame.UI
 
         public void OnDifficulutyPlus() 
         {
+            if (page == MenuPage.ExitingMenu) return;
             if (SelectedDifficulty >= 4) return;
+
+            int prevDifficulty = SelectedDifficulty;
 
             SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
             int index = SelectedDifficulty + 1;
@@ -62,17 +71,28 @@ namespace SaturnGame.UI
 
             SetBgmValues();
 
-            if (page is MenuPage.ChartPreview)
+
+            if (prevDifficulty != SelectedDifficulty)
             {
-                string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
-                LoadChart(chartPath);
+                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+
+                if (page is MenuPage.ChartPreview)
+                {
+                    bgmPreview.FadeoutBgmPreview();
+                    bgmPreview.ResetLingerTimer();
+                    string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
+                    LoadChart(chartPath);
+                }
             }
         }
 
         public void OnDifficultyMinus() 
         {
+            if (page == MenuPage.ExitingMenu) return;
             if (SelectedDifficulty <= 0) return;
             
+            int prevDifficulty = SelectedDifficulty;
+
             SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
             int index = SelectedDifficulty - 1;
             SelectedDifficulty = FindNearestDifficulty(diffs, index);
@@ -86,17 +106,30 @@ namespace SaturnGame.UI
             
             SetBgmValues();
 
-            if (page is MenuPage.ChartPreview)
+            if (prevDifficulty != SelectedDifficulty)
             {
-                string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
-                LoadChart(chartPath);
+                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+                
+                if (page is MenuPage.ChartPreview)
+                {
+                    bgmPreview.FadeoutBgmPreview();
+                    bgmPreview.ResetLingerTimer();
+
+                    string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
+                    LoadChart(chartPath);
+                }
             }
         }
         
         public void OnBack()
         {
+            if (page == MenuPage.ExitingMenu) return;
+            UIAudio.PlaySound(UIAudioController.UISound.Back);
+
             if (page is MenuPage.SongSelect)
             {
+                page = MenuPage.ExitingMenu;
+                bgmPreview.FadeoutBgmPreview(true);
                 SceneSwitcher.Instance.LoadScene("_TitleScreen");
                 return;
             }
@@ -104,6 +137,7 @@ namespace SaturnGame.UI
             if (page is MenuPage.ChartPreview)
             {
                 page = MenuPage.SongSelect;
+
                 pageAnimator.Anim_ToSongSelect();
                 buttonManager.SwitchButtons(0);
                 return;
@@ -112,19 +146,29 @@ namespace SaturnGame.UI
 
         public void OnConfirm()
         {
+            if (page == MenuPage.ExitingMenu) return;
             if (page is MenuPage.SongSelect)
             {
+                UIAudio.PlaySound(UIAudioController.UISound.Impact);
+
+                bgmPreview.FadeoutBgmPreview();
+                bgmPreview.ResetLingerTimer();
+
                 page = MenuPage.ChartPreview;
                 pageAnimator.Anim_ToChartPreview();
                 buttonManager.SwitchButtons(1);
 
                 string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
-                //LoadChart(chartPath);
+                LoadChart(chartPath);
                 return;
             }
 
             if (page is MenuPage.ChartPreview)
             {
+                UIAudio.PlaySound(UIAudioController.UISound.StartGame);
+                bgmPreview.FadeoutBgmPreview(true);
+                page = MenuPage.ExitingMenu;
+
                 SceneSwitcher.Instance.LoadScene("_RhythmGame");
                 return;
             }
@@ -132,7 +176,10 @@ namespace SaturnGame.UI
 
         public async void OnNavigateLeft()
         {
+            if (page == MenuPage.ExitingMenu) return;
             if (page is not MenuPage.SongSelect) return;
+
+            UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
             // Index
             SelectedSongIndex = SaturnMath.Modulo(SelectedSongIndex - 1, songDatabase.songs.Count);
@@ -161,13 +208,16 @@ namespace SaturnGame.UI
 
             // Audio Preview
             SetBgmValues();
-            bgmPreview.StopBgmPreview();
+            bgmPreview.FadeoutBgmPreview();
             bgmPreview.ResetLingerTimer();
         }
 
         public async void OnNavigateRight()
         {
+            if (page == MenuPage.ExitingMenu) return;
             if (page is not MenuPage.SongSelect) return;
+
+            UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
             // Index
             SelectedSongIndex = SaturnMath.Modulo(SelectedSongIndex + 1, songDatabase.songs.Count);
@@ -197,7 +247,7 @@ namespace SaturnGame.UI
 
             // Audio Preview
             SetBgmValues();
-            bgmPreview.StopBgmPreview();
+            bgmPreview.FadeoutBgmPreview();
             bgmPreview.ResetLingerTimer();
         }
 
@@ -286,6 +336,8 @@ namespace SaturnGame.UI
             if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
             if (Input.GetKeyDown(KeyCode.UpArrow)) OnDifficulutyPlus();
             if (Input.GetKeyDown(KeyCode.DownArrow)) OnDifficultyMinus();
+
+            if (Input.GetKeyDown(KeyCode.X)) bgmPreview.FadeoutBgmPreview();
         }
     }
 }

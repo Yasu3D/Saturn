@@ -39,8 +39,6 @@ namespace SaturnGame.UI
             textBounds = text.GetPreferredValues().x + textSpacing;
             enableScroll = rect.rect.width < textBounds;
 
-            Debug.Log($"{enableScroll} -- {text.text}");
-            
             // Reset offset and text positions.
             offset = 0;
             rect.anchoredPosition = new(startPos + offset, 0);

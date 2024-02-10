@@ -98,6 +98,7 @@ namespace SaturnGame.UI
         {
             string[] messages =
             {
+                "び",
                 ":3",
                 ":3c",
                 ">:3",
