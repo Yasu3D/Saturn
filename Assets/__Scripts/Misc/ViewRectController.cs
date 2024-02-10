@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.Settings;
 using UnityEngine;
 using UnityEngine.SceneManagement;

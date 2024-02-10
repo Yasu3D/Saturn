@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace SaturnGame.RhythmGame
 {
     [System.Serializable]
@@ -15,5 +13,7 @@ namespace SaturnGame.RhythmGame
             ) : base(measure, tick, position, size, bonusType, isSync)
         {
         }
+
+        public override HitWindow[] HitWindows => baseHitWindows;
     }
 }

@@ -15,6 +15,32 @@ namespace SaturnGame.RhythmGame
         // it is at the same time as another note and is highlighted
         public bool IsSync;
 
+        public float? EarliestHitTimeMs;
+        public float? LatestHitTimeMs;
+
+        // If the note has not been judged, this must be null (not None).
+        public Judgement? Judgement;
+        // Hit refers to whether the HitWindows of a note have been evaluated.
+        // Hit will be true for Misses.
+        // Generally this just checks if Judgement is present, but it's override for HoldNotes.
+        public virtual bool Hit => Judgement is not null;
+        // For a HoldNote, hit time of start.
+        // null HitTimeMs doesn't indicate that the note hasn't been judged - it could be Miss.
+        public float? HitTimeMs;
+        // The error in ms of this input compared to a perfectly-timed input.
+        // e.g. 5ms early will give a value of -5
+        // null TimeErrorMs doesn't indicate that the note hasn't been judged - it could be Miss.
+        public float? TimeErrorMs
+        {
+            get
+            {
+                if (HitTimeMs is null)
+                    return null;
+                else
+                    return HitTimeMs - TimeMs;
+            }
+        }
+
         public Note (
             int measure,
             int tick,
@@ -137,5 +163,40 @@ namespace SaturnGame.RhythmGame
             Bonus,
             R_Note,
         }
+
+        protected static HitWindow[] baseHitWindows = {
+            // TODO: Set these values correctly. These are placeholder values.
+            new HitWindow(-45f, 45f, RhythmGame.Judgement.Marvelous),
+            new HitWindow(-90f, 90f, RhythmGame.Judgement.Great),
+            new HitWindow(-180f, 180f, RhythmGame.Judgement.Good),
+            // There is no early or late Miss window.
+            // You get a Miss if all windows pass without hitting the note.
+        };
+        public abstract HitWindow[] HitWindows { get; }
+    }
+
+    public readonly struct HitWindow
+    {
+        // Earliest hit time for the window
+        [Range(float.MinValue, 0)] public readonly float LeftMs;
+        // Latest hit time for the window
+        [Range(0, float.MaxValue)] public readonly float RightMs;
+        public readonly Judgement Judgement;
+
+        public HitWindow(float leftMs, float rightMs, Judgement judgement)
+        {
+            LeftMs = leftMs;
+            RightMs = rightMs;
+            Judgement = judgement;
+        }
+    }
+
+    public enum Judgement
+    {
+        None, // Represents cases where the judgement is missing entirely, e.g. for a note that did not receive any judgement.
+        Miss,
+        Good,
+        Great,
+        Marvelous
     }
 }

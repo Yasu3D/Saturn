@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -81,6 +80,8 @@ namespace SaturnGame.RhythmGame
         public virtual int Measure { get; set; }
         [Range(0, 1919)] private int _tick;
         public virtual int Tick { get => _tick; set => _tick = value; }
+        // ChartTick is the number of ticks since the beginning of the chart, combining both Measure and Tick into a single value.
+        public int ChartTick => Measure * 1920 + Tick;
         public float TimeMs;
         public float ScaledVisualTime;
     }
