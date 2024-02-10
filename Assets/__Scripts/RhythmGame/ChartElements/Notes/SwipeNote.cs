@@ -21,6 +21,9 @@ namespace SaturnGame.RhythmGame
             Direction = direction;
         }
 
+        // TODO: fix
+        public override HitWindow[] HitWindows => baseHitWindows;
+
         public enum SwipeDirection
         {
             Clockwise,

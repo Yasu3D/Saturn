@@ -26,13 +26,13 @@ namespace SaturnGame.RhythmGame
 
         private string loadedChart;
         // Notes must be sorted by note TimeMs
-        private List<ScoringNote> notes;
+        private List<Note> notes;
 
         private void ShowDebugText(string text) {
             if (debugText is null)
                 return;
 
-            debugText.text = text;
+            debugText.text = $"{timeManager.VisualTime}\n" + text;
         }
 
 		public int CurrentScore() {
@@ -43,14 +43,14 @@ namespace SaturnGame.RhythmGame
 
             long maxScoreBeforeNormalization = 0;
             long scoreBeforeNormalization = 0;
-			foreach (ScoringNote note in notes)
+			foreach (Note note in notes)
             {
                 maxScoreBeforeNormalization += 100;
-                if (note.JudgementResult is null)
+                if (note.Judgement is null)
                 {
                     continue;
                 }
-                switch (note.JudgementResult.Judgement)
+                switch (note.Judgement)
                 {
                     case Judgement.None:
                     case Judgement.Miss:
@@ -78,23 +78,12 @@ namespace SaturnGame.RhythmGame
             return Convert.ToInt32((scoreBeforeNormalization * 1_000_000L) / maxScoreBeforeNormalization);
         }
 
-        // A list of judgement windows, from smallest to largest.
-        // Each judgement window is tuple of minimum error in ms, maximum error in ms, and the earned Judgement
-        // TODO: Make this better lol, create a class or something.
-        readonly (float left, float right, Judgement judgement)[] TouchNoteJudgementWindows =
-        {
-            // TODO: tweak these values
-            (-45f, 45f, Judgement.Marvelous),
-            (-90f, 90f, Judgement.Great),
-            (-180f, 180f, Judgement.Good),
-            // There is no early or late Miss window
-        };
         // This should be greater than the maximum late timing window of any note.
         const float IgnorePastNotesThreshold = 300f;
         // This should be greater than the maximum early timing window of any note.
         const float IgnoreFutureNotesThreshold = 300f;
 
-        bool segmentsOverlap(ScoringNote note1, ScoringNote note2)
+        bool segmentsOverlap(Note note1, Note note2)
         {
 			if (note1.Left == note1.Right || note2.Left == note2.Right)
 			{
@@ -102,63 +91,80 @@ namespace SaturnGame.RhythmGame
 				return true;
 			}
 
-            // Given 3 positions mod 60, return true if these are in "ascending" order without going around the circle a full time.
-            // 0 -> 15 -> 30: true
-            // 0 -> 30 -> 15: false
-            // 45 -> 0 -> 15: true
-            // 15 -> 0 -> 45: false
-            // 15 -> 0 -> 10: true
-            // This is equivalent to "pos2 is in the interval (pos1, pos3)" in mod60 arithmetic.
-            bool inOrder(int pos1, int pos2, int pos3)
+            // Bonus reading: https://fgiesen.wordpress.com/2015/09/24/intervals-in-modular-arithmetic/
+            // Each note is a half-open interval in mod60.
+
+            // See point_in_half_open_interval in the link.
+            // This returns true iff point is in the half-open interval [note.Left, note.Right) (mod 60)
+            bool pointWithinNote(Note note, int point)
             {
-                return SaturnMath.Modulo(pos2 - pos1, 60) < SaturnMath.Modulo(pos3 - pos1, 60);
+                return SaturnMath.Modulo(point - note.Left, 60) < SaturnMath.Modulo(note.Right - note.Left, 60);
             }
 
-            // To test for overlap, check to see if the left side of either note is within the other.
-            // Bonus reading: https://fgiesen.wordpress.com/2015/09/24/intervals-in-modular-arithmetic/
-            return inOrder(note1.Left, note2.Left, note1.Right) || inOrder(note2.Left, note1.Right, note2.Right);
+            // See half_open_intervals_overlap in the link.
+            // We know that the interval size is positive, so we don't need to worry about that case.
+            return pointWithinNote(note1, note2.Left) || pointWithinNote(note2, note1.Left);
         }
 
+        // TODO: just move this into the normal chart loading (ChartManager)
         void LoadChart()
         {
-            // TODO: other types of notes (e.g. hold notes)
-            // TODO: notes on top of each other (may only be legal for hold notes)
+            List<Note> allNotesFromChart = Chart.notes.Concat(Chart.holdNotes).OrderBy(note => note.TimeMs).ToList();
+            // TODO: swipe notes within a hold... that is gonna be hell lmao
+            // TODO: holds with a swipe on the hold start take on the timing window of the swipe??
             notes = new();
 
-            foreach (Note note in Chart.notes)
+            foreach (Note note in allNotesFromChart)
             {
-                ScoringNote scoringNote = new(note)
-                {
-                    EarliestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].left,
-                    LatestTimeMs = note.TimeMs + TouchNoteJudgementWindows[^1].right
-                };
+                note.EarliestHitTimeMs = note.TimeMs + note.HitWindows[^1].LeftMs;
+                note.LatestHitTimeMs = note.TimeMs + note.HitWindows[^1].RightMs;
+
+                List<Note> overlappingNotes = new();
 
                 // Look backwards through the chart to see if any notes overlap with this.
                 // Potential optimization: once a note is out of range (for all possible note type windows!),
                 // we know it can never come back in range. We can keep track of the minimum index into the notes
                 // array that we have to care about, like minNoteIndex below.
-                foreach (ScoringNote otherNote in notes)
+                foreach (Note otherNote in notes)
                 {
-                    if (otherNote.LatestTimeMs > scoringNote.EarliestTimeMs && segmentsOverlap(scoringNote, otherNote))
+                    if (otherNote.ChartTick == note.ChartTick)
                     {
-                        // We have overlapping timing windows. Split the difference between the two notes.
-                        // TODO: If the windows of the two notes are different sizes (e.g. touch vs swipe notes), bias the split point.
-                        var cutoff = (otherNote.Note.TimeMs + note.TimeMs) / 2;
-                        otherNote.LatestTimeMs = cutoff;
-                        scoringNote.EarliestTimeMs = cutoff;
-
-                        // We only expect one previous note to possibly overlap this one, so exit the loop;
+                        // Don't try to do anything with notes that are at exactly the same time.
+                        // Furthermore, we know we can't find any other notes from an earlier ChartTick, so just break out of the loop.
                         break;
+                    }
+
+                    if (otherNote.LatestHitTimeMs.Value > note.EarliestHitTimeMs.Value && segmentsOverlap(note, otherNote))
+                    {
+                        overlappingNotes.Add(otherNote);
                     }
                 }
 
-                notes.Add(scoringNote);
+                if (overlappingNotes.Count > 0)
+                {
+                    Debug.Log($"{note.GetType().Name} at {note.TimeMs} overlaps with {overlappingNotes.Count} previous notes");
+                    // We have overlapping timing windows. Split the difference between the two closest notes.
+                    Note latestNote = overlappingNotes.OrderByDescending(note => note.TimeMs).First();
+                    Debug.Log($"Earliest note is a {latestNote.GetType().Name} at {latestNote.TimeMs}");
+                    // TODO: If the windows of the two notes are different sizes (e.g. touch vs swipe notes), bias the split point.
+                    float cutoff = (latestNote.TimeMs + note.TimeMs) / 2;
+                    Debug.Log($"Cutoff at {cutoff}");
+                    note.EarliestHitTimeMs = cutoff;
+                    foreach (Note otherNote in overlappingNotes)
+                    {
+                        Debug.Log($"{otherNote.GetType().Name} at {otherNote.TimeMs} possibly updated, previously {otherNote.LatestHitTimeMs}");
+                        otherNote.LatestHitTimeMs = Math.Min(otherNote.LatestHitTimeMs.Value, cutoff);
+                    }
+                }
+
+                notes.Add(note);
             }
         }
 
         // minNoteIndex tracks the first note that we need to care about when judging future inputs. It should be greater than
         // all notes whose windows have already fully passed or who have been hit.
         int minNoteIndex = 0;
+        List<HoldNote> activeHolds = new();
 		TouchState prevTouchState;
         // TODO: This is currently super basic and assumes all the notes are touch notes.
         void HandleInput(float hitTimeMs, TouchState touchState)
@@ -177,41 +183,69 @@ namespace SaturnGame.RhythmGame
                 // Scan forward, looking for a note that can be hit by this input.
                 while (noteScanIndex < notes.Count)
                 {
-                    ScoringNote note = notes[noteScanIndex];
+                    Note note = notes[noteScanIndex];
 
-                    if (note.Note.TimeMs + IgnorePastNotesThreshold < hitTimeMs)
+                    if (note.TimeMs + IgnorePastNotesThreshold < hitTimeMs)
                     {
                         // This note can no longer be hit, we don't need to ever look at it or any notes before it again.
                         minNoteIndex = noteScanIndex + 1;
-                        if (note.JudgementResult is null)
+                        if (!note.Hit)
                         {
-                            Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.Note.TimeMs + IgnorePastNotesThreshold}");
-                            note.JudgementResult = new(Judgement.Miss, null, note.Note);
-                            LastJudgement = Judgement.Miss;
-                            LastJudgementTimeMs = hitTimeMs;
+                            Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.TimeMs + IgnorePastNotesThreshold}");
+                            if (note is HoldNote holdNote)
+                            {
+                                holdNote.StartJudgement = Judgement.Miss;
+                                // In this case, lastHeldTimeMs can be set to the beginning of the note, since
+                                // that's when the hold leniency window should begin.
+                                holdNote.LastHeldTimeMs = holdNote.TimeMs;
+                                holdNote.CurrentlyHeld = false;
+                                holdNote.Held = false;
+                                holdNote.Dropped = false;
+
+                                if (hitTimeMs < holdNote.End.TimeMs)
+                                {
+                                    activeHolds.Add(holdNote);
+                                }
+                                else
+                                {
+                                    holdNote.Dropped = true;
+                                    // hold note is already over, judge
+                                    holdNote.Judgement = Judgement.Miss;
+                                }
+                            }
+                            else
+                            {
+                                note.Judgement = Judgement.Miss;
+                                note.HitTimeMs = null;
+                                LastJudgement = Judgement.Miss;
+                                LastJudgementTimeMs = hitTimeMs;
+                            }
                         }
                     }
-                    else if (hitTimeMs + IgnoreFutureNotesThreshold < note.Note.TimeMs)
+                    else if (hitTimeMs + IgnoreFutureNotesThreshold < note.TimeMs)
                     {
                         // We can stop scanning since this note or any future notes cannot be hit by this input.
                         break;
                     }
-                    else if (note.EarliestTimeMs <= hitTimeMs && hitTimeMs < note.LatestTimeMs && note.JudgementResult is null)
+                    else if (note.EarliestHitTimeMs <= hitTimeMs && hitTimeMs < note.LatestHitTimeMs && !note.Hit)
                     {
-                        switch (note.Note)
+                        switch (note)
                         {
+                            case SwipeNote:
+                            case SnapNote:
                             case TouchNote:
                                 if (note.Touched(newSegments))
                                 {
-                                    float errorMs = hitTimeMs - note.Note.TimeMs;
+                                    float errorMs = hitTimeMs - note.TimeMs;
                                     ShowDebugText($"{noteScanIndex}: {errorMs}");
 
-                                    foreach (var judgementWindow in TouchNoteJudgementWindows)
+                                    foreach (HitWindow hitWindow in note.HitWindows)
                                     {
-                                        if (errorMs >= judgementWindow.left && errorMs < judgementWindow.right)
+                                        if (errorMs >= hitWindow.LeftMs && errorMs < hitWindow.RightMs)
                                         {
-                                            note.JudgementResult = new JudgementResult(judgementWindow.judgement, hitTimeMs, note.Note);
-                                            LastJudgement = judgementWindow.judgement;
+                                            note.Judgement = hitWindow.Judgement;
+                                            note.HitTimeMs = hitTimeMs;
+                                            LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
                                             break;
                                         }
@@ -220,27 +254,130 @@ namespace SaturnGame.RhythmGame
                                 break;
                             case ChainNote:
                                 // Warning: need to adjust judgement and hitsounds to play at the exact time of the note, even if it is hit early.
+                                // Warning: even if the input is the same, this requires HandleInput to be called within the note's timing window. Ideally, any chain notes between this input and the last should be hit.
+                                // Warning: currently, the timing window is totally wrong, it's huge.
                                 if (note.Touched(touchState))
                                 {
                                     ShowDebugText($"{noteScanIndex}: chain");
-                                    note.JudgementResult = new JudgementResult(Judgement.Marvelous, hitTimeMs, note.Note);
+                                    note.Judgement = Judgement.Marvelous;
+                                    note.HitTimeMs = hitTimeMs;
                                     LastJudgement = Judgement.Marvelous;
                                     LastJudgementTimeMs = hitTimeMs;
-                                    break;
+                                }
+                                break;
+                            case HoldNote holdNote:
+                                if (holdNote.Touched(newSegments))
+                                {
+                                    float errorMs = hitTimeMs - holdNote.TimeMs;
+                                    ShowDebugText($"{noteScanIndex} (hold): {errorMs} {holdNote.Left} {holdNote.Right}");
+
+                                    foreach (HitWindow hitWindow in holdNote.HitWindows)
+                                    {
+                                        if (errorMs >= hitWindow.LeftMs && errorMs < hitWindow.RightMs)
+                                        {
+                                            holdNote.StartJudgement = hitWindow.Judgement;
+                                            holdNote.HitTimeMs = hitTimeMs;
+                                            holdNote.Held = true;
+                                            holdNote.Dropped = false;
+                                            holdNote.CurrentlyHeld = true;
+                                            holdNote.LastHeldTimeMs = hitTimeMs;
+                                            activeHolds.Add(holdNote);
+
+                                            LastJudgement = hitWindow.Judgement;
+                                            LastJudgementTimeMs = hitTimeMs;
+                                            break;
+                                        }
+                                    }
                                 }
                                 break;
                         }
                     }
-                    else if (hitTimeMs >= note.LatestTimeMs && note.JudgementResult is null)
+                    else if (hitTimeMs >= note.LatestHitTimeMs && !note.Hit)
                     {
                         // The note can no longer be hit.
-                        Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestTimeMs}");
-                        note.JudgementResult = new(Judgement.Miss, null, note.Note);
-						LastJudgement = Judgement.Miss;
-						LastJudgementTimeMs = hitTimeMs;
+                        Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
+
+                        // TODO: this is copy paste from the first if case
+                        if (note is HoldNote holdNote)
+                        {
+                            holdNote.StartJudgement = Judgement.Miss;
+                            // In this case, lastHeldTimeMs can be set to the beginning of the note, since
+                            // that's when the hold leniency window should begin.
+                            holdNote.LastHeldTimeMs = holdNote.TimeMs;
+                            holdNote.CurrentlyHeld = false;
+                            holdNote.Held = false;
+                            holdNote.Dropped = false;
+
+                            if (hitTimeMs < holdNote.End.TimeMs)
+                            {
+                                activeHolds.Add(holdNote);
+                            }
+                            else
+                            {
+                                // hold note is already over, judge
+                                holdNote.Judgement = Judgement.Miss;
+                            }
+                        }
+                        else
+                        {
+                            note.Judgement = Judgement.Miss;
+                            note.HitTimeMs = null;
+                            LastJudgement = Judgement.Miss;
+                            LastJudgementTimeMs = hitTimeMs;
+                        }
                     }
 
                     noteScanIndex++;
+                }
+
+                // Note: not using a foreach because we remove finished holds as we iterate
+                for (int i = 0; i < activeHolds.Count; i++)
+                {
+                    HoldNote holdNote = activeHolds[i];
+
+                    if (hitTimeMs < holdNote.Start.TimeMs)
+                    {
+                        // Hold was hit early, and we haven't started the actual hold body.
+                        // Skip doing any judgement on this hold for now.
+                        continue;
+                    }
+
+                    if (!holdNote.CurrentlyHeld)
+                    {
+                        // The note has been dropped for some time, calculate how long that is.
+                        // The drop window starts at lastHeldTimeMs.
+                        // The drop window is evaluated up until now, but not past the end of the note.
+                        float droppedUntil = Math.Min(hitTimeMs, holdNote.End.TimeMs);
+                        float dropTimeMs = droppedUntil - holdNote.LastHeldTimeMs.Value;
+                        if (dropTimeMs > HoldNote.LeniencyMs && !holdNote.Dropped)
+                        {
+                            ShowDebugText($"dropped hold after {dropTimeMs}");
+                            holdNote.Dropped = true;
+                        }
+                    }
+
+                    if (hitTimeMs > holdNote.End.TimeMs)
+                    {
+                        // Hold note is finished.
+                        Judgement judgement = holdNote.Judge();
+                        ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
+                        LastJudgement = judgement;
+                        LastJudgementTimeMs = hitTimeMs;
+                        activeHolds.Remove(holdNote);
+
+                        // Since we removed an element, the current index should go back one
+                        i--;
+                    }
+                    else if (holdNote.CurrentSegmentFor(hitTimeMs).Touched(touchState))
+                    {
+                        holdNote.CurrentlyHeld = true;
+                        holdNote.LastHeldTimeMs = hitTimeMs;
+                        holdNote.Held = true;
+                    }
+                    else
+                    {
+                        holdNote.CurrentlyHeld = false;
+                    }
                 }
             }
 			finally
@@ -250,7 +387,7 @@ namespace SaturnGame.RhythmGame
         }
 
 		public void NewTouchState(TouchState touchState) {
-			HandleInput(timeManager.RawVisualTime, touchState);
+			HandleInput(timeManager.VisualTime, touchState);
 		}
 
         void Update()
@@ -267,96 +404,16 @@ namespace SaturnGame.RhythmGame
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                HandleInput(timeManager.RawVisualTime, null);
+                HandleInput(timeManager.VisualTime, null);
                 Debug.Log("judgements:");
                 foreach (var note in notes)
                 {
-                    if (note.JudgementResult is not null)
+                    if (note.Judgement is not null)
                     {
-                        Debug.Log($"{note.JudgementResult.Judgement} by {note.JudgementResult.TimeErrorMs ?? 999}ms, note at {note.JudgementResult.Note.TimeMs}");
+                        Debug.Log($"{note.Judgement} by {note.TimeErrorMs ?? 999}ms, note at {note.TimeMs}");
                     }
                 }
             }
         }
-
-        /// <summary>
-        /// This is a Note with some additional metadata used by the scoring manager.
-        /// This is an internal class since it should only be used by the ScoringManager.
-        /// </summary>
-        /// Probably this should be deleted and we should just move everything into Note.
-        private class ScoringNote
-        {
-            public readonly Note Note;
-            public JudgementResult JudgementResult;
-            // We can define a note as an interval in mod 60, e.g. [40, 50) for a 10-size note at position 40.
-            // If the note crosses 60, still use mod 60 integers, e.g. [55, 5) for a 10-size note at position 55.
-            // Left is the beginning or left side of this interval. It is the clockwise-most segment of the note. (Note, that might be the "right" side of the note if it's on the top of the ring.)
-            public readonly int Left;
-            // Left is the end or right side of this interval. It is the counterclockwise-most segment of the note + 1.
-            public readonly int Right;
-            public float? EarliestTimeMs;
-            public float? LatestTimeMs;
-
-            public ScoringNote(Note note)
-            {
-                Note = note;
-                Left = note.Position;
-                Right = (note.Position + note.Size) % 60;
-            }
-
-            public bool Touched(TouchState touchState)
-            {
-                foreach (int offset in Enumerable.Range(0, Note.Size))
-                {
-                    int rotation = (Left + offset) % 60;
-                    if (touchState.RotationPressedAtAnyDepth(rotation))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-    }
-
-    class JudgementResult
-    {
-        public Judgement Judgement { get; }
-
-        // TODO: This is not naively well-defined for HoldNotes - consider how HoldNotes should be represented.
-        // Can be null if there was no hit associated with this judgement (e.g. miss)
-        public float? HitTimeMs { get; }
-
-        // FIXME: HoldNote is not a Note, so this cannot capture HoldNotes
-        public Note Note { get; }
-
-        // The error in ms of this input compared to a perfectly-timed input.
-        // e.g. 5ms early will give a value of -5
-        public float? TimeErrorMs
-        {
-            get
-            {
-                if (HitTimeMs is null)
-                    return null;
-                else
-                    return HitTimeMs - Note.TimeMs;
-            }
-        }
-
-        public JudgementResult(Judgement judgement, float? hitTimeMs, Note note)
-        {
-            Judgement = judgement;
-            HitTimeMs = hitTimeMs;
-            Note = note;
-        }
-    }
-
-    public enum Judgement
-    {
-        None, // Represents cases where the judgement is missing entirely, e.g. for a note that did not receive any judgement.
-        Miss,
-        Good,
-        Great,
-        Marvelous
     }
 }

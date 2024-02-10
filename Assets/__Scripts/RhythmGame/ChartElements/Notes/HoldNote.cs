@@ -71,9 +71,44 @@ namespace SaturnGame.RhythmGame
         public HoldSegment[] Segments => Notes.Skip(1).Take(Notes.Length - 2).ToArray();
         // Notes is all HoldSegments, including Start and End;
         public HoldSegment[] Notes;
-        //
         public HoldSegment[] RenderedNotes => Notes.Where(x => x.RenderFlag).ToArray();
 
+        public HoldSegment CurrentSegmentFor(float currentTimeMs)
+        {
+            return Notes.Where(segment => segment.TimeMs <= currentTimeMs).Last();
+        }
+
         public int MaxSize => Notes.Max(note => note.Size);
+
+        public override HitWindow[] HitWindows => baseHitWindows;
+
+        public Judgement? StartJudgement;
+        public override bool Hit => StartJudgement is not null;
+        public bool CurrentlyHeld;
+        public float? LastHeldTimeMs;
+        // Held should be true if the note was ever touched/held.
+        public bool Held;
+        // Dropped should be true if hold lenciency is exceeded at any point in the hold.
+        public bool Dropped;
+        public static float LeniencyMs = 200f;
+
+        // TODO: No clue if this is actually accurate.
+        public Judgement Judge()
+        {
+            if (!Held)
+            {
+                Judgement = RhythmGame.Judgement.Miss;
+            }
+            else if (StartJudgement is RhythmGame.Judgement.Miss || Dropped)
+            {
+                Judgement = RhythmGame.Judgement.Good;
+            }
+            else
+            {
+                Judgement = StartJudgement;
+            }
+
+            return Judgement.Value;
+        }
     }
 }
