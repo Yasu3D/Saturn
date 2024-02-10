@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Opt_1_Design
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   Name: Design
+  ScreenType: 0
   ListItems:
   - Title: Design
     Subtitle: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Type: 0
     NextScreen: {fileID: 0}
+    Paramter: 
+    Value: 0

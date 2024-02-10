@@ -12,10 +12,12 @@ public class UIListItemDrawer : PropertyDrawer
 
         SerializedProperty title = property.FindPropertyRelative("Title");
         SerializedProperty subtitle = property.FindPropertyRelative("Subtitle");
+        SerializedProperty color = property.FindPropertyRelative("Color");
         SerializedProperty type = property.FindPropertyRelative("Type");
 
         EditorGUILayout.PropertyField(title);
         EditorGUILayout.PropertyField(subtitle);
+        EditorGUILayout.PropertyField(color);
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(type);
 
@@ -29,11 +31,9 @@ public class UIListItemDrawer : PropertyDrawer
         {
             SerializedProperty parameter = property.FindPropertyRelative("Paramter");
             SerializedProperty value = property.FindPropertyRelative("Value");
-            SerializedProperty optionPreviewSprite = property.FindPropertyRelative("OptionPreviewSprite");
 
             EditorGUILayout.PropertyField(parameter);
             EditorGUILayout.PropertyField(value);
-            EditorGUILayout.PropertyField(optionPreviewSprite);
         }
 
         EditorGUI.indentLevel--;

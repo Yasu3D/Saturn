@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace SaturnGame.UI
 {
@@ -10,7 +11,7 @@ namespace SaturnGame.UI
         public enum UIScreenType
         {
             LinearSimple,
-            LinearDetail,
+            LinearDetailed,
             Radial
         }
 
@@ -30,6 +31,7 @@ namespace SaturnGame.UI
 
         public string Title;
         public string Subtitle;
+        public Color Color;
         public ItemType Type;
 
         // These should only be visible when Type is set to SubMenu.
@@ -38,6 +40,5 @@ namespace SaturnGame.UI
         // These should only be visible when Type is set to ValueSetter.
         public string Paramter;
         public int Value;
-        public Sprite OptionPreviewSprite;
     }
 }

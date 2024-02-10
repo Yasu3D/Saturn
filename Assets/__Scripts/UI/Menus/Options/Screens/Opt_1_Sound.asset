@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Opt_1_Sound
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   Name: Sound
+  ScreenType: 0
   ListItems:
   - Title: Sound
     Subtitle: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Type: 0
     NextScreen: {fileID: 0}
+    Paramter: 
+    Value: 0

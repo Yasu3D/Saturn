@@ -11,7 +11,7 @@ namespace SaturnGame.UI
         [SerializeField] private UIPanelObjectPool panelPool;
         [SerializeField] private RectTransform activePanels;
 
-        [SerializeField] private OptionPanel selectedPanel;
+        [SerializeField] private OptionPanel primaryPanel;
 
         [SerializeField] private CanvasGroup panelGroup;
         [SerializeField] private RectTransform panelGroupRect;
@@ -21,11 +21,14 @@ namespace SaturnGame.UI
         [SerializeField] private RectTransform glassRect;
         [SerializeField] private RectTransform headerRect;
 
-        private float[] positionsY = {0, -150, -250, -350};
-        private float[] positionsX = {-520, -520, -485, -420};
-        private float[] scales = {1, 1, 0.85f, 0.85f};
+        private float[] positionsY = { 0, -150, -250, -350 };
+        private float[] positionsX = { 20, 20, 55, 120 };
+        private float[] scales = { 1, 1, 0.85f, 0.85f };
 
-        public void Anim_ShiftPanels(int selectedIndex)
+        private float[] angles = { -99, -81, -63, -45, -27, 0, 27, 45, 63, 81, 99, 117, 135, 153, 171, 189, 207, 225};
+        private Vector2 centerPoint = new(0, -12);
+
+        public void Anim_ShiftPanels(int selectedIndex, UIScreen screen)
         {
             const float duration = 0.05f;
             Ease ease = Ease.Linear;
@@ -34,14 +37,28 @@ namespace SaturnGame.UI
             {
                 int distance = i - selectedIndex;
                 int sign = (int) Mathf.Sign(distance);
-                int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
-
-                Vector2 position = new(positionsX[index], sign * positionsY[index]);
-                float scale = scales[index];
                 var panel = panelPool.ActiveObjects[i];
 
-                panel.rect.DOAnchorPos(position, duration).SetEase(ease);
-                panel.rect.DOScale(scale, duration).SetEase(ease);
+                if (screen.ScreenType is not UIScreen.UIScreenType.Radial)
+                {
+                    int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
+                    Vector2 position = new(positionsX[index], sign * positionsY[index]);
+                    float scale = scales[index];
+
+                    panel.rect.DOAnchorPos(position, duration).SetEase(ease);
+                    panel.rect.DOScale(scale, duration).SetEase(ease);
+                }
+
+                if (screen.ScreenType is UIScreen.UIScreenType.Radial)
+                {
+                    panel.rect.anchoredPosition = centerPoint;
+                    panel.rect.localScale = Vector3.one;
+
+                    int index = Mathf.Clamp(distance + 5, 0, 17);
+                    float angle = angles[index];
+
+                    panel.rect.DORotate(new Vector3(0, 0, angle), duration, RotateMode.Fast).SetEase(ease);
+                }
             }
         }
 
@@ -81,14 +98,15 @@ namespace SaturnGame.UI
 
         public void SetSelectedPanel(UIListItem item)
         {
-            selectedPanel.Title = item.Title;
-            selectedPanel.Subtitle = item.Subtitle;
+            primaryPanel.Title = item.Title;
+            primaryPanel.Subtitle = item.Subtitle;
+            primaryPanel.SetRadialPanelColor(item);
         }
 
-        public void GetPanels(List<UIListItem> items, int selectedIndex = 0)
+        public void GetPanels(UIScreen screen, int selectedIndex = 0)
         {
             int activeCount = panelPool.ActiveObjects.Count;
-            int newCount = items.Count;
+            int newCount = screen.ListItems.Count;
             int difference = activeCount - newCount;
 
             switch (difference)
@@ -106,7 +124,7 @@ namespace SaturnGame.UI
                         panel.gameObject.SetActive(true);
                     }
                     break;
-                
+
                 default:
                     break;
             }
@@ -114,19 +132,41 @@ namespace SaturnGame.UI
             for (int i = 0; i < panelPool.ActiveObjects.Count; i++)
             {
                 var panel = panelPool.ActiveObjects[i];
+                var listItem = screen.ListItems[i];
+
+
+                panel.Title = listItem.Title;
+                panel.Subtitle = listItem.Subtitle;
+                panel.SetType(screen.ScreenType);
+                panel.SetRadialPanelColor(listItem);
 
                 int distance = i - selectedIndex;
                 int sign = (int) Mathf.Sign(distance);
-                int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
 
-                Vector2 position = new(positionsX[index], sign * positionsY[index]);
-                float scale = scales[index];
-                panel.rect.anchoredPosition = position;
-                panel.rect.localScale = Vector3.one * scale;
+                if (screen.ScreenType is UIScreen.UIScreenType.Radial)
+                {
+                    panel.rect.anchoredPosition = centerPoint;
+                    panel.rect.localScale = Vector3.one;
 
-                panel.Title = items[i].Title;
-                panel.Subtitle = items[i].Subtitle;
+                    int index = Mathf.Clamp(distance + 5, 0, 17);
+                    float angle = angles[index];
+
+                    panel.rect.eulerAngles = new Vector3(0, 0, angle);
+                }
+
+                if (screen.ScreenType is not UIScreen.UIScreenType.Radial)
+                {
+                    int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
+                    Vector2 position = new(positionsX[index], sign * positionsY[index]);
+                    float scale = scales[index];
+
+                    panel.rect.eulerAngles = Vector3.zero;
+                    panel.rect.anchoredPosition = position;
+                    panel.rect.localScale = Vector3.one * scale;
+                }
             }
+
+            primaryPanel.SetType(screen.ScreenType);
         }
     }
 }

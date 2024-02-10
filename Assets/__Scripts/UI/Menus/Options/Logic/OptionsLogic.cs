@@ -27,7 +27,7 @@ namespace SaturnGame.UI
         void Awake()
         {
             screenStack.Push(startScreen);
-            panelAnimator.GetPanels(startScreen.ListItems);
+            panelAnimator.GetPanels(startScreen);
             panelAnimator.SetSelectedPanel(startScreen.ListItems[currentIndex]);
         }
 
@@ -43,7 +43,7 @@ namespace SaturnGame.UI
 
             panelAnimator.Anim_HidePanels();
             await Awaitable.WaitForSecondsAsync(0.1f);
-            panelAnimator.GetPanels(currentScreen.ListItems);
+            panelAnimator.GetPanels(currentScreen);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[0]);
             panelAnimator.Anim_ShowPanels();
         }
@@ -64,7 +64,7 @@ namespace SaturnGame.UI
 
             panelAnimator.Anim_HidePanels();
             await Awaitable.WaitForSecondsAsync(0.1f);
-            panelAnimator.GetPanels(currentScreen.ListItems, currentIndex);
+            panelAnimator.GetPanels(currentScreen, currentIndex);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
             panelAnimator.Anim_ShowPanels();
         }
@@ -80,7 +80,7 @@ namespace SaturnGame.UI
                 currentIndex = newIndex;
             }
 
-            panelAnimator.Anim_ShiftPanels(currentIndex);
+            panelAnimator.Anim_ShiftPanels(currentIndex, currentScreen);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
         }
         
@@ -95,7 +95,7 @@ namespace SaturnGame.UI
                 currentIndex = newIndex;
             }
 
-            panelAnimator.Anim_ShiftPanels(currentIndex);
+            panelAnimator.Anim_ShiftPanels(currentIndex, currentScreen);
             panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
         }
 
