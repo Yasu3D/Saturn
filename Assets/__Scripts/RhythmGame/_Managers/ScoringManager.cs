@@ -142,17 +142,13 @@ namespace SaturnGame.RhythmGame
 
                 if (overlappingNotes.Count > 0)
                 {
-                    Debug.Log($"{note.GetType().Name} at {note.TimeMs} overlaps with {overlappingNotes.Count} previous notes");
                     // We have overlapping timing windows. Split the difference between the two closest notes.
                     Note latestNote = overlappingNotes.OrderByDescending(note => note.TimeMs).First();
-                    Debug.Log($"Earliest note is a {latestNote.GetType().Name} at {latestNote.TimeMs}");
                     // TODO: If the windows of the two notes are different sizes (e.g. touch vs swipe notes), bias the split point.
                     float cutoff = (latestNote.TimeMs + note.TimeMs) / 2;
-                    Debug.Log($"Cutoff at {cutoff}");
                     note.EarliestHitTimeMs = cutoff;
                     foreach (Note otherNote in overlappingNotes)
                     {
-                        Debug.Log($"{otherNote.GetType().Name} at {otherNote.TimeMs} possibly updated, previously {otherNote.LatestHitTimeMs}");
                         otherNote.LatestHitTimeMs = Math.Min(otherNote.LatestHitTimeMs.Value, cutoff);
                     }
                 }
