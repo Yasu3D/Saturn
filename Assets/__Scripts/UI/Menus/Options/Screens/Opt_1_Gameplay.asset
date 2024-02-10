@@ -15,10 +15,66 @@ MonoBehaviour:
   Name: Gameplay
   ScreenType: 1
   ListItems:
-  - Title: Note Speed
+  - SubtitleType: 1
+    Title: NOTE SPEED
     Subtitle: 
+    Binding: NoteSpeed
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Type: 1
+    ItemType: 1
+    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
+    Paramter: 
+    Value: 0
+  - SubtitleType: 0
+    Title: JUDGEMENT OFFSET
+    Subtitle: 
+    Binding: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    ItemType: 1
+    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
+    Paramter: 
+    Value: 0
+  - SubtitleType: 0
+    Title: MASK DENSITY
+    Subtitle: 
+    Binding: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    ItemType: 1
+    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
+    Paramter: 
+    Value: 0
+  - SubtitleType: 0
+    Title: BACKGROUND VIDEO
+    Subtitle: 
+    Binding: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    ItemType: 1
+    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
+    Paramter: 
+    Value: 0
+  - SubtitleType: 0
+    Title: BONUS EFFECT
+    Subtitle: 
+    Binding: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    ItemType: 1
+    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
+    Paramter: 
+    Value: 0
+  - SubtitleType: 0
+    Title: MIRROR NOTES
+    Subtitle: 
+    Binding: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    ItemType: 1
+    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
+    Paramter: 
+    Value: 0
+  - SubtitleType: 0
+    Title: GIVE UP
+    Subtitle: 
+    Binding: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    ItemType: 1
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
     Paramter: 
     Value: 0

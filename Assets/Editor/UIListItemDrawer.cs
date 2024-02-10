@@ -11,23 +11,37 @@ public class UIListItemDrawer : PropertyDrawer
         EditorGUI.indentLevel++;
 
         SerializedProperty title = property.FindPropertyRelative("Title");
-        SerializedProperty subtitle = property.FindPropertyRelative("Subtitle");
+        SerializedProperty subtitleType = property.FindPropertyRelative("SubtitleType");
         SerializedProperty color = property.FindPropertyRelative("Color");
-        SerializedProperty type = property.FindPropertyRelative("Type");
+        SerializedProperty itemType = property.FindPropertyRelative("ItemType");
 
         EditorGUILayout.PropertyField(title);
-        EditorGUILayout.PropertyField(subtitle);
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(subtitleType);
+
+        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Text)
+        {
+            SerializedProperty subtitle = property.FindPropertyRelative("Subtitle");
+            EditorGUILayout.PropertyField(subtitle);
+        }
+
+        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Binding)
+        {
+            SerializedProperty binding = property.FindPropertyRelative("Binding");
+            EditorGUILayout.PropertyField(binding);
+        }
+
         EditorGUILayout.PropertyField(color);
         EditorGUILayout.Space();
-        EditorGUILayout.PropertyField(type);
+        EditorGUILayout.PropertyField(itemType);
 
-        if (type.enumValueIndex == (int)UIListItem.ItemType.SubMenu)
+        if (itemType.enumValueIndex == (int)UIListItem.ItemTypes.SubMenu)
         {
             SerializedProperty nextScreen = property.FindPropertyRelative("NextScreen");
             EditorGUILayout.PropertyField(nextScreen);
         }
 
-        else if (type.enumValueIndex == (int)UIListItem.ItemType.ValueSetter)
+        else if (itemType.enumValueIndex == (int)UIListItem.ItemTypes.ValueSetter)
         {
             SerializedProperty parameter = property.FindPropertyRelative("Paramter");
             SerializedProperty value = property.FindPropertyRelative("Value");

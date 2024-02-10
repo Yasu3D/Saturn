@@ -118,7 +118,7 @@ Shader "SaturnGame/UI/Circle"
                 clip (color.a * circle - 0.001);
                 #endif
 
-                return float4(IN.color.xyz, circle);
+                return float4(IN.color.xyz, circle * IN.color.w);
             }
         ENDCG
         }

@@ -175,11 +175,11 @@ namespace SaturnGame.Rendering
                     id = settings.NoteColorID_Chain;
                     break;
                 case SwipeNote { Direction: SwipeNote.SwipeDirection.Clockwise }:
-                    if (settings.InvertSlideColor) id = settings.NoteColorID_SwipeCounterclockwise;
+                    if (settings.InvertSlideColor != 0) id = settings.NoteColorID_SwipeCounterclockwise;
                     else id = settings.NoteColorID_SwipeClockwise;
                     break;
                 case SwipeNote { Direction: SwipeNote.SwipeDirection.Counterclockwise }:
-                    if (settings.InvertSlideColor) id = settings.NoteColorID_SwipeClockwise;
+                    if (settings.InvertSlideColor != 0) id = settings.NoteColorID_SwipeClockwise;
                     else id = settings.NoteColorID_SwipeCounterclockwise;
                     break;
                 case SnapNote { Direction: SnapNote.SnapDirection.Forward }:

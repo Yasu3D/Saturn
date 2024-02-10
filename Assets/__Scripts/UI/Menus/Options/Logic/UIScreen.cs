@@ -23,16 +23,25 @@ namespace SaturnGame.UI
     [Serializable]
     public class UIListItem
     {
-        public enum ItemType
+        public enum ItemTypes
         {
             ValueSetter,
             SubMenu
         }
 
+        public enum SubtitleTypes
+        {
+            Text,
+            Binding
+        }
+
+        public SubtitleTypes SubtitleType;
         public string Title;
         public string Subtitle;
+        public string Binding;
+
         public Color Color;
-        public ItemType Type;
+        public ItemTypes ItemType;
 
         // These should only be visible when Type is set to SubMenu.
         public UIScreen NextScreen;

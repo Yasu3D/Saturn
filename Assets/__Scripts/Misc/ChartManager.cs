@@ -66,7 +66,7 @@ namespace SaturnGame.RhythmGame
                 if (chart.reverseGimmicks.Count != 0)
                     await Task.Run(() => GenerateReverseLists());
 
-                if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes)
+                if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes != 0)
                     await Task.Run(() => MirrorChart());
 
                 if (!CheckLoadErrors().passed)
