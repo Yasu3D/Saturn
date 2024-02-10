@@ -40,7 +40,7 @@ namespace SaturnGame.UI
             stripeRect.anchoredPosition = new(stripePosB, stripeRect.anchoredPosition.y);
 
             currentSequence = DOTween.Sequence();
-            currentSequence.Append(listGroup.DOFade(1, duration).SetEase(Ease.OutExpo));
+            currentSequence.Join(listGroup.DOFade(1, duration).SetEase(Ease.OutExpo));
             currentSequence.Join(listRect.DOScale(1, duration).SetEase(Ease.OutExpo));
             currentSequence.Join(viewportRect.DOScale(0, duration).SetEase(Ease.OutQuad));
             currentSequence.Join(panelRect.DOAnchorPosX(panelPosA, duration).SetEase(Ease.OutQuad));
@@ -66,7 +66,7 @@ namespace SaturnGame.UI
             stripeRect.anchoredPosition = new(stripePosA, stripeRect.anchoredPosition.y);
 
             currentSequence = DOTween.Sequence();
-            currentSequence.Append(listRect.DOScale(listZoomScale, duration).SetEase(Ease.InOutExpo));
+            currentSequence.Join(listRect.DOScale(listZoomScale, duration).SetEase(Ease.InOutExpo));
             currentSequence.Join(viewportRect.DOScale(1, duration).SetEase(Ease.OutQuad));
             currentSequence.Join(navigatorRect.DOScale(1, duration).SetEase(Ease.OutQuad));
             currentSequence.Join(navigatorRect.DOAnchorPosX(navigatorPosB, 1.5f * duration).SetEase(Ease.OutQuad));
