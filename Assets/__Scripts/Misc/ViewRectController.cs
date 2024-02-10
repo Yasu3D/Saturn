@@ -1,22 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.Settings;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ViewRectController : StaticInstance<ViewRectController>
+public class ViewRectController : MonoBehaviour
 {
     [SerializeField] private Image mask;
-    [SerializeField] public TextMeshProUGUI DebugText;
 
     [SerializeField] private Vector2 rBounds = new(0, 0.3237f);
     [SerializeField] private Vector2 oBounds = new(0, 840);
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
         OnUpdateViewRect();
     }
 
@@ -46,7 +41,6 @@ public class ViewRectController : StaticInstance<ViewRectController>
 
         SetViewRect(currentAspect, pos, scale);
         SetMask(currentAspect, pos, scale);
-        PositionDebugText(currentAspect, pos, scale);
     }
 
     public void SetViewRect(float currentAspect, float pos, float scale)
@@ -95,39 +89,5 @@ public class ViewRectController : StaticInstance<ViewRectController>
         }
 
         mask.material.SetFloat("_Radius", radius);
-    }
-
-    public void PositionDebugText(float currentAspect, float pos, float scale)
-    {
-        float offset = Mathf.LerpUnclamped(oBounds.x, oBounds.y, pos);
-
-        if (currentAspect < 1.0f)
-        {
-            // Portrait
-
-            // Pivot bottom left
-            DebugText.rectTransform.pivot = new(0, 0);
-
-            // Text align bottom
-            DebugText.verticalAlignment = VerticalAlignmentOptions.Bottom;
-
-            // Anchor to top left of square viewport
-            float radiusPos = scale * Screen.width / 2f;
-            DebugText.rectTransform.localPosition = new(-radiusPos, radiusPos + offset, 0);
-        }
-        else
-        {
-            // Landscape
-
-            // Pivot top left
-            DebugText.rectTransform.pivot = new(0, 1);
-
-            // Text align top
-            DebugText.verticalAlignment = VerticalAlignmentOptions.Top;
-
-            // Anchor to top right of square viewport
-            float radiusPos = scale * Screen.height / 2f;
-            DebugText.rectTransform.localPosition = new(radiusPos + offset, radiusPos, 0);
-        }
     }
 }

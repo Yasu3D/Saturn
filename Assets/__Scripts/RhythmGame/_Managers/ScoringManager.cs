@@ -17,7 +17,7 @@ namespace SaturnGame.RhythmGame
     {
         private Chart Chart => ChartManager.Instance.chart;
         private ChartManager ChartManager => ChartManager.Instance;
-        private TMPro.TextMeshProUGUI debugText => ViewRectController.Instance?.DebugText;
+        [SerializeField] private TMPro.TextMeshProUGUI DebugText;
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
 
@@ -29,10 +29,10 @@ namespace SaturnGame.RhythmGame
         private List<Note> notes;
 
         private void ShowDebugText(string text) {
-            if (debugText is null)
+            if (DebugText is null)
                 return;
 
-            debugText.text = $"{timeManager.VisualTime}\n" + text;
+            DebugText.text = $"{timeManager.VisualTime}\n" + text;
         }
 
 		public int CurrentScore() {
