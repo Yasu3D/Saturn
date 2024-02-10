@@ -35,15 +35,15 @@ namespace SaturnGame.RhythmGame
             DebugText.text = $"{timeManager.VisualTime}\n" + text;
         }
 
-		public int CurrentScore() {
-			if (notes is null || notes.Count() == 0)
-			{
+        public int CurrentScore() {
+            if (notes is null || notes.Count() == 0)
+            {
                 return 0;
             }
 
             long maxScoreBeforeNormalization = 0;
             long scoreBeforeNormalization = 0;
-			foreach (Note note in notes)
+            foreach (Note note in notes)
             {
                 maxScoreBeforeNormalization += 100;
                 if (note.Judgement is null)
@@ -67,14 +67,14 @@ namespace SaturnGame.RhythmGame
                 }
             }
 
-			if (maxScoreBeforeNormalization == 0)
-			{
-				// Not sure how this should be possible but ok
+            if (maxScoreBeforeNormalization == 0)
+            {
+                // Not sure how this should be possible but ok
                 return 0;
             }
 
-			// Int conversion should be safe as max score is 1,000,000
-			// (unless we fucked something up, then exception is appropriate anyway)
+            // Int conversion should be safe as max score is 1,000,000
+            // (unless we fucked something up, then exception is appropriate anyway)
             return Convert.ToInt32((scoreBeforeNormalization * 1_000_000L) / maxScoreBeforeNormalization);
         }
 
@@ -85,11 +85,11 @@ namespace SaturnGame.RhythmGame
 
         bool segmentsOverlap(Note note1, Note note2)
         {
-			if (note1.Left == note1.Right || note2.Left == note2.Right)
-			{
-				// Full circle notes always overlap
-				return true;
-			}
+            if (note1.Left == note1.Right || note2.Left == note2.Right)
+            {
+                // Full circle notes always overlap
+                return true;
+            }
 
             // Bonus reading: https://fgiesen.wordpress.com/2015/09/24/intervals-in-modular-arithmetic/
             // Each note is a half-open interval in mod60.
@@ -161,7 +161,7 @@ namespace SaturnGame.RhythmGame
         // all notes whose windows have already fully passed or who have been hit.
         int minNoteIndex = 0;
         List<HoldNote> activeHolds = new();
-		TouchState prevTouchState;
+        TouchState prevTouchState;
         // TODO: This is currently super basic and assumes all the notes are touch notes.
         void HandleInput(float hitTimeMs, TouchState touchState)
         {
@@ -376,15 +376,15 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-			finally
-			{
+            finally
+            {
                 prevTouchState = touchState;
             }
         }
 
-		public void NewTouchState(TouchState touchState) {
-			HandleInput(timeManager.VisualTime, touchState);
-		}
+        public void NewTouchState(TouchState touchState) {
+            HandleInput(timeManager.VisualTime, touchState);
+        }
 
         void Update()
         {

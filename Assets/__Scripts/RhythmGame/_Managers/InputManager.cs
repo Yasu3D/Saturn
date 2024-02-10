@@ -24,7 +24,7 @@ namespace SaturnGame.RhythmGame
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
-			// Initializes to all false.
+            // Initializes to all false.
             var segments = new bool[60, 4];
             if (Input.GetKey("[6]"))
             {
@@ -164,30 +164,30 @@ namespace SaturnGame.RhythmGame
             return _segments[rotation, depth];
         }
 
-		public bool RotationPressedAtAnyDepth(int rotation)
-		{
+        public bool RotationPressedAtAnyDepth(int rotation)
+        {
             foreach (int depth in Enumerable.Range(0, 4))
-			{
-				if (IsPressed(rotation, depth))
-				{
+            {
+                if (IsPressed(rotation, depth))
+                {
                     return true;
                 }
-			}
+            }
             return false;
         }
 
-		/// <summary>
-		/// SegmentsPressedSince returns a new TouchState that only marks newly activated segments,
-		/// when compared to the provided previous state.
-		/// <summary>
-		public TouchState SegmentsPressedSince(TouchState previous) {
-			// Initializes to all false.
+        /// <summary>
+        /// SegmentsPressedSince returns a new TouchState that only marks newly activated segments,
+        /// when compared to the provided previous state.
+        /// <summary>
+        public TouchState SegmentsPressedSince(TouchState previous) {
+            // Initializes to all false.
             bool[,] segments = new bool[60, 4];
             foreach (int i in Enumerable.Range(0, _segments.GetLength(0)))
             {
                 foreach (int j in Enumerable.Range(0, _segments.GetLength(1)))
                 {
-					if (previous is null || (IsPressed(i, j) && !previous.IsPressed(i, j)))
+                    if (previous is null || (IsPressed(i, j) && !previous.IsPressed(i, j)))
                     {
                         segments[i, j] = true;
                     }
