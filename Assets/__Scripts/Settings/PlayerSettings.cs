@@ -106,14 +106,14 @@ namespace SaturnGame.Settings
                 "ChainNoteVolume" => SoundSettings.ChainNoteVolume,
                 "BonusEffectVolume" => SoundSettings.BonusEffectVolume,
                 "RNoteEffectVolume" => SoundSettings.RNoteEffectVolume,
-                _ => 0,
+                _ => -1,
             };
         }
     }
 
     [System.Serializable] public class GameSettings
     {
-        public int NoteSpeed = 5;
+        public int NoteSpeed = 15;
         public int JudgementOffset;
         public int MaskDensity;
         public int BackgroundVideoSetting;
@@ -157,7 +157,7 @@ namespace SaturnGame.Settings
     {
         public int TouchSE;
         public int BGMVolume = 100;
-        public int NavigatorMenuVolume = 30;
+        public int GuideVolume = 30;
         public int TouchNoteVolume = 80;
         public int HoldNoteVolume = 80;
         public int SlideNoteVolume = 80;
