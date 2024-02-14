@@ -51,7 +51,7 @@ namespace SaturnGame.Settings
 
                 case "TouchSE": SoundSettings.TouchSE = value; break;
                 case "BGMVolume": SoundSettings.BGMVolume = value; break;
-                case "NavigatorMenuVolume": SoundSettings.GuideVolume = value; break;
+                case "GuideVolume": SoundSettings.GuideVolume = value; break;
                 case "TouchNoteVolume": SoundSettings.TouchNoteVolume = value; break;
                 case "HoldNoteVolume": SoundSettings.HoldNoteVolume = value; break;
                 case "SlideNoteVolume": SoundSettings.SlideNoteVolume = value; break;
