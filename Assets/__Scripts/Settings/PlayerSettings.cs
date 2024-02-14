@@ -98,7 +98,7 @@ namespace SaturnGame.Settings
                 "ShowR_NoteEffect" => DesignSettings.ShowR_NoteEffect,
                 "TouchSE" => SoundSettings.TouchSE,
                 "BGMVolume" => SoundSettings.BGMVolume,
-                "NavigatorMenuVolume" => SoundSettings.NavigatorMenuVolume,
+                "GuideVolume" => SoundSettings.GuideVolume,
                 "TouchNoteVolume" => SoundSettings.TouchNoteVolume,
                 "HoldNoteVolume" => SoundSettings.HoldNoteVolume,
                 "SlideNoteVolume" => SoundSettings.SlideNoteVolume,
