@@ -16,65 +16,65 @@ MonoBehaviour:
   ScreenType: 1
   ListItems:
   - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: NOTE SPEED
     Subtitle: 
-    Binding: NoteSpeed
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
+    SettingsBinding: NoteSpeed
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
-  - SubtitleType: 0
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: JUDGEMENT OFFSET
     Subtitle: 
-    Binding: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
-    NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsBinding: JudgementOffset
+    NextScreen: {fileID: 11400000, guid: bf4fd6011eadc204f9538ff6a7af6d08, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
   - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: MASK DENSITY
     Subtitle: 
-    Binding: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0
   - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: BACKGROUND VIDEO
     Subtitle: 
-    Binding: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0
   - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: BONUS EFFECT
     Subtitle: 
-    Binding: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0
   - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: MIRROR NOTES
     Subtitle: 
-    Binding: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0
   - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Title: GIVE UP
     Subtitle: 
-    Binding: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    ItemType: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,7 +32,7 @@ namespace SaturnGame.UI
         {
             screenStack.Push(startScreen);
             panelAnimator.GetPanels(startScreen);
-            panelAnimator.SetSelectedPanel(startScreen.ListItems[currentIndex]);
+            panelAnimator.SetPrimaryPanel(startScreen.ListItems[currentIndex]);
         }
 
         public async void OnConfirm()
@@ -55,7 +53,7 @@ namespace SaturnGame.UI
 
             await Awaitable.WaitForSecondsAsync(0.25f);
             panelAnimator.GetPanels(currentScreen);
-            panelAnimator.SetSelectedPanel(currentScreen.ListItems[0]);
+            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[0]);
             panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
             state = MenuState.Idle;
         }
@@ -84,7 +82,7 @@ namespace SaturnGame.UI
 
             await Awaitable.WaitForSecondsAsync(0.25f);
             panelAnimator.GetPanels(currentScreen, currentIndex);
-            panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
             panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
             state = MenuState.Idle;
         }
@@ -102,7 +100,7 @@ namespace SaturnGame.UI
             }
 
             panelAnimator.Anim_ShiftPanels(currentIndex, currentScreen);
-            panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
         }
         
         public void OnNavigateRight()
@@ -118,7 +116,7 @@ namespace SaturnGame.UI
             }
 
             panelAnimator.Anim_ShiftPanels(currentIndex, currentScreen);
-            panelAnimator.SetSelectedPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
         }
 
         public void OnDefault() {}

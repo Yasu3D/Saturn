@@ -15,31 +15,48 @@ MonoBehaviour:
   Name: Root
   ScreenType: 0
   ListItems:
-  - Title: GAMEPLAY SETTINGS
+  - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: GAMEPLAY SETTINGS
     Subtitle: SET NOTE SPEED, MASK, ETC.
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Type: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: f62703ec9daf9794b9788f03366cd0db, type: 2}
-    Paramter: 
-    Value: 0
-  - Title: UI SETTINGS
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: UI SETTINGS
     Subtitle: SET JUDGEMENT INFO, LANE TYPE, ETC.
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Type: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 25bbd3b8b48e4aa44a469a8aa70ecbe9, type: 2}
-    Paramter: 
-    Value: 0
-  - Title: DESIGN SETTINGS
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: DESIGN SETTINGS
     Subtitle: SET NOTE COLOR, LIGHT COLOR, ETC.
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Type: 1
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 5fd7cb7cef866904b8c3034047e6a1b3, type: 2}
-    Paramter: 
-    Value: 0
-  - Title: SOUND SETTINGS
-    Subtitle: SET VOLUME, HITSOUNDS, ETC.
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Type: 1
+    Title: SOUND SETTINGS
+    Subtitle: SET VOLUME, HITSOUNDS, ETC.
+    SettingsBinding: 
     NextScreen: {fileID: 11400000, guid: 5446df24b2aad9447a4fbfd96a6ebdd6, type: 2}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: TEST
+    Subtitle: 'DEBUGGING :]'
+    SettingsBinding: 
+    NextScreen: {fileID: 11400000, guid: bddaf010bd5879f458d77a76346f1a79, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0

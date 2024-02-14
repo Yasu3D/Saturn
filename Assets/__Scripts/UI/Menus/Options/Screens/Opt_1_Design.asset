@@ -15,10 +15,12 @@ MonoBehaviour:
   Name: Design
   ScreenType: 0
   ListItems:
-  - Title: Design
-    Subtitle: 
+  - SubtitleType: 0
+    ItemType: 0
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Type: 0
+    Title: Design
+    Subtitle: 
+    SettingsBinding: 
     NextScreen: {fileID: 0}
-    Paramter: 
-    Value: 0
+    SettingsParameter: 
+    SettingsValue: 0

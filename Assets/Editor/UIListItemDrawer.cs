@@ -10,30 +10,32 @@ public class UIListItemDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
         EditorGUI.indentLevel++;
 
-        SerializedProperty title = property.FindPropertyRelative("Title");
         SerializedProperty subtitleType = property.FindPropertyRelative("SubtitleType");
-        SerializedProperty color = property.FindPropertyRelative("Color");
         SerializedProperty itemType = property.FindPropertyRelative("ItemType");
+        SerializedProperty title = property.FindPropertyRelative("Title");
+        SerializedProperty color = property.FindPropertyRelative("Color");
 
-        EditorGUILayout.PropertyField(title);
-        EditorGUILayout.Space();
         EditorGUILayout.PropertyField(subtitleType);
+        EditorGUILayout.PropertyField(itemType);
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(color);
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(title);
 
-        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Text)
+        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Static)
         {
             SerializedProperty subtitle = property.FindPropertyRelative("Subtitle");
             EditorGUILayout.PropertyField(subtitle);
         }
 
-        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Binding)
+        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Dynamic)
         {
-            SerializedProperty binding = property.FindPropertyRelative("Binding");
-            EditorGUILayout.PropertyField(binding);
+            SerializedProperty settingsBinding = property.FindPropertyRelative("SettingsBinding");
+            EditorGUILayout.PropertyField(settingsBinding);
         }
 
-        EditorGUILayout.PropertyField(color);
         EditorGUILayout.Space();
-        EditorGUILayout.PropertyField(itemType);
+
 
         if (itemType.enumValueIndex == (int)UIListItem.ItemTypes.SubMenu)
         {
@@ -43,11 +45,11 @@ public class UIListItemDrawer : PropertyDrawer
 
         else if (itemType.enumValueIndex == (int)UIListItem.ItemTypes.ValueSetter)
         {
-            SerializedProperty parameter = property.FindPropertyRelative("Paramter");
-            SerializedProperty value = property.FindPropertyRelative("Value");
+            SerializedProperty settingsParameter = property.FindPropertyRelative("SettingsParameter");
+            SerializedProperty settingsValue = property.FindPropertyRelative("SettingsValue");
 
-            EditorGUILayout.PropertyField(parameter);
-            EditorGUILayout.PropertyField(value);
+            EditorGUILayout.PropertyField(settingsParameter);
+            EditorGUILayout.PropertyField(settingsValue);
         }
 
         EditorGUI.indentLevel--;

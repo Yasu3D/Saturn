@@ -1,21 +1,22 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UI;
 using SaturnGame.Settings;
-using static UnityEngine.Rendering.DebugUI;
-using UnityEditorInternal.VersionControl;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 namespace SaturnGame.UI
 {
     public class OptionsPanelAnimator : MonoBehaviour
     {
-        [SerializeField] private UIPanelObjectPool panelPool;
-        [SerializeField] private RectTransform activePanels;
+        [SerializeField] private GameObject linearPanelGroup;
+        [SerializeField] private GameObject radialPanelGroup;
 
-        [SerializeField] private OptionPanel primaryPanel;
+        [SerializeField] private List<OptionPanelLinear> linearPanels;
+        [SerializeField] private List<OptionPanelRadial> radialPanels;
+
+        [SerializeField] private OptionPanelPrimary primaryPanel;
 
         [SerializeField] private CanvasGroup panelGroup;
         [SerializeField] private RectTransform panelGroupRect;
@@ -43,11 +44,53 @@ namespace SaturnGame.UI
             const float duration = 0.05f;
             Ease ease = Ease.Linear;
 
-            for (int i = 0; i < panelPool.ActiveObjects.Count; i++)
+            if (screen.ScreenType is UIScreen.UIScreenType.Radial) animateRadial();
+            else animateLinear();
+
+            void animateLinear()
             {
-                int distance = i - selectedIndex;
-                int sign = (int)Mathf.Sign(distance);
-                var panel = panelPool.ActiveObjects[i];
+                for (int i = 0; i < linearPanels.Count; i++)
+                {
+                    if (i >= screen.ListItems.Count) break;
+
+                    var panel = linearPanels[i];
+                    int distance = i - selectedIndex;
+                    int sign = (int)Mathf.Sign(distance);
+
+                    if (screen.ListItems.Count > linearPanels.Count)
+                    {
+                        // Loop logic still needs to go here.
+                        // Basically: if a panel reaches a distance of 4 / -4, it should
+                        // be teleported to the opposite side.
+                        //
+                        // If there's a new item in the list available at that position, update panel.
+                        // If there's no more items available, set panel inactive.
+                        //
+                        // I suspect this method will need to know what direction you're moving in.
+                    }
+                    else
+                    {
+                        int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
+                        Vector2 position = new(positionsX[index], sign * positionsY[index]);
+                        float scale = scales[index];
+
+                        panel.rect.DOAnchorPos(position, duration).SetEase(ease);
+                        panel.rect.DOScale(scale, duration).SetEase(ease);
+                    }
+                }
+            }
+
+            void animateRadial()
+            {
+                for (int i = 0; i < radialPanels.Count; i++)
+                {
+                    // Will handle radial soon.
+                }
+            }
+
+            /*for (int i = 0; i < panelPool.ActiveObjects.Count; i++)
+            {
+                
 
                 if (screen.ScreenType is not UIScreen.UIScreenType.Radial)
                 {
@@ -55,6 +98,7 @@ namespace SaturnGame.UI
                     Vector2 position = new(positionsX[index], sign * positionsY[index]);
                     float scale = scales[index];
 
+                    panel.gameObject.SetActive(Mathf.Abs(distance) >= 0 && Mathf.Abs(distance) <= 3);
                     panel.rect.DOAnchorPos(position, duration).SetEase(ease);
                     panel.rect.DOScale(scale, duration).SetEase(ease);
                 }
@@ -67,9 +111,10 @@ namespace SaturnGame.UI
                     int index = Mathf.Clamp(distance + 5, 0, 17);
                     float angle = angles[index];
 
+                    panel.gameObject.SetActive(distance + 5 >= 0 && distance + 5 <= 17);
                     panel.rect.DORotate(new Vector3(0, 0, angle), duration, RotateMode.Fast).SetEase(ease);
                 }
-            }
+            }*/
         }
 
         public void Anim_ShowPanels(UIScreen previous, UIScreen next)
@@ -79,19 +124,16 @@ namespace SaturnGame.UI
 
             if (!nextLinear)
             {
-                Debug.Log("Show Radial");
                 Anim_ShowPanelsRadial();
                 return;
             }
 
             if (prevLinear)
             {
-                Debug.Log("Show Partial");
                 Anim_ShowPanelsLinearPartial();
             }
             else
             {
-                Debug.Log("Show Full");
                 Anim_ShowPanelsLinearFull();
             }
 
@@ -108,19 +150,16 @@ namespace SaturnGame.UI
 
             if (!prevLinear)
             {
-                Debug.Log("Hide Radial");
                 Anim_HidePanelsRadial();
                 return;
             }
             
             if (nextLinear)
             {
-                Debug.Log("Hide Partial");
                 Anim_HidePanelsLinearPartial();
             }
             else
             {
-                Debug.Log("Hide Full");
                 Anim_HidePanelsLinearFull();
             }
 
@@ -330,99 +369,125 @@ namespace SaturnGame.UI
         }
 
 
-        public void SetSelectedPanel(UIListItem item)
+        public void SetPrimaryPanel(UIListItem item)
         {
+            bool dynamic = item.ItemType is UIListItem.ItemTypes.SubMenu && item.SubtitleType is UIListItem.SubtitleTypes.Dynamic;
+
             primaryPanel.Title = item.Title;
-
-            if (item.SubtitleType is UIListItem.SubtitleTypes.Text)
-                primaryPanel.Subtitle = item.Subtitle;
-
-            // This is really really hacky and bad. So.. WIP I guess?
-            if (item.ItemType is UIListItem.ItemTypes.SubMenu && item.SubtitleType is UIListItem.SubtitleTypes.Binding && item.Binding != "")
-            {
-                int settingsValue = SettingsManager.Instance.PlayerSettings.GetParameter(item.Binding);
-                string subtitle = item.NextScreen.ListItems[settingsValue].Title;
-                primaryPanel.Subtitle = subtitle;
-            }
-
+            primaryPanel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
             primaryPanel.SetRadialPanelColor(item);
         }
 
         public void GetPanels(UIScreen screen, int selectedIndex = 0)
         {
-            int activeCount = panelPool.ActiveObjects.Count;
-            int newCount = screen.ListItems.Count;
-            int difference = activeCount - newCount;
+            selectedIndex = Mathf.Clamp(selectedIndex, 0, screen.ListItems.Count);
 
-            switch (difference)
+            int itemCount = screen.ListItems.Count;
+            if (itemCount == 0) return;
+
+            if (screen.ScreenType is UIScreen.UIScreenType.Radial) getRadial();
+            else getLinear();
+
+            void getLinear()
             {
-                case > 0:
-                    for (int i = 0; i < difference; i++)
-                        panelPool.ReleaseObject(panelPool.ActiveObjects[0]);
-                    break;
+                linearPanelGroup.SetActive(true);
+                radialPanelGroup.SetActive(false);
 
-                case < 0:
-                    for (int i = 0; i < -difference; i++)
+                SetPrimaryPanel(screen.ListItems[selectedIndex]);
+                primaryPanel.SetType(screen.ScreenType);
+
+                for (int i = 0; i < linearPanels.Count; i++)
+                {
+                    var panel = linearPanels[i];
+
+                    if (i >= screen.ListItems.Count)
                     {
-                        var panel = panelPool.GetObject();
-                        panel.rect.SetParent(activePanels);
-                        panel.gameObject.SetActive(true);
+                        panel.gameObject.SetActive(false);
+                        continue;
                     }
-                    break;
 
-                default:
-                    break;
-            }
+                    int distance = i - selectedIndex;
+                    int sign = (int)Mathf.Sign(distance);
+                    var item = screen.ListItems[i];
+                    bool dynamic = item.ItemType is UIListItem.ItemTypes.SubMenu && item.SubtitleType is UIListItem.SubtitleTypes.Dynamic;
 
-            for (int i = 0; i < panelPool.ActiveObjects.Count; i++)
-            {
-                var panel = panelPool.ActiveObjects[i];
-                var listItem = screen.ListItems[i];
+                    panel.Title = item.Title;
+                    panel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
+                    panel.SetType(screen.ScreenType);
 
-
-                panel.Title = listItem.Title;
-
-                if (listItem.SubtitleType is UIListItem.SubtitleTypes.Text)
-                    panel.Subtitle = listItem.Subtitle;
-
-                // This is really really hacky and bad. So.. WIP I guess?
-                if (listItem.ItemType is UIListItem.ItemTypes.SubMenu && listItem.SubtitleType is UIListItem.SubtitleTypes.Binding && listItem.Binding != "")
-                {
-                    int settingsValue = SettingsManager.Instance.PlayerSettings.GetParameter(listItem.Binding);
-                    string subtitle = listItem.NextScreen.ListItems[settingsValue].Title;
-                    panel.Subtitle = subtitle;
-                }
-
-                panel.SetType(screen.ScreenType);
-                panel.SetRadialPanelColor(listItem);
-
-                int distance = i - selectedIndex;
-                int sign = (int) Mathf.Sign(distance);
-
-                if (screen.ScreenType is UIScreen.UIScreenType.Radial)
-                {
-                    panel.rect.anchoredPosition = centerPoint;
-                    panel.rect.localScale = Vector3.one;
-
-                    int index = Mathf.Clamp(distance + 5, 0, 17);
-                    float angle = angles[index];
-
-                    panel.rect.eulerAngles = new Vector3(0, 0, angle);
-                }
-
-                if (screen.ScreenType is not UIScreen.UIScreenType.Radial)
-                {
                     int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
                     Vector2 position = new(positionsX[index], sign * positionsY[index]);
                     float scale = scales[index];
 
-                    panel.rect.eulerAngles = Vector3.zero;
                     panel.rect.anchoredPosition = position;
                     panel.rect.localScale = Vector3.one * scale;
+                    panel.gameObject.SetActive(true);
                 }
             }
 
-            primaryPanel.SetType(screen.ScreenType);
+            void getRadial()
+            {
+                linearPanelGroup.SetActive(false);
+                radialPanelGroup.SetActive(true);
+
+                SetPrimaryPanel(screen.ListItems[selectedIndex]);
+                primaryPanel.SetType(screen.ScreenType);
+
+                for (int i = 0; i < radialPanels.Count; i++)
+                {
+                    var panel = radialPanels[i];
+
+                    if (i >= screen.ListItems.Count)
+                    {
+                        panel.gameObject.SetActive(false);
+                        continue;
+                    }
+
+                    int distance = i - selectedIndex;
+                    var item = screen.ListItems[i];
+
+                    panel.Title = item.Title;
+                    panel.SetRadialPanelColor(item);
+
+                    int index = Mathf.Clamp(Mathf.Abs(distance + 5), 0, 17);
+                    float angle = angles[index];
+                    panel.rect.eulerAngles = new Vector3(0, 0, angle);
+                    panel.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        private string GetSelectedString(UIListItem item)
+        {
+            int settingsIndex = SettingsManager.Instance.PlayerSettings.GetParameter(item.SettingsBinding);
+
+            if (settingsIndex == -1)
+            {
+                Debug.LogWarning($"Setting \"{item.SettingsBinding}\" was not found!");
+                return "???";
+            }
+
+            if (item.NextScreen == null)
+            {
+                Debug.LogWarning($"NextScreen of [{item.Title}] has not been set!");
+                return "???";
+            }
+
+            if (item.NextScreen.ListItems.Count == 0)
+            {
+                Debug.LogWarning($"NextScreen of [{item.Title}] has no List Items!");
+                return "???";
+            }
+
+            var selectedItem = item.NextScreen.ListItems.FirstOrDefault(x => x.SettingsValue == settingsIndex);
+
+            if (selectedItem == null)
+            {
+                Debug.LogWarning($"No item with matching index [{settingsIndex}] was found!");
+                return "???";
+            }
+
+            return selectedItem.Title;
         }
     }
 }

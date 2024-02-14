@@ -535,9 +535,9 @@ namespace SaturnGame.RhythmGame
         {
             // A Note scrolling from it's spawn point to the judgement line at NoteSpeed 1.0 takes
             // approximately 3266.667 milliseconds. This is 10x that, because
-            // NoteSpeed is stored as an integer that's 10x the actual value minus 10.
+            // NoteSpeed is stored as an integer that's 10x the actual value.
 
-            return 32660.667f / SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed + 10;
+            return 32660.667f / SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
         }
 
         private float ScaledVisualTime()

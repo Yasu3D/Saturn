@@ -510,7 +510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4702381540137013221}
   - component: {fileID: 6497793632552354807}
-  - component: {fileID: 6175113738615450991}
+  - component: {fileID: 7769524707522176633}
   m_Layer: 5
   m_Name: OptionPrimary
   m_TagString: Untagged
@@ -547,7 +547,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6032423725477638825}
   m_CullTransparentMesh: 1
---- !u!114 &6175113738615450991
+--- !u!114 &7769524707522176633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -556,16 +556,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6032423725477638825}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e26b55a79a33487459ecbe189e17bdde, type: 3}
+  m_Script: {fileID: 11500000, guid: c602df849e0609c4a8208a4aca98ae9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 4702381540137013221}
   title0TMP: {fileID: 7189507021861216674}
   title1TMP: {fileID: 753375254652050700}
-  title2TMP: {fileID: 0}
   subtitleTMP: {fileID: 4758129244237472225}
-  simple: {fileID: 3501265625366255392}
-  detailed: {fileID: 0}
+  linear: {fileID: 3501265625366255392}
   radial: {fileID: 7351664631858878892}
   radialPanel: {fileID: 5799858868757036875}
 --- !u!1 &6266888880392232104

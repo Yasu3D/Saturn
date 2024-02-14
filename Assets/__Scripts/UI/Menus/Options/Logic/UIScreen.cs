@@ -31,23 +31,22 @@ namespace SaturnGame.UI
 
         public enum SubtitleTypes
         {
-            Text,
-            Binding
+            Static,
+            Dynamic
         }
 
         public SubtitleTypes SubtitleType;
-        public string Title;
-        public string Subtitle;
-        public string Binding;
-
-        public Color Color;
         public ItemTypes ItemType;
 
-        // These should only be visible when Type is set to SubMenu.
+        public Color Color;
+        public string Title;
+        public string Subtitle;
+
+        public string SettingsBinding;
+
         public UIScreen NextScreen;
 
-        // These should only be visible when Type is set to ValueSetter.
-        public string Paramter;
-        public int Value;
+        public string SettingsParameter;
+        public int SettingsValue;
     }
 }
