@@ -93,13 +93,11 @@ namespace SaturnGame.UI
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
 
             int newIndex = Mathf.Max(currentIndex - 1, 0);
-            if (currentIndex != newIndex)
-            {
-                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
-                currentIndex = newIndex;
-            }
+            if (currentIndex == newIndex) return;
 
-            panelAnimator.Anim_ShiftPanels(currentIndex, currentScreen);
+            currentIndex = newIndex;
+            UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+            panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, currentIndex, currentScreen);
             panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
         }
         
@@ -109,13 +107,11 @@ namespace SaturnGame.UI
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
 
             int newIndex = Mathf.Min(currentIndex + 1, currentScreen.ListItems.Count - 1);
-            if (currentIndex != newIndex)
-            {
-                UIAudio.PlaySound(UIAudioController.UISound.Navigate);
-                currentIndex = newIndex;
-            }
+            if (currentIndex == newIndex) return;
 
-            panelAnimator.Anim_ShiftPanels(currentIndex, currentScreen);
+            currentIndex = newIndex;
+            UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+            panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Down, currentIndex, currentScreen);
             panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
         }
 

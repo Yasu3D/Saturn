@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 namespace SaturnGame.UI
 {
+    // TODO: A LOT OF CLEANUP
+
     public class OptionsPanelAnimator : MonoBehaviour
     {
         [SerializeField] private GameObject linearPanelGroup;
@@ -17,7 +18,6 @@ namespace SaturnGame.UI
         [SerializeField] private List<OptionPanelRadial> radialPanels;
 
         [SerializeField] private OptionPanelPrimary primaryPanel;
-
         [SerializeField] private CanvasGroup panelGroup;
         [SerializeField] private RectTransform panelGroupRect;
         [SerializeField] private RectTransform gradientRect;
@@ -32,14 +32,17 @@ namespace SaturnGame.UI
 
         private Sequence currentSequence;
 
-        private float[] positionsY = { 0, -150, -250, -350 };
-        private float[] positionsX = { 20, 20, 55, 120 };
-        private float[] scales = { 1, 1, 0.85f, 0.85f };
-
         private float[] angles = { -99, -81, -63, -45, -27, 0, 27, 45, 63, 81, 99, 117, 135, 153, 171, 189, 207, 225 };
         private Vector2 centerPoint = new(0, 0);
 
-        public void Anim_ShiftPanels(int selectedIndex, UIScreen screen)
+        public int LinearCenterIndex { get; private set; } = 0;
+        public int LinearWrapIndex { get; private set; } = 0;
+        public int LinearHalfCount => (int)(linearPanels.Count * 0.5f);
+        public int RadialHalfCount => (int)(radialPanels.Count * 0.5f);
+
+        public enum MoveDirection { Up = -1, Down = 1 }
+
+        public void Anim_ShiftPanels(MoveDirection direction, int currentIndex, UIScreen screen)
         {
             const float duration = 0.05f;
             Ease ease = Ease.Linear;
@@ -49,30 +52,48 @@ namespace SaturnGame.UI
 
             void animateLinear()
             {
+                LinearCenterIndex = SaturnMath.Modulo(LinearCenterIndex + (int)direction, linearPanels.Count);
+                LinearWrapIndex = SaturnMath.Modulo(LinearCenterIndex + LinearHalfCount * (int)direction, linearPanels.Count);
+
                 for (int i = 0; i < linearPanels.Count; i++)
                 {
                     if (i >= screen.ListItems.Count) break;
 
                     var panel = linearPanels[i];
-                    int distance = i - selectedIndex;
-                    int sign = (int)Mathf.Sign(distance);
-
+                    
                     if (screen.ListItems.Count > linearPanels.Count)
                     {
-                        // Loop logic still needs to go here.
-                        // Basically: if a panel reaches a distance of 4 / -4, it should
-                        // be teleported to the opposite side.
-                        //
-                        // If there's a new item in the list available at that position, update panel.
-                        // If there's no more items available, set panel inactive.
-                        //
-                        // I suspect this method will need to know what direction you're moving in.
+                        int index = SaturnMath.Modulo(LinearHalfCount - LinearCenterIndex + i, linearPanels.Count);
+                        bool snap = i == LinearWrapIndex;
+
+                        Vector2 position = GetLinearPosition(index);
+                        float scale = GetLinearScale(index);
+                        float snapDuration = snap ? 0 : duration;
+
+                        panel.rect.DOAnchorPos(position, snapDuration).SetEase(ease);
+                        panel.rect.DOScale(scale, snapDuration).SetEase(ease);
+
+                        
+                        int newItemIndex = currentIndex + LinearHalfCount * (int)direction;
+
+                        if (!snap) continue;
+
+                        if (newItemIndex < 0 || newItemIndex >= screen.ListItems.Count)
+                        {
+                            panel.gameObject.SetActive(false);
+                        }
+                        else
+                        {
+                            panel.gameObject.SetActive(true);
+                            SetPanelLinear(screen, screen.ListItems[newItemIndex], panel);
+                        }
                     }
                     else
                     {
-                        int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
-                        Vector2 position = new(positionsX[index], sign * positionsY[index]);
-                        float scale = scales[index];
+                        int index = Mathf.Clamp(LinearHalfCount - LinearCenterIndex + i, 0, 6);
+
+                        Vector2 position = GetLinearPosition(index);
+                        float scale = GetLinearScale(index);
 
                         panel.rect.DOAnchorPos(position, duration).SetEase(ease);
                         panel.rect.DOScale(scale, duration).SetEase(ease);
@@ -378,9 +399,11 @@ namespace SaturnGame.UI
             primaryPanel.SetRadialPanelColor(item);
         }
 
-        public void GetPanels(UIScreen screen, int selectedIndex = 0)
+        public void GetPanels(UIScreen screen, int currentIndex = 0)
         {
-            selectedIndex = Mathf.Clamp(selectedIndex, 0, screen.ListItems.Count);
+            // TODO: Make GetPanels set panels active/inactive properly.
+
+            currentIndex = Mathf.Clamp(currentIndex, 0, screen.ListItems.Count);
 
             int itemCount = screen.ListItems.Count;
             if (itemCount == 0) return;
@@ -393,8 +416,10 @@ namespace SaturnGame.UI
                 linearPanelGroup.SetActive(true);
                 radialPanelGroup.SetActive(false);
 
-                SetPrimaryPanel(screen.ListItems[selectedIndex]);
+                SetPrimaryPanel(screen.ListItems[currentIndex]);
                 primaryPanel.SetType(screen.ScreenType);
+
+                LinearCenterIndex = SaturnMath.Modulo(currentIndex, linearPanels.Count);
 
                 for (int i = 0; i < linearPanels.Count; i++)
                 {
@@ -406,31 +431,27 @@ namespace SaturnGame.UI
                         continue;
                     }
 
-                    int distance = i - selectedIndex;
-                    int sign = (int)Mathf.Sign(distance);
+                    int distance = i - currentIndex;
                     var item = screen.ListItems[i];
-                    bool dynamic = item.ItemType is UIListItem.ItemTypes.SubMenu && item.SubtitleType is UIListItem.SubtitleTypes.Dynamic;
+                    SetPanelLinear(screen, item, panel);
 
-                    panel.Title = item.Title;
-                    panel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
-                    panel.SetType(screen.ScreenType);
+                    int index = Mathf.Clamp(LinearHalfCount - LinearCenterIndex + i, 0, 6);
 
-                    int index = Mathf.Clamp(Mathf.Abs(distance), 0, 3);
-                    Vector2 position = new(positionsX[index], sign * positionsY[index]);
-                    float scale = scales[index];
+                    Vector2 position = GetLinearPosition(index);
+                    float scale = GetLinearScale(index);
 
                     panel.rect.anchoredPosition = position;
                     panel.rect.localScale = Vector3.one * scale;
                     panel.gameObject.SetActive(true);
-                }
             }
+        }
 
             void getRadial()
             {
                 linearPanelGroup.SetActive(false);
                 radialPanelGroup.SetActive(true);
 
-                SetPrimaryPanel(screen.ListItems[selectedIndex]);
+                SetPrimaryPanel(screen.ListItems[currentIndex]);
                 primaryPanel.SetType(screen.ScreenType);
 
                 for (int i = 0; i < radialPanels.Count; i++)
@@ -443,11 +464,10 @@ namespace SaturnGame.UI
                         continue;
                     }
 
-                    int distance = i - selectedIndex;
+                    int distance = i - currentIndex;
                     var item = screen.ListItems[i];
 
-                    panel.Title = item.Title;
-                    panel.SetRadialPanelColor(item);
+                    SetPanelRadial(item, panel);
 
                     int index = Mathf.Clamp(Mathf.Abs(distance + 5), 0, 17);
                     float angle = angles[index];
@@ -488,6 +508,35 @@ namespace SaturnGame.UI
             }
 
             return selectedItem.Title;
+        }
+
+
+        private Vector2 GetLinearPosition(int index)
+        {
+            float[] posX = { 120,   55,   20,   20,   20,   55,  120 };
+            float[] posY = { 350,  250,  150,    0, -150, -250, -350 };
+            return new(posX[index], posY[index]);
+        }
+
+        private float GetLinearScale(int index)
+        {
+            float[] scales = {0.85f, 0.85f, 1, 1, 1, 0.85f, 0.85f };
+            return scales[index];
+        }
+
+        private void SetPanelLinear(UIScreen screen, UIListItem item, OptionPanelLinear panel)
+        {
+            bool dynamic = item.ItemType is UIListItem.ItemTypes.SubMenu && item.SubtitleType is UIListItem.SubtitleTypes.Dynamic;
+
+            panel.Title = item.Title;
+            panel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
+            panel.SetType(screen.ScreenType);
+        }
+
+        private void SetPanelRadial(UIListItem item, OptionPanelRadial panel)
+        {
+            panel.Title = item.Title;
+            panel.SetRadialPanelColor(item);
         }
     }
 }
