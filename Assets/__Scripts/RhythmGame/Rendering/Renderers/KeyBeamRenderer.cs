@@ -16,8 +16,8 @@ namespace SaturnGame.Rendering
             TouchState touchState = inputManager.CurrentTouchState;
             if (touchState is null) return;
 
-            foreach (int rotation in Enumerable.Range(0, 60)) {
-                laneSegments[rotation].SetActive(touchState.RotationPressedAtAnyDepth(rotation));
+            foreach (int anglePos in Enumerable.Range(0, 60)) {
+                laneSegments[anglePos].SetActive(touchState.AnglePosPressedAtAnyDepth(anglePos));
             }
         }
     }

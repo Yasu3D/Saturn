@@ -32,6 +32,7 @@ namespace SaturnGame.RhythmGame
         /// <summary>
         /// Left is the beginning or "left side" of the interval represented in mod60.
         /// It is the clockwise-most segment of the note. Note that Left can be greater than Right.
+        /// This is a synonym for Position.
         /// </summary>
         public int Left => Position;
         /// <summary>
@@ -44,8 +45,8 @@ namespace SaturnGame.RhythmGame
         {
             foreach (int offset in Enumerable.Range(0, Size))
             {
-                int rotation = (Left + offset) % 60;
-                if (touchState.RotationPressedAtAnyDepth(rotation))
+                int anglePos = (Left + offset) % 60;
+                if (touchState.AnglePosPressedAtAnyDepth(anglePos))
                 {
                     return true;
                 }

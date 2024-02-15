@@ -125,9 +125,9 @@ namespace SaturnGame.RhythmGame
     public class TouchState
     {
         // Segments is a 2d array:
-        // - first index "rotation": rotational segment indicator using polar notation [0, 60)
+        // - first index "anglePos": angular segment indicator using polar notation [0, 60)
         //   (0 is on the right, the top is 14-15)
-        // - second index "depth": forward/backward segment indicator [0, 4), outside to inside
+        // - second index "depthPos": forward/backward segment indicator [0, 4), outside to inside
         //   (0 is the outermost segment, 3 is the innermost segment right up against the screen)
         private readonly bool[,] _segments;
 
@@ -159,16 +159,16 @@ namespace SaturnGame.RhythmGame
             return true;
         }
 
-        public bool IsPressed(int rotation, int depth)
+        public bool IsPressed(int anglePos, int depthPos)
         {
-            return _segments[rotation, depth];
+            return _segments[anglePos, depthPos];
         }
 
-        public bool RotationPressedAtAnyDepth(int rotation)
+        public bool AnglePosPressedAtAnyDepth(int anglePos)
         {
-            foreach (int depth in Enumerable.Range(0, 4))
+            foreach (int depthPos in Enumerable.Range(0, 4))
             {
-                if (IsPressed(rotation, depth))
+                if (IsPressed(anglePos, depthPos))
                 {
                     return true;
                 }
