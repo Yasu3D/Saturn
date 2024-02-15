@@ -226,7 +226,6 @@ namespace SaturnGame.RhythmGame
                         switch (note)
                         {
                             case SwipeNote:
-                            case SnapNote:
                             case TouchNote:
                                 if (note.Touched(newSegments))
                                 {
@@ -277,6 +276,119 @@ namespace SaturnGame.RhythmGame
                                             holdNote.LastHeldTimeMs = hitTimeMs;
                                             activeHolds.Add(holdNote);
 
+                                            LastJudgement = hitWindow.Judgement;
+                                            LastJudgementTimeMs = hitTimeMs;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            case SnapNote snapNote:
+                                // yeah yeah I know this needs to be broken up
+                                bool CheckDepthChangeInRange(int rangeLeft, int rangeSize)
+                                {
+                                    int? prevMin = null;
+                                    int? curMin = null;
+                                    int? prevMax = null;
+                                    int? curMax = null;
+                                    foreach (int offset in Enumerable.Range(0, rangeSize))
+                                    {
+                                        int anglePos = (rangeLeft + offset) % 60;
+                                        foreach (int depthPos in Enumerable.Range(0, 4))
+                                        {
+                                            if (prevTouchState.IsPressed(anglePos, depthPos))
+                                            {
+                                                if (prevMin is null || depthPos < prevMin)
+                                                {
+                                                    prevMin = depthPos;
+                                                }
+                                                if (prevMax is null || depthPos > prevMax)
+                                                {
+                                                    prevMax = depthPos;
+                                                }
+                                            }
+
+                                            if (touchState.IsPressed(anglePos, depthPos))
+                                            {
+                                                if (curMin is null || depthPos < curMin)
+                                                {
+                                                    curMin = depthPos;
+                                                }
+                                                if (curMax is null || depthPos > curMax)
+                                                {
+                                                    curMax = depthPos;
+                                                }
+                                            }
+                                            if (prevMax != curMax)
+                                            {
+                                                ShowDebugText($"prev {prevMax}\ncur {curMax}");
+                                            }
+                                        }
+                                    }
+
+                                    switch (snapNote.Direction)
+                                    {
+                                        case SnapNote.SnapDirection.Forward:
+                                            if (curMin is not null && prevMin is not null && curMin > prevMin)
+                                            {
+                                                return true;
+                                            }
+                                            if (curMax is not null && prevMax is not null && curMax > prevMax)
+                                            {
+                                                return true;
+                                            }
+                                            return false;
+                                        case SnapNote.SnapDirection.Backward:
+                                            if (curMin is not null && prevMin is not null && curMin < prevMin)
+                                            {
+                                                return true;
+                                            }
+                                            if (curMax is not null && prevMax is not null && curMax < prevMax)
+                                            {
+                                                return true;
+                                            }
+                                            return false;
+                                        default:
+                                            throw new Exception($"Unknown enum value {snapNote.Direction}");
+                                    }
+                                }
+
+                                bool hit = false;
+                                // Check if we have moved up/down on any specific anglePos.
+                                foreach (int offset in Enumerable.Range(0, snapNote.Size))
+                                {
+                                    int anglePos = (snapNote.Left + offset) % 60;
+                                    if (CheckDepthChangeInRange(anglePos, 1)) {
+                                        hit = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!hit)
+                                {
+                                    // Check if we have moved up/down on any range of two adjacent anglePos
+                                    foreach (int offset in Enumerable.Range(0, snapNote.Size - 1))
+                                    {
+                                        int rangeLeft = (snapNote.Left + offset) % 60;
+                                        if (CheckDepthChangeInRange(rangeLeft, 2))
+                                        {
+                                            hit = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (hit)
+                                {
+                                    // TODO: this is copy-pasted like 15 different places, fix it
+                                    float errorMs = hitTimeMs - snapNote.TimeMs;
+                                    ShowDebugText($"{noteScanIndex} (snap): {errorMs}");
+                                    foreach (HitWindow hitWindow in snapNote.HitWindows)
+                                    {
+                                        if (errorMs >= hitWindow.LeftMs && errorMs < hitWindow.RightMs)
+                                        {
+                                            snapNote.Judgement = hitWindow.Judgement;
+                                            snapNote.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
                                             break;
