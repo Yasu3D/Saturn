@@ -114,6 +114,39 @@ namespace SaturnGame.RhythmGame
                 }
             }
 
+            // Thank you, ChatGPT
+            // Top row (1-6)
+            if (Input.GetKey("1")) { segments[42, 3] = true; }
+            if (Input.GetKey("2")) { segments[43, 3] = true; }
+            if (Input.GetKey("3")) { segments[44, 3] = true; }
+            if (Input.GetKey("4")) { segments[45, 3] = true; }
+            if (Input.GetKey("5")) { segments[46, 3] = true; }
+            if (Input.GetKey("6")) { segments[47, 3] = true; }
+
+            // Second row (q to y, mapping directly below 1-6)
+            if (Input.GetKey("q")) { segments[42, 2] = true; }
+            if (Input.GetKey("w")) { segments[43, 2] = true; }
+            if (Input.GetKey("e")) { segments[44, 2] = true; }
+            if (Input.GetKey("r")) { segments[45, 2] = true; }
+            if (Input.GetKey("t")) { segments[46, 2] = true; }
+            if (Input.GetKey("y")) { segments[47, 2] = true; }
+
+            // Third row (a to h, mapping directly below q to y)
+            if (Input.GetKey("a")) { segments[42, 1] = true; }
+            if (Input.GetKey("s")) { segments[43, 1] = true; }
+            if (Input.GetKey("d")) { segments[44, 1] = true; }
+            if (Input.GetKey("f")) { segments[45, 1] = true; }
+            if (Input.GetKey("g")) { segments[46, 1] = true; }
+            if (Input.GetKey("h")) { segments[47, 1] = true; }
+
+            // Bottom row (z to n, mapping directly below a to h)
+            if (Input.GetKey("z")) { segments[42, 0] = true; }
+            if (Input.GetKey("x")) { segments[43, 0] = true; }
+            if (Input.GetKey("c")) { segments[44, 0] = true; }
+            if (Input.GetKey("v")) { segments[45, 0] = true; }
+            if (Input.GetKey("b")) { segments[46, 0] = true; }
+            if (Input.GetKey("n")) { segments[47, 0] = true; }
+
             CurrentTouchState = new TouchState(segments);
             scoringManager.NewTouchState(CurrentTouchState);
         }
@@ -125,9 +158,9 @@ namespace SaturnGame.RhythmGame
     public class TouchState
     {
         // Segments is a 2d array:
-        // - first index "rotation": rotational segment indicator using polar notation [0, 60)
+        // - first index "anglePos": angular segment indicator using polar notation [0, 60)
         //   (0 is on the right, the top is 14-15)
-        // - second index "depth": forward/backward segment indicator [0, 4), outside to inside
+        // - second index "depthPos": forward/backward segment indicator [0, 4), outside to inside
         //   (0 is the outermost segment, 3 is the innermost segment right up against the screen)
         private readonly bool[,] _segments;
 
@@ -159,16 +192,16 @@ namespace SaturnGame.RhythmGame
             return true;
         }
 
-        public bool IsPressed(int rotation, int depth)
+        public bool IsPressed(int anglePos, int depthPos)
         {
-            return _segments[rotation, depth];
+            return _segments[anglePos, depthPos];
         }
 
-        public bool RotationPressedAtAnyDepth(int rotation)
+        public bool AnglePosPressedAtAnyDepth(int anglePos)
         {
-            foreach (int depth in Enumerable.Range(0, 4))
+            foreach (int depthPos in Enumerable.Range(0, 4))
             {
-                if (IsPressed(rotation, depth))
+                if (IsPressed(anglePos, depthPos))
                 {
                     return true;
                 }
