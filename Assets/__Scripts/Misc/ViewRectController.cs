@@ -1,4 +1,6 @@
 using SaturnGame.Settings;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +14,22 @@ public class ViewRectController : MonoBehaviour
 
     void Awake()
     {
+        Screen.fullScreen = false;
+        List<DisplayInfo> displays = new();
+        Screen.GetDisplayLayout(displays);
+        foreach (DisplayInfo display in displays)
+        {
+            if (display.height > display.width)
+            {
+                Screen.MoveMainWindowTo(display, Vector2Int.zero);
+                break;
+            }
+        }
+        var resolution = Screen.resolutions
+            .OrderByDescending(r => r.height)
+            .ThenByDescending(r => r.width)
+            .First();
+        Screen.SetResolution(resolution.width, resolution.height, true);
         OnUpdateViewRect();
     }
 
