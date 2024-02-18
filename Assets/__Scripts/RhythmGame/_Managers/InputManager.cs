@@ -1,22 +1,209 @@
 using System;
 using System.Linq;
+using System.IO.Ports;
 using UnityEngine;
+using System.Threading;
+using System.Text;
 
 namespace SaturnGame.RhythmGame
 {
 
     public class InputManager : MonoBehaviour
     {
+        [SerializeField] private bool UseTouchController;
+
         [Header("MANAGERS")]
         [SerializeField] private ScoringManager scoringManager;
         [SerializeField] private BgmManager bgmManager;
 
         public TouchState CurrentTouchState;
 
+        // TODO: Break this out to a separate class, refactor etc
+        // Warning: Please only use BaseStream to read/write. The .NET SerialPort implementation has several issues,
+        // especially regarding its internal buffer/cache. This can all be avoided if you use BaseStream directly and
+        // never use any of the Read/Write methods on SerialPort itself. I think the mono implementation is actually
+        // basically okay, but let's be cautious and consistent. See https://sparxeng.com/blog/software/must-use-net-system-io-ports-serialport
+        private SerialPort LeftRingPort;
+        private SerialPort RightRingPort;
+
+        private bool[,] leftTouchData = new bool[30, 4];
+        private bool[,] rightTouchData = new bool[30, 4];
+
         // Start is called before the first frame update
-        void Start()
+        async void Start()
         {
-            return;
+            if (UseTouchController)
+            {
+                await InitializeTouchController();
+            }
+        }
+        
+        // Touch controller code is adapted from yellowberryHN/LilyConsole
+        private async Awaitable InitializeTouchController()
+        {
+            SerialPort leftPort = new SerialPort("COM4", 115200);
+            SerialPort rightPort = new SerialPort("COM3", 115200);
+            await InitializeSerialPort(leftPort, (byte)'L');
+            LeftRingPort = leftPort;
+            await InitializeSerialPort(rightPort, (byte)'R');
+            RightRingPort = rightPort;
+        }
+
+        private async Awaitable InitializeSerialPort(SerialPort port, byte side)
+        {
+            if (!port.IsOpen)
+            {
+                port.Open();
+            }
+            Debug.Log($"Port {(char)side}: port opened.");
+
+            // In milliseconds.
+            // During streaming mode, board sends data every 8ms.
+            port.ReadTimeout = 1000;
+            port.WriteTimeout = 1000;
+            
+            // Send once to get board to shut up.
+            await SendData(port, new byte[] { (byte)SerialCommand.GET_SYNC_BOARD_VER });
+            // Wait to make sure we've received all incoming bytes and they are all discarded.
+            await Awaitable.WaitForSecondsAsync(0.020f);
+            port.DiscardInBuffer();
+            Debug.Log($"Port {(char)side}: shut up!");
+
+            // Get sync board version
+            await SendData(port, new byte[] { (byte)SerialCommand.GET_SYNC_BOARD_VER });
+            await ReadData(port, 8);
+            // Currently, we discard this data as unused.
+            Debug.Log($"Port {(char)side}: got sync board version.");
+
+            // Get unit board versions
+            await SendData(port, new byte[] { (byte)SerialCommand.GET_UNIT_BOARD_VER });
+            byte[] unitVersionResponse = await ReadData(port, 45);
+            byte reportedSide = unitVersionResponse[7];
+            if (reportedSide != side)
+            {
+                throw new Exception("Sync Board disagrees which side it is! Wanted {(char)side}, got {reportedSide}.");
+            }
+            Debug.Log($"Port {(char)side}: got unit board version.");
+
+            // Start touch stream
+            await SendData(port, new byte[] { (byte)SerialCommand.START_AUTO_SCAN, 0x7F, 0x3F, 0x64, 0x28, 0x44, 0x3B, 0x3A });
+            byte[] ack = await ReadData(port, 3);
+            if (ack[0] != (byte)SerialCommand.START_AUTO_SCAN)
+            {
+                throw new Exception("Start Scan message was not acknowledged.");
+            }
+            Debug.Log($"Port {(char)side}: started touch stream.");
+        }
+
+        private async Awaitable SendData(SerialPort port, byte[] data)
+        {
+            await port.BaseStream.WriteAsync(data, 0, data.Length);
+        }
+
+        // Taken verbatim from LilyConsole
+        /// <summary>
+        /// Validates the checksum on the end of a given full payload.
+        /// </summary>
+        /// <param name="packet">The bytes of the payload to be validated.</param>
+        /// <returns>The validity of the checksum</returns>
+        private bool ValidChecksum(byte[] packet)
+        {
+            byte chk = 0x80;
+            for (var i = 0; i < packet.Length - 1; i++)
+                chk ^= packet[i];
+            return packet[packet.Length - 1] == chk;
+        }
+
+        private async Awaitable<byte[]> ReadData(SerialPort port, int size)
+        {
+            byte[] buffer = new byte[size];
+            int bytesRead = 0;
+            while (bytesRead < size)
+            {
+                bytesRead += await port.BaseStream.ReadAsync(buffer, bytesRead, buffer.Length - bytesRead);
+            }
+            if (!ValidChecksum(buffer))
+            {
+                // TODO: some kind of better error handling here - e.g. reboot the touch connection.
+                throw new Exception("Bad serial checksum!");
+            }
+            return buffer;
+        }
+
+        // Write to a 30x4 array of segments in the order given by the sync board.
+        // The translation from the first index to anglePos depends on which side the board is on.
+        private void ReadTouchDataNonBlocking(SerialPort port, bool[,] dest)
+        {
+            byte[] buffer = new byte[36];
+            bool hasData = false;
+            while (port.BytesToRead >= buffer.Length)
+            {
+                int readCommandByte = port.BaseStream.Read(buffer, 0, 1);
+                if (readCommandByte != 1) 
+                {
+                    Debug.Log("Didn't successfully read touch command.");
+                }
+                if (buffer[0] != (byte)SerialCommand.TOUCH_DATA) 
+                {
+                    Debug.Log($"Found {BitConverter.ToString(new byte[] { buffer[0] })} instead of a TOUCH_DATA command (81)!");
+                    continue;
+                }
+
+                int readBytes = port.BaseStream.Read(buffer, 1, buffer.Length - 1) + readCommandByte;
+                if (readBytes != 36)
+                {
+                    Debug.Log($"read {readBytes} bytes instead of expected 36");
+                    continue;
+                }
+                if (!ValidChecksum(buffer))
+                {
+                    // TODO: some kind of better error handling here - e.g. reboot the touch connection.
+                    throw new Exception("Bad serial checksum!");
+                }
+                hasData = true;
+            }
+
+            if (!hasData)
+            {
+                return;
+            }
+
+            // Buffer layout:
+            //  1 byte : SerialCommand.TOUCH_DATA
+            // 24 bytes: 4x 6-byte row
+            //           A row represents each panel with a single byte. A row contains 6 panels.
+            //           The panel byte representation just uses the 5 least significant bits of the byte.
+            //  9 bytes: ???
+            //  1 byte : Loop state, increases by 1 every time the sync board sends a frame
+            //  1 byte : Checksum, already validated above
+            
+            if (buffer[0] != (byte)SerialCommand.TOUCH_DATA)
+            {
+                throw new Exception($"Expected to receive TOUCH_DATA, but got {BitConverter.ToString(new byte[] { buffer[0] })}");
+            }
+
+            // PANELS_PER_SIDE * COLS_PER_PANEL = 30
+            const int PANELS_PER_SIDE = 6;
+            const int COLS_PER_PANEL = 5;
+            for (int depth = 0; depth < 4; depth++)
+            {
+
+                for (int panel = 0; panel < PANELS_PER_SIDE; panel++)
+                {
+                    int panelRowData = buffer[1 + (depth * PANELS_PER_SIDE) + panel];
+
+                    for (int panelColumn = 0; panelColumn < COLS_PER_PANEL; panelColumn++)
+                    {
+                        int panelColumnMask = 1 << panelColumn;
+                        bool active = (panelRowData & panelColumnMask) != 0;
+
+                        int angleOffset = panel * COLS_PER_PANEL + panelColumn;
+                        dest[angleOffset, depth] = active;
+                    }
+                }
+            }
+
+            // loop state is currently discarded.
         }
 
         // Update is called once per frame
@@ -147,8 +334,73 @@ namespace SaturnGame.RhythmGame
             if (Input.GetKey("b")) { segments[46, 0] = true; }
             if (Input.GetKey("n")) { segments[47, 0] = true; }
 
+            if (UseTouchController)
+            {
+                // LEFT
+                if (LeftRingPort is not null)
+                {
+                    ReadTouchDataNonBlocking(LeftRingPort, leftTouchData);
+                    for (int angleOffset = 0; angleOffset < 30; angleOffset++)
+                    {
+                        // touchData 0 is at the top, and then increasing CCW
+                        int anglePos = SaturnMath.Modulo(angleOffset + 15, 60);
+
+                        for (int depthPos = 0; depthPos < 4; depthPos++)
+                        {
+                            if (leftTouchData[angleOffset, 3 - depthPos])
+                            {
+                                segments[anglePos, depthPos] = true;
+                            }
+                        }
+                    }
+                }
+
+                // Right
+                if (RightRingPort is not null)
+                {
+                    ReadTouchDataNonBlocking(RightRingPort, rightTouchData);
+                    for (int angleOffset = 0; angleOffset < 30; angleOffset++)
+                    {
+                        // touchData 0 is at the top, and then increasing CW
+                        int anglePos = SaturnMath.Modulo(14 - angleOffset, 60);
+
+                        for (int depthPos = 0; depthPos < 4; depthPos++)
+                        {
+                            if (rightTouchData[angleOffset, 3 - depthPos])
+                            {
+                                segments[anglePos, depthPos] = true;
+                            }
+                        }
+                    }
+                }
+            }
+
             CurrentTouchState = new TouchState(segments);
             scoringManager.NewTouchState(CurrentTouchState);
+        }
+
+
+        /// send the unknown ones at your own peril.
+        private enum SerialCommand
+        {
+            NEXT_WRITE = 0x20,
+            UNKNOWN_6 = 0x6F,
+            UNKNOWN_7 = 0x71,
+            NEXT_READ = 0x72,
+            BEGIN_WRITE = 0x77,
+            TOUCH_DATA = 0x81,
+            UNKNOWN_4 = 0x91,
+            UNKNOWN_5 = 0x93,
+            UNKNOWN_2 = 0x94,
+            GET_SYNC_BOARD_VER = 0xA0,
+            UNKNOWN_1 = 0xA2,
+            UNKNOWN_READ = 0xA3,
+            GET_UNIT_BOARD_VER = 0xA8,
+            UNKNOWN_3 = 0xA9,
+            UNKNOWN_10 = 0xBC,
+            UNKNOWN_9 = 0xC0,
+            UNKNOWN_8 = 0xC1,
+            START_AUTO_SCAN = 0xC9,
         }
     }
 
