@@ -507,7 +507,7 @@ MonoBehaviour:
       RNoteEffectVolume: 80
   DeviceSettings:
     DisplaySettings:
-      ViewRectPosition: 50
+      ViewRectPosition: 56
       ViewRectScale: 100
       TargetFramerate: 120
 --- !u!114 &6885694711510743663
