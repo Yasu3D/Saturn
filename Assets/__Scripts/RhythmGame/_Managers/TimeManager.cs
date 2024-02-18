@@ -1,3 +1,4 @@
+using SaturnGame.Settings;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace SaturnGame.RhythmGame
             if (bgmManager.bgmPlayer.clip == null)
                 return -1;
 
-            return Mathf.Max(0, 1000 * bgmManager.bgmPlayer.time);
+            return Mathf.Max(0, 1000 * (bgmManager.bgmPlayer.time + ChartManager.Instance.chart.audioOffset));
         }
 
         /// <summary>
@@ -46,13 +47,12 @@ namespace SaturnGame.RhythmGame
         /// <b>Includes sync calibration and user offsets!</b> <br />
         /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
         /// </summary>
-        public float VisualTime { get; private set; }
+        public float VisualTime => RawVisualTime + StaticAudioOffset + (SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */);
         public void UpdateVisualTime()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
             RawVisualTime += Time.deltaTime * VisualTimeScale * 1000;
-            VisualTime = RawVisualTime + StaticAudioOffset;
         }
 
         /// <summary>
@@ -86,8 +86,11 @@ namespace SaturnGame.RhythmGame
 
             if (Input.GetKeyDown(KeyCode.P))
             {
+                Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
+                var bgm = ChartManager.Instance.bgmClip;
+                bgmManager.bgmClip = bgm;
+                bgmManager.bgmPlayer.clip = bgm;
                 bgmManager.UpdateBgmData(250, TimeSignature.Default);
-                bgmManager.bgmPlayer.clip = bgmManager.bgmClip;
                 bgmManager.Play();
             }
 
