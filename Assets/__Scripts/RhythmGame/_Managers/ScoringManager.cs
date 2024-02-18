@@ -110,6 +110,7 @@ namespace SaturnGame.RhythmGame
             List<Note> allNotesFromChart = Chart.notes.Concat(Chart.holdNotes).OrderBy(note => note.TimeMs).ToList();
             // TODO: swipe notes within a hold... that is gonna be hell lmao
             // TODO: holds with a swipe on the hold start take on the timing window of the swipe??
+            // TODO: hold ends swipe into hold start
             notes = new();
 
             foreach (Note note in allNotesFromChart)
@@ -225,7 +226,6 @@ namespace SaturnGame.RhythmGame
                     {
                         switch (note)
                         {
-                            case SwipeNote:
                             case TouchNote:
                                 if (note.Touched(newSegments))
                                 {
@@ -276,6 +276,30 @@ namespace SaturnGame.RhythmGame
                                             holdNote.LastHeldTimeMs = hitTimeMs;
                                             activeHolds.Add(holdNote);
 
+                                            LastJudgement = hitWindow.Judgement;
+                                            LastJudgementTimeMs = hitTimeMs;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            case SwipeNote swipeNote:
+                                if (!swipeNote.HasStart)
+                                {
+                                    // Idempotent if note is not touched
+                                    swipeNote.SetStart(touchState);
+                                }
+                                else if (swipeNote.Swiped(touchState))
+                                {
+                                    float errorMs = hitTimeMs - swipeNote.TimeMs;
+                                    ShowDebugText($"{noteScanIndex} (swipe): {errorMs}");
+
+                                    foreach (HitWindow hitWindow in swipeNote.HitWindows)
+                                    {
+                                        if (errorMs >= hitWindow.LeftMs && errorMs < hitWindow.RightMs)
+                                        {
+                                            swipeNote.Judgement = hitWindow.Judgement;
+                                            swipeNote.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
                                             break;

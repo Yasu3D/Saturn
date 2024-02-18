@@ -122,13 +122,13 @@ namespace SaturnGame.RhythmGame
                 case 5:
                 case 6:
                 case 23:
-                    note = new SwipeNote(measure, tick, position, size, SwipeNote.SwipeDirection.Clockwise);
+                    note = SwipeNote.CreateSwipe(measure, tick, position, size, SwipeNote.SwipeDirection.Clockwise);
                     break;
 
                 case 7:
                 case 8:
                 case 24:
-                    note = new SwipeNote(measure, tick, position, size, SwipeNote.SwipeDirection.Counterclockwise);
+                    note = SwipeNote.CreateSwipe(measure, tick, position, size, SwipeNote.SwipeDirection.Counterclockwise);
                     break;
 
 
