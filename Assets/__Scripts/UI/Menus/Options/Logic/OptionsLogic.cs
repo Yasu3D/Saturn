@@ -41,8 +41,8 @@ namespace SaturnGame.UI
         {
             if (state is MenuState.MenuSwitch) return;
 
-            var selectedItem = CurrentScreen.listItems[CurrentIndex];
-            var prevScreen = CurrentScreen;
+            UIListItem selectedItem = CurrentScreen.listItems[CurrentIndex];
+            UIScreen prevScreen = CurrentScreen;
 
             switch (selectedItem.itemType)
             {
@@ -165,7 +165,14 @@ namespace SaturnGame.UI
             panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
         }
 
-        public void OnDefault() {}
+        public void OnDefault()
+        {
+            UIListItem selectedItem = CurrentScreen.listItems[CurrentIndex];
+            if (selectedItem.settingsParameter == "") return;
+            
+            SettingsManager.Instance.PlayerSettings.SetParameterDefault(selectedItem.settingsParameter);
+            OnBack();
+        }
 
         private void Update()
         {
@@ -173,6 +180,7 @@ namespace SaturnGame.UI
             if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
             if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
             if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
+            if (Input.GetKeyDown(KeyCode.R)) OnDefault();
         }
     }
 }
