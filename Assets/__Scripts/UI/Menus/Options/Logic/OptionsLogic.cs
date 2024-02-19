@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.UI
@@ -39,23 +41,75 @@ namespace SaturnGame.UI
         {
             if (state is MenuState.MenuSwitch) return;
 
+            var selectedItem = CurrentScreen.listItems[CurrentIndex];
             var prevScreen = CurrentScreen;
-            var nextScreen = CurrentScreen.listItems[CurrentIndex].nextScreen;
-            if (nextScreen == null) return;
+            
+            switch (selectedItem.itemType)
+            {
+                case UIListItem.ItemTypes.SubMenu:
+                {
+                    var nextScreen = selectedItem.nextScreen;
+                    if (nextScreen == null || nextScreen.listItems.Count == 0)
+                        return;
+                    
+                    UIAudio.PlaySound(UIAudioController.UISound.Confirm);
 
-            UIAudio.PlaySound(UIAudioController.UISound.Confirm);
+                    screenStack.Push(nextScreen);
+                    indexStack.Push(0);
 
-            screenStack.Push(nextScreen);
-            indexStack.Push(0);
+                    panelAnimator.Anim_HidePanels(prevScreen, nextScreen);
+                    state = MenuState.MenuSwitch;
+            
+                    // Jumps to Panel with selected option.
+                    int selectedIndex = 0;
+                    if (nextScreen.screenType is UIScreen.UIScreenType.Radial)
+                    {
+                        string parameter = nextScreen.listItems[0].settingsParameter;
+                        int value = SettingsManager.Instance.PlayerSettings.GetParameter(parameter);
 
-            panelAnimator.Anim_HidePanels(prevScreen, nextScreen);
-            state = MenuState.MenuSwitch;
+                        var item = nextScreen.listItems.FirstOrDefault(x => x.settingsValue == value);
+                        if (item != null)
+                        {
+                            selectedIndex = nextScreen.listItems.IndexOf(item);
+                            CurrentIndex = selectedIndex;
+                        }
+                    }
 
-            await Awaitable.WaitForSecondsAsync(0.25f);
-            panelAnimator.GetPanels(CurrentScreen);
-            panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[0]);
-            panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
-            state = MenuState.Idle;
+                    await Awaitable.WaitForSecondsAsync(0.25f);
+                    panelAnimator.GetPanels(CurrentScreen, selectedIndex);
+                    panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
+                    state = MenuState.Idle;
+                    
+                    break;
+                }
+
+                case UIListItem.ItemTypes.ValueSetter:
+                {
+                    if (selectedItem.settingsParameter == "")
+                        return;
+                    
+                    UIAudio.PlaySound(UIAudioController.UISound.Confirm);
+                    SettingsManager.Instance.PlayerSettings.SetParameter(selectedItem.settingsParameter, selectedItem.settingsValue);
+                    
+                    if (screenStack.Count <= 1 || indexStack.Count <= 1)
+                        return;
+                    
+                    screenStack.Pop();
+                    indexStack.Pop();
+                    var nextScreen = CurrentScreen;
+
+                    panelAnimator.Anim_HidePanels(prevScreen, nextScreen);
+                    state = MenuState.MenuSwitch;
+
+                    await Awaitable.WaitForSecondsAsync(0.25f);
+                    panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
+                    panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
+                    panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
+                    state = MenuState.Idle;
+                    
+                    break;
+                }
+            }
         }
 
         public async void OnBack()

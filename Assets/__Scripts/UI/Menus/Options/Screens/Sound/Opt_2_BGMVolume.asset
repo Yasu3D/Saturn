@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
+  m_Name: Opt_2_BGMVolume
+  m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
+  screenName: BGMVolume
+  screenType: 2
+  listItems:
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 0
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 10
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 10
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 20
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 20
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 30
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 30
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 40
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 40
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 50
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 50
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 60
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 60
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 70
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 70
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 80
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 80
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 90
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 90
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 100
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: BGMVolume
+    settingsValue: 100

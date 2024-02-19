@@ -51,12 +51,3 @@ MonoBehaviour:
     nextScreen: {fileID: 11400000, guid: 5446df24b2aad9447a4fbfd96a6ebdd6, type: 2}
     settingsParameter: 
     settingsValue: 0
-  - subtitleType: 0
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: TEST
-    subtitle: 'DEBUGGING :]'
-    settingsBinding: 
-    nextScreen: {fileID: 11400000, guid: bddaf010bd5879f458d77a76346f1a79, type: 2}
-    settingsParameter: 
-    settingsValue: 0

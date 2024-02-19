@@ -461,11 +461,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerSettings:
     GameSettings:
-      NoteSpeed: 40
+      NoteSpeed: 25
       JudgementOffset: 0
-      MaskDensity: 4
+      MaskDensity: 2
       BackgroundVideoSetting: 0
-      BonusEffectSetting: 0
+      BonusEffectSetting: 1
       MirrorNotes: 0
       GiveUpSetting: 0
     UISettings:
@@ -496,8 +496,7 @@ MonoBehaviour:
     SoundSettings:
       TouchSE: 0
       BGMVolume: 100
-      NavigatorMenuVolume: 30
-      NavigatorDuringPlay: 0
+      GuideVolume: 30
       TouchNoteVolume: 80
       HoldNoteVolume: 80
       SlideNoteVolume: 80

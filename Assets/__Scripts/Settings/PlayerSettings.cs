@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using static UnityEngine.Rendering.DebugUI;
 
 namespace SaturnGame.Settings
@@ -45,9 +46,9 @@ namespace SaturnGame.Settings
                 case "NoteColorID_Hold": DesignSettings.NoteColorID_Hold = value; break;
                 case "InvertSlideColor": DesignSettings.InvertSlideColor = value; break;
                 case "TouchEffect": DesignSettings.TouchEffect = value; break;
-                case "ShootEffect": DesignSettings.ShootEffect = value; break;
+                case "ShowShootEffect": DesignSettings.ShowShootEffect = value; break;
                 case "ShowKeyBeams": DesignSettings.ShowKeyBeams = value; break;
-                case "ShowR_NoteEffect": DesignSettings.ShowR_NoteEffect = value; break;
+                case "ShowRNoteEffect": DesignSettings.ShowRNoteEffect = value; break;
 
                 case "TouchSE": SoundSettings.TouchSE = value; break;
                 case "BGMVolume": SoundSettings.BGMVolume = value; break;
@@ -93,9 +94,9 @@ namespace SaturnGame.Settings
                 "NoteColorID_Hold" => DesignSettings.NoteColorID_Hold,
                 "InvertSlideColor" => DesignSettings.InvertSlideColor,
                 "TouchEffect" => DesignSettings.TouchEffect,
-                "ShootEffect" => DesignSettings.ShootEffect,
+                "ShowShootEffect" => DesignSettings.ShowShootEffect,
                 "ShowKeyBeams" => DesignSettings.ShowKeyBeams,
-                "ShowR_NoteEffect" => DesignSettings.ShowR_NoteEffect,
+                "ShowRNoteEffect" => DesignSettings.ShowRNoteEffect,
                 "TouchSE" => SoundSettings.TouchSE,
                 "BGMVolume" => SoundSettings.BGMVolume,
                 "GuideVolume" => SoundSettings.GuideVolume,
@@ -106,26 +107,26 @@ namespace SaturnGame.Settings
                 "ChainNoteVolume" => SoundSettings.ChainNoteVolume,
                 "BonusEffectVolume" => SoundSettings.BonusEffectVolume,
                 "RNoteEffectVolume" => SoundSettings.RNoteEffectVolume,
-                _ => -1,
+                _ => 0,
             };
         }
     }
 
     [System.Serializable] public class GameSettings
     {
-        public int NoteSpeed = 15;
-        public int JudgementOffset;
-        public int MaskDensity;
-        public int BackgroundVideoSetting;
-        public int BonusEffectSetting;
-        public int MirrorNotes;
-        public int GiveUpSetting;
+        public int NoteSpeed = 25;
+        public int JudgementOffset = 0;
+        public int MaskDensity = 2;
+        public int BackgroundVideoSetting = 0;
+        public int BonusEffectSetting = 1;
+        public int MirrorNotes = 0;
+        public int GiveUpSetting = 0;
     }
 
     [System.Serializable] public class UISettings
     {
-        public int JudgementDisplayPosition;
-        public int ShowJudgementDetails;
+        public int JudgementDisplayPosition = 0;
+        public int ShowJudgementDetails = 1;
         public int GuideLaneType = 1;
         public int GuideLaneOpacity = 5;
         public int DisplayOpacity;
@@ -148,9 +149,9 @@ namespace SaturnGame.Settings
         public int NoteColorID_Hold = 6;
         public int InvertSlideColor;
         public int TouchEffect;
-        public int ShootEffect = 1;
+        public int ShowShootEffect = 1;
         public int ShowKeyBeams = 1;
-        public int ShowR_NoteEffect = 1;
+        public int ShowRNoteEffect = 1;
     }
 
     [System.Serializable] public class SoundSettings
