@@ -13,11 +13,11 @@ namespace SaturnGame.UI
 
         [SerializeField] private OptionsPanelAnimator panelAnimator;
         [SerializeField] private UIScreen startScreen;
-        private UIAudioController UIAudio => UIAudioController.Instance;
-        private Stack<UIScreen> screenStack = new();
-        private UIScreen currentScreen => screenStack.Peek();
-        private Stack<int> indexStack = new(new List<int>{0});
-        private int currentIndex
+        private static UIAudioController UIAudio => UIAudioController.Instance;
+        private readonly Stack<UIScreen> screenStack = new();
+        private UIScreen CurrentScreen => screenStack.Peek();
+        private readonly Stack<int> indexStack = new(new List<int>{0});
+        private int CurrentIndex
         {
             get => indexStack.Peek();
             set
@@ -28,19 +28,19 @@ namespace SaturnGame.UI
         }
         private MenuState state = MenuState.Idle;
 
-        void Awake()
+        private void Awake()
         {
             screenStack.Push(startScreen);
             panelAnimator.GetPanels(startScreen);
-            panelAnimator.SetPrimaryPanel(startScreen.ListItems[currentIndex]);
+            panelAnimator.SetPrimaryPanel(startScreen.listItems[CurrentIndex]);
         }
 
         public async void OnConfirm()
         {
             if (state is MenuState.MenuSwitch) return;
 
-            var prevScreen = currentScreen;
-            var nextScreen = currentScreen.ListItems[currentIndex].NextScreen;
+            var prevScreen = CurrentScreen;
+            var nextScreen = CurrentScreen.listItems[CurrentIndex].nextScreen;
             if (nextScreen == null) return;
 
             UIAudio.PlaySound(UIAudioController.UISound.Confirm);
@@ -52,8 +52,8 @@ namespace SaturnGame.UI
             state = MenuState.MenuSwitch;
 
             await Awaitable.WaitForSecondsAsync(0.25f);
-            panelAnimator.GetPanels(currentScreen);
-            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[0]);
+            panelAnimator.GetPanels(CurrentScreen);
+            panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[0]);
             panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
             state = MenuState.Idle;
         }
@@ -72,17 +72,17 @@ namespace SaturnGame.UI
             }
 
             // might be a little confusing but does the trick
-            var prevScreen = currentScreen;
+            var prevScreen = CurrentScreen;
             screenStack.Pop();
             indexStack.Pop();
-            var nextScreen = currentScreen;
+            var nextScreen = CurrentScreen;
 
             panelAnimator.Anim_HidePanels(prevScreen, nextScreen);
             state = MenuState.MenuSwitch;
 
             await Awaitable.WaitForSecondsAsync(0.25f);
-            panelAnimator.GetPanels(currentScreen, currentIndex);
-            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
+            panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
             panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
             state = MenuState.Idle;
         }
@@ -92,13 +92,13 @@ namespace SaturnGame.UI
             if (state is MenuState.MenuSwitch) return;
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
 
-            int newIndex = Mathf.Max(currentIndex - 1, 0);
-            if (currentIndex == newIndex) return;
+            int newIndex = Mathf.Max(CurrentIndex - 1, 0);
+            if (CurrentIndex == newIndex) return;
 
-            currentIndex = newIndex;
+            CurrentIndex = newIndex;
             UIAudio.PlaySound(UIAudioController.UISound.Navigate);
-            panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, currentIndex, currentScreen);
-            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, CurrentIndex, CurrentScreen);
+            panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
         }
         
         public void OnNavigateRight()
@@ -106,18 +106,18 @@ namespace SaturnGame.UI
             if (state is MenuState.MenuSwitch) return;
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
 
-            int newIndex = Mathf.Min(currentIndex + 1, currentScreen.ListItems.Count - 1);
-            if (currentIndex == newIndex) return;
+            int newIndex = Mathf.Min(CurrentIndex + 1, CurrentScreen.listItems.Count - 1);
+            if (CurrentIndex == newIndex) return;
 
-            currentIndex = newIndex;
+            CurrentIndex = newIndex;
             UIAudio.PlaySound(UIAudioController.UISound.Navigate);
-            panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Down, currentIndex, currentScreen);
-            panelAnimator.SetPrimaryPanel(currentScreen.ListItems[currentIndex]);
+            panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Down, CurrentIndex, CurrentScreen);
+            panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
         }
 
         public void OnDefault() {}
 
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.A)) OnNavigateLeft();
             if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();

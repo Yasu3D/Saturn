@@ -18,7 +18,7 @@ namespace SaturnGame.UI
 
         public void SetRadialPanelColor(UIListItem item)
         {
-            radialPanel.color = item.Color;
+            radialPanel.color = item.color;
         }
 
         [SerializeField] private TextMeshProUGUI title0TMP;

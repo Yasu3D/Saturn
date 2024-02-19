@@ -12,465 +12,465 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_NoteSpeed
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  Name: Note Speed
-  ScreenType: 2
-  ListItems:
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 1, g: 0, b: 0.47450984, a: 1}
-    Title: 1.0
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 10
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.627451, g: 0.7490196, b: 0.85098046, a: 1}
-    Title: 1.1
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 11
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.5686275, g: 0.76470596, b: 0.8862746, a: 1}
-    Title: 1.2
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 12
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.4666667, g: 0.7372549, b: 0.8705883, a: 1}
-    Title: 1.3
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 13
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.34117648, g: 0.7294118, b: 0.882353, a: 1}
-    Title: 1.4
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 14
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.70980394, b: 0.8745099, a: 1}
-    Title: 1.5
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 15
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.6392157, b: 0.89019614, a: 1}
-    Title: 1.6
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 16
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.5372549, b: 0.87843144, a: 1}
-    Title: 1.7
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 17
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.44705886, b: 0.8941177, a: 1}
-    Title: 1.8
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 18
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
-    Title: 1.9
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 19
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 1, g: 0, b: 0.4745098, a: 1}
-    Title: 2.0
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 20
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    Title: 2.1
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 21
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
-    Title: 2.2
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 22
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
-    Title: 2.3
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 23
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
-    Title: 2.4
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 24
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: 2.5
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 25
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
-    Title: 2.6
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 26
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
-    Title: 2.7
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 27
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
-    Title: 2.8
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 28
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
-    Title: 2.9
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 29
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 1, g: 0, b: 0.4745098, a: 1}
-    Title: 3.0
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 30
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    Title: 3.1
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 31
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
-    Title: 3.2
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 32
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
-    Title: 3.3
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 33
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
-    Title: 3.4
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 34
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: 3.5
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 35
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
-    Title: 3.6
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 36
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
-    Title: 3.7
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 37
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
-    Title: 3.8
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 38
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
-    Title: 3.9
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 39
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 1, g: 0, b: 0.4745098, a: 1}
-    Title: 4.0
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 40
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    Title: 4.1
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 41
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
-    Title: 4.2
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 42
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
-    Title: 4.3
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 43
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
-    Title: 4.4
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 44
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: 4.5
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 45
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
-    Title: 4.6
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 46
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
-    Title: 4.7
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 47
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
-    Title: 4.8
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 48
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
-    Title: 4.9
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 49
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 1, g: 0, b: 0.4745098, a: 1}
-    Title: 5.0
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 50
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    Title: 5.1
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 51
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
-    Title: 5.2
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 52
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
-    Title: 5.3
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 53
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
-    Title: 5.4
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 54
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: 5.5
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 55
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
-    Title: 5.6
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 56
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
-    Title: 5.7
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 57
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
-    Title: 5.8
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 58
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
-    Title: 5.9
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 59
-  - SubtitleType: 0
-    ItemType: 0
-    Color: {r: 1, g: 0, b: 0.4745098, a: 1}
-    Title: 6.0
-    Subtitle: 
-    SettingsBinding: 
-    NextScreen: {fileID: 0}
-    SettingsParameter: NoteSpeed
-    SettingsValue: 60
+  screenName: NoteSpeed
+  screenType: 2
+  listItems:
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 0, b: 0.47450984, a: 1}
+    title: 1.0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 10
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.627451, g: 0.7490196, b: 0.85098046, a: 1}
+    title: 1.1
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 11
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.5686275, g: 0.76470596, b: 0.8862746, a: 1}
+    title: 1.2
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 12
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.4666667, g: 0.7372549, b: 0.8705883, a: 1}
+    title: 1.3
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 13
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.34117648, g: 0.7294118, b: 0.882353, a: 1}
+    title: 1.4
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 14
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.70980394, b: 0.8745099, a: 1}
+    title: 1.5
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 15
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.6392157, b: 0.89019614, a: 1}
+    title: 1.6
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 16
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.5372549, b: 0.87843144, a: 1}
+    title: 1.7
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 17
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.44705886, b: 0.8941177, a: 1}
+    title: 1.8
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 18
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
+    title: 1.9
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 19
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 0, b: 0.4745098, a: 1}
+    title: 2.0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 20
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
+    title: 2.1
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 21
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
+    title: 2.2
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 22
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
+    title: 2.3
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 23
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
+    title: 2.4
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 24
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    title: 2.5
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 25
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
+    title: 2.6
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 26
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
+    title: 2.7
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 27
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
+    title: 2.8
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 28
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
+    title: 2.9
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 29
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 0, b: 0.4745098, a: 1}
+    title: 3.0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 30
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
+    title: 3.1
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 31
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
+    title: 3.2
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 32
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
+    title: 3.3
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 33
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
+    title: 3.4
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 34
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    title: 3.5
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 35
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
+    title: 3.6
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 36
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
+    title: 3.7
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 37
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
+    title: 3.8
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 38
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
+    title: 3.9
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 39
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 0, b: 0.4745098, a: 1}
+    title: 4.0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 40
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
+    title: 4.1
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 41
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
+    title: 4.2
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 42
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
+    title: 4.3
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 43
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
+    title: 4.4
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 44
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    title: 4.5
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 45
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
+    title: 4.6
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 46
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
+    title: 4.7
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 47
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
+    title: 4.8
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 48
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
+    title: 4.9
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 49
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 0, b: 0.4745098, a: 1}
+    title: 5.0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 50
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
+    title: 5.1
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 51
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.5686275, g: 0.7647059, b: 0.8862745, a: 1}
+    title: 5.2
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 52
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.46666667, g: 0.7372549, b: 0.87058824, a: 1}
+    title: 5.3
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 53
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.34117648, g: 0.7294118, b: 0.88235295, a: 1}
+    title: 5.4
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 54
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    title: 5.5
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 55
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.6392157, b: 0.8901961, a: 1}
+    title: 5.6
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 56
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.5372549, b: 0.8784314, a: 1}
+    title: 5.7
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 57
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0, g: 0.44705883, b: 0.89411765, a: 1}
+    title: 5.8
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 58
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 0.003921569, g: 0.31764707, b: 0.8941177, a: 1}
+    title: 5.9
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 59
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 0, b: 0.4745098, a: 1}
+    title: 6.0
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteSpeed
+    settingsValue: 60

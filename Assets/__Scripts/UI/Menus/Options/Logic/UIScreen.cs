@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.UI
 {
@@ -15,9 +16,9 @@ namespace SaturnGame.UI
             Radial
         }
 
-        public string Name;
-        public UIScreenType ScreenType;
-        public List<UIListItem> ListItems;
+        public string screenName;
+        public UIScreenType screenType;
+        public List<UIListItem> listItems;
     }
 
     [Serializable]
@@ -35,18 +36,18 @@ namespace SaturnGame.UI
             Dynamic
         }
 
-        public SubtitleTypes SubtitleType;
-        public ItemTypes ItemType;
+        public SubtitleTypes subtitleType;
+        public ItemTypes itemType;
 
-        public Color Color;
-        public string Title;
-        public string Subtitle;
+        public Color color;
+        public string title;
+        public string subtitle;
 
-        public string SettingsBinding;
+        public string settingsBinding;
 
-        public UIScreen NextScreen;
+        public UIScreen nextScreen;
 
-        public string SettingsParameter;
-        public int SettingsValue;
+        public string settingsParameter;
+        public int settingsValue;
     }
 }

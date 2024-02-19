@@ -10,10 +10,10 @@ public class UIListItemDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
         EditorGUI.indentLevel++;
 
-        SerializedProperty subtitleType = property.FindPropertyRelative("SubtitleType");
-        SerializedProperty itemType = property.FindPropertyRelative("ItemType");
-        SerializedProperty title = property.FindPropertyRelative("Title");
-        SerializedProperty color = property.FindPropertyRelative("Color");
+        SerializedProperty subtitleType = property.FindPropertyRelative("subtitleType");
+        SerializedProperty itemType = property.FindPropertyRelative("itemType");
+        SerializedProperty title = property.FindPropertyRelative("title");
+        SerializedProperty color = property.FindPropertyRelative("color");
 
         EditorGUILayout.PropertyField(subtitleType);
         EditorGUILayout.PropertyField(itemType);
@@ -22,34 +22,42 @@ public class UIListItemDrawer : PropertyDrawer
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(title);
 
-        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Static)
+        switch (subtitleType.enumValueIndex)
         {
-            SerializedProperty subtitle = property.FindPropertyRelative("Subtitle");
-            EditorGUILayout.PropertyField(subtitle);
-        }
-
-        if (subtitleType.enumValueIndex == (int)UIListItem.SubtitleTypes.Dynamic)
-        {
-            SerializedProperty settingsBinding = property.FindPropertyRelative("SettingsBinding");
-            EditorGUILayout.PropertyField(settingsBinding);
+            case (int)UIListItem.SubtitleTypes.Static:
+            {
+                SerializedProperty subtitle = property.FindPropertyRelative("subtitle");
+                EditorGUILayout.PropertyField(subtitle);
+                break;
+            }
+            case (int)UIListItem.SubtitleTypes.Dynamic:
+            {
+                SerializedProperty settingsBinding = property.FindPropertyRelative("settingsBinding");
+                EditorGUILayout.PropertyField(settingsBinding);
+                break;
+            }
         }
 
         EditorGUILayout.Space();
 
 
-        if (itemType.enumValueIndex == (int)UIListItem.ItemTypes.SubMenu)
+        switch (itemType.enumValueIndex)
         {
-            SerializedProperty nextScreen = property.FindPropertyRelative("NextScreen");
-            EditorGUILayout.PropertyField(nextScreen);
-        }
+            case (int)UIListItem.ItemTypes.SubMenu:
+            {
+                SerializedProperty nextScreen = property.FindPropertyRelative("nextScreen");
+                EditorGUILayout.PropertyField(nextScreen);
+                break;
+            }
+            case (int)UIListItem.ItemTypes.ValueSetter:
+            {
+                SerializedProperty settingsParameter = property.FindPropertyRelative("settingsParameter");
+                SerializedProperty settingsValue = property.FindPropertyRelative("settingsValue");
 
-        else if (itemType.enumValueIndex == (int)UIListItem.ItemTypes.ValueSetter)
-        {
-            SerializedProperty settingsParameter = property.FindPropertyRelative("SettingsParameter");
-            SerializedProperty settingsValue = property.FindPropertyRelative("SettingsValue");
-
-            EditorGUILayout.PropertyField(settingsParameter);
-            EditorGUILayout.PropertyField(settingsValue);
+                EditorGUILayout.PropertyField(settingsParameter);
+                EditorGUILayout.PropertyField(settingsValue);
+                break;
+            }
         }
 
         EditorGUI.indentLevel--;
