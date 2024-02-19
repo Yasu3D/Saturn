@@ -22,7 +22,7 @@ MonoBehaviour:
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
-    settingsParameter: BonusEffect
+    settingsParameter: BonusEffectSetting
     settingsValue: 0
   - subtitleType: 0
     itemType: 0
@@ -31,5 +31,5 @@ MonoBehaviour:
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
-    settingsParameter: BonusEffect
+    settingsParameter: BonusEffectSetting
     settingsValue: 1
