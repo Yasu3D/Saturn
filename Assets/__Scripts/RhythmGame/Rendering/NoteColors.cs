@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SaturnGame.Rendering
 {
-    public class NoteColors
+    public static class NoteColors
     {
         /// <summary>
         /// Returns user-selected colors and brightness values depending on Note
