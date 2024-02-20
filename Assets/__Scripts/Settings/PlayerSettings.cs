@@ -110,56 +110,6 @@ namespace SaturnGame.Settings
                 _ => 0,
             };
         }
-
-        public void SetParameterDefault(string parameter)
-        {
-            switch (parameter)
-            {
-                case "NoteSpeed": GameSettings.NoteSpeed = 25; break;
-                case "JudgementOffset": GameSettings.JudgementOffset = 0; break;
-                case "MaskDensity": GameSettings.MaskDensity = 2; break;
-                case "BackgroundVideoSetting": GameSettings.BackgroundVideoSetting = 0; break;
-                case "BonusEffectSetting": GameSettings.BonusEffectSetting = 1; break;
-                case "MirrorNotes": GameSettings.MirrorNotes = 0; break;
-                case "GiveUpSetting": GameSettings.GiveUpSetting = 0; break;
-
-                case "JudgementDisplayPosition": UISettings.JudgementDisplayPosition = 0; break;
-                case "ShowJudgementDetails": UISettings.ShowJudgementDetails = 1; break;
-                case "GuideLaneType": UISettings.GuideLaneType = 1; break;
-                case "GuideLaneOpacity": UISettings.GuideLaneOpacity = 5; break;
-                case "DisplayOpacity": UISettings.DisplayOpacity = 3; break;
-                case "ShowBarLines": UISettings.ShowBarLines = 1; break;
-                case "CenterDisplayInfo": UISettings.CenterDisplayInfo = 0; break;
-                case "ScoreDisplayMethod": UISettings.ScoreDisplayMethod = 0; break;
-
-                case "RingColor": DesignSettings.RingColor = 0; break;
-                case "JudgeLineColor": DesignSettings.JudgeLineColor = 2; break;
-                case "NoteWidth": DesignSettings.NoteWidth = 3; break;
-                case "NoteColorID_Touch": DesignSettings.NoteColorID_Touch = 0; break;
-                case "NoteColorID_Chain": DesignSettings.NoteColorID_Chain = 1; break;
-                case "NoteColorID_SwipeClockwise": DesignSettings.NoteColorID_SwipeClockwise = 2; break;
-                case "NoteColorID_SwipeCounterclockwise": DesignSettings.NoteColorID_SwipeCounterclockwise = 3; break;
-                case "NoteColorID_SnapForward": DesignSettings.NoteColorID_SnapForward = 4; break;
-                case "NoteColorID_SnapBackward": DesignSettings.NoteColorID_SnapBackward = 5; break;
-                case "NoteColorID_Hold": DesignSettings.NoteColorID_Hold = 6; break;
-                case "InvertSlideColor": DesignSettings.InvertSlideColor = 0; break;
-                case "TouchEffect": DesignSettings.TouchEffect = 1; break;
-                case "ShowShootEffect": DesignSettings.ShowShootEffect = 1; break;
-                case "ShowKeyBeams": DesignSettings.ShowKeyBeams = 1; break;
-                case "ShowRNoteEffect": DesignSettings.ShowRNoteEffect = 1; break;
-
-                case "TouchSE": SoundSettings.TouchSE = 0; break;
-                case "BGMVolume": SoundSettings.BGMVolume = 100; break;
-                case "GuideVolume": SoundSettings.GuideVolume = 30; break;
-                case "TouchNoteVolume": SoundSettings.TouchNoteVolume = 80; break;
-                case "HoldNoteVolume": SoundSettings.HoldNoteVolume = 80; break;
-                case "SlideNoteVolume": SoundSettings.SlideNoteVolume = 80; break;
-                case "SnapNoteVolume": SoundSettings.SnapNoteVolume = 80; break;
-                case "ChainNoteVolume": SoundSettings.ChainNoteVolume = 80; break;
-                case "BonusEffectVolume": SoundSettings.BonusEffectVolume = 80; break;
-                case "RNoteEffectVolume": SoundSettings.RNoteEffectVolume = 80; break;
-            }
-        }
     }
 
     [System.Serializable] public class GameSettings

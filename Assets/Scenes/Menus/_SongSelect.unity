@@ -5404,7 +5404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 7bba2b94dcdd60d46ab343d74bb71cec, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -5412,7 +5412,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7ebcd8dc607b04145aa4d31cdb4f7239, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8071,6 +8071,7 @@ GameObject:
   - component: {fileID: 1410557165}
   - component: {fileID: 1410557164}
   - component: {fileID: 1410557167}
+  - component: {fileID: 1410557168}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -8263,6 +8264,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 1015856777}
+--- !u!114 &1410557168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410557158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85f4229f778437c498c1ab2877643bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maskText: {fileID: 242130298}
+  speedText: {fileID: 1457064722}
+  offsetText: {fileID: 2122651380}
+  giveUpText: {fileID: 1690483728}
 --- !u!1 &1413121446
 GameObject:
   m_ObjectHideFlags: 0
@@ -11010,8 +11027,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 260a832c500666b448b6e73f3044904d, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 0189ada606e61c74b83b860e86b23975, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -14046,6 +14063,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 3870019641924301977}
   - {fileID: 1410557160}
-  - {fileID: 922771029}
   - {fileID: 1994888665}
+  - {fileID: 922771029}
   - {fileID: 1850381202}

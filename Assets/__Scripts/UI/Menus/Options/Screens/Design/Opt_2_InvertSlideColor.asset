@@ -14,13 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   screenName: InvertSlideColor
   screenType: 2
+  defaultItemIndex: 0
   listItems:
   - subtitleType: 0
     itemType: 0
     color: {r: 1, g: 1, b: 1, a: 1}
-    title: '[WIP]'
+    title: OFF
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
-    settingsParameter: 
+    settingsParameter: InvertSlideColor
     settingsValue: 0
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: ON
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: InvertSlideColor
+    settingsValue: 1

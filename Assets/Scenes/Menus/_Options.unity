@@ -1011,6 +1011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelAnimator: {fileID: 724074680}
   startScreen: {fileID: 11400000, guid: 182a15c46a5371442b13fd5630b696b4, type: 2}
+  revertButton: {fileID: 960736036}
 --- !u!4 &724074679
 Transform:
   m_ObjectHideFlags: 0
@@ -1333,6 +1334,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &960736036 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4858829607700198781, guid: d92b63c42cf02524596e2821820ac13d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1228444602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963730452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,7 +1934,7 @@ PrefabInstance:
     - target: {fileID: 3692499407962515278, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3692499407962515278, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
@@ -1942,7 +1949,7 @@ PrefabInstance:
     - target: {fileID: 3692499407962515278, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3692499407962515278, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
@@ -1952,13 +1959,13 @@ PrefabInstance:
     - target: {fileID: 3692499407962515278, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4402672312947577582, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 154826120, guid: b7a41e0dec2a7284d88309b05c4b7f9d,
+      objectReference: {fileID: -2078082091, guid: b7a41e0dec2a7284d88309b05c4b7f9d,
         type: 3}
     - target: {fileID: 4522735163941721721, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
@@ -2018,7 +2025,7 @@ PrefabInstance:
     - target: {fileID: 4522735163941721721, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.2588191
+      value: 0.9135455
       objectReference: {fileID: 0}
     - target: {fileID: 4522735163941721721, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
@@ -2033,7 +2040,7 @@ PrefabInstance:
     - target: {fileID: 4522735163941721721, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.9659258
+      value: 0.40673664
       objectReference: {fileID: 0}
     - target: {fileID: 4522735163941721721, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
@@ -2058,12 +2065,12 @@ PrefabInstance:
     - target: {fileID: 4522735163941721721, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 150
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 4858829607700198781, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_Name
-      value: DeleteSaves
+      value: Revert
       objectReference: {fileID: 0}
     - target: {fileID: 4858829607700198781, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
@@ -2073,7 +2080,9 @@ PrefabInstance:
     - target: {fileID: 5750731976307847843, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
       propertyPath: m_text
-      value: DELETE
+      value: 'REVERT
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 5750731976307847843, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}

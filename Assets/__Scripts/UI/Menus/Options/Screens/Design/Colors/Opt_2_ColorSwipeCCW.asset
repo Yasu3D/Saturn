@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   screenName: ColorTouch
   screenType: 2
+  defaultItemIndex: 7
   listItems:
   - subtitleType: 0
     itemType: 0

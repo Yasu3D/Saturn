@@ -8,12 +8,13 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
-  m_EditorHideFlags: 0F
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_GuideVolume
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   screenName: GuideVolume
   screenType: 2
+  defaultItemIndex: 3
   listItems:
   - subtitleType: 0
     itemType: 0

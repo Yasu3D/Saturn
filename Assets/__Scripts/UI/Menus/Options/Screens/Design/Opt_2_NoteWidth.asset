@@ -14,13 +14,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   screenName: NoteWidth
   screenType: 2
+  defaultItemIndex: 2
   listItems:
   - subtitleType: 0
     itemType: 0
     color: {r: 1, g: 1, b: 1, a: 1}
-    title: '[WIP]'
+    title: 1
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
-    settingsParameter: 
-    settingsValue: 0
+    settingsParameter: NoteWidth
+    settingsValue: 1
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 2
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteWidth
+    settingsValue: 2
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 3
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteWidth
+    settingsValue: 3
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 4
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteWidth
+    settingsValue: 4
+  - subtitleType: 0
+    itemType: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+    title: 5
+    subtitle: 
+    settingsBinding: 
+    nextScreen: {fileID: 0}
+    settingsParameter: NoteWidth
+    settingsValue: 5

@@ -18,6 +18,7 @@ namespace SaturnGame.UI
 
         public string screenName;
         public UIScreenType screenType;
+        public int defaultItemIndex;
         public List<UIListItem> listItems;
     }
 

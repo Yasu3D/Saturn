@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   screenName: MaskDensity
   screenType: 2
+  defaultItemIndex: 2
   listItems:
   - subtitleType: 0
     itemType: 0
     color: {r: 0.9450981, g: 0.94117653, b: 0.9490197, a: 1}
-    title: No Mask
+    title: NO MASK
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
@@ -27,7 +28,7 @@ MonoBehaviour:
   - subtitleType: 0
     itemType: 0
     color: {r: 0.8352942, g: 0.82745105, b: 0.8588236, a: 1}
-    title: Mask +1
+    title: MASK +1
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
@@ -36,7 +37,7 @@ MonoBehaviour:
   - subtitleType: 0
     itemType: 0
     color: {r: 0.7372549, g: 0.7176471, b: 0.77647066, a: 1}
-    title: Mask +2
+    title: MASK +2
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
@@ -45,7 +46,7 @@ MonoBehaviour:
   - subtitleType: 0
     itemType: 0
     color: {r: 0.6, g: 0.5764706, b: 0.6666667, a: 1}
-    title: Mask +3
+    title: MASK +3
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
@@ -54,7 +55,7 @@ MonoBehaviour:
   - subtitleType: 0
     itemType: 0
     color: {r: 0.43529415, g: 0.3803922, b: 0.54509807, a: 1}
-    title: Mask +4
+    title: MASK +4
     subtitle: 
     settingsBinding: 
     nextScreen: {fileID: 0}
