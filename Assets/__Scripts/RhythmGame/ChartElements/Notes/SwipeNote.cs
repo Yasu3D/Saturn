@@ -56,7 +56,8 @@ namespace SaturnGame.RhythmGame
         }
 
         // The swipe algorithm depends on the concept of an "average offset".
-        // Here, "offset" is the distance from the left side of the note to a segment within the note.
+        // Here, "offset" is the distance from the start of the swipe to a segment within the swipe.
+        // Note that offset increases in the direction of the swipe.
         // The average offset is the average of offset values for all the segments that are touched in a given touchState.
         // So, given a touchState, we look at all touched segments within the note, calculate their offsets, and average them.
         // Note that if multiple segments with the same anglePos but different depthPos are touched, they are all counted separately.
@@ -68,7 +69,12 @@ namespace SaturnGame.RhythmGame
             int segmentCount = 0;
             for (int anglePosOffset = 0; anglePosOffset < Size; anglePosOffset++)
             {
-                int anglePos = (anglePosOffset + Left) % 60;
+                int anglePos = Direction switch
+                {
+                    SwipeDirection.Clockwise => SaturnMath.Modulo(Right - anglePosOffset, 60),
+                    SwipeDirection.Counterclockwise => SaturnMath.Modulo(Left + anglePosOffset, 60),
+                    _ => throw new ArgumentOutOfRangeException(nameof(Direction))
+                };
                 for (int depthPos = 0; depthPos < 4; depthPos++)
                 {
                     if (touchState.IsPressed(anglePos, depthPos))
@@ -81,25 +87,25 @@ namespace SaturnGame.RhythmGame
             return segmentCount > 0 ? anglePosSum / segmentCount : null;
         }
 
-        // The startAverageOffset is the average offset at the first time the note is touched.
-        // Warning: once the note is touched, no later average offset will be used for the comparison.
-        // (This probably needs to be changed later, but needs some care.)
-        public virtual bool HasStart => startAverageOffset != null;
-        private double? startAverageOffset;
-        public virtual void SetStart(TouchState touchState)
+        // The minAverageOffset is the minimum average offset that we have seen on any frame within the swipe.
+        private double? minAverageOffset = null;
+        public virtual void MaybeUpdateMinAverageOffset(TouchState touchState)
         {
             // If note is not touched, this will be null
-            startAverageOffset = AverageTouchOffset(touchState);
+            if (minAverageOffset is null || AverageTouchOffset(touchState) < minAverageOffset.Value)
+            {
+                minAverageOffset = AverageTouchOffset(touchState);
+            }
         }
 
-        // A note is swiped if difference between the current average offset and the start average offset is more than 1.9.
+        // A note is swiped if difference between the current average offset and the min average offset is more than 1.9.
         // 1.9 is chosen based on testing with the original game. It should surely be less than 2.
-        // If the absolute value of the difference is more than 30, the swipe is not counted, since this would be more than
+        // If the  difference is more than 30, the swipe is not counted, since this would be more than
         // half the circle around. It's more likely that this is some other kind of input.
         // (E.g. touching the left then right edge of a >30 size note.)
         public virtual bool Swiped(TouchState touchState)
         {
-            if (startAverageOffset == null)
+            if (minAverageOffset == null)
             {
                 return false;
             }
@@ -108,16 +114,8 @@ namespace SaturnGame.RhythmGame
             {
                 return false;
             }
-            double anglePosDiff = (double)curAverageOffset - (double)startAverageOffset;
-            switch (Direction)
-            {
-                case SwipeDirection.Clockwise:
-                    return anglePosDiff < -1.9 && anglePosDiff > -30;
-                case SwipeDirection.Counterclockwise:
-                    return anglePosDiff > 1.9 && anglePosDiff < 30;
-                default:
-                    throw new Exception($"Invalid SwipeDirection {Direction}");
-            }
+            double anglePosDiff = curAverageOffset.Value - minAverageOffset.Value;
+            return anglePosDiff is > 1.9 and < 30;
         }
         // The "difference of averages" approach is preferred because it should still work alright if the non-swiping hand is
         // statically holding within the note, regardless of the position of that hand.
@@ -146,16 +144,12 @@ namespace SaturnGame.RhythmGame
             }
 
             // Four "virtual" notes of size 30 cover each hemisphere - top, left, bottom, right.
-            private SwipeNote[] virtualNotes;
-            public override bool HasStart => virtualNotes.Any(note => note.HasStart);
-            public override void SetStart(TouchState touchState)
+            private readonly SwipeNote[] virtualNotes;
+            public override void MaybeUpdateMinAverageOffset(TouchState touchState)
             {
                 foreach (var virtualNote in virtualNotes)
                 {
-                    if (!virtualNote.HasStart)
-                    {
-                        virtualNote.SetStart(touchState);
-                    }
+                    virtualNote.MaybeUpdateMinAverageOffset(touchState);
                 }
             }
 

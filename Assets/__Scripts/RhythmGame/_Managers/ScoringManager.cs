@@ -284,12 +284,8 @@ namespace SaturnGame.RhythmGame
                                 }
                                 break;
                             case SwipeNote swipeNote:
-                                if (!swipeNote.HasStart)
-                                {
-                                    // Idempotent if note is not touched
-                                    swipeNote.SetStart(touchState);
-                                }
-                                else if (swipeNote.Swiped(touchState))
+                                swipeNote.MaybeUpdateMinAverageOffset(touchState);
+                                if (swipeNote.Swiped(touchState))
                                 {
                                     float errorMs = hitTimeMs - swipeNote.TimeMs;
                                     ShowDebugText($"{noteScanIndex} (swipe): {errorMs}");
