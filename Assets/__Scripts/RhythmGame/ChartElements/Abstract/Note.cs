@@ -164,11 +164,13 @@ namespace SaturnGame.RhythmGame
             R_Note,
         }
 
+        protected const float _FRAMEMS = 1000f / 60f;
         protected static HitWindow[] baseHitWindows = {
-            // TODO: Set these values correctly. These are placeholder values.
-            new HitWindow(-45f, 45f, RhythmGame.Judgement.Marvelous),
-            new HitWindow(-90f, 90f, RhythmGame.Judgement.Great),
-            new HitWindow(-180f, 180f, RhythmGame.Judgement.Good),
+            // Touch note windows from the original game.
+            // Note: these are frame-based, so the feel will be different.
+            new HitWindow(-3 * _FRAMEMS, 3 * _FRAMEMS, RhythmGame.Judgement.Marvelous),
+            new HitWindow(-5 * _FRAMEMS, 5 * _FRAMEMS, RhythmGame.Judgement.Great),
+            new HitWindow(-6 * _FRAMEMS, 6 * _FRAMEMS, RhythmGame.Judgement.Good),
             // There is no early or late Miss window.
             // You get a Miss if all windows pass without hitting the note.
         };

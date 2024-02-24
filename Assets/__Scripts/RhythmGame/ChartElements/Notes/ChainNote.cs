@@ -15,8 +15,7 @@ namespace SaturnGame.RhythmGame
         }
 
         private static HitWindow[] _hitWindows = {
-            // TODO: fix
-            new HitWindow(-45f, 45f, RhythmGame.Judgement.Marvelous),
+            new HitWindow(-4 * _FRAMEMS, 4 * _FRAMEMS, RhythmGame.Judgement.Marvelous),
         };
         public override HitWindow[] HitWindows => _hitWindows;
     }

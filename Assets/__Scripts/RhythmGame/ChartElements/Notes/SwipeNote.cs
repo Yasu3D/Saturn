@@ -42,8 +42,12 @@ namespace SaturnGame.RhythmGame
             Direction = direction;
         }
 
-        // TODO: fix
-        public override HitWindow[] HitWindows => baseHitWindows;
+        private static HitWindow[] _hitWindows = {
+            new HitWindow(-5 * _FRAMEMS, 5 * _FRAMEMS, RhythmGame.Judgement.Marvelous),
+            new HitWindow(-8 * _FRAMEMS, 10 * _FRAMEMS, RhythmGame.Judgement.Great),
+            new HitWindow(-10 * _FRAMEMS, 10 * _FRAMEMS, RhythmGame.Judgement.Good),
+        };
+        public override HitWindow[] HitWindows => _hitWindows;
 
         public enum SwipeDirection
         {
