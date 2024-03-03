@@ -61,7 +61,7 @@ namespace SaturnGame.RhythmGame
             // During streaming mode, board sends data every 8ms.
             port.ReadTimeout = 1000;
             port.WriteTimeout = 1000;
-            
+
             // Send once to get board to shut up.
             await SendData(port, new byte[] { (byte)SerialCommand.GET_SYNC_BOARD_VER });
             // Wait to make sure we've received all incoming bytes and they are all discarded.
@@ -69,11 +69,11 @@ namespace SaturnGame.RhythmGame
             port.DiscardInBuffer();
             Debug.Log($"Port {(char)side}: shut up!");
 
-            // Get sync board version
-            await SendData(port, new byte[] { (byte)SerialCommand.GET_SYNC_BOARD_VER });
-            await ReadData(port, 8);
-            // Currently, we discard this data as unused.
-            Debug.Log($"Port {(char)side}: got sync board version.");
+            // // Get sync board version
+            // await SendData(port, new byte[] { (byte)SerialCommand.GET_SYNC_BOARD_VER });
+            // await ReadData(port, 8);
+            // // Currently, we discard this data as unused.
+            // Debug.Log($"Port {(char)side}: got sync board version.");
 
             // Get unit board versions
             await SendData(port, new byte[] { (byte)SerialCommand.GET_UNIT_BOARD_VER });
@@ -84,6 +84,15 @@ namespace SaturnGame.RhythmGame
                 throw new Exception("Sync Board disagrees which side it is! Wanted {(char)side}, got {reportedSide}.");
             }
             Debug.Log($"Port {(char)side}: got unit board version.");
+
+            const byte onThreshold = 17;
+            const byte offThreshold = 12;
+            // TODO: don't hardcode checksum
+            var thresholdCommand = new byte[] { (byte)SerialCommand.SET_THRESHOLDS, onThreshold, onThreshold, onThreshold, onThreshold, onThreshold, onThreshold, offThreshold, offThreshold, offThreshold, offThreshold, offThreshold, offThreshold, 0x14 };
+            await SendData(port, thresholdCommand);
+            byte[] thresholdResponse = await ReadData(port, 3);
+            Debug.Log($"Threshold ({onThreshold}/{offThreshold}) response:");
+            Debug.Log(BitConverter.ToString(thresholdResponse));
 
             // Start touch stream
             await SendData(port, new byte[] { (byte)SerialCommand.START_AUTO_SCAN, 0x7F, 0x3F, 0x64, 0x28, 0x44, 0x3B, 0x3A });
@@ -391,7 +400,7 @@ namespace SaturnGame.RhythmGame
             TOUCH_DATA = 0x81,
             UNKNOWN_4 = 0x91,
             UNKNOWN_5 = 0x93,
-            UNKNOWN_2 = 0x94,
+            SET_THRESHOLDS = 0x94,
             GET_SYNC_BOARD_VER = 0xA0,
             UNKNOWN_1 = 0xA2,
             UNKNOWN_READ = 0xA3,
