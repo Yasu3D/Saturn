@@ -81,7 +81,7 @@ namespace SaturnGame.RhythmGame
         // This should be greater than the maximum early timing window of any note.
         const float IgnoreFutureNotesThreshold = 300f;
 
-        bool segmentsOverlap(Note note1, Note note2)
+        bool segmentsOverlap(PositionedChartElement note1, PositionedChartElement note2)
         {
             if (note1.Left == note1.Right || note2.Left == note2.Right)
             {
@@ -94,7 +94,7 @@ namespace SaturnGame.RhythmGame
 
             // See point_in_half_open_interval in the link.
             // This returns true iff point is in the half-open interval [note.Left, note.Right) (mod 60)
-            bool pointWithinNote(Note note, int point)
+            bool pointWithinNote(PositionedChartElement note, int point)
             {
                 return SaturnMath.Modulo(point - note.Left, 60) < SaturnMath.Modulo(note.Right - note.Left, 60);
             }
@@ -110,13 +110,23 @@ namespace SaturnGame.RhythmGame
             List<Note> allNotesFromChart = Chart.notes.Concat(Chart.holdNotes).OrderBy(note => note.TimeMs).ToList();
             // TODO: swipe notes within a hold... that is gonna be hell lmao
             // TODO: holds with a swipe on the hold start take on the timing window of the swipe??
-            // TODO: hold ends swipe into hold start
             notes = new();
 
             foreach (Note note in allNotesFromChart)
             {
                 note.EarliestHitTimeMs = note.TimeMs + note.HitWindows[^1].LeftMs;
                 note.LatestHitTimeMs = note.TimeMs + note.HitWindows[^1].RightMs;
+
+                foreach (HoldNote holdNote in Chart.holdNotes)
+                {
+                    if (holdNote.End.ChartTick == note.ChartTick && segmentsOverlap(holdNote.End, note))
+                    {
+                        // Notes that overlap with a hold end should lose their early window (except Marvelous).
+                        note.EarliestHitTimeMs =
+                            Math.Max(note.EarliestHitTimeMs.Value, note.TimeMs + note.HitWindows[0].LeftMs);
+                        break;
+                    }
+                }
 
                 List<Note> overlappingNotes = new();
 
@@ -144,7 +154,10 @@ namespace SaturnGame.RhythmGame
                     // We have overlapping timing windows. Split the difference between the two closest notes.
                     Note latestNote = overlappingNotes.OrderByDescending(note => note.TimeMs).First();
                     // TODO: If the windows of the two notes are different sizes (e.g. touch vs swipe notes), bias the split point.
-                    float cutoff = (latestNote.TimeMs + note.TimeMs) / 2;
+                    // Use Max here to avoid expanding the window here if it's already truncated.
+                    // This should probably actually just split the overlap - otherwise it's possible to have some part with no window.
+                    // (E.g. if the latestNote is already truncated on the right side.)
+                    float cutoff = Math.Max(note.EarliestHitTimeMs.Value, (latestNote.TimeMs + note.TimeMs) / 2);
                     note.EarliestHitTimeMs = cutoff;
                     foreach (Note otherNote in overlappingNotes)
                     {
