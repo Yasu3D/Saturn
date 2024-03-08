@@ -14,7 +14,7 @@ namespace SaturnGame.Data
 
         public void LoadAllSongData()
         {
-            string songpacksPath = Path.Combine(Application.streamingAssetsPath, "Songpacks");
+            string songpacksPath = Path.Combine(Application.streamingAssetsPath, "SongPacks");
             var songDirectories = Directory.EnumerateFiles(songpacksPath, "meta.mer", SearchOption.AllDirectories);
 
             foreach(var filepath in songDirectories)
