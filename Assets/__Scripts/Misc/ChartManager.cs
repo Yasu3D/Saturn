@@ -275,14 +275,14 @@ namespace SaturnGame.RhythmGame
                             break;
                         case Gimmick.GimmickType.StopStart:
                             // Convert Stops to HiSpeed changes internally since they're functionally identical(?)
-                            tempGimmick.Type = Gimmick.GimmickType.HiSpeed;
+                            tempGimmick.Type = Gimmick.GimmickType.StopStart;
                             tempGimmick.HiSpeed = 0;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case Gimmick.GimmickType.StopEnd:
                             // Same as above.
-                            tempGimmick.Type = Gimmick.GimmickType.HiSpeed;
-                            tempGimmick.HiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.TimeMs < tempGimmick.TimeMs && x.HiSpeed != 0)?.HiSpeed ?? 1;
+                            tempGimmick.Type = Gimmick.GimmickType.StopEnd;
+                            tempGimmick.HiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.TimeMs < tempGimmick.TimeMs && x.Type is Gimmick.GimmickType.HiSpeed)?.HiSpeed ?? 1;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case Gimmick.GimmickType.ReverseEffectStart:
@@ -298,7 +298,6 @@ namespace SaturnGame.RhythmGame
         /// <summary>
         /// Check for common errors that may happen during a chart load.
         /// </summary>
-        /// <returns></returns>
         private (bool passed, string error) CheckLoadErrors()
         {
             // I made the checks separate to spare the next person reading this an aneyurism.
@@ -372,8 +371,6 @@ namespace SaturnGame.RhythmGame
         /// Creates a copy of a Note, remaps it's position in time, <br />
         /// then adds a copy of it to <c>reverseNotes</c>
         /// </summary>
-        /// <param name="note">The Note to reverse</param>
-        /// <param name="timeAxis">The axis to reverse around.</param>
         private void ReverseNote(Note note, float startTime, float midTime, float endTime)
         {
             Note copy = (Note) note.Clone();
@@ -386,8 +383,6 @@ namespace SaturnGame.RhythmGame
         /// Reverses a Hold Note by creating a deep copy of it, <br />
         /// then remapping each segment note's position in time.
         /// </summary>
-        /// <param name="note">The Note to reverse</param>
-        /// <param name="timeAxis">The axis to reverse around.</param>
         private void ReverseHold(HoldNote hold, float startTime, float midTime, float endTime)
         {
             HoldNote copy = HoldNote.DeepCopy(hold);
@@ -411,8 +406,6 @@ namespace SaturnGame.RhythmGame
         /// Check if the last parsed note is on the same timestamp as the current note. <br />
         /// This should efficiently and cleanly detect any simultaneous notes.
         /// </summary>
-        /// <param name="current"></param>
-        /// <param name="last"></param>
         private void CheckSync(Note current, Note last)
         {
             if (last == null) return;
@@ -449,6 +442,7 @@ namespace SaturnGame.RhythmGame
 
             // cg505's note: This may not work when there are more than 2 simultaneous notes... but let's not
             // get a headache over that at this point.
+            // yasu's note: it appears mercury's system is just as "dumb". Good enough :3
 
             int position0 = SaturnMath.Modulo(note0.Position + note0.Size - 1, 60); // pos + 1 // size  - 2
             int size0 = SaturnMath.Modulo(note1.Position - position0, 60) + 1;  // pos + 1 // shift - 1
