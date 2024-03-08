@@ -282,7 +282,7 @@ namespace SaturnGame.RhythmGame
                         case Gimmick.GimmickType.StopEnd:
                             // Same as above.
                             tempGimmick.Type = Gimmick.GimmickType.StopEnd;
-                            tempGimmick.HiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.TimeMs < tempGimmick.TimeMs && x.Type is Gimmick.GimmickType.HiSpeed)?.HiSpeed ?? 1;
+                            tempGimmick.HiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.ChartTick < tempGimmick.ChartTick && x.Type is Gimmick.GimmickType.HiSpeed)?.HiSpeed ?? 1;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case Gimmick.GimmickType.ReverseEffectStart:
