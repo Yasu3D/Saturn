@@ -100,7 +100,6 @@ namespace SaturnGame.RhythmGame
         /// either finds a <c>#BODY</c> tag or runs out of lines to parse.
         /// </summary>
         /// <param name="merFile"></param>
-        /// <param name="readerIndex"></param>
         private void ParseMetadata(List<string> merFile)
         {
             if (merFile == null) return;
@@ -134,7 +133,6 @@ namespace SaturnGame.RhythmGame
         /// Loops through a .mer file's body and adds chartObjects to appropriate lists.
         /// </summary>
         /// <param name="merFile"></param>
-        /// <param name="readerIndex"></param>
         private void ParseChart(List<string> merFile)
         {
             Note tempNote;
@@ -276,7 +274,7 @@ namespace SaturnGame.RhythmGame
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case Gimmick.GimmickType.StopStart:
-                            // Convert Stops to 0/1 HiSpeed changes internally since they're functionally identical(?)
+                            // Convert Stops to HiSpeed changes internally since they're functionally identical(?)
                             tempGimmick.Type = Gimmick.GimmickType.HiSpeed;
                             tempGimmick.HiSpeed = 0;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
@@ -284,7 +282,7 @@ namespace SaturnGame.RhythmGame
                         case Gimmick.GimmickType.StopEnd:
                             // Same as above.
                             tempGimmick.Type = Gimmick.GimmickType.HiSpeed;
-                            tempGimmick.HiSpeed = 1;
+                            tempGimmick.HiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.TimeMs < tempGimmick.TimeMs && x.HiSpeed != 0)?.HiSpeed ?? 1;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
                         case Gimmick.GimmickType.ReverseEffectStart:
