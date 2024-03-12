@@ -19,7 +19,7 @@ public class BgmProgressBar : MonoBehaviour
     void Update()
     {
         float length = bgmManager.bgmClip.length * 1000;
-        float time = timeManager.VisualTime;
+        float time = timeManager.VisualTimeMs;
 
         float progress = Mathf.InverseLerp(0, length, time);
 
