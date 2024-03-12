@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -18,6 +22,13 @@ namespace SaturnGame.RhythmGame
         [SerializeField] private TMPro.TextMeshProUGUI DebugText;
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
+
+        public struct ReplayFrame
+        {
+            public float TimeMs;
+            public TouchState TouchState;
+        }
+        public List<ReplayFrame> Replay = new();
 
         public Judgement LastJudgement { get; private set; } = Judgement.None;
         public float? LastJudgementTimeMs { get; private set; } = null;
@@ -175,7 +186,7 @@ namespace SaturnGame.RhythmGame
         List<HoldNote> activeHolds = new();
         TouchState prevTouchState;
         // TODO: This is currently super basic and assumes all the notes are touch notes.
-        void HandleInput(float hitTimeMs, TouchState touchState)
+        private void HandleInput(float hitTimeMs, TouchState touchState)
         {
             if (notes is null)
             {
@@ -526,6 +537,7 @@ namespace SaturnGame.RhythmGame
         }
 
         public void NewTouchState(TouchState touchState) {
+            Replay.Add(new ReplayFrame { TimeMs = timeManager.VisualTime, TouchState = touchState });
             HandleInput(timeManager.VisualTime, touchState);
         }
 
@@ -543,7 +555,7 @@ namespace SaturnGame.RhythmGame
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                HandleInput(timeManager.VisualTime, null);
+                // HandleInput(timeManager.VisualTime, null);
                 Debug.Log("judgements:");
                 foreach (var note in notes)
                 {
@@ -553,6 +565,25 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.F12))
+            {
+                WriteReplayFile();
+            }
+        }
+
+        // TODO maybe: stream to file continuously rather than all at the end
+        private void WriteReplayFile()
+        {
+            string chartRelativePath = Path.GetRelativePath(Application.streamingAssetsPath, ChartManager.LoadedChart);
+            string timestamp = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
+            string replayFileName = $"replay-{chartRelativePath}-{timestamp}.json.gz";
+            string escapedReplayFileName = String.Join('_', replayFileName.Split(Path.GetInvalidFileNameChars()));
+            string replayPath = Path.Combine(Application.persistentDataPath, escapedReplayFileName);
+            using FileStream replayFileStream = File.Create(replayPath);
+            using GZipStream compressedStream = new(replayFileStream, System.IO.Compression.CompressionLevel.Fastest);
+            using StreamWriter writer = new(compressedStream);
+            new JsonSerializer().Serialize(writer, Replay);
         }
     }
 }
