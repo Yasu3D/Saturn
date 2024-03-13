@@ -8,7 +8,6 @@ public class ScoreNumRenderer : MonoBehaviour
 
     public void SetScoreNum(int score)
     {
-        // TODO spaces, padding
-        scoreNumText.text = score.ToString();
+        scoreNumText.text = score.ToString("0' '000' '000");
     }
 }
