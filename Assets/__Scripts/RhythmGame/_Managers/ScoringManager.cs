@@ -20,6 +20,10 @@ namespace SaturnGame.RhythmGame
         private Chart Chart => ChartManager.Instance.chart;
         private ChartManager ChartManager => ChartManager.Instance;
         [SerializeField] private TMPro.TextMeshProUGUI DebugText;
+        public bool AutoWriteReplays = true;
+        // Only modify on main thread Update()
+        public bool WritingReplayAndExiting = false;
+
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
 
@@ -645,17 +649,47 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-            
+
+            // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
+            // of the end of the audio clip.
+            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTime && !WritingReplayAndExiting)
+            {
+                async Awaitable EndSong()
+                {
+                    WritingReplayAndExiting = true;
+                    if (AutoWriteReplays)
+                    {
+                        await WriteReplayFile();
+                    }
+                    ChartManager.Instance.LastScoreData = CurrentScoreData();
+                    SceneSwitcher.Instance.LoadScene("_SongResults");
+                }
+                // chart is done
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                // Don't await within Update()
+                EndSong();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            }
+
+
+
             if (Input.GetKeyDown(KeyCode.F12))
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                // Don't await within Update()
                 WriteReplayFile();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
             if (Input.GetKeyDown(KeyCode.F11))
             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                // Don't await within Update()
+
                 // For now, copy the replay you want to view to "replay.json.gz" in the persistentDataPath.
                 ReadReplayFile(Path.Combine(Application.persistentDataPath, "replay.json.gz"));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
-            
+
             if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTime)
             {
                 // chart is done
@@ -671,7 +705,7 @@ namespace SaturnGame.RhythmGame
         }
 
         // TODO maybe: stream to file continuously rather than all at the end
-        private async void WriteReplayFile()
+        private async Awaitable WriteReplayFile()
         {
             string chartRelativePath = Path.GetRelativePath(Application.streamingAssetsPath, ChartManager.LoadedChart);
             string timestamp = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
@@ -690,10 +724,11 @@ namespace SaturnGame.RhythmGame
             var threadsafeReplay = Replay.Take(Replay.Count);
             await Awaitable.BackgroundThreadAsync();
             serializer.Serialize(writer, threadsafeReplay);
+            await Awaitable.MainThreadAsync();
             Debug.Log($"Replay {replayFileName} successfully written!");
         }
 
-        private async void ReadReplayFile(string replayPath)
+        private async Awaitable ReadReplayFile(string replayPath)
         {
             Debug.Log($"Reading replay from {replayPath}");
             PlayingFromReplay = true;
