@@ -15,7 +15,7 @@ public class ScoreText : MonoBehaviour
     private int prevScore = 0;
     void Update()
     {
-        displayedScore = scoringManager.CurrentScore();
+        displayedScore = scoringManager.CurrentScoreData().Score;
         if (displayedScore != prevScore)
         {
             text.text = $"<mspace=0.7em>{displayedScore:D7}</mspace>";

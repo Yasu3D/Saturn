@@ -23,6 +23,8 @@ namespace SaturnGame.RhythmGame
         public string LoadedChart { get; private set; } = null;
         private int readerIndex = 0;
 
+        public ScoreData LastScoreData;
+
         /// <summary>
         /// Parses a <c>.mer</c> file and creates lists of objects from it.
         /// </summary>

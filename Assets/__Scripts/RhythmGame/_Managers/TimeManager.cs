@@ -102,6 +102,9 @@ namespace SaturnGame.RhythmGame
 
             if (Input.GetKeyDown(KeyCode.J))
                 SetPlaybackSpeed(0.5f * PlaybackSpeed, false);
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                SceneSwitcher.Instance.LoadScene("_SongSelect");
         }
     }
 }
