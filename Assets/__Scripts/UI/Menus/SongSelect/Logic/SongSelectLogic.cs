@@ -36,18 +36,47 @@ namespace SaturnGame.UI
         void Awake()
         {
             songDatabase.LoadAllSongData();
-            
+
+            int songIndex = 0;
+            int difficultyIndex = 0;
+            if (PersistentStateManager.Instance.LastSelectedSongPath is string path)
+            {
+                int foundIndex = songDatabase.songs.FindIndex(song => song.folderPath == path);
+                // -1 indicates not found
+                if (foundIndex != -1)
+                {
+                    songIndex = foundIndex;
+                    difficultyIndex = PersistentStateManager.Instance.LastSelectedDifficulty;
+                }
+            }
+
+            SetSongAndDifficulty(songIndex, difficultyIndex);
+
+            LoadAllCards();
+        }
+
+        private void SetSongAndDifficulty(int songIndex, int difficultyIndex)
+        {
+            SelectedSongIndex = songIndex;
+            PersistentStateManager.Instance.LastSelectedSongPath = songDatabase.songs[SelectedSongIndex].folderPath;
+            // Always set difficulty after setting the song to avoid leaving difficultyIndex set to a value that is not
+            // valid for the current song.
+            SetDifficulty(difficultyIndex);
+        }
+
+        private void SetDifficulty(int difficultyIndex)
+        {
             SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
-            SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
+            SelectedDifficulty = FindNearestDifficulty(diffs, difficultyIndex);
+            PersistentStateManager.Instance.LastSelectedDifficulty = SelectedDifficulty;
 
             diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
             diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
             diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
             diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
 
-
             displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
-            LoadAllCards();
+
             SetBgmValues();
         }
 
@@ -57,20 +86,7 @@ namespace SaturnGame.UI
             if (SelectedDifficulty >= 4) return;
 
             int prevDifficulty = SelectedDifficulty;
-
-            SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
-            int index = SelectedDifficulty + 1;
-            SelectedDifficulty = FindNearestDifficulty(diffs, index);
-
-            diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-
-            displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
-
-            SetBgmValues();
-
+            SetDifficulty(SelectedDifficulty + 1);
 
             if (prevDifficulty != SelectedDifficulty)
             {
@@ -92,19 +108,7 @@ namespace SaturnGame.UI
             if (SelectedDifficulty <= 0) return;
             
             int prevDifficulty = SelectedDifficulty;
-
-            SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
-            int index = SelectedDifficulty - 1;
-            SelectedDifficulty = FindNearestDifficulty(diffs, index);
-
-            diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-
-            displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
-            
-            SetBgmValues();
+            SetDifficulty(SelectedDifficulty - 1);
 
             if (prevDifficulty != SelectedDifficulty)
             {
@@ -181,19 +185,7 @@ namespace SaturnGame.UI
 
             UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
-            // Index
-            SelectedSongIndex = SaturnMath.Modulo(SelectedSongIndex - 1, songDatabase.songs.Count);
-
-            // Diff
-            SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
-            SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
-            diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-
-            // Update Selected Song
-            displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
+            SetSongAndDifficulty(SaturnMath.Modulo(SelectedSongIndex - 1, songDatabase.songs.Count), SelectedDifficulty);
 
             // Update Cards
             cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Right);
@@ -207,7 +199,6 @@ namespace SaturnGame.UI
             cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
             // Audio Preview
-            SetBgmValues();
             bgmPreview.FadeoutBgmPreview();
             bgmPreview.ResetLingerTimer();
         }
@@ -219,20 +210,9 @@ namespace SaturnGame.UI
 
             UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
-            // Index
-            SelectedSongIndex = SaturnMath.Modulo(SelectedSongIndex + 1, songDatabase.songs.Count);
+            SetSongAndDifficulty(SaturnMath.Modulo(SelectedSongIndex + 1, songDatabase.songs.Count), SelectedDifficulty);
+            PersistentStateManager.Instance.LastSelectedSongPath = songDatabase.songs[SelectedSongIndex].folderPath;
 
-            // Diffs
-            SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
-            SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
-            diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-            diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-
-            // Update Selected Song
-            displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
-            
             // Update Cards
             cardAnimator.Anim_ShiftCards(SongSelectCardAnimator.MoveDirection.Left);
 
@@ -246,7 +226,6 @@ namespace SaturnGame.UI
             cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
             // Audio Preview
-            SetBgmValues();
             bgmPreview.FadeoutBgmPreview();
             bgmPreview.ResetLingerTimer();
         }
@@ -261,7 +240,7 @@ namespace SaturnGame.UI
         {
             for (int i = 0; i < cardAnimator.songCards.Count; i++)
             {
-                int index = SaturnMath.Modulo(i - cardAnimator.cardHalfCount, songDatabase.songs.Count);
+                int index = SaturnMath.Modulo(SelectedSongIndex + i - cardAnimator.cardHalfCount, songDatabase.songs.Count);
                 SongData data = songDatabase.songs[index];
                 string path = data.jacketPath;
 
