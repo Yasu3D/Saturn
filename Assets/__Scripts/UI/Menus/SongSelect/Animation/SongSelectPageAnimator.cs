@@ -54,6 +54,7 @@ namespace SaturnGame.UI
 
         public void Anim_ToChartPreview()
         {
+            // If you update this, also update ToChartPreviewInstant so the end states match.
             currentSequence.Kill(true);
             listRect.gameObject.SetActive(true);
             previewRect.gameObject.SetActive(true);
@@ -76,6 +77,21 @@ namespace SaturnGame.UI
             currentSequence.Join(listGroup.DOFade(0, duration).SetEase(Ease.OutExpo).OnComplete(() =>
                 listRect.gameObject.SetActive(false)
             ));
+        }
+
+        public void ToChartPreviewInstant()
+        {
+            // If you update this, also update Anim_ToChartPreview to animate in the end state correctly.
+            currentSequence.Kill(true);
+            listRect.gameObject.SetActive(true);
+            previewRect.gameObject.SetActive(true);
+            listGroup.gameObject.SetActive(false);
+            listRect.localScale = listZoomScale * Vector3.one;
+            viewportRect.localScale = Vector3.one;
+            navigatorRect.localScale = Vector3.one;
+            navigatorRect.anchoredPosition = new(navigatorPosB, navigatorRect.anchoredPosition.y);
+            panelRect.anchoredPosition = new(panelPosB, panelRect.anchoredPosition.y);
+            stripeRect.anchoredPosition = new(stripePosB, stripeRect.anchoredPosition.y);
         }
     }
 }
