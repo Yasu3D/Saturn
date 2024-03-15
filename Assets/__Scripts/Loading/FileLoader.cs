@@ -60,7 +60,9 @@ namespace SaturnGame.Loading
 
                     if (webRequest.result == UnityWebRequest.Result.Success)
                     {
-                        var test = DownloadHandlerAudioClip.GetContent(webRequest);
+                        var handler = (DownloadHandlerAudioClip) webRequest.downloadHandler;
+                        handler.compressed = true;
+                        var test = handler.audioClip;
                         return test;
                     }
                     else
