@@ -18,7 +18,7 @@ namespace SaturnGame.UI
         public int SelectedSongIndex { get; private set; } = 0;
         public int SelectedDifficulty { get; private set; } = 0;
 
-        public enum MenuPage 
+        public enum MenuPage
         {
         SongSelect = 0,
         ChartPreview = 1,
@@ -35,7 +35,13 @@ namespace SaturnGame.UI
 
         void Awake()
         {
+            Debug.Log($"Coming from {SceneSwitcher.Instance.LastScene}");
+            page = SceneSwitcher.Instance.LastScene == "_Options" ? MenuPage.ChartPreview : MenuPage.SongSelect;
+
             songDatabase.LoadAllSongData();
+            
+            SongDifficulty[] diffs = songDatabase.songs[SelectedSongIndex].songDiffs;
+            SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
 
             int songIndex = 0;
             int difficultyIndex = 0;
@@ -52,7 +58,19 @@ namespace SaturnGame.UI
 
             SetSongAndDifficulty(songIndex, difficultyIndex);
 
+            displayAnimator.SetSongData(songDatabase.songs[SelectedSongIndex], SelectedDifficulty);
+
+            // TODO: async
             LoadAllCards();
+            SetBgmValues();
+
+            if (page is MenuPage.ChartPreview)
+            {
+                buttonManager.SetActiveButtons(1);
+                pageAnimator.ToChartPreviewInstant();
+                string chartPath = songDatabase.songs[SelectedSongIndex].songDiffs[SelectedDifficulty].chartFilepath;
+                LoadChart(chartPath);
+            }
         }
 
         private void SetSongAndDifficulty(int songIndex, int difficultyIndex)
@@ -174,7 +192,6 @@ namespace SaturnGame.UI
                 page = MenuPage.ExitingMenu;
 
                 SceneSwitcher.Instance.LoadScene("_RhythmGame");
-                return;
             }
         }
 
@@ -232,7 +249,24 @@ namespace SaturnGame.UI
 
         public void OnSort() {}
         public void OnFavorite() {}
-        public void OnOptions() {}
+
+        public void OnOptions()
+        {
+            if (page == MenuPage.ExitingMenu) return;
+
+            if (page != MenuPage.ChartPreview)
+            {
+                // nope sound
+                UIAudio.PlaySound(UIAudioController.UISound.Back);
+                return;
+            }
+
+            UIAudio.PlaySound(UIAudioController.UISound.Impact);
+            bgmPreview.FadeoutBgmPreview(true);
+            page = MenuPage.ExitingMenu;
+
+            SceneSwitcher.Instance.LoadScene("_Options");
+        }
 
 
 
@@ -315,6 +349,7 @@ namespace SaturnGame.UI
             if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
             if (Input.GetKeyDown(KeyCode.UpArrow)) OnDifficulutyPlus();
             if (Input.GetKeyDown(KeyCode.DownArrow)) OnDifficultyMinus();
+            if (Input.GetKeyDown(KeyCode.O)) OnOptions();
 
             if (Input.GetKeyDown(KeyCode.X)) bgmPreview.FadeoutBgmPreview();
         }
