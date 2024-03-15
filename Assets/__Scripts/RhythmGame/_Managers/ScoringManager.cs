@@ -36,6 +36,8 @@ namespace SaturnGame.RhythmGame
 
         public Judgement LastJudgement { get; private set; } = Judgement.None;
         public float? LastJudgementTimeMs { get; private set; } = null;
+        public bool NeedTouchHitsound = false;
+        public bool NeedSwipeSnapHitsound = false;
 
         private string loadedChart;
         // Notes must be sorted by note TimeMs
@@ -45,7 +47,7 @@ namespace SaturnGame.RhythmGame
             if (DebugText is null)
                 return;
 
-            DebugText.text = $"{timeManager.VisualTime}\n" + text;
+            DebugText.text = $"{timeManager.VisualTimeMs}\n" + text;
         }
 
         public int CurrentScore() {
@@ -214,7 +216,7 @@ namespace SaturnGame.RhythmGame
                         minNoteIndex = noteScanIndex + 1;
                         if (!note.Hit)
                         {
-                            Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.TimeMs + IgnorePastNotesThreshold}");
+                            //Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.TimeMs + IgnorePastNotesThreshold}");
                             if (note is HoldNote holdNote)
                             {
                                 holdNote.StartJudgement = Judgement.Miss;
@@ -268,6 +270,7 @@ namespace SaturnGame.RhythmGame
                                             note.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
                                             break;
                                         }
                                     }
@@ -284,6 +287,7 @@ namespace SaturnGame.RhythmGame
                                     note.HitTimeMs = hitTimeMs;
                                     LastJudgement = Judgement.Marvelous;
                                     LastJudgementTimeMs = hitTimeMs;
+                                    NeedTouchHitsound = true;
                                 }
                                 break;
                             case HoldNote holdNote:
@@ -306,6 +310,7 @@ namespace SaturnGame.RhythmGame
 
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
                                             break;
                                         }
                                     }
@@ -326,6 +331,8 @@ namespace SaturnGame.RhythmGame
                                             swipeNote.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
+                                            NeedSwipeSnapHitsound = true;
                                             break;
                                         }
                                     }
@@ -439,6 +446,8 @@ namespace SaturnGame.RhythmGame
                                             snapNote.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
+                                            NeedSwipeSnapHitsound = true;
                                             break;
                                         }
                                     }
@@ -449,7 +458,7 @@ namespace SaturnGame.RhythmGame
                     else if (hitTimeMs >= note.LatestHitTimeMs && !note.Hit)
                     {
                         // The note can no longer be hit.
-                        Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
+                        //Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
 
                         // TODO: this is copy paste from the first if case
                         if (note is HoldNote holdNote)
@@ -517,6 +526,10 @@ namespace SaturnGame.RhythmGame
                         ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
                         LastJudgement = judgement;
                         LastJudgementTimeMs = hitTimeMs;
+                        if (holdNote.CurrentlyHeld)
+                        {
+                            NeedTouchHitsound = true;
+                        }
                         activeHolds.Remove(holdNote);
 
                         // Since we removed an element, the current index should go back one
@@ -572,7 +585,6 @@ namespace SaturnGame.RhythmGame
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                // HandleInput(timeManager.VisualTime, null);
                 Debug.Log("judgements:");
                 foreach (var note in notes)
                 {
