@@ -9,4 +9,10 @@
       <property name="ShortenReferences">true</property>
     </attribute>
   </member>
+  <member name="T:System.Threading.Tasks.Task">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$thisType$</argument>
+      <property name="Message">Warning: Prefer UnityEngine.Awaitable for most uses.</property>
+    </attribute>
+  </member>
 </assembly>
