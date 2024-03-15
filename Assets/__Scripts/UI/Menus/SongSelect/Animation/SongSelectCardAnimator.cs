@@ -36,7 +36,7 @@ namespace SaturnGame.UI
         /// <summary>
         /// Number of cards on either side of the center card.
         /// </summary>
-        public int cardHalfCount {get; private set; }
+        public int cardHalfCount => songCards.Count / 2;
 
         public enum MoveDirection { Left = 1, Right = -1}
 
@@ -45,7 +45,6 @@ namespace SaturnGame.UI
             if (songCards.Count != previewCards.Count)
                 Debug.LogWarning("SongCard and PreviewCard count does not match!");
 
-            cardHalfCount = (int)(songCards.Count * 0.5f);
             CenterCardIndex = cardHalfCount;
         }
 
