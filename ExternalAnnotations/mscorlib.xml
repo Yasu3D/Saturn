@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly name="mscorlib, Version=4.0.0.0">
+  <member name="M:System.Convert.ToSingle(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToSingle(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+</assembly>
