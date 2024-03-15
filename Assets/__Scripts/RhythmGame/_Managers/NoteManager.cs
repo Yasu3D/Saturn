@@ -44,7 +44,7 @@ namespace SaturnGame.RhythmGame
         {
             if (maskIndex > Chart.masks.Count - 1) return;
 
-            while (maskIndex < Chart.masks.Count && timeManager.VisualTime >= Chart.masks[maskIndex].TimeMs)
+            while (maskIndex < Chart.masks.Count && timeManager.VisualTimeMs >= Chart.masks[maskIndex].TimeMs)
             {
                 guideLaneRenderer.SetMask(Chart.masks[maskIndex], timeManager.PlaybackSpeed);
                 maskIndex++;
@@ -130,7 +130,7 @@ namespace SaturnGame.RhythmGame
         {
             if (bgmDataIndex > Chart.notes.Count - 1) return;
 
-            while (bgmDataIndex < Chart.bgmDataGimmicks.Count && Chart.bgmDataGimmicks[bgmDataIndex].TimeMs <= timeManager.VisualTime)
+            while (bgmDataIndex < Chart.bgmDataGimmicks.Count && Chart.bgmDataGimmicks[bgmDataIndex].TimeMs <= timeManager.VisualTimeMs)
             {
                 bgmData = Chart.bgmDataGimmicks[bgmDataIndex];
 
@@ -145,7 +145,7 @@ namespace SaturnGame.RhythmGame
         {
             if (hiSpeedIndex > Chart.notes.Count - 1) return;
 
-            while (hiSpeedIndex < Chart.hiSpeedGimmicks.Count && Chart.hiSpeedGimmicks[hiSpeedIndex].TimeMs <= timeManager.VisualTime)
+            while (hiSpeedIndex < Chart.hiSpeedGimmicks.Count && Chart.hiSpeedGimmicks[hiSpeedIndex].TimeMs <= timeManager.VisualTimeMs)
             {
                 lastHiSpeedChange = Chart.hiSpeedGimmicks[hiSpeedIndex];
                 hiSpeedIndex++;
@@ -167,7 +167,7 @@ namespace SaturnGame.RhythmGame
 
             if (reverseNoteIndex > Chart.reverseNotes.Count) return;
 
-            if (reverseGimmickIndex < Chart.reverseGimmicks.Count - 1 && Chart.reverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTime)
+            if (reverseGimmickIndex < Chart.reverseGimmicks.Count - 1 && Chart.reverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTimeMs)
             {
                 switch (Chart.reverseGimmicks[reverseGimmickIndex].Type)
                 {
@@ -544,12 +544,12 @@ namespace SaturnGame.RhythmGame
         {
             if (reverseActive)
             {
-                float progress = SaturnMath.InverseLerp(reverseStartTime, reverseMidTime, GetScaledTime(timeManager.VisualTime));
+                float progress = SaturnMath.InverseLerp(reverseStartTime, reverseMidTime, GetScaledTime(timeManager.VisualTimeMs));
                 float ease = SaturnMath.Ease.Reverse(progress);
                 return Mathf.Lerp(reverseStartTime, reverseMirrorTime, ease);
             }
 
-            return GetScaledTime(timeManager.VisualTime);
+            return GetScaledTime(timeManager.VisualTimeMs);
         }
 
         void Update()

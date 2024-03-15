@@ -20,7 +20,7 @@ public class JudgementDisplay : MonoBehaviour
             text.enabled = false;
             return;
         }
-        if (scoringManager.LastJudgementTimeMs.Value + 1000 < timeManager.RawVisualTime)
+        if (scoringManager.LastJudgementTimeMs.Value + 1000 < timeManager.RawVisualTimeMs)
         {
             text.enabled = false;
             return;
