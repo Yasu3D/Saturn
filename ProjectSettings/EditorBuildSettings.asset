@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/_RhythmGame.unity
     guid: b47877bd8015146409322f16ed3a47f0
+  - enabled: 1
+    path: Assets/Scenes/Menus/_Options.unity
+    guid: 5fdf760b4daba0f43aa031a77de2305e
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
