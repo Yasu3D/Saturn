@@ -42,17 +42,22 @@ namespace SaturnGame.RhythmGame
         /// <b>Use VisualTime! This does NOT include any offsets!</b><br />
         /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
         /// </summary>
-        public float RawVisualTime { get; private set; }
+        public float RawVisualTimeMs { get; private set; }
+        public float LastFrameRawVisualTimeMs { get; private set; }
+
+        public float TotalOffsetMs => StaticAudioOffset + (SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */);
         /// <summary>
         /// <b>Includes sync calibration and user offsets!</b> <br />
         /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
         /// </summary>
-        public float VisualTime => RawVisualTime + StaticAudioOffset + (SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */);
+        public float VisualTimeMs => RawVisualTimeMs + TotalOffsetMs;
+        public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
         public void UpdateVisualTime()
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
-            RawVisualTime += Time.deltaTime * VisualTimeScale * 1000;
+            LastFrameRawVisualTimeMs = RawVisualTimeMs;
+            RawVisualTimeMs += Time.deltaTime * VisualTimeScale * 1000;
         }
 
         /// <summary>
@@ -63,14 +68,14 @@ namespace SaturnGame.RhythmGame
         {
             if (!bgmManager.bgmPlayer.isPlaying) return;
 
-            float discrepancy = RawVisualTime - BgmTime();
+            float discrepancy = RawVisualTimeMs - BgmTime();
             float absDiscrepancy = Mathf.Abs(discrepancy);
 
             if (absDiscrepancy >= forceSyncDiscrepancy || PlaybackSpeed == 0)
             {
                 // Snap directly to BgmTime if discrepancy gets too high.
                 Debug.Log($"Force correcting by {discrepancy}");
-                RawVisualTime = BgmTime();
+                RawVisualTimeMs = BgmTime();
             }
 
             // Warp VisualTime to re-align with audio
@@ -94,7 +99,7 @@ namespace SaturnGame.RhythmGame
                 bgmManager.Play();
             }
 
-            if (Input.GetKey(KeyCode.M) && VisualTime > 94000)
+            if (Input.GetKey(KeyCode.M) && VisualTimeMs > 94000)
                 SetPlaybackSpeed(1);
 
             if (Input.GetKeyDown(KeyCode.I))
