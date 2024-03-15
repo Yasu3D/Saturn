@@ -50,10 +50,36 @@ namespace SaturnGame.RhythmGame
             DebugText.text = $"{timeManager.VisualTimeMs}\n" + text;
         }
 
-        public int CurrentScore() {
-            if (notes is null || notes.Count() == 0)
+        public ScoreData CurrentScoreData()
+        {
+            ScoreData ret = new ScoreData
             {
-                return 0;
+                Score = 0,
+                JudgementCounts = new Dictionary<Judgement, int>
+                {
+                    { Judgement.Marvelous, 0 },
+                    { Judgement.Great, 0 },
+                    { Judgement.Good, 0 },
+                    { Judgement.Miss, 0 },
+                },
+                EarlyCount = 0,
+                LateCount = 0,
+                EarlyCountByJudgement = new Dictionary<Judgement, int>
+                {
+                    { Judgement.Marvelous, 0 },
+                    { Judgement.Great, 0 },
+                    { Judgement.Good, 0 },
+                },
+                LateCountByJudgement = new Dictionary<Judgement, int>
+                {
+                    { Judgement.Marvelous, 0 },
+                    { Judgement.Great, 0 },
+                    { Judgement.Good, 0 },
+                },
+            };
+            if (notes is null || notes.Count == 0)
+            {
+                return ret;
             }
 
             long maxScoreBeforeNormalization = 0;
@@ -61,10 +87,12 @@ namespace SaturnGame.RhythmGame
             foreach (Note note in notes)
             {
                 maxScoreBeforeNormalization += 100;
+
                 if (note.Judgement is null)
                 {
                     continue;
                 }
+
                 switch (note.Judgement)
                 {
                     case Judgement.None:
@@ -80,17 +108,40 @@ namespace SaturnGame.RhythmGame
                         scoreBeforeNormalization += 100;
                         break;
                 }
+
+                if (note.Judgement is not Judgement.None)
+                {
+                    ret.JudgementCounts[note.Judgement.Value]++;
+                    if (note is not ChainNote && note.TimeErrorMs is not null && note.Judgement is not Judgement.Miss)
+                    {
+                        if (note.TimeErrorMs < 0)
+                        {
+                            if (note.Judgement is not Judgement.Marvelous)
+                            {
+                                // Marvelous notes don't count toward overall early count.
+                                ret.EarlyCount++;
+                            }
+                            ret.EarlyCountByJudgement[note.Judgement.Value]++;
+                        }
+                        else if (note.TimeErrorMs > 0)
+                        {
+                            if (note.Judgement is not Judgement.Marvelous)
+                            {
+                                // Marvelous notes don't count toward overall late count.
+                                ret.LateCount++;
+                            }
+                            ret.LateCountByJudgement[note.Judgement.Value]++;
+                        }
+                    }
+                }
             }
 
-            if (maxScoreBeforeNormalization == 0)
-            {
-                // Not sure how this should be possible but ok
-                return 0;
-            }
+            ret.Score = maxScoreBeforeNormalization == 0 ? 0 :
+                // Int conversion should be safe as max score is 1,000,000
+                // (unless we fucked something up, then exception is appropriate anyway)
+                Convert.ToInt32(scoreBeforeNormalization * 1_000_000L / maxScoreBeforeNormalization);
 
-            // Int conversion should be safe as max score is 1,000,000
-            // (unless we fucked something up, then exception is appropriate anyway)
-            return Convert.ToInt32((scoreBeforeNormalization * 1_000_000L) / maxScoreBeforeNormalization);
+            return ret;
         }
 
         // This should be greater than the maximum late timing window of any note.
@@ -594,7 +645,7 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
-
+            
             if (Input.GetKeyDown(KeyCode.F12))
             {
                 WriteReplayFile();
@@ -603,6 +654,13 @@ namespace SaturnGame.RhythmGame
             {
                 // For now, copy the replay you want to view to "replay.json.gz" in the persistentDataPath.
                 ReadReplayFile(Path.Combine(Application.persistentDataPath, "replay.json.gz"));
+            }
+            
+            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTime)
+            {
+                // chart is done
+                ChartManager.Instance.LastScoreData = CurrentScoreData();
+                SceneSwitcher.Instance.LoadScene("_SongResults");
             }
         }
 
@@ -656,5 +714,15 @@ namespace SaturnGame.RhythmGame
             Debug.Log($"Loaded replay {replayPath} with {Replay.Count} frames");
             replayFrameIndex = 0;
         }
+    }
+
+    public struct ScoreData
+    {
+        public int Score;
+        public Dictionary<Judgement, int> JudgementCounts;
+        public int EarlyCount;
+        public int LateCount;
+        public Dictionary<Judgement, int> EarlyCountByJudgement;
+        public Dictionary<Judgement, int> LateCountByJudgement;
     }
 }
