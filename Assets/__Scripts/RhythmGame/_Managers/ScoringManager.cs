@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -19,8 +23,21 @@ namespace SaturnGame.RhythmGame
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
 
+        // If PlayingFromReplay is true, all inputs are ignored, and scoring data is read from Replay instead.
+        // If false, gameplay is normal and inputs are stored into Replay as they happen.
+        public bool PlayingFromReplay { get; private set; } = false;
+        private int replayFrameIndex = -1;
+        public struct ReplayFrame
+        {
+            public float TimeMs;
+            public TouchState TouchState;
+        }
+        public List<ReplayFrame> Replay { get; private set; } = new();
+
         public Judgement LastJudgement { get; private set; } = Judgement.None;
         public float? LastJudgementTimeMs { get; private set; } = null;
+        public bool NeedTouchHitsound = false;
+        public bool NeedSwipeSnapHitsound = false;
 
         private string loadedChart;
         // Notes must be sorted by note TimeMs
@@ -30,13 +47,39 @@ namespace SaturnGame.RhythmGame
             if (DebugText is null)
                 return;
 
-            DebugText.text = $"{timeManager.VisualTime}\n" + text;
+            DebugText.text = $"{timeManager.VisualTimeMs}\n" + text;
         }
 
-        public int CurrentScore() {
-            if (notes is null || notes.Count() == 0)
+        public ScoreData CurrentScoreData()
+        {
+            ScoreData ret = new ScoreData
             {
-                return 0;
+                Score = 0,
+                JudgementCounts = new Dictionary<Judgement, int>
+                {
+                    { Judgement.Marvelous, 0 },
+                    { Judgement.Great, 0 },
+                    { Judgement.Good, 0 },
+                    { Judgement.Miss, 0 },
+                },
+                EarlyCount = 0,
+                LateCount = 0,
+                EarlyCountByJudgement = new Dictionary<Judgement, int>
+                {
+                    { Judgement.Marvelous, 0 },
+                    { Judgement.Great, 0 },
+                    { Judgement.Good, 0 },
+                },
+                LateCountByJudgement = new Dictionary<Judgement, int>
+                {
+                    { Judgement.Marvelous, 0 },
+                    { Judgement.Great, 0 },
+                    { Judgement.Good, 0 },
+                },
+            };
+            if (notes is null || notes.Count == 0)
+            {
+                return ret;
             }
 
             long maxScoreBeforeNormalization = 0;
@@ -44,10 +87,12 @@ namespace SaturnGame.RhythmGame
             foreach (Note note in notes)
             {
                 maxScoreBeforeNormalization += 100;
+
                 if (note.Judgement is null)
                 {
                     continue;
                 }
+
                 switch (note.Judgement)
                 {
                     case Judgement.None:
@@ -63,17 +108,40 @@ namespace SaturnGame.RhythmGame
                         scoreBeforeNormalization += 100;
                         break;
                 }
+
+                if (note.Judgement is not Judgement.None)
+                {
+                    ret.JudgementCounts[note.Judgement.Value]++;
+                    if (note is not ChainNote && note.TimeErrorMs is not null && note.Judgement is not Judgement.Miss)
+                    {
+                        if (note.TimeErrorMs < 0)
+                        {
+                            if (note.Judgement is not Judgement.Marvelous)
+                            {
+                                // Marvelous notes don't count toward overall early count.
+                                ret.EarlyCount++;
+                            }
+                            ret.EarlyCountByJudgement[note.Judgement.Value]++;
+                        }
+                        else if (note.TimeErrorMs > 0)
+                        {
+                            if (note.Judgement is not Judgement.Marvelous)
+                            {
+                                // Marvelous notes don't count toward overall late count.
+                                ret.LateCount++;
+                            }
+                            ret.LateCountByJudgement[note.Judgement.Value]++;
+                        }
+                    }
+                }
             }
 
-            if (maxScoreBeforeNormalization == 0)
-            {
-                // Not sure how this should be possible but ok
-                return 0;
-            }
+            ret.Score = maxScoreBeforeNormalization == 0 ? 0 :
+                // Int conversion should be safe as max score is 1,000,000
+                // (unless we fucked something up, then exception is appropriate anyway)
+                Convert.ToInt32(scoreBeforeNormalization * 1_000_000L / maxScoreBeforeNormalization);
 
-            // Int conversion should be safe as max score is 1,000,000
-            // (unless we fucked something up, then exception is appropriate anyway)
-            return Convert.ToInt32((scoreBeforeNormalization * 1_000_000L) / maxScoreBeforeNormalization);
+            return ret;
         }
 
         // This should be greater than the maximum late timing window of any note.
@@ -175,7 +243,7 @@ namespace SaturnGame.RhythmGame
         List<HoldNote> activeHolds = new();
         TouchState prevTouchState;
         // TODO: This is currently super basic and assumes all the notes are touch notes.
-        void HandleInput(float hitTimeMs, TouchState touchState)
+        private void HandleInput(float hitTimeMs, TouchState touchState)
         {
             if (notes is null)
             {
@@ -199,7 +267,7 @@ namespace SaturnGame.RhythmGame
                         minNoteIndex = noteScanIndex + 1;
                         if (!note.Hit)
                         {
-                            Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.TimeMs + IgnorePastNotesThreshold}");
+                            //Debug.Log($"Note {noteScanIndex}: Miss after threshold {note.TimeMs + IgnorePastNotesThreshold}");
                             if (note is HoldNote holdNote)
                             {
                                 holdNote.StartJudgement = Judgement.Miss;
@@ -253,6 +321,7 @@ namespace SaturnGame.RhythmGame
                                             note.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
                                             break;
                                         }
                                     }
@@ -269,6 +338,7 @@ namespace SaturnGame.RhythmGame
                                     note.HitTimeMs = hitTimeMs;
                                     LastJudgement = Judgement.Marvelous;
                                     LastJudgementTimeMs = hitTimeMs;
+                                    NeedTouchHitsound = true;
                                 }
                                 break;
                             case HoldNote holdNote:
@@ -291,6 +361,7 @@ namespace SaturnGame.RhythmGame
 
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
                                             break;
                                         }
                                     }
@@ -311,6 +382,8 @@ namespace SaturnGame.RhythmGame
                                             swipeNote.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
+                                            NeedSwipeSnapHitsound = true;
                                             break;
                                         }
                                     }
@@ -424,6 +497,8 @@ namespace SaturnGame.RhythmGame
                                             snapNote.HitTimeMs = hitTimeMs;
                                             LastJudgement = hitWindow.Judgement;
                                             LastJudgementTimeMs = hitTimeMs;
+                                            NeedTouchHitsound = true;
+                                            NeedSwipeSnapHitsound = true;
                                             break;
                                         }
                                     }
@@ -434,7 +509,7 @@ namespace SaturnGame.RhythmGame
                     else if (hitTimeMs >= note.LatestHitTimeMs && !note.Hit)
                     {
                         // The note can no longer be hit.
-                        Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
+                        //Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
 
                         // TODO: this is copy paste from the first if case
                         if (note is HoldNote holdNote)
@@ -502,6 +577,10 @@ namespace SaturnGame.RhythmGame
                         ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
                         LastJudgement = judgement;
                         LastJudgementTimeMs = hitTimeMs;
+                        if (holdNote.CurrentlyHeld)
+                        {
+                            NeedTouchHitsound = true;
+                        }
                         activeHolds.Remove(holdNote);
 
                         // Since we removed an element, the current index should go back one
@@ -526,6 +605,11 @@ namespace SaturnGame.RhythmGame
         }
 
         public void NewTouchState(TouchState touchState) {
+            if (PlayingFromReplay)
+            {
+                return;
+            }
+            Replay.Add(new ReplayFrame { TimeMs = timeManager.VisualTime, TouchState = touchState });
             HandleInput(timeManager.VisualTime, touchState);
         }
 
@@ -537,13 +621,21 @@ namespace SaturnGame.RhythmGame
             // note: maybe race if we don't hold LoadingLock here
             if (!ChartManager.Loading && ChartManager.LoadedChart is not null && ChartManager.LoadedChart != loadedChart)
             {
-                loadedChart = ChartManager.LoadedChart;
                 LoadChart();
+                loadedChart = ChartManager.LoadedChart;
+            }
+
+            if (PlayingFromReplay && replayFrameIndex >= 0 && loadedChart == ChartManager.LoadedChart && notes is not null)
+            {
+                while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.VisualTime)
+                {
+                    HandleInput(Replay[replayFrameIndex].TimeMs, Replay[replayFrameIndex].TouchState);
+                    replayFrameIndex++;
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                HandleInput(timeManager.VisualTime, null);
                 Debug.Log("judgements:");
                 foreach (var note in notes)
                 {
@@ -553,6 +645,84 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
+            
+            if (Input.GetKeyDown(KeyCode.F12))
+            {
+                WriteReplayFile();
+            }
+            if (Input.GetKeyDown(KeyCode.F11))
+            {
+                // For now, copy the replay you want to view to "replay.json.gz" in the persistentDataPath.
+                ReadReplayFile(Path.Combine(Application.persistentDataPath, "replay.json.gz"));
+            }
+            
+            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTime)
+            {
+                // chart is done
+                ChartManager.Instance.LastScoreData = CurrentScoreData();
+                SceneSwitcher.Instance.LoadScene("_SongResults");
+            }
         }
+
+        private static void jsonError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs errorArgs)
+        {
+            Debug.LogError(errorArgs.ErrorContext.Error);
+            errorArgs.ErrorContext.Handled = true;
+        }
+
+        // TODO maybe: stream to file continuously rather than all at the end
+        private async void WriteReplayFile()
+        {
+            string chartRelativePath = Path.GetRelativePath(Application.streamingAssetsPath, ChartManager.LoadedChart);
+            string timestamp = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
+            string replayFileName = $"replay-{chartRelativePath}-{timestamp}.json.gz";
+            string escapedReplayFileName = String.Join('_', replayFileName.Split(Path.GetInvalidFileNameChars()));
+            string replayPath = Path.Combine(Application.persistentDataPath, escapedReplayFileName);
+            Debug.Log($"Writing replay with {Replay.Count} frames to {replayPath}...");
+            await using FileStream replayFileStream = File.Create(replayPath);
+            await using GZipStream compressedStream = new(replayFileStream, System.IO.Compression.CompressionLevel.Fastest);
+            await using StreamWriter writer = new(compressedStream);
+            var serializer = new JsonSerializer();
+            serializer.Error += jsonError;
+            // "threadsafe" here is not entirely accurate, but this should hopefully allow us to take a reference
+            // to the Replay that will _not_ be modified as more frames are added, so the JsonSerializer can safely
+            // iterate over it.
+            var threadsafeReplay = Replay.Take(Replay.Count);
+            await Awaitable.BackgroundThreadAsync();
+            serializer.Serialize(writer, threadsafeReplay);
+            Debug.Log($"Replay {replayFileName} successfully written!");
+        }
+
+        private async void ReadReplayFile(string replayPath)
+        {
+            Debug.Log($"Reading replay from {replayPath}");
+            PlayingFromReplay = true;
+            await using FileStream replayFileStream = File.OpenRead(replayPath);
+            await using GZipStream compressedStream = new(replayFileStream, CompressionMode.Decompress);
+            using StreamReader streamReader = new(compressedStream);
+            var serializer = new JsonSerializer();
+            serializer.Error += jsonError;
+            await Awaitable.BackgroundThreadAsync();
+            var readReplay = (List<ReplayFrame>) serializer.Deserialize(streamReader, typeof(List<ReplayFrame>));
+            await Awaitable.MainThreadAsync();
+            if (readReplay is null)
+            {
+                PlayingFromReplay = false;
+                throw new Exception("Failed to read replay");
+            }
+            Replay = readReplay;
+            Debug.Log($"Loaded replay {replayPath} with {Replay.Count} frames");
+            replayFrameIndex = 0;
+        }
+    }
+
+    public struct ScoreData
+    {
+        public int Score;
+        public Dictionary<Judgement, int> JudgementCounts;
+        public int EarlyCount;
+        public int LateCount;
+        public Dictionary<Judgement, int> EarlyCountByJudgement;
+        public Dictionary<Judgement, int> LateCountByJudgement;
     }
 }

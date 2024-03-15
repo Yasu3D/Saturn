@@ -4,6 +4,7 @@ using System.IO.Ports;
 using UnityEngine;
 using System.Threading;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace SaturnGame.RhythmGame
 {
@@ -416,6 +417,7 @@ namespace SaturnGame.RhythmGame
     /// <summary>
     /// TouchState is an immutable representation of the touch array state.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)] 
     public class TouchState
     {
         // Segments is a 2d array:
@@ -423,15 +425,17 @@ namespace SaturnGame.RhythmGame
         //   (0 is on the right, the top is 14-15)
         // - second index "depthPos": forward/backward segment indicator [0, 4), outside to inside
         //   (0 is the outermost segment, 3 is the innermost segment right up against the screen)
+        [JsonProperty]
         private readonly bool[,] _segments;
 
-        public TouchState(bool[,] segments)
+        // Note: paramater name here must match the field name in order for JSON deserialization to work.
+        public TouchState(bool[,] _segments)
         {
-            if (segments.GetLength(0) != 60 || segments.GetLength(1) != 4)
+            if (_segments.GetLength(0) != 60 || _segments.GetLength(1) != 4)
             {
-                throw new ArgumentException($"Wrong dimensions for touch segments {segments.GetLength(0)}, {segments.GetLength(1)} (should be 60, 4)");
+                throw new ArgumentException($"Wrong dimensions for touch segments {_segments.GetLength(0)}, {_segments.GetLength(1)} (should be 60, 4)");
             }
-            _segments = (bool[,])segments.Clone();
+            this._segments = (bool[,])_segments.Clone();
         }
 
         public bool EqualsSegments(TouchState other)
