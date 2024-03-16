@@ -43,7 +43,7 @@ namespace SaturnGame
             // it may only show in files that are already using SaturnMath.Modulo. Probably the only way to fix this is
             // to create a proper SSR in Resharper in Visual Studio.
             searchTemplate: "$num{Expression, 'int'}$ % $mod{Expression, 'int'}$",
-            Message = "Warning: Built-in modulo operator does not handle negative numbers correctly.",
+            Message = "Warning: Built-in c# remainder operator does not handle negative numbers correctly.",
             ReplaceTemplate = "SaturnMath.Modulo($num$, $mod$)",
             ReplaceMessage = "Convert to 'SaturnMath.Modulo'")]
         public static int Modulo(int x, int m)
