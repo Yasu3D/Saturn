@@ -18,6 +18,7 @@ public class BgmProgressBar : MonoBehaviour
 
     void Update()
     {
+        if (bgmManager.bgmClip == null) return;
         float length = bgmManager.bgmClip.length * 1000;
         float time = timeManager.VisualTimeMs;
 

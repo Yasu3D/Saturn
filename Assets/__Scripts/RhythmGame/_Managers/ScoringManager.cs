@@ -613,8 +613,8 @@ namespace SaturnGame.RhythmGame
             {
                 return;
             }
-            Replay.Add(new ReplayFrame { TimeMs = timeManager.VisualTime, TouchState = touchState });
-            HandleInput(timeManager.VisualTime, touchState);
+            Replay.Add(new ReplayFrame { TimeMs = timeManager.VisualTimeMs, TouchState = touchState });
+            HandleInput(timeManager.VisualTimeMs, touchState);
         }
 
         void Update()
@@ -631,7 +631,7 @@ namespace SaturnGame.RhythmGame
 
             if (PlayingFromReplay && replayFrameIndex >= 0 && loadedChart == ChartManager.LoadedChart && notes is not null)
             {
-                while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.VisualTime)
+                while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.VisualTimeMs)
                 {
                     HandleInput(Replay[replayFrameIndex].TimeMs, Replay[replayFrameIndex].TouchState);
                     replayFrameIndex++;
@@ -652,7 +652,7 @@ namespace SaturnGame.RhythmGame
 
             // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
             // of the end of the audio clip.
-            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTime && !WritingReplayAndExiting)
+            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTimeMs && !WritingReplayAndExiting)
             {
                 async Awaitable EndSong()
                 {
@@ -690,7 +690,7 @@ namespace SaturnGame.RhythmGame
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
 
-            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTime)
+            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTimeMs)
             {
                 // chart is done
                 ChartManager.Instance.LastScoreData = CurrentScoreData();
