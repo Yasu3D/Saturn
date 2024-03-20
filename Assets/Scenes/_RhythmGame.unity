@@ -1411,6 +1411,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugText: {fileID: 1245724631}
+  AutoWriteReplays: 1
+  WritingReplayAndExiting: 0
   timeManager: {fileID: 1783936258}
   NeedTouchHitsound: 0
   NeedSwipeSnapHitsound: 0
