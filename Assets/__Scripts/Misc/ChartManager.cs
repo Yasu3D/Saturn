@@ -540,60 +540,45 @@ namespace SaturnGame.RhythmGame
             TimeSignature lastTimeSig = timeSigGimmicks[0].TimeSig;
 
             // merge both lists and sort by timestamp
-            chart.bgmDataGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.ChartTick).ToList();
+            IOrderedEnumerable<Gimmick> bpmAndTimeSigGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.ChartTick);
 
-            chart.bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
-            chart.bgmDataGimmicks[0].TimeSig = lastTimeSig;
+            chart.bgmDataGimmicks = new();
 
-            int lastTick = 0;
-
-            List<Gimmick> obsoleteGimmicks = new();
-
-            for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
+            foreach (Gimmick gimmick in bpmAndTimeSigGimmicks)
             {
-                int currentTick = chart.bgmDataGimmicks[i].ChartTick;
-
-                // Handles two gimmicks at the same time, in case a chart changes
-                // BeatsPerMinute and TimeSignature simultaneously.
-                if (currentTick == lastTick)
+                Gimmick gimmickToUpdate;
+                switch (chart.bgmDataGimmicks.LastOrDefault())
                 {
-                    // if this is a bpm change, then last change must've been a time sig change.
-                    if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.BeatsPerMinute)
+                    case Gimmick lastGimmick when lastGimmick.ChartTick == gimmick.ChartTick:
                     {
-                        chart.bgmDataGimmicks[i - 1].BeatsPerMinute = chart.bgmDataGimmicks[i].BeatsPerMinute;
-                        lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
+                        gimmickToUpdate = lastGimmick;
+                        break;
                     }
-                    if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.TimeSignature)
+                    default:
                     {
-                        chart.bgmDataGimmicks[i - 1].TimeSig = chart.bgmDataGimmicks[i].TimeSig;
-                        lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
+                        Gimmick newGimmick = new(gimmick.Measure, gimmick.Tick, lastBpm, lastTimeSig);
+                        chart.bgmDataGimmicks.Add(newGimmick);
+                        gimmickToUpdate = newGimmick;
+                        break;
                     }
-
-                    // send gimmick to list for removal later
-                    obsoleteGimmicks.Add(chart.bgmDataGimmicks[i]);
-                    continue;
                 }
 
-                if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.BeatsPerMinute)
+                switch (gimmick)
                 {
-                    chart.bgmDataGimmicks[i].TimeSig = lastTimeSig;
-                    lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
+                    case Gimmick {Type: Gimmick.GimmickType.BeatsPerMinute, BeatsPerMinute: var bpm}:
+                    {
+                        gimmickToUpdate.BeatsPerMinute = bpm;
+                        lastBpm = gimmick.BeatsPerMinute;
+                        break;
+                    }
+                    case Gimmick {Type: Gimmick.GimmickType.TimeSignature, TimeSig: var timeSig}:
+                    {
+                        gimmickToUpdate.TimeSig = timeSig;
+                        lastTimeSig = timeSig;
+                        break;
+                    }
                 }
-
-                if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.TimeSignature)
-                {
-                    chart.bgmDataGimmicks[i].BeatsPerMinute = lastBpm;
-                    lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
-                }
-
-                lastTick = currentTick;
             }
-
-            // clear obsolete gimmicks
-            foreach (Gimmick gimmick in obsoleteGimmicks)
-                chart.bgmDataGimmicks.Remove(gimmick);
-
-            obsoleteGimmicks.Clear();
 
             chart.bgmDataGimmicks[0].TimeMs = 0;
             for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)

@@ -14,5 +14,10 @@ namespace SaturnGame.RhythmGame
         public float Ratio = 1;
 
         public static TimeSignature Default { get; private set; } = new(4,4);
+
+        public override string ToString()
+        {
+            return $"{Upper}/{Lower} ({Ratio})";
+        }
     }
 }
