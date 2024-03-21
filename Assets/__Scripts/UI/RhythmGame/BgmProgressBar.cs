@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class BgmProgressBar : MonoBehaviour
 {
-    [SerializeField] private BgmManager bgmManager;
+    [SerializeField] private AudioSource bgmPlayer;
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private Image image;
     [SerializeField] private Material material;
@@ -18,8 +18,8 @@ public class BgmProgressBar : MonoBehaviour
 
     void Update()
     {
-        if (bgmManager.bgmClip == null) return;
-        float length = bgmManager.bgmClip.length * 1000;
+        if (bgmPlayer.clip == null) return;
+        float length = bgmPlayer.clip.length * 1000;
         float time = timeManager.VisualTimeMs;
 
         float progress = Mathf.InverseLerp(0, length, time);

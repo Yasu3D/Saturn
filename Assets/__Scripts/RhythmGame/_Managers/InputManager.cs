@@ -15,7 +15,7 @@ namespace SaturnGame.RhythmGame
 
         [Header("MANAGERS")]
         [SerializeField] private ScoringManager scoringManager;
-        [SerializeField] private BgmManager bgmManager;
+        [SerializeField] private AudioSource bgmPlayer;
 
         public TouchState CurrentTouchState;
 
@@ -219,7 +219,7 @@ namespace SaturnGame.RhythmGame
         // Update is called once per frame
         void Update()
         {
-            if (!bgmManager.bgmPlayer.isPlaying) return;
+            if (!bgmPlayer.isPlaying) return;
 
             // Initializes to all false.
             var segments = new bool[60, 4];

@@ -7,7 +7,7 @@ public class DebugChartPlayer : MonoBehaviour
 {
     [SerializeField] private string path = "SongPacks/DONOTSHIP/";
     [SerializeField] private AudioClip bgm;
-    [SerializeField] private BgmManager bgmManager;
+    [SerializeField] private AudioSource bgmPlayer;
 
     // i know update shouldnt be async but this is for temporary testing so i dont care
     async void Update()
@@ -15,13 +15,9 @@ public class DebugChartPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             ChartManager.Instance.bgmClip = bgm;
-            bgmManager.bgmClip = bgm;
+            bgmPlayer.clip = bgm;
             await ChartManager.Instance.LoadChart(System.IO.Path.Combine(Application.streamingAssetsPath, path));
-        }
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            bgmManager.Play();
         }
     }
 }
