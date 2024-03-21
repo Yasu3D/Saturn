@@ -252,10 +252,18 @@ namespace SaturnGame.RhythmGame
                     object value2 = null;
 
                     // avoid IndexOutOfRangeExceptions :]
-                    if (objectID is 3 && splitLine.Length > 4)
+                    if (objectID is 3)
                     {
-                        value1 = Convert.ToInt32(splitLine[3]);
-                        value2 = Convert.ToInt32(splitLine[4]);
+                        if (splitLine.Length == 4)
+                        {
+                            value1 = Convert.ToInt32(splitLine[3]);
+                            value2 = 4; // yeah.......... this happens in the wild
+                        }
+                        else if (splitLine.Length > 4)
+                        {
+                            value1 = Convert.ToInt32(splitLine[3]);
+                            value2 = Convert.ToInt32(splitLine[4]);
+                        }
                     }
 
                     if (objectID is 2 or 5 && splitLine.Length > 3)
