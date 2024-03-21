@@ -310,8 +310,9 @@ namespace SaturnGame.RhythmGame
             if (chart.notes.Last().TimeMs > chart.endOfChart.TimeMs)
                 return (false, "Notes behind end of Chart note!");
 
-            if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
-                return (false, "Chart is longer than audio!");
+            // this is fine actually lol
+            //if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
+            //    return (false, "Chart is longer than audio!");
 
             if (chart.bgmDataGimmicks.Count == 0)
                 return (false, "Chart is missing BPM and TimeSignature data!");

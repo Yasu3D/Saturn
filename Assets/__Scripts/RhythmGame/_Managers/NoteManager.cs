@@ -553,7 +553,7 @@ namespace SaturnGame.RhythmGame
 
         void Update()
         {
-            if (!bgmPlayer.isPlaying) return;
+            if (timeManager.State != TimeManager.SongState.Playing) return;
 
             ProcessBgmData();
 

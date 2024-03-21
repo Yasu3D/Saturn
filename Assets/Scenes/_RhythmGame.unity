@@ -1445,7 +1445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseTouchController: 1
   scoringManager: {fileID: 1472638032}
-  bgmPlayer: {fileID: 1534859774}
+  timeManager: {fileID: 1783936258}
 --- !u!1 &1495675952
 GameObject:
   m_ObjectHideFlags: 0
