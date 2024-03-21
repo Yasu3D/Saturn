@@ -104,7 +104,7 @@ namespace SaturnGame.RhythmGame
 
         bool ShouldPlayGuideSound()
         {
-            var chart = ChartManager.Instance.chart;
+            var chart = ChartManager.Instance.Chart;
             
             foreach (var note in chart.notes)
             {

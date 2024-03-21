@@ -111,7 +111,7 @@ namespace SaturnGame.UI
             // Please just use .wav... I beg you.
             AudioClip bgmClip = await AudioLoader.LoadBgm(bgmPath);
 
-            ChartManager.Instance.bgmClip = bgmClip;
+            ChartManager.Instance.BGMClip = bgmClip;
             bgmSource.clip = bgmClip;
         }
     }

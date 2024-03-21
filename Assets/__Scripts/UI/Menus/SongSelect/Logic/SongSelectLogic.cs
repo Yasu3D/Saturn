@@ -336,9 +336,9 @@ namespace SaturnGame.UI
             bgmPreview.SetBgmValues(path, start, duration);
         }
 
-        private async void LoadChart(string path)
+        private void LoadChart(string path)
         {
-            await ChartManager.Instance.LoadChart(path);
+            ChartManager.Instance.LoadChart(path);
         }
 
         void Update()

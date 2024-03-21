@@ -44,7 +44,7 @@ namespace SaturnGame.RhythmGame
             if (bgmPlayer.clip == null)
                 return -1;
 
-            return Mathf.Max(0, 1000 * (bgmPlayer.time + ChartManager.Instance.chart.audioOffset));
+            return Mathf.Max(0, 1000 * (bgmPlayer.time + ChartManager.Instance.Chart.audioOffset));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace SaturnGame.RhythmGame
                 }
                 case SongState.Playing:
                 {
-                    if (VisualTimeMs > ChartManager.Instance.chart.endOfChart.TimeMs)
+                    if (VisualTimeMs > ChartManager.Instance.Chart.endOfChart.TimeMs)
                         State = SongState.Finished;
                     break;
                 }
@@ -131,7 +131,7 @@ namespace SaturnGame.RhythmGame
             if (Input.GetKeyDown(KeyCode.P))
             {
                 Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
-                var bgm = ChartManager.Instance.bgmClip;
+                var bgm = ChartManager.Instance.BGMClip;
                 bgmPlayer.clip = bgm;
                 State = SongState.Playing;
                 bgmPlayer.Play();

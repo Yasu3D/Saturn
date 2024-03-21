@@ -1,9 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
 <assembly name="mscorlib, Version=4.0.0.0">
+  <member name="M:System.Convert.ToBoolean(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToBoolean(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToBoolean(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToBoolean(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToByte(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToByte(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToByte(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToByte(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToChar(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToChar(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToChar(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToChar(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToDateTime(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToDateTime(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToDateTime(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToDateTime(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToDecimal(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToDecimal(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToDecimal(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToDecimal(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToDouble(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToDouble(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToDouble(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToDouble(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt16(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt16(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt16(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt16(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt32(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt32(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt32(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt32(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt64(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt64(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt64(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt64(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt64(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt64(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToInt64(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToInt64(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
   <member name="M:System.Convert.ToSingle(System.String)">
     <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
       <argument>$member$($expr$)</argument>
       <property name="Message">Warning: Convert.ToSingle(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToSingle(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToSingle(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <!-- note: Convert.ToString not annotated -->
+  <member name="M:System.Convert.ToUInt16(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToUInt16(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToUInt16(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToUInt16(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToUInt32(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToUInt32(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToUInt32(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToUInt32(object) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToUInt64(System.String)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToUInt64(string) depends on system locale.</property>
+      <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
+      <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
+      <property name="ShortenReferences">true</property>
+    </attribute>
+  </member>
+  <member name="M:System.Convert.ToUInt64(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.CodeTemplateAttribute.#ctor(System.String)">
+      <argument>$member$($expr$)</argument>
+      <property name="Message">Warning: Convert.ToUInt64(object) depends on system locale.</property>
       <property name="ReplaceTemplate">$member$($expr$, System.Globalization.CultureInfo.InvariantCulture)</property>
       <property name="ReplaceMessage">Use CultureInfo.InvariantCulture</property>
       <property name="ShortenReferences">true</property>

@@ -9,15 +9,14 @@ public class DebugChartPlayer : MonoBehaviour
     [SerializeField] private AudioClip bgm;
     [SerializeField] private AudioSource bgmPlayer;
 
-    // i know update shouldnt be async but this is for temporary testing so i dont care
-    async void Update()
+    // i know update shouldn't be async but this is for temporary testing so i dont care
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            ChartManager.Instance.bgmClip = bgm;
+            ChartManager.Instance.BGMClip = bgm;
             bgmPlayer.clip = bgm;
-            await ChartManager.Instance.LoadChart(System.IO.Path.Combine(Application.streamingAssetsPath, path));
-
+            ChartManager.Instance.LoadChart(System.IO.Path.Combine(Application.streamingAssetsPath, path));
         }
     }
 }

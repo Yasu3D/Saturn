@@ -17,7 +17,7 @@ namespace SaturnGame.RhythmGame
     /// A new ScoringManager should be used for each independent score.
     public class ScoringManager : MonoBehaviour
     {
-        private Chart Chart => ChartManager.Instance.chart;
+        private Chart Chart => ChartManager.Instance.Chart;
         private ChartManager ChartManager => ChartManager.Instance;
         [SerializeField] private TMPro.TextMeshProUGUI DebugText;
         public bool AutoWriteReplays = true;
