@@ -14,7 +14,7 @@ namespace SaturnGame.RhythmGame
 
         [Header("MANAGERS")]
         [SerializeField] private TimeManager timeManager;
-        [SerializeField] private BgmManager bgmManager;
+        [SerializeField] private AudioSource bgmPlayer;
 
         [Header("POOLS")]
         [SerializeField] private Transform activeObjectsContainer;
@@ -134,7 +134,6 @@ namespace SaturnGame.RhythmGame
             {
                 bgmData = Chart.bgmDataGimmicks[bgmDataIndex];
 
-                if (bgmData != null) bgmManager.UpdateBgmData(bgmData.BeatsPerMinute, bgmData.TimeSig);
                 bgmDataIndex++;
             }
         }
@@ -554,7 +553,7 @@ namespace SaturnGame.RhythmGame
 
         void Update()
         {
-            if (!bgmManager.bgmPlayer.isPlaying) return;
+            if (!bgmPlayer.isPlaying) return;
 
             ProcessBgmData();
 

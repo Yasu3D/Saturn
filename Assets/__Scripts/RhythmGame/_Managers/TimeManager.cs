@@ -8,7 +8,7 @@ namespace SaturnGame.RhythmGame
 {
     public class TimeManager : MonoBehaviour
     {
-        [SerializeField] private BgmManager bgmManager;
+        [SerializeField] private AudioSource bgmPlayer;
 
         //public float StaticAudioOffset {get; private set; } = -20;
         public float StaticAudioOffset = -20;
@@ -23,7 +23,7 @@ namespace SaturnGame.RhythmGame
         {
             float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
             PlaybackSpeed = clampedSpeed;
-            bgmManager.bgmPlayer.pitch = clampedSpeed;
+            bgmPlayer.pitch = clampedSpeed;
         }
 
         /// <summary>
@@ -32,10 +32,10 @@ namespace SaturnGame.RhythmGame
         /// <returns></returns>
         public float BgmTime()
         {
-            if (bgmManager.bgmPlayer.clip == null)
+            if (bgmPlayer.clip == null)
                 return -1;
 
-            return Mathf.Max(0, 1000 * (bgmManager.bgmPlayer.time + ChartManager.Instance.chart.audioOffset));
+            return Mathf.Max(0, 1000 * (bgmPlayer.time + ChartManager.Instance.chart.audioOffset));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SaturnGame.RhythmGame
         public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
         public void UpdateVisualTime()
         {
-            if (!bgmManager.bgmPlayer.isPlaying) return;
+            if (!bgmPlayer.isPlaying) return;
 
             LastFrameRawVisualTimeMs = RawVisualTimeMs;
             RawVisualTimeMs += Time.deltaTime * VisualTimeScale * 1000;
@@ -66,7 +66,7 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         public void ReSync()
         {
-            if (!bgmManager.bgmPlayer.isPlaying) return;
+            if (!bgmPlayer.isPlaying) return;
 
             float discrepancy = RawVisualTimeMs - BgmTime();
             float absDiscrepancy = Mathf.Abs(discrepancy);
@@ -93,10 +93,8 @@ namespace SaturnGame.RhythmGame
             {
                 Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
                 var bgm = ChartManager.Instance.bgmClip;
-                bgmManager.bgmClip = bgm;
-                bgmManager.bgmPlayer.clip = bgm;
-                bgmManager.UpdateBgmData(250, TimeSignature.Default);
-                bgmManager.Play();
+                bgmPlayer.clip = bgm;
+                bgmPlayer.Play();
             }
 
             if (Input.GetKey(KeyCode.M) && VisualTimeMs > 94000)

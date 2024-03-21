@@ -1212,7 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d0b7f0fefbc144ba83c777d4682a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmManager: {fileID: 1783936256}
+  bgmPlayer: {fileID: 1534859774}
   timeManager: {fileID: 1783936258}
   image: {fileID: 1286506600}
   material: {fileID: 2100000, guid: bc6b4168759878e4ca30e98acc957fbd, type: 2}
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: SongPacks/DONOTSHIP/
   bgm: {fileID: 0}
-  bgmManager: {fileID: 1783936256}
+  bgmPlayer: {fileID: 1534859774}
 --- !u!4 &1332587191
 Transform:
   m_ObjectHideFlags: 0
@@ -1443,7 +1443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseTouchController: 1
   scoringManager: {fileID: 1472638032}
-  bgmManager: {fileID: 1783936256}
+  bgmPlayer: {fileID: 1534859774}
 --- !u!1 &1495675952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1474,7 +1474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeManager: {fileID: 1783936258}
-  bgmManager: {fileID: 1783936256}
+  bgmPlayer: {fileID: 1534859774}
   activeObjectsContainer: {fileID: 1217854417}
   barLinePool: {fileID: 1647205787}
   holdEndPool: {fileID: 1129053362}
@@ -2205,7 +2205,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1783936257}
   - component: {fileID: 1783936258}
-  - component: {fileID: 1783936256}
   - component: {fileID: 1783936259}
   m_Layer: 0
   m_Name: Sound
@@ -2214,26 +2213,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1783936256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1783936255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d39d1c0fb418ec7468aa25e092c6d1b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BeatDuration: 0
-  BeatsPerMinute: 160
-  TimeSig:
-    Upper: 4
-    Lower: 4
-    Ratio: 1
-  bgmPlayer: {fileID: 1534859774}
-  bgmClip: {fileID: 8300000, guid: 56bb55bcd77598c41b1143186b2faa29, type: 3}
 --- !u!4 &1783936257
 Transform:
   m_ObjectHideFlags: 0
@@ -2263,7 +2242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb337ba8f7f27a14c8e821793ab0ec9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmManager: {fileID: 1783936256}
+  bgmPlayer: {fileID: 1534859774}
   StaticAudioOffset: -10
   VisualTimeScale: 1
   timeWarpMultiplier: 1
