@@ -104,15 +104,21 @@ namespace SaturnGame.RhythmGame
             switch (State)
             {
                 case SongState.NotYetStarted:
+                {
                     // Wait for playback to start, don't update here.
                     break;
+                }
                 case SongState.Playing:
+                {
                     if (VisualTimeMs > ChartManager.Instance.chart.endOfChart.TimeMs)
                         State = SongState.Finished;
                     break;
+                }
                 case SongState.Finished:
+                {
                     // Terminal.
                     break;
+                }
             }
         }
 
