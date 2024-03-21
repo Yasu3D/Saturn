@@ -101,16 +101,24 @@ namespace SaturnGame.RhythmGame
                 {
                     case Judgement.None:
                     case Judgement.Miss:
+                    {
                         break;
+                    }
                     case Judgement.Good:
+                    {
                         scoreBeforeNormalization += 50;
                         break;
+                    }
                     case Judgement.Great:
+                    {
                         scoreBeforeNormalization += 70;
                         break;
+                    }
                     case Judgement.Marvelous:
+                    {
                         scoreBeforeNormalization += 100;
                         break;
+                    }
                 }
 
                 if (note.Judgement is not Judgement.None)
@@ -312,6 +320,7 @@ namespace SaturnGame.RhythmGame
                         switch (note)
                         {
                             case TouchNote:
+                            {
                                 if (note.Touched(newSegments))
                                 {
                                     float errorMs = hitTimeMs - note.TimeMs;
@@ -331,7 +340,9 @@ namespace SaturnGame.RhythmGame
                                     }
                                 }
                                 break;
+                            }
                             case ChainNote:
+                            {
                                 // Warning: need to adjust judgement and hitsounds to play at the exact time of the note, even if it is hit early.
                                 // Warning: even if the input is the same, this requires HandleInput to be called within the note's timing window. Ideally, any chain notes between this input and the last should be hit.
                                 // Warning: currently, the timing window is totally wrong, it's huge.
@@ -345,7 +356,9 @@ namespace SaturnGame.RhythmGame
                                     NeedTouchHitsound = true;
                                 }
                                 break;
+                            }
                             case HoldNote holdNote:
+                            {
                                 if (holdNote.Touched(newSegments))
                                 {
                                     float errorMs = hitTimeMs - holdNote.TimeMs;
@@ -371,7 +384,9 @@ namespace SaturnGame.RhythmGame
                                     }
                                 }
                                 break;
+                            }
                             case SwipeNote swipeNote:
+                            {
                                 swipeNote.MaybeUpdateMinAverageOffset(touchState);
                                 if (swipeNote.Swiped(touchState))
                                 {
@@ -393,7 +408,9 @@ namespace SaturnGame.RhythmGame
                                     }
                                 }
                                 break;
+                            }
                             case SnapNote snapNote:
+                            {
                                 // yeah yeah I know this needs to be broken up
                                 bool CheckDepthChangeInRange(int rangeLeft, int rangeSize)
                                 {
@@ -439,6 +456,7 @@ namespace SaturnGame.RhythmGame
                                     switch (snapNote.Direction)
                                     {
                                         case SnapNote.SnapDirection.Forward:
+                                        {
                                             if (curMin is not null && prevMin is not null && curMin > prevMin)
                                             {
                                                 return true;
@@ -448,7 +466,9 @@ namespace SaturnGame.RhythmGame
                                                 return true;
                                             }
                                             return false;
+                                        }
                                         case SnapNote.SnapDirection.Backward:
+                                        {
                                             if (curMin is not null && prevMin is not null && curMin < prevMin)
                                             {
                                                 return true;
@@ -458,8 +478,11 @@ namespace SaturnGame.RhythmGame
                                                 return true;
                                             }
                                             return false;
+                                        }
                                         default:
+                                        {
                                             throw new Exception($"Unknown enum value {snapNote.Direction}");
+                                        }
                                     }
                                 }
 
@@ -508,6 +531,7 @@ namespace SaturnGame.RhythmGame
                                     }
                                 }
                                 break;
+                            }
                         }
                     }
                     else if (hitTimeMs >= note.LatestHitTimeMs && !note.Hit)

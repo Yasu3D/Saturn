@@ -29,29 +29,45 @@ namespace SaturnGame.Rendering
             switch (laneType)
             {
                 case 0:
+                {
                     keyword = "_NONE";
                     break;
+                }
                 case 1:
+                {
                     keyword = "_A";
                     break;
+                }
                 case 2:
+                {
                     keyword = "_B";
                     break;
+                }
                 case 3:
+                {
                     keyword = "_C";
                     break;
+                }
                 case 4:
+                {
                     keyword = "_D";
                     break;
+                }
                 case 5:
+                {
                     keyword = "_E";
                     break;
+                }
                 case 6:
+                {
                     keyword = "_F";
                     break;
+                }
                 default:
+                {
                     keyword = "";
                     break;
+                }
             }
 
             material.DisableKeyword("_LANETYPE_A");
@@ -87,14 +103,20 @@ namespace SaturnGame.Rendering
             switch (direction)
             {
                 case Mask.MaskDirection.Clockwise:
+                {
                     await AnimateClockwise(position, size, state, clampedSpeed);
                     break;
+                }
                 case Mask.MaskDirection.Counterclockwise:
+                {
                     await AnimateCounterclockwise(position, size, state, clampedSpeed);
                     break;
+                }
                 case Mask.MaskDirection.Center:
+                {
                     await AnimateCenter(position, size, state, clampedSpeed);
                     break;
+                }
             }
         }
 

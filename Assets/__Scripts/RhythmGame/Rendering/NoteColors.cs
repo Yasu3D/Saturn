@@ -89,33 +89,49 @@ namespace SaturnGame.Rendering
             switch (note)
             {
                 case TouchNote:
+                {
                     id = settings.NoteColorID_Touch;
                     break;
+                }
                 case ChainNote:
+                {
                     id = settings.NoteColorID_Chain;
                     break;
+                }
                 case SwipeNote { Direction: SwipeNote.SwipeDirection.Clockwise }:
+                {
                     if (settings.InvertSlideColor != 0) id = settings.NoteColorID_SwipeCounterclockwise;
                     else id = settings.NoteColorID_SwipeClockwise;
                     break;
+                }
                 case SwipeNote { Direction: SwipeNote.SwipeDirection.Counterclockwise }:
+                {
                     if (settings.InvertSlideColor != 0) id = settings.NoteColorID_SwipeClockwise;
                     else id = settings.NoteColorID_SwipeCounterclockwise;
                     break;
+                }
                 case SnapNote { Direction: SnapNote.SnapDirection.Forward }:
+                {
                     id = settings.NoteColorID_SnapForward;
                     break;
+                }
                 case SnapNote { Direction: SnapNote.SnapDirection.Backward }:
+                {
                     id = settings.NoteColorID_SnapBackward;
                     break;
+                }
                 case HoldNote:
                 case HoldSegment:
+                {
                     id = settings.NoteColorID_Hold;
                     break;
+                }
 
                 default:
+                {
                     id = 0;
                     break;
+                }
             }
             
             return id;

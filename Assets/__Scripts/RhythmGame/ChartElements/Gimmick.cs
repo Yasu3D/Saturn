@@ -15,19 +15,27 @@ namespace SaturnGame.RhythmGame
             switch (Type)
             {
                 default:
+                {
                     break;
+                }
 
                 case GimmickType.BeatsPerMinute:
+                {
                     BeatsPerMinute = Convert.ToSingle(value1);
                     break;
+                }
 
                 case GimmickType.TimeSignature:
+                {
                     TimeSig = new TimeSignature(Convert.ToInt32(value1), Convert.ToInt32(value2));
                     break;
+                }
 
                 case GimmickType.HiSpeed:
+                {
                     HiSpeed = Convert.ToSingle(value1);
                     break;
+                }
             }
         }
 
@@ -40,43 +48,61 @@ namespace SaturnGame.RhythmGame
             switch (gimmickID)
             {
                 case 2:
+                {
                     Type = GimmickType.BeatsPerMinute;
                     BeatsPerMinute = Convert.ToSingle(value1);
                     break;
+                }
 
                 case 3:
+                {
                     Type = GimmickType.TimeSignature;
                     TimeSig = new TimeSignature(Convert.ToInt32(value1), Convert.ToInt32(value2));
                     break;
+                }
 
                 case 5:
+                {
                     Type = GimmickType.HiSpeed;
                     HiSpeed = Convert.ToSingle(value1);
                     break;
+                }
 
                 case 6:
+                {
                     Type = GimmickType.ReverseEffectStart;
                     break;
+                }
 
                 case 7:
+                {
                     Type = GimmickType.ReverseEffectEnd;
                     break;
+                }
 
                 case 8:
+                {
                     Type = GimmickType.ReverseNoteEnd;
                     break;
+                }
 
                 case 9:
+                {
                     Type = GimmickType.StopStart;
                     break;
+                }
 
                 case 10:
+                {
                     Type = GimmickType.StopEnd;
                     break;
+                }
 
                 default:
+                {
                     Type = GimmickType.None;
                     break;
+                }
             }
         }
 

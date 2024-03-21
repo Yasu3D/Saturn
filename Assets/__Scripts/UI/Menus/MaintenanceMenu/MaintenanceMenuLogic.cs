@@ -225,24 +225,32 @@ namespace SaturnGame.UI
             switch (numericIndex)
             {
                 case 0:
+                {
                     display.ViewRectPosition++;
                     if (display.ViewRectPosition > 100)
                         display.ViewRectPosition -= 101;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
+                }
 
                 case 1:
+                {
                     display.ViewRectScale++;
                     if (display.ViewRectScale > 100)
                         display.ViewRectScale -= 51;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
+                }
 
                 case 2:
+                {
                     break;
-                
+                }
+
                 case 3:
+                {
                     break;
+                }
             }
         }
 
@@ -253,24 +261,32 @@ namespace SaturnGame.UI
             switch (numericIndex)
             {
                 case 0:
+                {
                     display.ViewRectPosition--;
                     if (display.ViewRectPosition < 0)
                         display.ViewRectPosition += 101;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
+                }
 
                 case 1:
+                {
                     display.ViewRectScale--;
                     if (display.ViewRectScale < 50)
                         display.ViewRectScale += 51;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
+                }
 
                 case 2:
+                {
                     break;
-                
+                }
+
                 case 3:
+                {
                     break;
+                }
             }
         }
     }

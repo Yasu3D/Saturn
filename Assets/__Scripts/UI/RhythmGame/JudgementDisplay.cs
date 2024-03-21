@@ -29,26 +29,36 @@ public class JudgementDisplay : MonoBehaviour
         switch (judgement)
         {
             case Judgement.None:
+            {
                 // ???
                 text.text = "unknown";
                 text.color = Color.white;
                 break;
+            }
             case Judgement.Miss:
+            {
                 text.text = "Miss";
                 text.color = Color.grey;
                 break;
+            }
             case Judgement.Good:
+            {
                 text.text = "Good";
                 text.color = Color.blue;
                 break;
+            }
             case Judgement.Great:
+            {
                 text.text = "Great";
                 text.color = Color.green;
                 break;
+            }
             case Judgement.Marvelous:
+            {
                 text.text = "Marvelous";
                 text.color = Color.magenta;
                 break;
+            }
         }
         text.enabled = true;
     }

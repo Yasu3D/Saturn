@@ -250,31 +250,43 @@ namespace SaturnGame.RhythmGame
                     switch (tempGimmick.Type)
                     {
                         case Gimmick.GimmickType.BeatsPerMinute:
+                        {
                             bpmGimmicks.Add(tempGimmick);
                             break;
+                        }
                         case Gimmick.GimmickType.TimeSignature:
+                        {
                             timeSigGimmicks.Add(tempGimmick);
                             break;
+                        }
                         case Gimmick.GimmickType.HiSpeed:
+                        {
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
+                        }
                         case Gimmick.GimmickType.StopStart:
+                        {
                             // Convert Stops to HiSpeed changes internally since they're functionally identical(?)
                             tempGimmick.Type = Gimmick.GimmickType.StopStart;
                             tempGimmick.HiSpeed = 0;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
+                        }
                         case Gimmick.GimmickType.StopEnd:
+                        {
                             // Same as above.
                             tempGimmick.Type = Gimmick.GimmickType.StopEnd;
                             tempGimmick.HiSpeed = chart.hiSpeedGimmicks.LastOrDefault(x => x.ChartTick < tempGimmick.ChartTick && x.Type is Gimmick.GimmickType.HiSpeed)?.HiSpeed ?? 1;
                             chart.hiSpeedGimmicks.Add(tempGimmick);
                             break;
+                        }
                         case Gimmick.GimmickType.ReverseEffectStart:
                         case Gimmick.GimmickType.ReverseEffectEnd:
                         case Gimmick.GimmickType.ReverseNoteEnd:
+                        {
                             chart.reverseGimmicks.Add(tempGimmick);
                             break;
+                        }
                     }
                 }
             }
@@ -477,11 +489,15 @@ namespace SaturnGame.RhythmGame
                 switch (swipeNote.Direction)
                 {
                     case SwipeNote.SwipeDirection.Clockwise:
+                    {
                         swipeNote.Direction = SwipeNote.SwipeDirection.Counterclockwise;
                         break;
+                    }
                     case SwipeNote.SwipeDirection.Counterclockwise:
+                    {
                         swipeNote.Direction = SwipeNote.SwipeDirection.Clockwise;
                         break;
+                    }
                 }
             }
 

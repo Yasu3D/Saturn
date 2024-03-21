@@ -73,14 +73,18 @@ namespace SaturnGame.RhythmGame
                 case 13:
                 case 14:
                 case 16:
+                {
                     BonusType = NoteBonusType.None;
                     break;
+                }
 
                 case 2:
                 case 6:
                 case 8:
+                {
                     BonusType = NoteBonusType.Bonus;
                     break;
+                }
 
                 case 20:
                 case 21:
@@ -89,11 +93,15 @@ namespace SaturnGame.RhythmGame
                 case 24:
                 case 25:
                 case 26:
+                {
                     BonusType = NoteBonusType.R_Note;
                     break;
+                }
 
                 default:
+                {
                     throw new ArgumentException($"Unkown note ID {noteID}", "noteID");
+                }
             }
         }
 
@@ -106,50 +114,68 @@ namespace SaturnGame.RhythmGame
                 case 1:
                 case 2:
                 case 20:
+                {
                     note = new TouchNote(measure, tick, position, size);
                     break;
+                }
 
                 case 3:
                 case 21:
+                {
                     note = new SnapNote(measure, tick, position, size, SnapNote.SnapDirection.Forward);
                     break;
+                }
 
                 case 4:
                 case 22:
+                {
                     note = new SnapNote(measure, tick, position, size, SnapNote.SnapDirection.Backward);
                     break;
+                }
 
                 case 5:
                 case 6:
                 case 23:
+                {
                     note = SwipeNote.CreateSwipe(measure, tick, position, size, SwipeNote.SwipeDirection.Clockwise);
                     break;
+                }
 
                 case 7:
                 case 8:
                 case 24:
+                {
                     note = SwipeNote.CreateSwipe(measure, tick, position, size, SwipeNote.SwipeDirection.Counterclockwise);
                     break;
+                }
 
 
                 case 16:
                 case 26:
+                {
                     note = new ChainNote(measure, tick, position, size);
                     break;
+                }
 
                 case 9:
                 case 25:
                 case 10:
                 case 11:
+                {
                     throw new ArgumentException($"Note ID {noteID} represents a HoldNote component which is unsupported by this function", "noteID");
+                }
 
                 case 12:
                 case 13:
                 case 14:
+                {
                     throw new ArgumentException($"Note ID {noteID} does not represent a Note", "noteID");
+                }
 
                 default:
+                {
                     throw new ArgumentException($"Unkown note ID {noteID}", "noteID");
+                }
             }
 
             note.SetBonusTypeFromNoteID(noteID);

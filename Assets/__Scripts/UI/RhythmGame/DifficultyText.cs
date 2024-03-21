@@ -29,29 +29,39 @@ public class DifficultyText : MonoBehaviour
         switch (index)
         {
             case 0:
+            {
                 diffName = "NORMAL";
                 color = normalColor;
                 break;
-            
+            }
+
             case 1:
+            {
                 diffName = "HARD";
                 color = hardColor;
                 break;
-            
+            }
+
             case 2:
+            {
                 diffName = "EXPERT";
                 color = expertColor;
                 break;
+            }
 
             case 3:
+            {
                 diffName = "INFERNO";
                 color = infernoColor;
                 break;
-            
+            }
+
             default:
+            {
                 diffName = "BEYOND";
                 color = beyondColor;
                 break;
+            }
         }
 
         // TODO: Eventually replace with SongData.GetDifficultyString();

@@ -171,19 +171,23 @@ namespace SaturnGame.RhythmGame
                 switch (Chart.reverseGimmicks[reverseGimmickIndex].Type)
                 {
                     case Gimmick.GimmickType.ReverseEffectStart:
+                    {
                         reverseStartTime = Chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
                         reverseMidTime = Chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
                         reverseEndTime = Chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
                         reverseMirrorTime = reverseStartTime + (reverseEndTime - reverseMidTime);
                         reverseActive = true;
                         break;
+                    }
 
                     case Gimmick.GimmickType.ReverseEffectEnd:
+                    {
                         reverseStartTime = 0;
                         reverseMidTime = 0;
                         reverseEndTime = 0;
                         reverseActive = false;
                         break;
+                    }
                 }
 
                 reverseGimmickIndex++;

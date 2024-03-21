@@ -29,24 +29,34 @@ namespace SaturnGame.UI
             switch (sound)
             {
                 case UISound.Back:
+                {
                     source.PlayOneShot(ui_Back);
                     break;
+                }
 
                 case UISound.Confirm:
+                {
                     source.PlayOneShot(ui_Confirm);
                     break;
+                }
 
                 case UISound.Impact:
+                {
                     source.PlayOneShot(ui_Impact);
                     break;
+                }
 
                 case UISound.Navigate:
+                {
                     source.PlayOneShot(ui_Navigate);
                     break;
+                }
 
                 case UISound.StartGame:
+                {
                     source.PlayOneShot(ui_StartGame);
                     return;
+                }
             }
         }
     }

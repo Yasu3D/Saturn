@@ -17,49 +17,169 @@ namespace SaturnGame.Settings
         {
             switch (parameter)
             {
-                case "NoteSpeed": GameSettings.NoteSpeed = value; break;
-                case "JudgementOffset": GameSettings.JudgementOffset = value; break;
-                case "MaskDensity": GameSettings.MaskDensity = value; break;
-                case "BackgroundVideoSetting": GameSettings.BackgroundVideoSetting = value; break;
-                case "BonusEffectSetting": GameSettings.BonusEffectSetting = value; break;
-                case "MirrorNotes": GameSettings.MirrorNotes = value; break;
-                case "GiveUpSetting": GameSettings.GiveUpSetting = value; break;
+                case "NoteSpeed":
+                {
+                    GameSettings.NoteSpeed = value; break;
+                }
+                case "JudgementOffset":
+                {
+                    GameSettings.JudgementOffset = value; break;
+                }
+                case "MaskDensity":
+                {
+                    GameSettings.MaskDensity = value; break;
+                }
+                case "BackgroundVideoSetting":
+                {
+                    GameSettings.BackgroundVideoSetting = value; break;
+                }
+                case "BonusEffectSetting":
+                {
+                    GameSettings.BonusEffectSetting = value; break;
+                }
+                case "MirrorNotes":
+                {
+                    GameSettings.MirrorNotes = value; break;
+                }
+                case "GiveUpSetting":
+                {
+                    GameSettings.GiveUpSetting = value; break;
+                }
 
-                case "JudgementDisplayPosition": UISettings.JudgementDisplayPosition = value; break;
-                case "ShowJudgementDetails": UISettings.ShowJudgementDetails = value; break;
-                case "GuideLaneType": UISettings.GuideLaneType = value; break;
-                case "GuideLaneOpacity": UISettings.GuideLaneOpacity = value; break;
-                case "DisplayOpacity": UISettings.DisplayOpacity = value; break;
-                case "ShowBarLines": UISettings.ShowBarLines = value; break;
-                case "CenterDisplayInfo": UISettings.CenterDisplayInfo = value; break;
-                case "ScoreDisplayMethod": UISettings.ScoreDisplayMethod = value; break;
+                case "JudgementDisplayPosition":
+                {
+                    UISettings.JudgementDisplayPosition = value; break;
+                }
+                case "ShowJudgementDetails":
+                {
+                    UISettings.ShowJudgementDetails = value; break;
+                }
+                case "GuideLaneType":
+                {
+                    UISettings.GuideLaneType = value; break;
+                }
+                case "GuideLaneOpacity":
+                {
+                    UISettings.GuideLaneOpacity = value; break;
+                }
+                case "DisplayOpacity":
+                {
+                    UISettings.DisplayOpacity = value; break;
+                }
+                case "ShowBarLines":
+                {
+                    UISettings.ShowBarLines = value; break;
+                }
+                case "CenterDisplayInfo":
+                {
+                    UISettings.CenterDisplayInfo = value; break;
+                }
+                case "ScoreDisplayMethod":
+                {
+                    UISettings.ScoreDisplayMethod = value; break;
+                }
 
-                case "RingColor": DesignSettings.RingColor = value; break;
-                case "JudgeLineColor": DesignSettings.JudgeLineColor = value; break;
-                case "NoteWidth": DesignSettings.NoteWidth = value; break;
-                case "NoteColorID_Touch": DesignSettings.NoteColorID_Touch = value; break;
-                case "NoteColorID_Chain": DesignSettings.NoteColorID_Chain = value; break;
-                case "NoteColorID_SwipeClockwise": DesignSettings.NoteColorID_SwipeClockwise = value; break;
-                case "NoteColorID_SwipeCounterclockwise": DesignSettings.NoteColorID_SwipeCounterclockwise = value; break;
-                case "NoteColorID_SnapForward": DesignSettings.NoteColorID_SnapForward = value; break;
-                case "NoteColorID_SnapBackward": DesignSettings.NoteColorID_SnapBackward = value; break;
-                case "NoteColorID_Hold": DesignSettings.NoteColorID_Hold = value; break;
-                case "InvertSlideColor": DesignSettings.InvertSlideColor = value; break;
-                case "TouchEffect": DesignSettings.TouchEffect = value; break;
-                case "ShowShootEffect": DesignSettings.ShowShootEffect = value; break;
-                case "ShowKeyBeams": DesignSettings.ShowKeyBeams = value; break;
-                case "ShowRNoteEffect": DesignSettings.ShowRNoteEffect = value; break;
+                case "RingColor":
+                {
+                    DesignSettings.RingColor = value; break;
+                }
+                case "JudgeLineColor":
+                {
+                    DesignSettings.JudgeLineColor = value; break;
+                }
+                case "NoteWidth":
+                {
+                    DesignSettings.NoteWidth = value; break;
+                }
+                case "NoteColorID_Touch":
+                {
+                    DesignSettings.NoteColorID_Touch = value; break;
+                }
+                case "NoteColorID_Chain":
+                {
+                    DesignSettings.NoteColorID_Chain = value; break;
+                }
+                case "NoteColorID_SwipeClockwise":
+                {
+                    DesignSettings.NoteColorID_SwipeClockwise = value; break;
+                }
+                case "NoteColorID_SwipeCounterclockwise":
+                {
+                    DesignSettings.NoteColorID_SwipeCounterclockwise = value; break;
+                }
+                case "NoteColorID_SnapForward":
+                {
+                    DesignSettings.NoteColorID_SnapForward = value; break;
+                }
+                case "NoteColorID_SnapBackward":
+                {
+                    DesignSettings.NoteColorID_SnapBackward = value; break;
+                }
+                case "NoteColorID_Hold":
+                {
+                    DesignSettings.NoteColorID_Hold = value; break;
+                }
+                case "InvertSlideColor":
+                {
+                    DesignSettings.InvertSlideColor = value; break;
+                }
+                case "TouchEffect":
+                {
+                    DesignSettings.TouchEffect = value; break;
+                }
+                case "ShowShootEffect":
+                {
+                    DesignSettings.ShowShootEffect = value; break;
+                }
+                case "ShowKeyBeams":
+                {
+                    DesignSettings.ShowKeyBeams = value; break;
+                }
+                case "ShowRNoteEffect":
+                {
+                    DesignSettings.ShowRNoteEffect = value; break;
+                }
 
-                case "TouchSE": SoundSettings.TouchSE = value; break;
-                case "BGMVolume": SoundSettings.BGMVolume = value; break;
-                case "GuideVolume": SoundSettings.GuideVolume = value; break;
-                case "TouchNoteVolume": SoundSettings.TouchNoteVolume = value; break;
-                case "HoldNoteVolume": SoundSettings.HoldNoteVolume = value; break;
-                case "SlideNoteVolume": SoundSettings.SlideNoteVolume = value; break;
-                case "SnapNoteVolume": SoundSettings.SnapNoteVolume = value; break;
-                case "ChainNoteVolume": SoundSettings.ChainNoteVolume = value; break;
-                case "BonusEffectVolume": SoundSettings.BonusEffectVolume = value; break;
-                case "RNoteEffectVolume": SoundSettings.RNoteEffectVolume = value; break;
+                case "TouchSE":
+                {
+                    SoundSettings.TouchSE = value; break;
+                }
+                case "BGMVolume":
+                {
+                    SoundSettings.BGMVolume = value; break;
+                }
+                case "GuideVolume":
+                {
+                    SoundSettings.GuideVolume = value; break;
+                }
+                case "TouchNoteVolume":
+                {
+                    SoundSettings.TouchNoteVolume = value; break;
+                }
+                case "HoldNoteVolume":
+                {
+                    SoundSettings.HoldNoteVolume = value; break;
+                }
+                case "SlideNoteVolume":
+                {
+                    SoundSettings.SlideNoteVolume = value; break;
+                }
+                case "SnapNoteVolume":
+                {
+                    SoundSettings.SnapNoteVolume = value; break;
+                }
+                case "ChainNoteVolume":
+                {
+                    SoundSettings.ChainNoteVolume = value; break;
+                }
+                case "BonusEffectVolume":
+                {
+                    SoundSettings.BonusEffectVolume = value; break;
+                }
+                case "RNoteEffectVolume":
+                {
+                    SoundSettings.RNoteEffectVolume = value; break;
+                }
             }
         }
 
