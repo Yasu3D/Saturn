@@ -7,6 +7,12 @@ namespace SaturnGame.RhythmGame
     [Serializable]
     public class HoldNote : Note
     {
+        // if using this constructor, you must add the remaining segments later.
+        public HoldNote(HoldSegment start)
+        {
+            Notes = new HoldSegment[] { start };
+        }
+
         public HoldNote(HoldSegment start, HoldSegment[] segments, HoldSegment end)
         {
             Notes = new HoldSegment[] { start }.Concat(segments).Concat(new HoldSegment[] { end }).ToArray();

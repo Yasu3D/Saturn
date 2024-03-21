@@ -140,6 +140,10 @@ namespace SaturnGame.RhythmGame
             Note tempNote;
             Note lastNote = null; // make lastNote start as null so the compiler doesn't scream
             Gimmick tempGimmick;
+            // (incomplete HoldNote, next segment noteId)
+            List<(HoldNote, int)> incompleteHoldNotes = new();
+            // noteId -> (segment, next segment noteId)
+            Dictionary<int, (HoldSegment, int?)> allHoldSegments = new();
 
             for (int i = readerIndex; i < merFile.Count; i++)
             {
@@ -166,9 +170,6 @@ namespace SaturnGame.RhythmGame
                         continue;
                     }
 
-                    // skip hold segment and hold end. they're handled separately.
-                    if (noteTypeID is 10 or 11) continue;
-
                     int position = Convert.ToInt32(splitLine[5]);
                     int size = Convert.ToInt32(splitLine[6]);
 
@@ -176,48 +177,22 @@ namespace SaturnGame.RhythmGame
                     if (noteTypeID is 9 or 25)
                     {
                         HoldSegment holdStart = new HoldSegment(measure, tick, position, size, true);
-                        // .... it ain't pretty but it does the job. I hope.
-                        // start another loop that begins at the hold start
-                        // and looks for a referenced note.
-                        int referencedNoteIndex = Convert.ToInt32(splitLine[8]);
-                        List<HoldSegment> holdSegments = new() { holdStart };
+                        int nextNoteID = Convert.ToInt32(splitLine[8]);
 
-                        for (int j = i; j < merFile.Count; j++)
-                        {
-                            string[] tempSplitLine = merFile[j].Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
-
-                            int tempNoteIndex = Convert.ToInt32(tempSplitLine[4]);
-
-                            // found the next referenced note
-                            if (tempNoteIndex == referencedNoteIndex)
-                            {
-                                int tempMeasure = Convert.ToInt32(tempSplitLine[0]);
-                                int tempTick = Convert.ToInt32(tempSplitLine[1]);
-                                int tempNoteTypeID = Convert.ToInt32(tempSplitLine[3]);
-                                int tempPosition = Convert.ToInt32(tempSplitLine[5]);
-                                int tempSize = Convert.ToInt32(tempSplitLine[6]);
-                                bool tempRenderFlag = Convert.ToInt32(tempSplitLine[7]) == 1;
-
-                                HoldSegment tempSegmentNote = new(tempMeasure, tempTick, tempPosition, tempSize, tempRenderFlag);
-                                holdSegments.Add(tempSegmentNote);
-
-                                if (tempNoteTypeID == 10)
-                                {
-                                    referencedNoteIndex = Convert.ToInt32(tempSplitLine[8]);
-                                }
-
-                                // noteType 11 = hold end
-                                if (tempNoteTypeID == 11)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        HoldNote hold = new(holdSegments.ToArray());
+                        HoldNote hold = new(holdStart);
                         hold.SetBonusTypeFromNoteID(noteTypeID);
+                        incompleteHoldNotes.Add((hold, nextNoteID));
+
                         tempNote = hold;
                         chart.holdNotes.Add(hold);
+                    }
+                    else if (noteTypeID is 10 or 11)
+                    {
+                        int noteId = Convert.ToInt32(splitLine[4]);
+                        bool renderFlag = Convert.ToInt32(splitLine[7]) == 1;
+                        int? nextNoteId = noteTypeID == 10 ? Convert.ToInt32(splitLine[8]) : null;
+                        allHoldSegments.Add(noteId, (new HoldSegment(measure, tick, position, size, renderFlag), nextNoteId));
+                        continue; // don't proceed to sync check for hold segments
                     }
                     // mask notes
                     else if (noteTypeID is 12 or 13)
@@ -302,6 +277,22 @@ namespace SaturnGame.RhythmGame
                             break;
                     }
                 }
+            }
+
+            // Assemble holds
+            foreach ((HoldNote holdNote, int? firstNoteId) in incompleteHoldNotes)
+            {
+                List<HoldSegment> holdSegments = holdNote.Notes.ToList();
+                int? currentNoteId = firstNoteId;
+
+                while (currentNoteId is int noteId)
+                {
+                    (HoldSegment segment, int? nextNoteId) = allHoldSegments[noteId];
+                    holdSegments.Add(segment);
+                    currentNoteId = nextNoteId;
+                }
+
+                holdNote.Notes = holdSegments.ToArray();
             }
         }
 
