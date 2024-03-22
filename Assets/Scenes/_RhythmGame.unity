@@ -1443,7 +1443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a962b7d2219503f94e284ba84e0ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseTouchController: 1
+  useTouchController: 1
   scoringManager: {fileID: 1472638032}
   timeManager: {fileID: 1783936258}
 --- !u!1 &1495675952
