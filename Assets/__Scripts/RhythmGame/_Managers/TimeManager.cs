@@ -1,7 +1,5 @@
-using SaturnGame.Settings;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -11,11 +9,11 @@ namespace SaturnGame.RhythmGame
         [SerializeField] private AudioSource bgmPlayer;
 
         //public float StaticAudioOffset {get; private set; } = -20;
-        public float StaticAudioOffset = -20;
+        public float StaticAudioOffset = -10;
         public float PlaybackSpeed {get; private set; } = 1.0f;
 
         [Space(20)]
-        [SerializeField] private float VisualTimeScale = 1.0f;
+        [SerializeField] private float visualTimeScale = 1.0f;
         [SerializeField] private float timeWarpMultiplier = 1.0f;
         [SerializeField] private float forceSyncDiscrepancy = 50f;
 
@@ -28,7 +26,7 @@ namespace SaturnGame.RhythmGame
 
         public SongState State { get; private set; } = SongState.NotYetStarted;
 
-        public void SetPlaybackSpeed(float speed, bool clamp = true)
+        private void SetPlaybackSpeed(float speed, bool clamp = true)
         {
             float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
             PlaybackSpeed = clampedSpeed;
@@ -39,7 +37,7 @@ namespace SaturnGame.RhythmGame
         /// Returns Song Position in ms.
         /// </summary>
         /// <returns></returns>
-        public float BgmTime()
+        private float BgmTime()
         {
             if (bgmPlayer.clip == null)
                 return -1;
@@ -52,34 +50,35 @@ namespace SaturnGame.RhythmGame
         /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
         /// </summary>
         public float RawVisualTimeMs { get; private set; }
-        public float LastFrameRawVisualTimeMs { get; private set; }
+        private float LastFrameRawVisualTimeMs { get; set; }
 
-        public float TotalOffsetMs => StaticAudioOffset + (SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */);
+        private float TotalOffsetMs =>
+            StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */;
         /// <summary>
         /// <b>Includes sync calibration and user offsets!</b> <br />
         /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
         /// </summary>
         public float VisualTimeMs => RawVisualTimeMs + TotalOffsetMs;
         public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
-        public void UpdateVisualTime()
+        private void UpdateVisualTime()
         {
             if (State != SongState.Playing) return;
 
             LastFrameRawVisualTimeMs = RawVisualTimeMs;
-            RawVisualTimeMs += Time.deltaTime * VisualTimeScale * 1000;
+            RawVisualTimeMs += Time.deltaTime * visualTimeScale * 1000;
         }
 
         /// <summary>
         /// Synchronises VisualTime with BgmTime if they drift apart too much. <br />
         /// Huge thanks to AllPoland for sharing this code from ArcViewer with me.
         /// </summary>
-        public void ReSync()
+        private void ReSync()
         {
             if (!bgmPlayer.isPlaying)
             {
-                // If the song is not playing, just use the gameplay clock (Time.detlaTime).
+                // If the song is not playing, just use the gameplay clock (Time.deltaTime).
                 // So VisualTimeScale should just be exactly the PlaybackSpeed.
-                VisualTimeScale = PlaybackSpeed;
+                visualTimeScale = PlaybackSpeed;
                 return;
             }
 
@@ -96,7 +95,7 @@ namespace SaturnGame.RhythmGame
             // Warp VisualTime to re-align with audio
             // * 0.001f because SaturnGame uses milliseconds for all timing.
             float timeWarp = discrepancy * timeWarpMultiplier * 0.001f;
-            VisualTimeScale = PlaybackSpeed - timeWarp;
+            visualTimeScale = PlaybackSpeed - timeWarp;
         }
 
         private void UpdateState()
@@ -119,10 +118,14 @@ namespace SaturnGame.RhythmGame
                     // Terminal.
                     break;
                 }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
-        void Update()
+        private void Update()
         {
             UpdateVisualTime();
             ReSync();
@@ -131,7 +134,7 @@ namespace SaturnGame.RhythmGame
             if (Input.GetKeyDown(KeyCode.P))
             {
                 Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
-                var bgm = ChartManager.Instance.BGMClip;
+                AudioClip bgm = ChartManager.Instance.BGMClip;
                 bgmPlayer.clip = bgm;
                 State = SongState.Playing;
                 bgmPlayer.Play();
