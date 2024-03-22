@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -11,39 +10,33 @@ namespace SaturnGame.RhythmGame
     {
         [SerializeField] private TimeManager timeManager;
         [SerializeField] private ScoringManager scoringManager;
-        [SerializeField] private TMPro.TextMeshProUGUI debugText;
         
         [SerializeField] private AudioClip guideSound;
         [SerializeField] private AudioClip touchSound;
         [SerializeField] private AudioClip swipeSound;
-        //[SerializeField] private AudioSource audioSource;
 
         public int PoolSize;
         [SerializeField] private AudioSource hitsoundSourcePrefab;
         [SerializeField] private Transform availableHitsoundSourcesParent;
         [SerializeField] private Transform activeHitsoundSourcesParent;
-        public List<AudioSource> AvailableHitsoundSources = new List<AudioSource>();
-        public List<AudioSource> ActiveHitsoundSources = new List<AudioSource>();
+        public List<AudioSource> AvailableHitsoundSources = new();
+        public List<AudioSource> ActiveHitsoundSources = new();
         
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             EnsurePoolSize();
         }
 
-        void EnsurePoolSize()
+        private void EnsurePoolSize()
         {
             int currentSize = AvailableHitsoundSources.Count + ActiveHitsoundSources.Count;
             int delta = PoolSize - currentSize;
             if (delta > 0)
-            {
-                for (int i = 0; i < delta; i++)
-                {
-                    AddHitsoundSourceToPool();
-                }
-            }
+                for (int i = 0; i < delta; i++) AddHitsoundSourceToPool();
         }
 
+        [NotNull]
         private AudioSource AddHitsoundSourceToPool()
         {
             AudioSource newSource = Instantiate(hitsoundSourcePrefab, availableHitsoundSourcesParent);
@@ -52,17 +45,10 @@ namespace SaturnGame.RhythmGame
             return newSource;
         }
 
-        public AudioSource GetHitsoundSourceFromPool()
+        [NotNull]
+        private AudioSource GetHitsoundSourceFromPool()
         {
-            AudioSource source;
-            if (AvailableHitsoundSources.Count > 0)
-            {
-                source = AvailableHitsoundSources.First();
-            }
-            else
-            {
-                source = AddHitsoundSourceToPool();
-            }
+            AudioSource source = AvailableHitsoundSources.FirstOrDefault() ?? AddHitsoundSourceToPool();
             AvailableHitsoundSources.Remove(source);
             ActiveHitsoundSources.Add(source);
             source.transform.SetParent(activeHitsoundSourcesParent);
@@ -70,67 +56,57 @@ namespace SaturnGame.RhythmGame
             return source;
         }
 
-        public void ReturnHitsoundSourceToPool(AudioSource source)
+        private void ReturnHitsoundSourceToPool([NotNull] AudioSource source)
         {
             if (!ActiveHitsoundSources.Contains(source))
-            {
                 throw new Exception("Tried to return a hitsound source to the pool that was not in the active list");
-            }
             source.gameObject.SetActive(false);
             source.transform.SetParent(availableHitsoundSourcesParent);
             ActiveHitsoundSources.Remove(source);
             AvailableHitsoundSources.Add(source);
         }
-        
-        void ReturnFinishedHitsoundsToPool()
+
+        private void ReturnFinishedHitsoundsToPool()
         {
             for (int i = ActiveHitsoundSources.Count - 1; i >= 0; i--)
             {
                 AudioSource source = ActiveHitsoundSources[i];
-                if (!source.isPlaying)
-                {
-                    ReturnHitsoundSourceToPool(source);
-                }
+                if (!source.isPlaying) ReturnHitsoundSourceToPool(source);
             }
         }
 
-        void playHitsound(AudioClip clip, float volume = 0.3f)
+        private void PlayHitsound(AudioClip clip, float volume = 0.3f)
         {
-            var source = GetHitsoundSourceFromPool();
+            AudioSource source = GetHitsoundSourceFromPool();
             source.clip = clip;
             source.volume = volume;
             source.Play();
         }
 
-        bool ShouldPlayGuideSound()
+        private bool ShouldPlayGuideSound()
         {
-            var chart = ChartManager.Instance.Chart;
-            
-            foreach (var note in chart.notes)
+            Chart chart = ChartManager.Instance.Chart;
+
+            foreach (Note note in chart.notes)
             {
                 if (timeManager.LastFrameVisualTimeMs < note.TimeMs && note.TimeMs <= timeManager.VisualTimeMs)
-                {
                     return true;
-                }
             }
 
-            foreach (var note in chart.holdNotes)
+            foreach (HoldNote note in chart.holdNotes)
             {
                 if (timeManager.LastFrameVisualTimeMs < note.TimeMs && note.TimeMs <= timeManager.VisualTimeMs)
-                {
                     return true;
-                }
                 if (timeManager.LastFrameVisualTimeMs < note.End.TimeMs && note.End.TimeMs <= timeManager.VisualTimeMs)
-                {
                     return true;
-                }
             }
 
             return false;
         }
 
         private float time;
-        void Update()
+
+        private void Update()
         {
             EnsurePoolSize();
             ReturnFinishedHitsoundsToPool();
@@ -142,18 +118,18 @@ namespace SaturnGame.RhythmGame
                     // Note: ideally we would play the guide sound at the exact time the note is supposed to be hit,
                     // using PlayScheduled, but I'm too lazy to do this now. Given a decent enough framerate, this is
                     // pretty good.
-                    playHitsound(guideSound);
+                    PlayHitsound(guideSound);
                 }
             }
 
             if (scoringManager.NeedTouchHitsound)
             {
-                playHitsound(touchSound);
+                PlayHitsound(touchSound);
                 scoringManager.NeedTouchHitsound = false;
             }
             if (scoringManager.NeedSwipeSnapHitsound)
             {
-                playHitsound(swipeSound);
+                PlayHitsound(swipeSound);
                 scoringManager.NeedSwipeSnapHitsound = false;
             }
         }
