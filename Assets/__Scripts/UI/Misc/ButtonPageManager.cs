@@ -8,9 +8,9 @@ namespace SaturnGame.UI
     public class ButtonPageManager : MonoBehaviour
     {
         [SerializeField] private List<RectTransform> buttonGroups;
-        private const float scale = 1.5f;
-        private const float tweenDuration = 0.15f;
-        private readonly Ease tweenEase = Ease.InOutQuad;
+        private const float Scale = 1.5f;
+        private const float TweenDuration = 0.15f;
+        private const Ease TweenEase = Ease.InOutQuad;
 
         public void SetActiveButtons(int index)
         {
@@ -24,18 +24,18 @@ namespace SaturnGame.UI
             if (index < 0 || index >= buttonGroups.Count)
                 throw new ArgumentException($"Index out of range ({index}, {buttonGroups.Count})");
 
-            for (int i = 0; i < buttonGroups.Count; i++)
+            foreach (RectTransform group in buttonGroups)
             {
-                buttonGroups[i].localScale = Vector3.one;
-                buttonGroups[i].DOScale(scale, tweenDuration).SetEase(tweenEase);
+                group.localScale = Vector3.one;
+                group.DOScale(Scale, TweenDuration).SetEase(TweenEase);
             }
 
-            await Awaitable.WaitForSecondsAsync(tweenDuration);
+            await Awaitable.WaitForSecondsAsync(TweenDuration);
 
             SetActiveButtons(index);
             
-            buttonGroups[index].localScale = Vector3.one * scale;
-            buttonGroups[index].DOScale(1, tweenDuration).SetEase(tweenEase);
+            buttonGroups[index].localScale = Vector3.one * Scale;
+            buttonGroups[index].DOScale(1, TweenDuration).SetEase(TweenEase);
         }
     }
 }

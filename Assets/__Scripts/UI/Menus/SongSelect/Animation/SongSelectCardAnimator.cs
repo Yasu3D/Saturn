@@ -3,7 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using SaturnGame.Data;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.UI
 {
@@ -11,7 +13,7 @@ namespace SaturnGame.UI
     {
 
         [Header("Cards")]
-        public List<SongCard> songCards;
+        [FormerlySerializedAs("songCards")] public List<SongCard> SongCards;
         [SerializeField] private List<PreviewCard> previewCards;
 
         [Header("Jackets")]
@@ -21,69 +23,69 @@ namespace SaturnGame.UI
         [SerializeField] private RawImage selectedJacket2;
 
         [Header("Animation")]
-        private const float songCardScaleA = 0.6f;
-        private const float songCardScaleB = 0.8f;
-        private const float tweenDuration = 0.1f;
-        private readonly Ease tweenEase = Ease.OutQuad;
+        private const float SongCardScaleA = 0.6f;
+        private const float SongCardScaleB = 0.8f;
+        private const float TweenDuration = 0.1f;
+        private const Ease TweenEase = Ease.OutQuad;
 
         /// <summary>
         /// Index of the card that's currently in the center.
         /// </summary>
-        public int CenterCardIndex { get; private set; }
+        private int CenterCardIndex { get; set; }
         
-        public int WrapCardIndex { get; private set; } = 0;
+        public int WrapCardIndex { get; private set; }
 
         /// <summary>
         /// Number of cards on either side of the center card.
         /// </summary>
-        public int cardHalfCount => songCards.Count / 2;
+        public int CardHalfCount => SongCards.Count / 2;
 
-        public enum MoveDirection { Left = 1, Right = -1}
+        public enum ShiftDirection { Left = 1, Right = -1}
 
-        void Awake()
+        private void Awake()
         {
-            if (songCards.Count != previewCards.Count)
+            if (SongCards.Count != previewCards.Count)
                 Debug.LogWarning("SongCard and PreviewCard count does not match!");
 
-            CenterCardIndex = cardHalfCount;
+            CenterCardIndex = CardHalfCount;
         }
 
-        public void Anim_ShiftCards(MoveDirection direction)
+        public void Anim_ShiftCards(ShiftDirection direction)
         {
-            CenterCardIndex = SaturnMath.Modulo(CenterCardIndex + (int)direction, songCards.Count);
-            WrapCardIndex = SaturnMath.Modulo(CenterCardIndex + cardHalfCount * (int)direction, songCards.Count);
+            CenterCardIndex = SaturnMath.Modulo(CenterCardIndex + (int)direction, SongCards.Count);
+            WrapCardIndex = SaturnMath.Modulo(CenterCardIndex + CardHalfCount * (int)direction, SongCards.Count);
 
-            for (int i = 0; i < songCards.Count; i++)
+            for (int i = 0; i < SongCards.Count; i++)
             {
-                int animIndex = SaturnMath.Modulo(cardHalfCount - CenterCardIndex + i, songCards.Count);
+                int animIndex = SaturnMath.Modulo(CardHalfCount - CenterCardIndex + i, SongCards.Count);
 
                 Vector2 cardPos = GetSongCardPosition(animIndex);
                 Vector2 previewPos = GetPreviewCardPosition(animIndex);
-                float scale = i == CenterCardIndex ? songCardScaleA : songCardScaleB;
+                float scale = i == CenterCardIndex ? SongCardScaleA : SongCardScaleB;
 
                 if (i == WrapCardIndex)
                 {
-                    songCards[i].rect.localScale = Vector3.one * scale;
-                    songCards[i].rect.anchoredPosition = cardPos;
+                    SongCards[i].rect.localScale = Vector3.one * scale;
+                    SongCards[i].rect.anchoredPosition = cardPos;
                     previewCards[i].rect.anchoredPosition = previewPos;
                 }
                 else
                 {
-                    songCards[i].rect.DOScale(scale, tweenDuration).SetEase(tweenEase);
-                    songCards[i].rect.DOAnchorPos(cardPos, tweenDuration).SetEase(tweenEase);
-                    previewCards[i].rect.DOAnchorPos(previewPos, tweenDuration).SetEase(tweenEase);
+                    SongCards[i].rect.DOScale(scale, TweenDuration).SetEase(TweenEase);
+                    SongCards[i].rect.DOAnchorPos(cardPos, TweenDuration).SetEase(TweenEase);
+                    previewCards[i].rect.DOAnchorPos(previewPos, TweenDuration).SetEase(TweenEase);
                 }
             }
         }
 
-        private Vector2 GetSongCardPosition(int index)
+        private static Vector2 GetSongCardPosition(int index)
         {
             float[] xPos = {-670, -670, -670, -670, -500, -260,   0, 260,  500,  670,  670,  670,  670};
             float[] yPos = {-160, -160, -160, -160, -100,  -50, -50, -50, -100, -160, -160, -160, -160};
             return new(xPos[index], yPos[index]);
         }
 
-        private Vector2 GetPreviewCardPosition(int index)
+        private static Vector2 GetPreviewCardPosition(int index)
         {
             float[] xPos = {-700, -472, -384, -296, -208, -120, 0, 120, 208, 296, 384, 472, 700};
             float[] yPos = { -60,  -45,  -30,  -20,  -10,   -5, 0,  -5, -10, -20, -30, -45, -60};
@@ -92,7 +94,7 @@ namespace SaturnGame.UI
     
         public void SetCardJacket(int cardIndex, Texture2D jacket)
         {
-            RawImage jacket0 = songCards[cardIndex].jacketImage;
+            RawImage jacket0 = SongCards[cardIndex].jacketImage;
             RawImage jacket1 = previewCards[cardIndex].jacketImage;
 
             // Destroy previous textures to avoid a memory leak.
@@ -103,12 +105,12 @@ namespace SaturnGame.UI
             jacket1.texture = jacket;
         }
 
-        public void SetSongData(int cardIndex, int diffIndex, SongData data)
+        public void SetSongData(int cardIndex, int diffIndex, [NotNull] SongData data)
         {
-            var card = songCards[cardIndex];
-            card.artistText.text = data.artist;
-            card.titleText.text = data.title;
-            card.difficultyText.text = SaturnMath.GetDifficultyString(data.songDiffs[diffIndex].diffLevel);
+            SongCard card = SongCards[cardIndex];
+            card.artistText.text = data.Artist;
+            card.titleText.text = data.Title;
+            card.difficultyText.text = SaturnMath.GetDifficultyString(data.SongDiffs[diffIndex].DiffLevel);
         }
 
         public void SetSelectedJacket(Texture2D jacket)
@@ -120,7 +122,7 @@ namespace SaturnGame.UI
     
         public Texture2D GetCenterCardJacket()
         {
-            return (Texture2D) songCards[CenterCardIndex].jacketImage.texture;
+            return (Texture2D) SongCards[CenterCardIndex].jacketImage.texture;
         }
     }
 }

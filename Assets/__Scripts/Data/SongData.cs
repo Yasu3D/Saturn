@@ -1,27 +1,28 @@
-using UnityEngine;
+using System;
 
 namespace SaturnGame.Data
 {
-    [System.Serializable]
+    [Serializable]
     public class SongData
     {
-        public SongData(string title, string rubi, string artist, string bpm, string folderPath,  string jacketPath, SongDifficulty[] songDiffs)
+        public SongData(string title, string rubi, string artist, string bpm, string folderPath, string jacketPath,
+            SongDifficulty[] songDiffs)
         {
-            this.title = title;
-            this.rubi = rubi;
-            this.artist = artist;
-            this.bpm = bpm;
-            this.folderPath = folderPath;
-            this.jacketPath = jacketPath;
-            this.songDiffs = songDiffs;
+            Title = title;
+            Rubi = rubi;
+            Artist = artist;
+            Bpm = bpm;
+            FolderPath = folderPath;
+            JacketPath = jacketPath;
+            SongDiffs = songDiffs;
         }
 
-        public string title;
-        public string rubi;
-        public string artist;
-        public string bpm;
-        public string folderPath;
-        public string jacketPath;
-        public SongDifficulty[] songDiffs;
+        public string Title;
+        public string Rubi;
+        public string Artist;
+        public string Bpm;
+        public string FolderPath;
+        public string JacketPath;
+        public SongDifficulty[] SongDiffs;
     }
 }

@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using SaturnGame.Settings;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SaturnGame.UI
 {
@@ -11,7 +12,7 @@ namespace SaturnGame.UI
         private enum MenuState
         {
             Idle,
-            MenuSwitch
+            MenuSwitch,
         }
 
         [SerializeField] private OptionsPanelAnimator panelAnimator;
@@ -40,19 +41,18 @@ namespace SaturnGame.UI
             panelAnimator.SetPrimaryPanel(startScreen.listItems[CurrentIndex]);
         }
 
-        public async void OnConfirm()
+        private async void OnConfirm()
         {
             if (state is MenuState.MenuSwitch) return;
 
             UIListItem selectedItem = CurrentScreen.listItems[CurrentIndex];
             UIScreen prevScreen = CurrentScreen;
-            UIScreen nextScreen = null; // dont know if this is smart or not.
 
             switch (selectedItem.itemType)
             {
                 case UIListItem.ItemTypes.SubMenu:
                 {
-                    nextScreen = selectedItem.nextScreen;
+                    UIScreen nextScreen = selectedItem.nextScreen;
                     if (nextScreen == null || nextScreen.listItems.Count == 0) return;
 
                     UIAudio.PlaySound(UIAudioController.UISound.Confirm);
@@ -70,10 +70,7 @@ namespace SaturnGame.UI
                         int value = SettingsManager.Instance.PlayerSettings.GetParameter(parameter);
 
                         UIListItem item = nextScreen.listItems.FirstOrDefault(x => x.settingsValue == value);
-                        if (item != null)
-                        {
-                            CurrentIndex = nextScreen.listItems.IndexOf(item);
-                        }
+                        if (item != null) CurrentIndex = nextScreen.listItems.IndexOf(item);
                     }
                     
                     break;
@@ -91,23 +88,27 @@ namespace SaturnGame.UI
 
                     screenStack.Pop();
                     indexStack.Pop();
-                    nextScreen = CurrentScreen;
 
-                    panelAnimator.Anim_HidePanels(prevScreen, nextScreen);
+                    panelAnimator.Anim_HidePanels(prevScreen, CurrentScreen);
                     state = MenuState.MenuSwitch;
                     break;
+                }
+
+                default:
+                {
+                    throw new ArgumentOutOfRangeException();
                 }
             }
             
             await Awaitable.WaitForSecondsAsync(0.25f);
             panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
             panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
-            panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
-            ToggleRevertButton(nextScreen);
+            panelAnimator.Anim_ShowPanels(prevScreen, CurrentScreen);
+            ToggleRevertButton(CurrentScreen);
             state = MenuState.Idle;
         }
 
-        public async void OnBack()
+        private async void OnBack()
         {
             if (state is MenuState.MenuSwitch) return;
 
@@ -121,10 +122,10 @@ namespace SaturnGame.UI
             }
 
             // might be a little confusing but does the trick
-            var prevScreen = CurrentScreen;
+            UIScreen prevScreen = CurrentScreen;
             screenStack.Pop();
             indexStack.Pop();
-            var nextScreen = CurrentScreen;
+            UIScreen nextScreen = CurrentScreen;
 
             panelAnimator.Anim_HidePanels(prevScreen, nextScreen);
             ToggleRevertButton(nextScreen);
@@ -137,7 +138,7 @@ namespace SaturnGame.UI
             state = MenuState.Idle;
         }
 
-        public void OnNavigateLeft()
+        private void OnNavigateLeft()
         {
             if (state is MenuState.MenuSwitch) return;
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
@@ -150,8 +151,8 @@ namespace SaturnGame.UI
             panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, CurrentIndex, CurrentScreen);
             panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
         }
-        
-        public void OnNavigateRight()
+
+        private void OnNavigateRight()
         {
             if (state is MenuState.MenuSwitch) return;
             if (screenStack.Count == 0 || indexStack.Count == 0) return;
@@ -165,7 +166,7 @@ namespace SaturnGame.UI
             panelAnimator.SetPrimaryPanel(CurrentScreen.listItems[CurrentIndex]);
         }
 
-        public async void OnRevert()
+        private async void OnRevert()
         {
             UIListItem selectedItem = CurrentScreen.listItems[CurrentIndex];
             if (selectedItem.settingsParameter == "") return;
@@ -189,7 +190,7 @@ namespace SaturnGame.UI
             }
         }
 
-        private void ToggleRevertButton(UIScreen screen)
+        private void ToggleRevertButton([NotNull] UIScreen screen)
         {
             revertButton.SetActive(screen.screenType is UIScreen.UIScreenType.Radial && screen.listItems.Count != 0);
         }

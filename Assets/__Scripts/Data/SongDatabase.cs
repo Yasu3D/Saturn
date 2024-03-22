@@ -1,29 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using SaturnGame.Loading;
 using System;
+using System.Globalization;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace SaturnGame.Data
 {
     public class SongDatabase : MonoBehaviour
     {
-        public List<SongData> songs;
+        public List<SongData> Songs;
 
         public void LoadAllSongData()
         {
-            string songpacksPath = Path.Combine(Application.streamingAssetsPath, "SongPacks");
-            var songDirectories = Directory.EnumerateFiles(songpacksPath, "meta.mer", SearchOption.AllDirectories);
+            string songPacksPath = Path.Combine(Application.streamingAssetsPath, "SongPacks");
+            IEnumerable<string> songDirectories =
+                Directory.EnumerateFiles(songPacksPath, "meta.mer", SearchOption.AllDirectories);
 
-            foreach(var filepath in songDirectories)
-            {
-                LoadSongData(filepath);
-            }
+            foreach(string filepath in songDirectories) LoadSongData(filepath);
         }
-    
-        public void LoadSongData(string path)
+
+        private void LoadSongData([NotNull] string path)
         {
             FileStream metaStream = new(path, FileMode.Open, FileAccess.Read);
             List<string> metaFile = MerLoader.LoadMer(metaStream);
@@ -31,10 +30,10 @@ namespace SaturnGame.Data
             string folderPath = Path.GetDirectoryName(path);
             string jacketPath = Directory.GetFiles(folderPath).FirstOrDefault(file =>
             {
-                string name = Path.GetFileNameWithoutExtension(file);
+                string filename = Path.GetFileNameWithoutExtension(file);
                 string extension = Path.GetExtension(file);
 
-                return name != null && name == "jacket" && extension is ".png" or ".jpg" or ".jpeg";
+                return filename == "jacket" && extension is ".png" or ".jpg" or ".jpeg";
             });
 
             string title = "";
@@ -67,19 +66,19 @@ namespace SaturnGame.Data
             for (int i = 0; i < 5; i++)
             {
                 string chartFilepath = Path.Combine(folderPath, merIDs[i]);
-                diffs[i].diffName = (DifficultyName) i;
+                diffs[i].DiffName = (DifficultyName) i;
 
                 if (!File.Exists(chartFilepath))
                 {
-                    diffs[i].exists = false;
+                    diffs[i].Exists = false;
                     continue;
                 }
 
                 FileStream merStream = new(chartFilepath, FileMode.Open, FileAccess.Read);
                 List<string> merFile = MerLoader.LoadMer(merStream);
 
-                diffs[i].exists = true;
-                diffs[i].chartFilepath = chartFilepath;
+                diffs[i].Exists = true;
+                diffs[i].ChartFilepath = chartFilepath;
 
                 readerIndex = 0;
                 do
@@ -89,29 +88,37 @@ namespace SaturnGame.Data
                     if (merLine == "#BODY") break;
 
                     string tempLevel = MerLoader.GetMetadata(merLine, "#LEVEL");
-                    if (tempLevel != null) diffs[i].diffLevel = Convert.ToSingle(tempLevel);
+                    if (tempLevel != null)
+                        diffs[i].DiffLevel = Convert.ToSingle(tempLevel, CultureInfo.InvariantCulture);
 
                     string tempAudioFilepath = MerLoader.GetMetadata(merLine, "#AUDIO");
-                    if (tempAudioFilepath != null) diffs[i].audioFilepath = Path.Combine(folderPath, tempAudioFilepath);
+                    if (tempAudioFilepath != null)
+                        diffs[i].AudioFilepath = Path.Combine(folderPath, tempAudioFilepath);
 
                     string tempAudioOffset = MerLoader.GetMetadata(merLine, "#OFFSET");
-                    if (tempAudioOffset != null) diffs[i].audioOffset = Convert.ToSingle(tempAudioOffset);
+                    if (tempAudioOffset != null)
+                        diffs[i].AudioOffset = Convert.ToSingle(tempAudioOffset, CultureInfo.InvariantCulture);
 
                     string tempCharter = MerLoader.GetMetadata(merLine, "#AUTHOR");
-                    if (tempCharter != null) diffs[i].charter = tempCharter;
+                    if (tempCharter != null)
+                        diffs[i].Charter = tempCharter;
 
                     string tempPreviewStart = MerLoader.GetMetadata(merLine, "#PREVIEW_TIME");
-                    if (tempPreviewStart != null) diffs[i].previewStart = Convert.ToSingle(tempPreviewStart);
-                    if (tempPreviewStart == "") diffs[i].previewStart = 0;
+                    if (tempPreviewStart != null)
+                        diffs[i].PreviewStart = Convert.ToSingle(tempPreviewStart, CultureInfo.InvariantCulture);
+                    if (tempPreviewStart == "")
+                        diffs[i].PreviewStart = 0;
 
                     string tempPreviewDuration = MerLoader.GetMetadata(merLine, "#PREVIEW_LENGTH");
-                    if (tempPreviewDuration != null) diffs[i].previewDuration = Convert.ToSingle(tempPreviewDuration);
-                    if (tempPreviewDuration == "") diffs[i].previewDuration = 10;
+                    if (tempPreviewDuration != null)
+                        diffs[i].PreviewDuration = Convert.ToSingle(tempPreviewDuration, CultureInfo.InvariantCulture);
+                    if (tempPreviewDuration == "")
+                        diffs[i].PreviewDuration = 10;
                 }
                 while (++readerIndex < merFile.Count);
             }
 
-            songs.Add(new(title, rubi, artist, bpm, folderPath, jacketPath, diffs));
+            Songs.Add(new(title, rubi, artist, bpm, folderPath, jacketPath, diffs));
         }
     }
 }
