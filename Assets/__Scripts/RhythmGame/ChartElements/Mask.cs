@@ -19,7 +19,7 @@ namespace SaturnGame.RhythmGame
             None = 3,
             Counterclockwise = 0,
             Clockwise = 1,
-            Center = 2
+            Center = 2,
         }
     }
 }

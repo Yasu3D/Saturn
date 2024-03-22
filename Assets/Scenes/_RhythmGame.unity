@@ -1410,7 +1410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa3f905a5f427b4e923a628a2f1f552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugText: {fileID: 1245724631}
+  debugText: {fileID: 1245724631}
   AutoWriteReplays: 1
   WritingReplayAndExiting: 0
   timeManager: {fileID: 1783936258}

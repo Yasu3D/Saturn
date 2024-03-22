@@ -73,7 +73,7 @@ namespace SaturnGame.RhythmGame
                 if (currentNote is SwipeNote swipeNote)
                     GetSwipe(swipeNote);
 
-                if (currentNote.BonusType is Note.NoteBonusType.R_Note)
+                if (currentNote.BonusType is Note.NoteBonusType.RNote)
                     GetR_Effect(currentNote);
 
                 noteIndex++;
@@ -93,7 +93,7 @@ namespace SaturnGame.RhythmGame
                 GetHoldEnd(currentHold.End);
                 GetHoldSurface(currentHold);
 
-                if (currentHold.BonusType is Note.NoteBonusType.R_Note)
+                if (currentHold.BonusType is Note.NoteBonusType.RNote)
                     GetR_Effect(currentHold);
 
                 holdIndex++;
@@ -205,7 +205,7 @@ namespace SaturnGame.RhythmGame
                 if (currentNote is SwipeNote swipeNote)
                     GetSwipe(swipeNote, true);
 
-                if (currentNote.BonusType is Note.NoteBonusType.R_Note)
+                if (currentNote.BonusType is Note.NoteBonusType.RNote)
                     GetR_Effect(currentNote, true);
 
                 reverseNoteIndex++;
@@ -221,7 +221,7 @@ namespace SaturnGame.RhythmGame
                 GetHoldEnd(currentHold.End, true);
                 GetHoldSurface(currentHold, true);
 
-                if (currentHold.BonusType is Note.NoteBonusType.R_Note)
+                if (currentHold.BonusType is Note.NoteBonusType.RNote)
                     GetR_Effect(currentHold, true);
 
                 reverseHoldNoteIndex++;

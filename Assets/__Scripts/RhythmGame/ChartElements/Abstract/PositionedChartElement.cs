@@ -9,18 +9,18 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public abstract class PositionedChartElement : ChartElement
     {
-        [Range(0, 59)] private int _position;
+        [Range(0, 59)] private int position;
         // Position of the note or start of hold note.
-        public virtual int Position { get => _position; set => _position = value; }
+        public virtual int Position { get => position; set => position = value; }
 
-        [Range(1, 60)] private int _size;
+        [Range(1, 60)] private int size;
         // Size of the note or start of hold note.
-        public virtual int Size { get => _size; set => _size = value; }
+        public virtual int Size { get => size; set => size = value; }
 
-        public PositionedChartElement(int measure, int tick, int position, int size) : base(measure, tick)
+        protected PositionedChartElement(int measure, int tick, int position, int size) : base(measure, tick)
         {
-            _position = position;
-            _size = size;
+            this.position = position;
+            this.size = size;
         }
 
         protected PositionedChartElement()
@@ -39,19 +39,12 @@ namespace SaturnGame.RhythmGame
         /// Right is the end or "right side" of the interval represented in mod60 (not inclusive).
         /// It is the counterclockwise-most segment of the note + 1. Note that Left can be greater than Right.
         /// </summary>
-        public int Right => (Position + Size) % 60;
+        public int Right => SaturnMath.Modulo(Position + Size, 60);
 
         public bool Touched(TouchState touchState)
         {
-            foreach (int offset in Enumerable.Range(0, Size))
-            {
-                int anglePos = (Left + offset) % 60;
-                if (touchState.AnglePosPressedAtAnyDepth(anglePos))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return Enumerable.Range(Position, Size)
+                .Any(offset => touchState.AnglePosPressedAtAnyDepth(SaturnMath.Modulo(offset, 60)));
         }
     }
 }

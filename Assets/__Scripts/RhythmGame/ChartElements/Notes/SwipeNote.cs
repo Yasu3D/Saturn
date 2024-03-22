@@ -1,14 +1,15 @@
 using System;
 using System.Linq;
-using UnityEngine;
+using JetBrains.Annotations;
 
 namespace SaturnGame.RhythmGame
 {
-    [System.Serializable]
+    [Serializable]
     public class SwipeNote : Note
     {
         public SwipeDirection Direction;
 
+        [NotNull]
         public static SwipeNote CreateSwipe(
             int measure,
             int tick,
@@ -18,14 +19,12 @@ namespace SaturnGame.RhythmGame
             NoteBonusType bonusType = NoteBonusType.None,
             bool isSync = false)
         {
-            if (size == 60)
-            {
-                return new FullCircleSwipeNote(measure, tick, direction, bonusType, isSync);
-            }
-            return new SwipeNote(measure, tick, position, size, direction, bonusType, isSync);
+            return size == 60
+                ? new FullCircleSwipeNote(measure, tick, direction, bonusType, isSync)
+                : new SwipeNote(measure, tick, position, size, direction, bonusType, isSync);
         }
 
-        protected SwipeNote(
+        private SwipeNote(
             int measure,
             int tick,
             int position,
@@ -36,18 +35,16 @@ namespace SaturnGame.RhythmGame
             ) : base(measure, tick, position, size, bonusType, isSync)
         {
             if (size == 60 && GetType() == typeof(SwipeNote))
-            {
                 throw new Exception("Use CreateSwipe for full circle swipes");
-            }
             Direction = direction;
         }
 
-        private static HitWindow[] _hitWindows = {
-            new HitWindow(-5 * _FRAMEMS, 5 * _FRAMEMS, RhythmGame.Judgement.Marvelous),
-            new HitWindow(-8 * _FRAMEMS, 10 * _FRAMEMS, RhythmGame.Judgement.Great),
-            new HitWindow(-10 * _FRAMEMS, 10 * _FRAMEMS, RhythmGame.Judgement.Good),
+        private static HitWindow[] hitWindows = {
+            new(-5 * FrameMS, 5 * FrameMS, RhythmGame.Judgement.Marvelous),
+            new(-8 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Great),
+            new(-10 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Good),
         };
-        public override HitWindow[] HitWindows => _hitWindows;
+        public override HitWindow[] HitWindows => hitWindows;
 
         public enum SwipeDirection
         {
@@ -73,7 +70,7 @@ namespace SaturnGame.RhythmGame
                 {
                     SwipeDirection.Clockwise => SaturnMath.Modulo(Right - anglePosOffset, 60),
                     SwipeDirection.Counterclockwise => SaturnMath.Modulo(Left + anglePosOffset, 60),
-                    _ => throw new ArgumentOutOfRangeException(nameof(Direction))
+                    _ => throw new ArgumentOutOfRangeException(nameof(Direction)),
                 };
                 for (int depthPos = 0; depthPos < 4; depthPos++)
                 {
@@ -88,14 +85,11 @@ namespace SaturnGame.RhythmGame
         }
 
         // The minAverageOffset is the minimum average offset that we have seen on any frame within the swipe.
-        private double? minAverageOffset = null;
+        private double? minAverageOffset;
         public virtual void MaybeUpdateMinAverageOffset(TouchState touchState)
         {
             // If note is not touched, this will be null
-            if (minAverageOffset is null || AverageTouchOffset(touchState) < minAverageOffset.Value)
-            {
-                minAverageOffset = AverageTouchOffset(touchState);
-            }
+            if (minAverageOffset is null || AverageTouchOffset(touchState) < minAverageOffset.Value) minAverageOffset = AverageTouchOffset(touchState);
         }
 
         // A note is swiped if difference between the current average offset and the min average offset is more than 1.9.
@@ -105,15 +99,9 @@ namespace SaturnGame.RhythmGame
         // (E.g. touching the left then right edge of a >30 size note.)
         public virtual bool Swiped(TouchState touchState)
         {
-            if (minAverageOffset == null)
-            {
-                return false;
-            }
+            if (minAverageOffset == null) return false;
             double? curAverageOffset = AverageTouchOffset(touchState);
-            if (curAverageOffset == null)
-            {
-                return false;
-            }
+            if (curAverageOffset == null) return false;
             double anglePosDiff = curAverageOffset.Value - minAverageOffset.Value;
             return anglePosDiff is > 1.9 and < 30;
         }
@@ -134,23 +122,20 @@ namespace SaturnGame.RhythmGame
                 bool isSync
                 ) : base(measure, tick, 0, 60, direction, bonusType, isSync)
             {
-                SwipeNote[] _virtualNotes = {
-                    new SwipeNote(measure, tick, 0, 30, direction, bonusType, isSync),
-                    new SwipeNote(measure, tick, 15, 30, direction, bonusType, isSync),
-                    new SwipeNote(measure, tick, 30, 30, direction, bonusType, isSync),
-                    new SwipeNote(measure, tick, 45, 30, direction, bonusType, isSync),
+                virtualNotes = new SwipeNote[]{
+                    new(measure, tick, 0, 30, direction, bonusType, isSync),
+                    new(measure, tick, 15, 30, direction, bonusType, isSync),
+                    new(measure, tick, 30, 30, direction, bonusType, isSync),
+                    new(measure, tick, 45, 30, direction, bonusType, isSync),
                 };
-                virtualNotes = _virtualNotes;
             }
 
             // Four "virtual" notes of size 30 cover each hemisphere - top, left, bottom, right.
             private readonly SwipeNote[] virtualNotes;
             public override void MaybeUpdateMinAverageOffset(TouchState touchState)
             {
-                foreach (var virtualNote in virtualNotes)
-                {
+                foreach (SwipeNote virtualNote in virtualNotes)
                     virtualNote.MaybeUpdateMinAverageOffset(touchState);
-                }
             }
 
             public override bool Swiped(TouchState touchState)

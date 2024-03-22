@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -7,17 +8,19 @@ namespace SaturnGame.RhythmGame
     [System.Serializable]
     public abstract class ChartElement
     {
-        public ChartElement(int measure, int tick)
+        protected ChartElement(int measure, int tick)
         {
-            Measure = measure;
-            Tick = tick;
+            this.measure = measure;
+            this.tick = tick;
         }
 
         protected ChartElement()
         {
         }
 
-        public ChartElement Clone() {
+        [NotNull]
+        public ChartElement Clone()
+        {
             return (ChartElement)MemberwiseClone();
         }
 
@@ -25,7 +28,7 @@ namespace SaturnGame.RhythmGame
         /// Calculates the object's time in milliseconds <br />
         /// according to all BPM and TimeSignature changes.
         /// </summary>
-        public virtual void CalculateTime(List<Gimmick> bgmDataGimmicks)
+        public virtual void CalculateTime([NotNull] List<Gimmick> bgmDataGimmicks)
         {
             if (bgmDataGimmicks.Count == 0)
             {
@@ -42,7 +45,7 @@ namespace SaturnGame.RhythmGame
             float timeSig = lastBgmData.TimeSig.Ratio;
             float bpm = lastBgmData.BeatsPerMinute;
 
-            TimeMs = lastTime + ((currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm)));
+            TimeMs = lastTime + (currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm));
         }
 
         /// <summary>
@@ -54,7 +57,7 @@ namespace SaturnGame.RhythmGame
         /// This function also relies on scaled HiSpeed timestamps to already be calculated. <br />
         /// Make sure <c>ChartManager.CreateHiSpeedData()</c> has already been called before this.
         /// </remarks>
-        public virtual void CalculateScaledTime(List<Gimmick> hiSpeedGimmicks)
+        public virtual void CalculateScaledTime([NotNull] List<Gimmick> hiSpeedGimmicks)
         {
             if (hiSpeedGimmicks.Count == 0)
             {
@@ -62,11 +65,11 @@ namespace SaturnGame.RhythmGame
             }
 
             Gimmick lastHiSpeed = hiSpeedGimmicks.LastOrDefault(x => x.TimeMs <= TimeMs);
-            float hiSpeedScaledTime = lastHiSpeed != null ? lastHiSpeed.ScaledVisualTime : 0;
-            float hiSpeedTime = lastHiSpeed != null ? lastHiSpeed.TimeMs : 0;
-            float hiSpeed = lastHiSpeed != null ? lastHiSpeed.HiSpeed : 1;
+            float hiSpeedScaledTime = lastHiSpeed?.ScaledVisualTime ?? 0;
+            float hiSpeedTime = lastHiSpeed?.TimeMs ?? 0;
+            float hiSpeed = lastHiSpeed?.HiSpeed ?? 1;
 
-            ScaledVisualTime = hiSpeedScaledTime + ((TimeMs - hiSpeedTime) * hiSpeed);
+            ScaledVisualTime = hiSpeedScaledTime + (TimeMs - hiSpeedTime) * hiSpeed;
         }
 
         public virtual void ReverseTime(float startTime, float midTime, float endTime)
@@ -77,9 +80,10 @@ namespace SaturnGame.RhythmGame
             ScaledVisualTime = remap;
         }
 
-        public virtual int Measure { get; set; }
-        [Range(0, 1919)] private int _tick;
-        public virtual int Tick { get => _tick; set => _tick = value; }
+        private int measure;
+        public virtual int Measure { get => measure; set => measure = value; }
+        [Range(0, 1919)] private int tick;
+        public virtual int Tick { get => tick; set => tick = value; }
         // ChartTick is the number of ticks since the beginning of the chart, combining both Measure and Tick into a single value.
         public int ChartTick => Measure * 1920 + Tick;
         public float TimeMs;

@@ -14,6 +14,6 @@ namespace SaturnGame.RhythmGame
         {
         }
 
-        public override HitWindow[] HitWindows => baseHitWindows;
+        public override HitWindow[] HitWindows => BaseHitWindows;
     }
 }
