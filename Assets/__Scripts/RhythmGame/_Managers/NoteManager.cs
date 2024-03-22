@@ -42,11 +42,11 @@ namespace SaturnGame.RhythmGame
         private int maskIndex = 0;
         private void ProcessMasks()
         {
-            if (maskIndex > Chart.masks.Count - 1) return;
+            if (maskIndex > Chart.Masks.Count - 1) return;
 
-            while (maskIndex < Chart.masks.Count && timeManager.VisualTimeMs >= Chart.masks[maskIndex].TimeMs)
+            while (maskIndex < Chart.Masks.Count && timeManager.VisualTimeMs >= Chart.Masks[maskIndex].TimeMs)
             {
-                guideLaneRenderer.SetMask(Chart.masks[maskIndex], timeManager.PlaybackSpeed);
+                guideLaneRenderer.SetMask(Chart.Masks[maskIndex], timeManager.PlaybackSpeed);
                 maskIndex++;
             }
         }
@@ -58,12 +58,12 @@ namespace SaturnGame.RhythmGame
         private int noteIndex = 0;
         private void ProcessNotes()
         {
-            if (noteIndex > Chart.notes.Count - 1) return;
+            if (noteIndex > Chart.Notes.Count - 1) return;
 
             // Scans through the chart note by note.
-            while (noteIndex < Chart.notes.Count && ScaledVisualTime() + ScrollDuration() >= Chart.notes[noteIndex].ScaledVisualTime)
+            while (noteIndex < Chart.Notes.Count && ScaledVisualTime() + ScrollDuration() >= Chart.Notes[noteIndex].ScaledVisualTime)
             {
-                Note currentNote = Chart.notes[noteIndex];
+                Note currentNote = Chart.Notes[noteIndex];
 
                 GetNote(currentNote);
 
@@ -83,11 +83,11 @@ namespace SaturnGame.RhythmGame
         private int holdIndex = 0;
         private void ProcessHolds()
         {
-            if (holdIndex > Chart.holdNotes.Count - 1) return;
+            if (holdIndex > Chart.HoldNotes.Count - 1) return;
 
-            while (holdIndex < Chart.holdNotes.Count && ScaledVisualTime() + ScrollDuration() >= Chart.holdNotes[holdIndex].Start.ScaledVisualTime)
+            while (holdIndex < Chart.HoldNotes.Count && ScaledVisualTime() + ScrollDuration() >= Chart.HoldNotes[holdIndex].Start.ScaledVisualTime)
             {
-                HoldNote currentHold = Chart.holdNotes[holdIndex];
+                HoldNote currentHold = Chart.HoldNotes[holdIndex];
 
                 GetNote(currentHold);
                 GetHoldEnd(currentHold.End);
@@ -103,11 +103,11 @@ namespace SaturnGame.RhythmGame
         private int barLineIndex = 0;
         private void ProcessBarLines()
         {
-            if (barLineIndex > Chart.barLines.Count - 1) return;
+            if (barLineIndex > Chart.BarLines.Count - 1) return;
 
-            while (barLineIndex < Chart.barLines.Count && ScaledVisualTime() + ScrollDuration() >= Chart.barLines[barLineIndex].ScaledVisualTime)
+            while (barLineIndex < Chart.BarLines.Count && ScaledVisualTime() + ScrollDuration() >= Chart.BarLines[barLineIndex].ScaledVisualTime)
             {
-                GetBarLine(Chart.barLines[barLineIndex].ScaledVisualTime);
+                GetBarLine(Chart.BarLines[barLineIndex].ScaledVisualTime);
                 barLineIndex++;
             }
         }
@@ -115,11 +115,11 @@ namespace SaturnGame.RhythmGame
         private int syncIndex = 0;
         private void ProcessSync()
         {
-            if (syncIndex > Chart.syncs.Count - 1) return;
+            if (syncIndex > Chart.Syncs.Count - 1) return;
 
-            while (syncIndex < Chart.syncs.Count && ScaledVisualTime() + ScrollDuration() >= Chart.syncs[syncIndex].ScaledVisualTime)
+            while (syncIndex < Chart.Syncs.Count && ScaledVisualTime() + ScrollDuration() >= Chart.Syncs[syncIndex].ScaledVisualTime)
             {
-                GetSync(Chart.syncs[syncIndex]);
+                GetSync(Chart.Syncs[syncIndex]);
                 syncIndex++;
             }
         }
@@ -128,11 +128,11 @@ namespace SaturnGame.RhythmGame
         private int bgmDataIndex = 0;
         private void ProcessBgmData()
         {
-            if (bgmDataIndex > Chart.notes.Count - 1) return;
+            if (bgmDataIndex > Chart.Notes.Count - 1) return;
 
-            while (bgmDataIndex < Chart.bgmDataGimmicks.Count && Chart.bgmDataGimmicks[bgmDataIndex].TimeMs <= timeManager.VisualTimeMs)
+            while (bgmDataIndex < Chart.BGMDataGimmicks.Count && Chart.BGMDataGimmicks[bgmDataIndex].TimeMs <= timeManager.VisualTimeMs)
             {
-                bgmData = Chart.bgmDataGimmicks[bgmDataIndex];
+                bgmData = Chart.BGMDataGimmicks[bgmDataIndex];
 
                 bgmDataIndex++;
             }
@@ -142,11 +142,11 @@ namespace SaturnGame.RhythmGame
         private int hiSpeedIndex = 0;
         private void ProcessHiSpeed()
         {
-            if (hiSpeedIndex > Chart.notes.Count - 1) return;
+            if (hiSpeedIndex > Chart.Notes.Count - 1) return;
 
-            while (hiSpeedIndex < Chart.hiSpeedGimmicks.Count && Chart.hiSpeedGimmicks[hiSpeedIndex].TimeMs <= timeManager.VisualTimeMs)
+            while (hiSpeedIndex < Chart.HiSpeedGimmicks.Count && Chart.HiSpeedGimmicks[hiSpeedIndex].TimeMs <= timeManager.VisualTimeMs)
             {
-                lastHiSpeedChange = Chart.hiSpeedGimmicks[hiSpeedIndex];
+                lastHiSpeedChange = Chart.HiSpeedGimmicks[hiSpeedIndex];
                 hiSpeedIndex++;
             }
         }
@@ -164,17 +164,17 @@ namespace SaturnGame.RhythmGame
         {
             // TODO!!!!! Fix reverses AGAIN omegalul
 
-            if (reverseNoteIndex > Chart.reverseNotes.Count) return;
+            if (reverseNoteIndex > Chart.ReverseNotes.Count) return;
 
-            if (reverseGimmickIndex < Chart.reverseGimmicks.Count - 1 && Chart.reverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTimeMs)
+            if (reverseGimmickIndex < Chart.ReverseGimmicks.Count - 1 && Chart.ReverseGimmicks[reverseGimmickIndex].TimeMs <= timeManager.VisualTimeMs)
             {
-                switch (Chart.reverseGimmicks[reverseGimmickIndex].Type)
+                switch (Chart.ReverseGimmicks[reverseGimmickIndex].Type)
                 {
                     case Gimmick.GimmickType.ReverseEffectStart:
                     {
-                        reverseStartTime = Chart.reverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
-                        reverseMidTime = Chart.reverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
-                        reverseEndTime = Chart.reverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
+                        reverseStartTime = Chart.ReverseGimmicks[reverseGimmickIndex].ScaledVisualTime;
+                        reverseMidTime = Chart.ReverseGimmicks[reverseGimmickIndex + 1].ScaledVisualTime;
+                        reverseEndTime = Chart.ReverseGimmicks[reverseGimmickIndex + 2].ScaledVisualTime;
                         reverseMirrorTime = reverseStartTime + (reverseEndTime - reverseMidTime);
                         reverseActive = true;
                         break;
@@ -193,9 +193,9 @@ namespace SaturnGame.RhythmGame
                 reverseGimmickIndex++;
             }
 
-            while (reverseActive && reverseNoteIndex < Chart.reverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= Chart.reverseNotes[reverseNoteIndex].ScaledVisualTime)
+            while (reverseActive && reverseNoteIndex < Chart.ReverseNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= Chart.ReverseNotes[reverseNoteIndex].ScaledVisualTime)
             {
-                Note currentNote = Chart.reverseNotes[reverseNoteIndex];
+                Note currentNote = Chart.ReverseNotes[reverseNoteIndex];
 
                 GetNote(currentNote, true);
 
@@ -211,11 +211,11 @@ namespace SaturnGame.RhythmGame
                 reverseNoteIndex++;
             }
 
-            if (reverseHoldNoteIndex != 0 && reverseHoldNoteIndex > Chart.reverseHoldNotes.Count - 1) return;
+            if (reverseHoldNoteIndex != 0 && reverseHoldNoteIndex > Chart.ReverseHoldNotes.Count - 1) return;
 
-            while (reverseHoldNoteIndex < Chart.reverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= Chart.reverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
+            while (reverseHoldNoteIndex < Chart.ReverseHoldNotes.Count && ScaledVisualTime() + (0.25f * ScrollDuration()) >= Chart.ReverseHoldNotes[reverseHoldNoteIndex].Start.ScaledVisualTime)
             {
-                HoldNote currentHold = Chart.reverseHoldNotes[reverseHoldNoteIndex];
+                HoldNote currentHold = Chart.ReverseHoldNotes[reverseHoldNoteIndex];
 
                 GetNote(currentHold, true);
                 GetHoldEnd(currentHold.End, true);

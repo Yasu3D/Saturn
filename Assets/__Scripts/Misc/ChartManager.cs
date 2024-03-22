@@ -64,7 +64,7 @@ namespace SaturnGame.RhythmGame
                 CreateHiSpeedData();
                 SetTime();
 
-                if (Chart.reverseGimmicks.Count != 0)
+                if (Chart.ReverseGimmicks.Count != 0)
                     GenerateReverseLists();
 
                 if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes != 0)
@@ -109,16 +109,16 @@ namespace SaturnGame.RhythmGame
                 string merLine = merFile[readerIndex];
 
                 string tempDifficultyString = MerLoader.GetMetadata(merLine, "#DIFFICULTY ");
-                if (tempDifficultyString != null) Chart.difficulty = Convert.ToSingle(tempDifficultyString, CultureInfo.InvariantCulture);
+                if (tempDifficultyString != null) Chart.Difficulty = Convert.ToSingle(tempDifficultyString, CultureInfo.InvariantCulture);
 
                 string tempClearThresholdString = MerLoader.GetMetadata(merLine, "#CLEAR_THRESHOLD");
-                if (tempClearThresholdString != null) Chart.clearThreshold = Convert.ToSingle(tempClearThresholdString, CultureInfo.InvariantCulture);
+                if (tempClearThresholdString != null) Chart.ClearThreshold = Convert.ToSingle(tempClearThresholdString, CultureInfo.InvariantCulture);
 
                 string tempAudioOffsetString = MerLoader.GetMetadata(merLine, "#OFFSET ");
-                if (tempAudioOffsetString != null) Chart.audioOffset = Convert.ToSingle(tempAudioOffsetString, CultureInfo.InvariantCulture);
+                if (tempAudioOffsetString != null) Chart.AudioOffset = Convert.ToSingle(tempAudioOffsetString, CultureInfo.InvariantCulture);
 
                 string tempMovieOffsetString = MerLoader.GetMetadata(merLine, "#MOVIEOFFSET ");
-                if (tempMovieOffsetString != null) Chart.movieOffset = Convert.ToSingle(tempMovieOffsetString, CultureInfo.InvariantCulture);
+                if (tempMovieOffsetString != null) Chart.MovieOffset = Convert.ToSingle(tempMovieOffsetString, CultureInfo.InvariantCulture);
 
                 if (merLine.Contains("#BODY"))
                 {
@@ -167,7 +167,7 @@ namespace SaturnGame.RhythmGame
                         // end of chart note
                         if (noteTypeID is 14)
                         {
-                            Chart.endOfChart = new(measure, tick);
+                            Chart.EndOfChart = new(measure, tick);
                             continue;
                         }
 
@@ -189,7 +189,7 @@ namespace SaturnGame.RhythmGame
                                 incompleteHoldNotes.Add((hold, nextNoteID));
 
                                 tempNote = hold;
-                                Chart.holdNotes.Add(hold);
+                                Chart.HoldNotes.Add(hold);
                                 break;
                             }
                             case 10 or 11:
@@ -205,13 +205,13 @@ namespace SaturnGame.RhythmGame
                             {
                                 int dir = Convert.ToInt32(splitLine[8], CultureInfo.InvariantCulture);
                                 bool add = noteTypeID == 12;
-                                Chart.masks.Add(new Mask(measure, tick, position, size, (Mask.MaskDirection) dir, add));
+                                Chart.Masks.Add(new Mask(measure, tick, position, size, (Mask.MaskDirection) dir, add));
                                 continue;
                             }
                             default:
                             {
                                 Note note = Note.CreateFromNoteID(measure, tick, noteTypeID, position, size);
-                                Chart.notes.Add(note);
+                                Chart.Notes.Add(note);
                                 tempNote = note;
                                 break;
                             }
@@ -267,7 +267,7 @@ namespace SaturnGame.RhythmGame
                             }
                             case Gimmick.GimmickType.HiSpeed:
                             {
-                                Chart.hiSpeedGimmicks.Add(tempGimmick);
+                                Chart.HiSpeedGimmicks.Add(tempGimmick);
                                 break;
                             }
                             case Gimmick.GimmickType.StopStart:
@@ -275,22 +275,22 @@ namespace SaturnGame.RhythmGame
                                 // Convert Stops to HiSpeed changes internally since they're functionally identical(?)
                                 tempGimmick.Type = Gimmick.GimmickType.StopStart;
                                 tempGimmick.HiSpeed = 0;
-                                Chart.hiSpeedGimmicks.Add(tempGimmick);
+                                Chart.HiSpeedGimmicks.Add(tempGimmick);
                                 break;
                             }
                             case Gimmick.GimmickType.StopEnd:
                             {
                                 // Same as above.
                                 tempGimmick.Type = Gimmick.GimmickType.StopEnd;
-                                tempGimmick.HiSpeed = Chart.hiSpeedGimmicks.LastOrDefault(x => x.ChartTick < tempGimmick.ChartTick && x.Type is Gimmick.GimmickType.HiSpeed)?.HiSpeed ?? 1;
-                                Chart.hiSpeedGimmicks.Add(tempGimmick);
+                                tempGimmick.HiSpeed = Chart.HiSpeedGimmicks.LastOrDefault(x => x.ChartTick < tempGimmick.ChartTick && x.Type is Gimmick.GimmickType.HiSpeed)?.HiSpeed ?? 1;
+                                Chart.HiSpeedGimmicks.Add(tempGimmick);
                                 break;
                             }
                             case Gimmick.GimmickType.ReverseEffectStart:
                             case Gimmick.GimmickType.ReverseEffectEnd:
                             case Gimmick.GimmickType.ReverseNoteEnd:
                             {
-                                Chart.reverseGimmicks.Add(tempGimmick);
+                                Chart.ReverseGimmicks.Add(tempGimmick);
                                 break;
                             }
                         }
@@ -324,26 +324,26 @@ namespace SaturnGame.RhythmGame
         {
             // I made the checks separate to spare the next person reading this an aneurysm.
             // It's also organized from most likely to least likely, so it doesn't matter much.
-            if (Chart.endOfChart is null)
+            if (Chart.EndOfChart is null)
                 return (false, "Chart is missing End of Chart note!");
 
-            if (Chart.notes.Last().TimeMs > Chart.endOfChart.TimeMs)
+            if (Chart.Notes.Last().TimeMs > Chart.EndOfChart.TimeMs)
                 return (false, "Notes behind end of Chart note!");
 
             // this is fine actually lol
             //if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
             //    return (false, "Chart is longer than audio!");
 
-            if (Chart.bgmDataGimmicks.Count == 0)
+            if (Chart.BGMDataGimmicks.Count == 0)
                 return (false, "Chart is missing BPM and TimeSignature data!");
 
-            if (SaturnMath.Modulo(Chart.reverseGimmicks.Count, 3) != 0) // Reverses always come in groups of 3 gimmicks. If the count is not divisible by 3 something's wrong.
+            if (SaturnMath.Modulo(Chart.ReverseGimmicks.Count, 3) != 0) // Reverses always come in groups of 3 gimmicks. If the count is not divisible by 3 something's wrong.
                 return (false, "Invalid reverse gimmicks! Every reverse must have these segments: [Effect Start] [Effect End] [Note End]");
 
             // Loop through all reverses to find any overlapping/out of order/broken ones.
             // The order must always be Effect Start > Effect End > Note End.
             Gimmick.GimmickType lastReverse = Gimmick.GimmickType.ReverseNoteEnd;
-            foreach (Gimmick gimmick in Chart.reverseGimmicks)
+            foreach (Gimmick gimmick in Chart.ReverseGimmicks)
             {
                 Gimmick.GimmickType currentReverse = gimmick.Type;
 
@@ -364,18 +364,18 @@ namespace SaturnGame.RhythmGame
         private void GenerateReverseLists()
         {
             // Loop over all Reverse Gimmicks except the last two to avoid an ArrayIndexOutOfBoundsException
-            for (int i = 0; i < Chart.reverseGimmicks.Count - 2; i++)
+            for (int i = 0; i < Chart.ReverseGimmicks.Count - 2; i++)
             {
-                if (Chart.reverseGimmicks[i].Type is not Gimmick.GimmickType.ReverseEffectStart)
+                if (Chart.ReverseGimmicks[i].Type is not Gimmick.GimmickType.ReverseEffectStart)
                     continue;
 
                 // If [i] is EffectStart, then [i + 1] must be EffectEnd and [i + 2] must be NoteEnd
-                float effectStartTime = Chart.reverseGimmicks[i].ScaledVisualTime;
-                float effectEndTime = Chart.reverseGimmicks[i + 1].ScaledVisualTime;
-                float noteEndTime = Chart.reverseGimmicks[i + 2].ScaledVisualTime;
+                float effectStartTime = Chart.ReverseGimmicks[i].ScaledVisualTime;
+                float effectEndTime = Chart.ReverseGimmicks[i + 1].ScaledVisualTime;
+                float noteEndTime = Chart.ReverseGimmicks[i + 2].ScaledVisualTime;
 
-                List<Note> notesToReverse = Chart.notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
-                List<HoldNote> holdsToReverse = Chart.holdNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
+                List<Note> notesToReverse = Chart.Notes.Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
+                List<HoldNote> holdsToReverse = Chart.HoldNotes.Where(x => x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
 
                 // TODO: reverse syncs?
 
@@ -386,7 +386,7 @@ namespace SaturnGame.RhythmGame
                     ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
 
                 // List.Reverse() from Linq
-                Chart.reverseHoldNotes.Reverse();
+                Chart.ReverseHoldNotes.Reverse();
             }
         }
 
@@ -399,19 +399,19 @@ namespace SaturnGame.RhythmGame
             Note copy = (Note) note.Clone();
             copy.ReverseTime(startTime, midTime, endTime);
 
-            Chart.reverseNotes.Insert(0, copy);
+            Chart.ReverseNotes.Insert(0, copy);
         }
 
         /// <summary>
         /// Reverses a Hold Note by creating a deep copy of it, <br />
         /// then remapping each segment note's position in time.
         /// </summary>
-        private void ReverseHold(HoldNote hold, float startTime, float midTime, float endTime)
+        private void ReverseHold([NotNull] HoldNote hold, float startTime, float midTime, float endTime)
         {
             HoldNote copy = HoldNote.DeepCopy(hold);
             copy.ReverseTime(startTime, midTime, endTime);
 
-            Chart.reverseHoldNotes.Add(copy);
+            Chart.ReverseHoldNotes.Add(copy);
         }
 
         /// <summary>
@@ -419,8 +419,8 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void GenerateBarLines()
         {
-            for (int i = 0; i <= Chart.endOfChart.Measure; i++)
-                Chart.barLines.Add(new BarLine(i, 0));
+            for (int i = 0; i <= Chart.EndOfChart.Measure; i++)
+                Chart.BarLines.Add(new BarLine(i, 0));
         }
 
         /// <summary>
@@ -477,7 +477,7 @@ namespace SaturnGame.RhythmGame
             if (finalSize > 30) return;
 
             SyncIndicator sync = new(measure, tick, finalPosition, finalSize);
-            Chart.syncs.Add(sync);
+            Chart.Syncs.Add(sync);
         }
 
         /// <summary>
@@ -516,25 +516,25 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void MirrorChart()
         {
-            foreach (Note note in Chart.notes)
+            foreach (Note note in Chart.Notes)
                 MirrorObject(note);
 
-            foreach (Mask mask in Chart.masks)
+            foreach (Mask mask in Chart.Masks)
                 MirrorObject(mask);
 
-            foreach (SyncIndicator sync in Chart.syncs)
+            foreach (SyncIndicator sync in Chart.Syncs)
                 MirrorObject(sync);
 
-            foreach (HoldNote hold in Chart.holdNotes)
+            foreach (HoldNote hold in Chart.HoldNotes)
             {
                 foreach (HoldSegment note in hold.Notes)
                     MirrorObject(note);
             }
 
-            foreach (Note note in Chart.reverseNotes)
+            foreach (Note note in Chart.ReverseNotes)
                 MirrorObject(note);
 
-            foreach (HoldNote hold in Chart.reverseHoldNotes)
+            foreach (HoldNote hold in Chart.ReverseHoldNotes)
             {
                 foreach (HoldSegment note in hold.Notes)
                     MirrorObject(note);
@@ -556,12 +556,12 @@ namespace SaturnGame.RhythmGame
             // merge both lists and sort by timestamp
             IOrderedEnumerable<Gimmick> bpmAndTimeSigGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.ChartTick);
 
-            Chart.bgmDataGimmicks = new();
+            Chart.BGMDataGimmicks = new();
 
             foreach (Gimmick gimmick in bpmAndTimeSigGimmicks)
             {
                 Gimmick gimmickToUpdate;
-                switch (Chart.bgmDataGimmicks.LastOrDefault())
+                switch (Chart.BGMDataGimmicks.LastOrDefault())
                 {
                     case Gimmick lastGimmick when lastGimmick.ChartTick == gimmick.ChartTick:
                     {
@@ -571,7 +571,7 @@ namespace SaturnGame.RhythmGame
                     default:
                     {
                         Gimmick newGimmick = new(gimmick.Measure, gimmick.Tick, lastBpm, lastTimeSig);
-                        Chart.bgmDataGimmicks.Add(newGimmick);
+                        Chart.BGMDataGimmicks.Add(newGimmick);
                         gimmickToUpdate = newGimmick;
                         break;
                     }
@@ -594,17 +594,17 @@ namespace SaturnGame.RhythmGame
                 }
             }
 
-            Chart.bgmDataGimmicks[0].TimeMs = 0;
-            for (int i = 1; i < Chart.bgmDataGimmicks.Count; i++)
+            Chart.BGMDataGimmicks[0].TimeMs = 0;
+            for (int i = 1; i < Chart.BGMDataGimmicks.Count; i++)
             {
-                float lastTime = Chart.bgmDataGimmicks[i - 1].TimeMs;
-                float currentMeasure = Chart.bgmDataGimmicks[i].ChartTick * SaturnMath.tickToMeasure;
-                float lastMeasure = Chart.bgmDataGimmicks[i - 1].ChartTick * SaturnMath.tickToMeasure;
-                float timeSig = Chart.bgmDataGimmicks[i - 1].TimeSig.Ratio;
-                float bpm = Chart.bgmDataGimmicks[i - 1].BeatsPerMinute;
+                float lastTime = Chart.BGMDataGimmicks[i - 1].TimeMs;
+                float currentMeasure = Chart.BGMDataGimmicks[i].ChartTick * SaturnMath.tickToMeasure;
+                float lastMeasure = Chart.BGMDataGimmicks[i - 1].ChartTick * SaturnMath.tickToMeasure;
+                float timeSig = Chart.BGMDataGimmicks[i - 1].TimeSig.Ratio;
+                float bpm = Chart.BGMDataGimmicks[i - 1].BeatsPerMinute;
 
                 float time = lastTime + (currentMeasure - lastMeasure) * (4 * timeSig * (60000f / bpm));
-                Chart.bgmDataGimmicks[i].TimeMs = time;
+                Chart.BGMDataGimmicks[i].TimeMs = time;
             }
         }
 
@@ -613,14 +613,14 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void CreateHiSpeedData()
         {
-            foreach (Gimmick gimmick in Chart.hiSpeedGimmicks)
-                gimmick.CalculateTime(Chart.bgmDataGimmicks);
+            foreach (Gimmick gimmick in Chart.HiSpeedGimmicks)
+                gimmick.CalculateTime(Chart.BGMDataGimmicks);
 
             float lastScaledTime = 0;
             float lastTime = 0;
             float lastHiSpeed = 1;
 
-            foreach (Gimmick gimmick in Chart.hiSpeedGimmicks)
+            foreach (Gimmick gimmick in Chart.HiSpeedGimmicks)
             {
                 float currentTime = gimmick.TimeMs;
                 float scaledTime = lastScaledTime + Mathf.Abs(currentTime - lastTime) * lastHiSpeed;
@@ -639,44 +639,44 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         private void SetTime()
         {
-            foreach (Note note in Chart.notes)
+            foreach (Note note in Chart.Notes)
             {
-                note.CalculateTime(Chart.bgmDataGimmicks);
-                note.CalculateScaledTime(Chart.hiSpeedGimmicks);
+                note.CalculateTime(Chart.BGMDataGimmicks);
+                note.CalculateScaledTime(Chart.HiSpeedGimmicks);
             }
 
-            foreach (SyncIndicator sync in Chart.syncs)
+            foreach (SyncIndicator sync in Chart.Syncs)
             {
-                sync.CalculateTime(Chart.bgmDataGimmicks);
-                sync.CalculateScaledTime(Chart.hiSpeedGimmicks);
+                sync.CalculateTime(Chart.BGMDataGimmicks);
+                sync.CalculateScaledTime(Chart.HiSpeedGimmicks);
             }
 
-            foreach (BarLine obj in Chart.barLines)
+            foreach (BarLine obj in Chart.BarLines)
             {
-                obj.CalculateTime(Chart.bgmDataGimmicks);
-                obj.CalculateScaledTime(Chart.hiSpeedGimmicks);
+                obj.CalculateTime(Chart.BGMDataGimmicks);
+                obj.CalculateScaledTime(Chart.HiSpeedGimmicks);
             }
 
-            foreach (Mask note in Chart.masks)
+            foreach (Mask note in Chart.Masks)
             {
-                note.CalculateTime(Chart.bgmDataGimmicks);
-                note.CalculateScaledTime(Chart.hiSpeedGimmicks);
+                note.CalculateTime(Chart.BGMDataGimmicks);
+                note.CalculateScaledTime(Chart.HiSpeedGimmicks);
             }
 
-            foreach (HoldNote hold in Chart.holdNotes)
+            foreach (HoldNote hold in Chart.HoldNotes)
             {
-                hold.CalculateTime(Chart.bgmDataGimmicks);
-                hold.CalculateScaledTime(Chart.hiSpeedGimmicks);
+                hold.CalculateTime(Chart.BGMDataGimmicks);
+                hold.CalculateScaledTime(Chart.HiSpeedGimmicks);
             }
 
-            foreach (Gimmick gimmick in Chart.reverseGimmicks)
+            foreach (Gimmick gimmick in Chart.ReverseGimmicks)
             {
-                gimmick.CalculateTime(Chart.bgmDataGimmicks);
-                gimmick.CalculateScaledTime(Chart.hiSpeedGimmicks);
+                gimmick.CalculateTime(Chart.BGMDataGimmicks);
+                gimmick.CalculateScaledTime(Chart.HiSpeedGimmicks);
             }
 
-            Chart.endOfChart.CalculateTime(Chart.bgmDataGimmicks);
-            Chart.endOfChart.CalculateScaledTime(Chart.hiSpeedGimmicks);
+            Chart.EndOfChart.CalculateTime(Chart.BGMDataGimmicks);
+            Chart.EndOfChart.CalculateScaledTime(Chart.HiSpeedGimmicks);
         }
     }
 }

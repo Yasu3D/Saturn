@@ -87,13 +87,13 @@ namespace SaturnGame.RhythmGame
         {
             Chart chart = ChartManager.Instance.Chart;
 
-            foreach (Note note in chart.notes)
+            foreach (Note note in chart.Notes)
             {
                 if (timeManager.LastFrameVisualTimeMs < note.TimeMs && note.TimeMs <= timeManager.VisualTimeMs)
                     return true;
             }
 
-            foreach (HoldNote note in chart.holdNotes)
+            foreach (HoldNote note in chart.HoldNotes)
             {
                 if (timeManager.LastFrameVisualTimeMs < note.TimeMs && note.TimeMs <= timeManager.VisualTimeMs)
                     return true;

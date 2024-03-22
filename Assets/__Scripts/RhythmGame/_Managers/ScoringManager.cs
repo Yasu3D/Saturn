@@ -193,7 +193,7 @@ namespace SaturnGame.RhythmGame
         // TODO: just move this into the normal chart loading (ChartManager)
         private void LoadChart()
         {
-            List<Note> allNotesFromChart = Chart.notes.Concat(Chart.holdNotes).OrderBy(note => note.TimeMs).ToList();
+            List<Note> allNotesFromChart = Chart.Notes.Concat(Chart.HoldNotes).OrderBy(note => note.TimeMs).ToList();
             // TODO: swipe notes within a hold... that is gonna be hell lmao
             // TODO: holds with a swipe on the hold start take on the timing window of the swipe??
             notes = new List<Note>();
@@ -203,7 +203,7 @@ namespace SaturnGame.RhythmGame
                 note.EarliestHitTimeMs = note.TimeMs + note.HitWindows[^1].LeftMs;
                 note.LatestHitTimeMs = note.TimeMs + note.HitWindows[^1].RightMs;
 
-                if (Chart.holdNotes.Any(holdNote => holdNote.End.ChartTick == note.ChartTick && SegmentsOverlap(holdNote.End, note)))
+                if (Chart.HoldNotes.Any(holdNote => holdNote.End.ChartTick == note.ChartTick && SegmentsOverlap(holdNote.End, note)))
                 {
                     // Notes that overlap with a hold end should lose their early window (except Marvelous).
                     note.EarliestHitTimeMs =
@@ -491,7 +491,7 @@ namespace SaturnGame.RhythmGame
 
             // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
             // of the end of the audio clip.
-            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTimeMs && !WritingReplayAndExiting)
+            if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs && !WritingReplayAndExiting)
             {
                 async Awaitable endSong()
                 {

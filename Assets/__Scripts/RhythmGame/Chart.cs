@@ -1,27 +1,28 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace SaturnGame.RhythmGame
 {
     [Serializable]
     public class Chart
     {
-        public float difficulty = 0;
-        public float clearThreshold = 0;
-        public float audioOffset = 0;
-        public float movieOffset = 0;
+        [UsedImplicitly] public float Difficulty = 0;
+        [UsedImplicitly] public float ClearThreshold = 0;
+        public float AudioOffset = 0;
+        [UsedImplicitly] public float MovieOffset = 0;
 
-        public List<Gimmick> bgmDataGimmicks = new();
-        public List<Gimmick> hiSpeedGimmicks = new();
-        public List<Gimmick> reverseGimmicks = new();
-        public List<Note> notes = new();
-        public List<HoldNote> holdNotes = new();
-        public List<Mask> masks = new();
-        public List<BarLine> barLines = new();
-        public List<SyncIndicator> syncs = new();
-        public EndOfChart endOfChart;
-        public List<Note> reverseNotes = new();
-        public List<HoldNote> reverseHoldNotes = new();
+        public List<Gimmick> BGMDataGimmicks = new();
+        public List<Gimmick> HiSpeedGimmicks = new();
+        public List<Gimmick> ReverseGimmicks = new();
+        public List<Note> Notes = new();
+        public List<HoldNote> HoldNotes = new();
+        public List<Mask> Masks = new();
+        public List<BarLine> BarLines = new();
+        public List<SyncIndicator> Syncs = new();
+        public EndOfChart EndOfChart;
+        public List<Note> ReverseNotes = new();
+        public List<HoldNote> ReverseHoldNotes = new();
 
     }
 }
