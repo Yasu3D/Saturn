@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using SaturnGame.Settings;
 using UnityEngine;
@@ -27,7 +24,7 @@ namespace SaturnGame.Rendering
         /// </summary>
         /// <param name="colorID"></param>
         /// <returns></returns>
-        public static (Color color, float subtract) GetColor(int colorID)
+        private static (Color color, float subtract) GetColor(int colorID)
         {
             return colorID switch
             {
@@ -44,7 +41,7 @@ namespace SaturnGame.Rendering
                 10 => (new Color(0.000f, 0.260f, 1.000f), 0.30f), // Bright Blue
                 11 => (new Color(0.400f, 0.800f, 1.000f), 0.30f), // Light Blue
                 12 => (new Color(0.780f, 0.780f, 0.780f), 0.30f), // Light Gray  
-                _ =>  (new Color(0.000f, 0.000f, 0.000f), 0.30f)
+                _ =>  (new Color(0.000f, 0.000f, 0.000f), 0.30f), // Black
             };
         }
 
@@ -71,7 +68,7 @@ namespace SaturnGame.Rendering
                 10 => new Color(0.000f, 0.113f, 0.855f), // Bright Blue
                 11 => new Color(0.180f, 0.529f, 0.855f), // Light Blue 
                 12 => new Color(0.510f, 0.509f, 0.525f), // Light Gray  
-                _ =>  new Color(0.000f, 0.000f, 0.000f)
+                _ =>  new Color(0.000f, 0.000f, 0.000f), // Black
             };
         }
 
@@ -90,40 +87,42 @@ namespace SaturnGame.Rendering
             {
                 case TouchNote:
                 {
-                    id = settings.NoteColorID_Touch;
+                    id = settings.NoteColorIDTouch;
                     break;
                 }
                 case ChainNote:
                 {
-                    id = settings.NoteColorID_Chain;
+                    id = settings.NoteColorIDChain;
                     break;
                 }
                 case SwipeNote { Direction: SwipeNote.SwipeDirection.Clockwise }:
                 {
-                    if (settings.InvertSlideColor != 0) id = settings.NoteColorID_SwipeCounterclockwise;
-                    else id = settings.NoteColorID_SwipeClockwise;
+                    id = settings.InvertSlideColor != 0
+                        ? settings.NoteColorIDSwipeCounterclockwise
+                        : settings.NoteColorIDSwipeClockwise;
                     break;
                 }
                 case SwipeNote { Direction: SwipeNote.SwipeDirection.Counterclockwise }:
                 {
-                    if (settings.InvertSlideColor != 0) id = settings.NoteColorID_SwipeClockwise;
-                    else id = settings.NoteColorID_SwipeCounterclockwise;
+                    id = settings.InvertSlideColor != 0
+                        ? settings.NoteColorIDSwipeClockwise
+                        : settings.NoteColorIDSwipeCounterclockwise;
                     break;
                 }
                 case SnapNote { Direction: SnapNote.SnapDirection.Forward }:
                 {
-                    id = settings.NoteColorID_SnapForward;
+                    id = settings.NoteColorIDSnapForward;
                     break;
                 }
                 case SnapNote { Direction: SnapNote.SnapDirection.Backward }:
                 {
-                    id = settings.NoteColorID_SnapBackward;
+                    id = settings.NoteColorIDSnapBackward;
                     break;
                 }
                 case HoldNote:
                 case HoldSegment:
                 {
-                    id = settings.NoteColorID_Hold;
+                    id = settings.NoteColorIDHold;
                     break;
                 }
 

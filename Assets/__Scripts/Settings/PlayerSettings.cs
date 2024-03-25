@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
-using static UnityEngine.Rendering.DebugUI;
-
 namespace SaturnGame.Settings
 {
-    [System.Serializable] public class PlayerSettings
+    [System.Serializable]
+    public class PlayerSettings
     {
         public GameSettings GameSettings = new();
         public UISettings UISettings = new();
@@ -93,31 +88,31 @@ namespace SaturnGame.Settings
                 }
                 case "NoteColorID_Touch":
                 {
-                    DesignSettings.NoteColorID_Touch = value; break;
+                    DesignSettings.NoteColorIDTouch = value; break;
                 }
                 case "NoteColorID_Chain":
                 {
-                    DesignSettings.NoteColorID_Chain = value; break;
+                    DesignSettings.NoteColorIDChain = value; break;
                 }
                 case "NoteColorID_SwipeClockwise":
                 {
-                    DesignSettings.NoteColorID_SwipeClockwise = value; break;
+                    DesignSettings.NoteColorIDSwipeClockwise = value; break;
                 }
                 case "NoteColorID_SwipeCounterclockwise":
                 {
-                    DesignSettings.NoteColorID_SwipeCounterclockwise = value; break;
+                    DesignSettings.NoteColorIDSwipeCounterclockwise = value; break;
                 }
                 case "NoteColorID_SnapForward":
                 {
-                    DesignSettings.NoteColorID_SnapForward = value; break;
+                    DesignSettings.NoteColorIDSnapForward = value; break;
                 }
                 case "NoteColorID_SnapBackward":
                 {
-                    DesignSettings.NoteColorID_SnapBackward = value; break;
+                    DesignSettings.NoteColorIDSnapBackward = value; break;
                 }
                 case "NoteColorID_Hold":
                 {
-                    DesignSettings.NoteColorID_Hold = value; break;
+                    DesignSettings.NoteColorIDHold = value; break;
                 }
                 case "InvertSlideColor":
                 {
@@ -205,13 +200,13 @@ namespace SaturnGame.Settings
                 "RingColor" => DesignSettings.RingColor,
                 "JudgeLineColor" => DesignSettings.JudgeLineColor,
                 "NoteWidth" => DesignSettings.NoteWidth,
-                "NoteColorID_Touch" => DesignSettings.NoteColorID_Touch,
-                "NoteColorID_Chain" => DesignSettings.NoteColorID_Chain,
-                "NoteColorID_SwipeClockwise" => DesignSettings.NoteColorID_SwipeClockwise,
-                "NoteColorID_SwipeCounterclockwise" => DesignSettings.NoteColorID_SwipeCounterclockwise,
-                "NoteColorID_SnapForward" => DesignSettings.NoteColorID_SnapForward,
-                "NoteColorID_SnapBackward" => DesignSettings.NoteColorID_SnapBackward,
-                "NoteColorID_Hold" => DesignSettings.NoteColorID_Hold,
+                "NoteColorID_Touch" => DesignSettings.NoteColorIDTouch,
+                "NoteColorID_Chain" => DesignSettings.NoteColorIDChain,
+                "NoteColorID_SwipeClockwise" => DesignSettings.NoteColorIDSwipeClockwise,
+                "NoteColorID_SwipeCounterclockwise" => DesignSettings.NoteColorIDSwipeCounterclockwise,
+                "NoteColorID_SnapForward" => DesignSettings.NoteColorIDSnapForward,
+                "NoteColorID_SnapBackward" => DesignSettings.NoteColorIDSnapBackward,
+                "NoteColorID_Hold" => DesignSettings.NoteColorIDHold,
                 "InvertSlideColor" => DesignSettings.InvertSlideColor,
                 "TouchEffect" => DesignSettings.TouchEffect,
                 "ShowShootEffect" => DesignSettings.ShowShootEffect,
@@ -232,6 +227,7 @@ namespace SaturnGame.Settings
         }
     }
 
+    // ReSharper disable RedundantDefaultMemberInitializer
     [System.Serializable] public class GameSettings
     {
         public int NoteSpeed = 25;
@@ -260,13 +256,13 @@ namespace SaturnGame.Settings
         public int RingColor = 0;
         public int JudgeLineColor = 2;
         public int NoteWidth = 3;
-        public int NoteColorID_Touch = 0;
-        public int NoteColorID_Chain = 1;
-        public int NoteColorID_SwipeClockwise = 2;
-        public int NoteColorID_SwipeCounterclockwise = 3;
-        public int NoteColorID_SnapForward = 4;
-        public int NoteColorID_SnapBackward = 5;
-        public int NoteColorID_Hold = 6;
+        public int NoteColorIDTouch = 0;
+        public int NoteColorIDChain = 1;
+        public int NoteColorIDSwipeClockwise = 2;
+        public int NoteColorIDSwipeCounterclockwise = 3;
+        public int NoteColorIDSnapForward = 4;
+        public int NoteColorIDSnapBackward = 5;
+        public int NoteColorIDHold = 6;
         public int InvertSlideColor = 0;
         public int TouchEffect = 1;
         public int ShowShootEffect = 1;
@@ -287,4 +283,5 @@ namespace SaturnGame.Settings
         public int BonusEffectVolume = 80;
         public int RNoteEffectVolume = 80;
     }
+    // ReSharper restore RedundantDefaultMemberInitializer
 }
