@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SaturnGame.RhythmGame;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SaturnGame.Rendering
@@ -11,8 +9,8 @@ namespace SaturnGame.Rendering
     [AddComponentMenu("SaturnGame/Rendering/Hold Surface Renderer")]
     public class HoldSurfaceRenderer : MonoBehaviour
     {
-        private const float tunnelRadius = 1.72f; // 1.75 by default.
-        private const float tunnelLength = -6f;
+        private const float TunnelRadius = 1.72f; // 1.75 by default.
+        private const float TunnelLength = -6f;
 
         // ==== MESH ====
         [SerializeField] private Material materialTemplate;
@@ -22,29 +20,29 @@ namespace SaturnGame.Rendering
         [SerializeField] private MeshRenderer meshRenderer;
 
         [SerializeField] private Mesh holdMesh;
-        private List<Vector3> vertList = new();
-        private List<Vector2> uvList = new();
+        private readonly List<Vector3> vertList = new();
+        private readonly List<Vector2> uvList = new();
         private int[] triangles;
 
-        private int ColorID;
-        public HoldNote holdNote;
+        private int colorID;
+        public HoldNote HoldNote;
 
-        public bool reverse;
+        public bool Reverse;
 
-        void Awake()
+        private void Awake()
         {
-            materialInstance = new(materialTemplate);
-            holdMesh = new();
+            materialInstance = new Material(materialTemplate);
+            holdMesh = new Mesh();
             meshFilter.mesh = holdMesh;
         }
 
         public void SetRenderer(HoldNote hold)
         {
-            ColorID = NoteColors.GetColorID(hold);
-            holdNote = hold;
+            colorID = NoteColors.GetColorID(hold);
+            HoldNote = hold;
 
-            if (materialInstance.HasFloat("_ColorID"))
-                materialInstance.SetFloat("_ColorID", ColorID);
+            if (materialInstance.HasFloat(ColorPropertyId))
+                materialInstance.SetFloat(ColorPropertyId, colorID);
 
             meshRenderer.material = materialInstance;
             meshFilter.mesh = holdMesh;
@@ -56,19 +54,17 @@ namespace SaturnGame.Rendering
         /// </summary>
         public void GenerateMesh(float scrollDuration)
         {
-            float holdStartTime = holdNote.Start.ScaledVisualTime;
+            float holdStartTime = HoldNote.Start.ScaledVisualTime;
 
-            int holdWidth = holdNote.MaxSize;
-            int holdLength = holdNote.RenderedNotes.Length;
+            int holdWidth = HoldNote.MaxSize;
+            int holdLength = HoldNote.RenderedNotes.Length;
             int trueLength = 0; // To keep track of all sub-segments as well
-
-            int vertexID = 0;
 
             vertList.Clear();
             uvList.Clear();
 
             // Sort so that this still works when the hold is reversed.
-            var sortedRenderedNotes = holdNote.RenderedNotes.OrderBy(seg => seg.ScaledVisualTime).ToArray();
+            HoldSegment[] sortedRenderedNotes = HoldNote.RenderedNotes.OrderBy(seg => seg.ScaledVisualTime).ToArray();
 
             // For every RenderedNote
             for (int y = 0; y < holdLength; y++)
@@ -120,9 +116,8 @@ namespace SaturnGame.Rendering
                     {
                         float currentAngle = (sizeMultiplier * x + notePos) * 6;
 
-                        vertList.Add(GetPointOnCylinder(Vector2.zero, tunnelRadius, tunnelLength, currentAngle, depth));
+                        vertList.Add(GetPointOnCylinder(Vector2.zero, TunnelRadius, TunnelLength, currentAngle, depth));
                         uvList.Add(GetUV(x, holdWidth, y + progress, holdLength - 1));
-                        vertexID++;
                     }
 
                     // We've generated one segment. Increment for triangle gen.
@@ -135,7 +130,7 @@ namespace SaturnGame.Rendering
             int vert = 0;
             int tris = 0;
 
-            for (int y = 0; y < (trueLength - 1); y++)
+            for (int y = 0; y < trueLength - 1; y++)
             {
                 for (int x = 0; x < holdWidth; x++)
                 {
@@ -162,7 +157,8 @@ namespace SaturnGame.Rendering
             holdMesh.triangles = triangles;
         }
 
-        Vector3 GetPointOnCylinder(Vector2 centerPoint, float coneRadius, float coneLength, float angle, float depth)
+        private static Vector3 GetPointOnCylinder(Vector2 centerPoint, float coneRadius, float coneLength, float angle,
+            float depth)
         {
             angle = 180 - angle;
 
@@ -175,7 +171,7 @@ namespace SaturnGame.Rendering
             return new Vector3 (x, y, z);
         }
 
-        Vector2 GetUV(float x, float noteSize, float y, float depth)
+        private static Vector2 GetUV(float x, float noteSize, float y, float depth)
         {
             float u = Mathf.InverseLerp(0, noteSize, x);
             float v = Mathf.InverseLerp(0, depth, y);
@@ -183,27 +179,19 @@ namespace SaturnGame.Rendering
             return new Vector2 (u,v);
         }
 
-        float GetAngleInterval(float currentNoteSize, int maxNoteSize)
+        private static float GetAngleInterval(float currentNoteSize, int maxNoteSize)
         {
-            return (float) currentNoteSize / maxNoteSize;
+            return currentNoteSize / maxNoteSize;
         }
 
 
-        [SerializeField] private int debugGizmos = 0;
-        void OnDrawGizmos()
+        [SerializeField] private int debugGizmos;
+        private static readonly int ColorPropertyId = Shader.PropertyToID("_ColorID");
+
+        private void OnDrawGizmos()
         {
             for (int i = 0; i < debugGizmos; i++)
-            {
                 Gizmos.DrawSphere(holdMesh.vertices[i], 0.1f);
-            }
-        }
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                GenerateMesh(800);
-            }
         }
     }
 }

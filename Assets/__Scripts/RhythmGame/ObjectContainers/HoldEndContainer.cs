@@ -1,6 +1,5 @@
 using SaturnGame.Rendering;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace SaturnGame.RhythmGame
 {

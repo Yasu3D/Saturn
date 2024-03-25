@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using UnityEngine;
 
@@ -11,13 +10,15 @@ namespace SaturnGame.Rendering
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
 
+        private static readonly int ColorPropertyID = Shader.PropertyToID("_ColorID");
+
         // ==== NOTE INFO ====
 
-        public int ColorID { get; private set; }
+        private int ColorID { get; set; }
 
-        void Awake()
+        private void Awake()
         {
-            materialInstance = new(materialTemplate);
+            materialInstance = new Material(materialTemplate);
         }
 
         public override void SetRenderer(HoldSegment note)
@@ -27,11 +28,11 @@ namespace SaturnGame.Rendering
 
             ColorID = NoteColors.GetColorID(note);
 
-            if (materialInstance.HasFloat("_ColorID"))
-                materialInstance.SetFloat("_ColorID", ColorID);
+            if (materialInstance.HasFloat(ColorPropertyID))
+                materialInstance.SetFloat(ColorPropertyID, ColorID);
 
-            meshFilter.mesh = meshes[Size - 1];
-            meshRenderer.material = materialInstance;
+            MeshFilter.mesh = Meshes[Size - 1];
+            MeshRenderer.material = materialInstance;
 
             transform.eulerAngles = new Vector3 (0, 0, Position * -6);
         }

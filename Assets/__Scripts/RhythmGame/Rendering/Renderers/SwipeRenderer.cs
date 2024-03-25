@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using UnityEngine;
 
@@ -10,13 +9,14 @@ namespace SaturnGame.Rendering
     {
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
+        private static readonly int NoteColorPropertyID = Shader.PropertyToID("_NoteColor");
 
-        public Color Color { get; private set; }
-        public string Direction { get; private set; } = "_COUNTERCLOCKWISE";
+        private Color Color { get; set; }
+        private string Direction { get; set; } = "_COUNTERCLOCKWISE";
 
-        void Awake()
+        private void Awake()
         {
-            materialInstance = new(materialTemplate);
+            materialInstance = new Material(materialTemplate);
         }
 
         public override void SetRenderer(SwipeNote note)
@@ -29,14 +29,14 @@ namespace SaturnGame.Rendering
 
             Direction = note.Direction is SwipeNote.SwipeDirection.Counterclockwise ? "_COUNTERCLOCKWISE" : "_CLOCKWISE";
 
-            if (materialInstance.HasColor("_NoteColor"))
-                materialInstance.SetColor("_NoteColor", Color);
+            if (materialInstance.HasColor(NoteColorPropertyID))
+                materialInstance.SetColor(NoteColorPropertyID, Color);
 
             materialInstance.DisableKeyword("_DIRECTION_COUNTERCLOCKWISE");
             materialInstance.EnableKeyword("_DIRECTION" + Direction);
 
-            meshFilter.mesh = meshes[Size - 1];
-            meshRenderer.material = materialInstance;
+            MeshFilter.mesh = Meshes[Size - 1];
+            MeshRenderer.material = materialInstance;
 
             transform.eulerAngles = new Vector3 (0, 0, Position * -6);
         }

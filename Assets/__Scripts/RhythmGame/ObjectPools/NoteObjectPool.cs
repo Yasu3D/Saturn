@@ -1,4 +1,4 @@
 namespace SaturnGame.RhythmGame
 {
-    public class NoteObjectPool : MonobehaviourPool<NoteContainer> { }
+    public class NoteObjectPool : MonoBehaviourPool<NoteContainer> { }
 }

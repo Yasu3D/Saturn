@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 // Big thanks to AllPoland for pointing me towards ArcViewer's implementation.
@@ -8,17 +9,17 @@ using UnityEngine;
 
 namespace SaturnGame
 {
-    public abstract class MonobehaviourPool<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class MonoBehaviourPool<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public List<T> AvailableObjects = new List<T>();
-        public List<T> ActiveObjects = new List<T>();
+        public List<T> AvailableObjects = new();
+        public List<T> ActiveObjects = new();
 
-        public int PoolSize { get; private set; }
+        private int PoolSize { get; set; }
         [SerializeField] private T prefab;
         [SerializeField] private int startSize;
-        [SerializeField] private Vector3 objectStartPosition = new Vector3 (0, 0, -6);
+        [SerializeField] private Vector3 objectStartPosition = new(0, 0, -6);
 
-        public void SetPoolSize(int size)
+        private void SetPoolSize(int size)
         {
             PoolSize = size;
             MatchPoolSize();
@@ -51,12 +52,13 @@ namespace SaturnGame
             }
         }
 
+        [NotNull]
         private T CreateNewObject()
         {
-            T newObject = Instantiate(prefab);
-            newObject.transform.SetParent(transform);
-            newObject.transform.position = objectStartPosition;
-            newObject.transform.localScale = Vector3.zero;
+            T newObject = Instantiate(prefab, transform, true);
+            Transform newTransform = newObject.transform;
+            newTransform.position = objectStartPosition;
+            newTransform.localScale = Vector3.zero;
             newObject.gameObject.SetActive(false);
 
             return newObject;
@@ -82,24 +84,25 @@ namespace SaturnGame
             return newObject;
         }
 
-        public void ReleaseObject(T target)
+        public void ReleaseObject([NotNull] T target)
         {
             if (!ActiveObjects.Contains(target))
             {
                 Destroy(target.gameObject);
                 return;
             }
-            
-            target.transform.SetParent(transform);
-            target.transform.position = objectStartPosition;
-            target.transform.localScale = Vector3.zero;
+
+            Transform targetTransform = target.transform;
+            targetTransform.SetParent(transform);
+            targetTransform.position = objectStartPosition;
+            targetTransform.localScale = Vector3.zero;
             target.gameObject.SetActive(false);
 
             ActiveObjects.Remove(target);
             AvailableObjects.Add(target);
         }
 
-        void Update()
+        private void Update()
         {
             int trueSize = AvailableObjects.Count + ActiveObjects.Count;
 
@@ -107,7 +110,7 @@ namespace SaturnGame
                 MatchPoolSize();
         }
 
-        void Start()
+        private void Start()
         {
             SetPoolSize(startSize);
         }

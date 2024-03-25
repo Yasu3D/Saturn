@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.Rendering
 {
-    public abstract class IObjectRenderer : MonoBehaviour
+    public abstract class ObjectRenderer : MonoBehaviour
     {
-        public List<Mesh> meshes;
-        public MeshFilter meshFilter;
-        public MeshRenderer meshRenderer;
+        [FormerlySerializedAs("meshes")] public List<Mesh> Meshes;
+        [FormerlySerializedAs("meshFilter")] public MeshFilter MeshFilter;
+        [FormerlySerializedAs("meshRenderer")] public MeshRenderer MeshRenderer;
     }
 }
