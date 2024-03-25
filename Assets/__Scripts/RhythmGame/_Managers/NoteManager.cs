@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using SaturnGame.Rendering;
 using SaturnGame.Settings;
 using UnityEngine;
@@ -230,75 +231,55 @@ namespace SaturnGame.RhythmGame
             }
         }
 
+        // note: maybe possible to avoid having 3 type parameters by using an interface with covariance and just using
+        // PositionedChartElement or AbstractPositionedChartElementRenderer<PositionedChartElement> for TContained and
+        // TRenderer, since we don't actually care about those types.
+        private void UpdateContainer<TContainer, TContained, TRenderer>([NotNull] TContainer container, List<TContainer> garbage)
+            where TContainer : AbstractPositionedChartElementContainer<TContained, TRenderer>
+            where TContained : PositionedChartElement
+            where TRenderer : AbstractPositionedChartElementRenderer<TContained>
+        {
+            // Set only reverse containers active during a reverse.
+            if (reverseActive)
+                container.gameObject.SetActive(container.reverse);
+            else
+                container.gameObject.SetActive(!container.reverse);
+
+            if (!container.reverse)
+            {
+                AnimateObject(container, garbage, container.note.ScaledVisualTime,
+                    container.note.ScaledVisualTime, 0.25f, container.transform, true);
+            }
+            else
+            {
+                ReverseAnimateObject(container, garbage, container.note.ScaledVisualTime,
+                    container.note.ScaledVisualTime, 1.0f, container.transform, true);
+            }
+        }
+
         private void UpdateObjects()
         {
             foreach (NoteContainer container in notePool.ActiveObjects)
-            {
-                // Set only reverse containers active during a reverse.
-                if (reverseActive)
-                    container.gameObject.SetActive(container.reverse);
-                else
-                    container.gameObject.SetActive(!container.reverse);
-
-                if (!container.reverse)
-                    AnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, noteGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
-            }
+                UpdateContainer<NoteContainer, Note, NoteRenderer>(container, noteGarbage);
 
             foreach (SnapContainer container in snapPool.ActiveObjects)
-            {
-                // Set only reverse containers active during a reverse.
-                if (reverseActive)
-                    container.gameObject.SetActive(container.reverse);
-                else
-                    container.gameObject.SetActive(!container.reverse);
-
-                if (!container.reverse)
-                    AnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, snapGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
-            }
+                UpdateContainer<SnapContainer, SnapNote, SnapRenderer>(container, snapGarbage);
 
             foreach (SwipeContainer container in swipePool.ActiveObjects)
-            {
-                // Set only reverse containers active during a reverse.
-                if (reverseActive)
-                    container.gameObject.SetActive(container.reverse);
-                else
-                    container.gameObject.SetActive(!container.reverse);
-
-                if (!container.reverse)
-                    AnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, swipeGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
-            }
+                UpdateContainer<SwipeContainer, SwipeNote, SwipeRenderer>(container, swipeGarbage);
 
             foreach (GenericContainer container in r_EffectPool.ActiveObjects)
-            {
-                // Set only reverse containers active during a reverse.
-                if (reverseActive)
-                    container.gameObject.SetActive(container.reverse);
-                else
-                    container.gameObject.SetActive(!container.reverse);
-
-                if (!container.reverse)
-                    AnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, r_EffectGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
-            }
+                UpdateContainer<GenericContainer, PositionedChartElement, GenericRenderer>(container, r_EffectGarbage);
 
             foreach (HoldEndContainer container in holdEndPool.ActiveObjects)
-            {
-                // Set only reverse containers active during a reverse.
-                if (reverseActive)
-                    container.gameObject.SetActive(container.reverse);
-                else
-                    container.gameObject.SetActive(!container.reverse);
-
-                if (!container.reverse)
-                    AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
-            }
+                UpdateContainer<HoldEndContainer, HoldSegment, HoldEndRenderer>(container, holdEndGarbage);
 
             foreach (HoldSurfaceRenderer renderer in holdSurfacePool.ActiveObjects)
             {
+                // Don't use UpdateContainer as currently hold surface management doesn't use the standard Container /
+                // Renderer abstract classes. It's a bit more complicated because the spawn and despawn times are not
+                // the same time.
+
                 // Set only reverse renderers active during a reverse.
                 if (reverseActive)
                     renderer.gameObject.SetActive(renderer.reverse);
@@ -311,7 +292,9 @@ namespace SaturnGame.RhythmGame
             }
 
             foreach (GenericContainer container in syncPool.ActiveObjects)
-                AnimateObject(container, syncGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.renderer.transform, true);
+                // Note: syncs do not show during reverses, but we use the reverse-aware UpdateContainer anyway for
+                // consistency in the non-reverse case.
+                UpdateContainer<GenericContainer, PositionedChartElement, GenericRenderer>(container, syncGarbage);
 
             foreach (BarLineContainer container in barLinePool.ActiveObjects)
             {
@@ -415,63 +398,52 @@ namespace SaturnGame.RhythmGame
             }
         }
 
-
-        private NoteContainer GetNote(Note input, bool reverse = false)
+        [NotNull]
+        private TContainer SetupContainer<TContainer, TContained, TRenderer>(
+            [NotNull] MonobehaviourPool<TContainer> pool, TContained input, bool reverse, bool setRenderer = true)
+            where TContained : PositionedChartElement
+            where TRenderer : AbstractPositionedChartElementRenderer<TContained>
+            where TContainer : AbstractPositionedChartElementContainer<TContained, TRenderer>
         {
-            NoteContainer container = notePool.GetObject();
+            TContainer container = pool.GetObject();
 
             container.note = input;
-            int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
-            container.renderer.Width = noteWidth;
-            container.renderer.SetRenderer(input);
+            if (setRenderer)
+                // This is optional as the caller may want to change some thing before calling SetRenderer.
+                container.renderer.SetRenderer(input);
             container.reverse = reverse;
 
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);
+
+            return container;
+        }
+
+        private NoteContainer GetNote(Note input, bool reverse = false)
+        {
+            NoteContainer container =
+                SetupContainer<NoteContainer, Note, NoteRenderer>(notePool, input, reverse, setRenderer: false);
+
+            int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
+            container.renderer.Width = noteWidth;
+            container.renderer.SetRenderer(input);
 
             return container;
         }
 
         private SnapContainer GetSnap(SnapNote input, bool reverse = false)
         {
-            SnapContainer container = snapPool.GetObject();
-
-            container.note = input;
-            container.renderer.SetRenderer(input);
-            container.reverse = reverse;
-
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
+            return SetupContainer<SnapContainer, SnapNote, SnapRenderer>(snapPool, input, reverse);
         }
 
         private SwipeContainer GetSwipe(SwipeNote input, bool reverse = false)
         {
-            SwipeContainer container = swipePool.GetObject();
-
-            container.note = input;
-            container.renderer.SetRenderer(input);
-            container.reverse = reverse;
-
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
+            return SetupContainer<SwipeContainer, SwipeNote, SwipeRenderer>(swipePool, input, reverse);
         }
 
         private HoldEndContainer GetHoldEnd(HoldSegment input, bool reverse = false)
         {
-            HoldEndContainer container = holdEndPool.GetObject();
-
-            container.note = input;
-            container.renderer.SetRenderer(input);
-            container.reverse = reverse;
-
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
+            return SetupContainer<HoldEndContainer, HoldSegment, HoldEndRenderer>(holdEndPool, input, reverse);
         }
 
         private HoldSurfaceRenderer GetHoldSurface(HoldNote input, bool reverse = false)
@@ -491,16 +463,8 @@ namespace SaturnGame.RhythmGame
 
         private GenericContainer GetR_Effect(Note input, bool reverse = false)
         {
-            GenericContainer container = r_EffectPool.GetObject();
-
-            container.note = input;
-            container.renderer.SetRenderer(input);
-            container.reverse = reverse;
-
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
+            return SetupContainer<GenericContainer, PositionedChartElement, GenericRenderer>(r_EffectPool, input,
+                reverse);
         }
 
         private BarLineContainer GetBarLine(float timestamp)
@@ -516,15 +480,8 @@ namespace SaturnGame.RhythmGame
 
         private GenericContainer GetSync(SyncIndicator input)
         {
-            GenericContainer container = syncPool.GetObject();
-
-            container.note = input;
-            container.renderer.SetRenderer(input);
-
-            container.transform.SetParent(activeObjectsContainer);
-            container.gameObject.SetActive(true);
-
-            return container;
+            return SetupContainer<GenericContainer, PositionedChartElement, GenericRenderer>(syncPool, input,
+                reverse: false);
         }
 
 
