@@ -226,15 +226,8 @@ public class ScoringManager : MonoBehaviour
                 // Don't try to do anything with notes that are at exactly the same time. Furthermore, we know we
                 // can't find any other notes from an earlier ChartTick, so just break out of the loop.
                 .TakeWhile(otherNote => otherNote.ChartTick != note.ChartTick)
-                .Where(otherNote =>
-                {
-                    // This should always be true but we check it anyway to shut up the compiler.
-                    System.Diagnostics.Debug.Assert(otherNote.LatestHitTimeMs != null,
-                        "already added note doesn't have LatestHitTimeMs");
-
-                    return otherNote.LatestHitTimeMs.Value > note.EarliestHitTimeMs.Value &&
-                           SegmentsOverlap(note, otherNote);
-                })
+                .Where(otherNote => otherNote.LatestHitTimeMs!.Value > note.EarliestHitTimeMs.Value &&
+                                    SegmentsOverlap(note, otherNote))
                 .ToList();
 
             if (overlappingNotes.Any())
@@ -242,15 +235,24 @@ public class ScoringManager : MonoBehaviour
                 // We have overlapping timing windows. Split the difference between the two closest notes.
                 Note latestNote = overlappingNotes.OrderByDescending(overlappingNote => overlappingNote.TimeMs).First();
                 // TODO: If the windows of the two notes are different sizes (e.g. touch vs swipe notes), bias the split point.
+                float cutoff = (latestNote.TimeMs + note.TimeMs) / 2;
+
                 // Use Max here to avoid expanding the window here if it's already truncated.
-                // This should probably actually just split the overlap - otherwise it's possible to have some part with no window.
-                // (E.g. if the latestNote is already truncated on the right side.)
-                // TODO: it's possible that the LatestHitTimeMs of the latest note is already truncated and before
-                // the cutoff, in which case we may have some period of time between the notes with no window.
-                // Think of a simpler way to represent this logic.
-                float cutoff = Math.Max(note.EarliestHitTimeMs.Value, (latestNote.TimeMs + note.TimeMs) / 2);
+                cutoff = Math.Max(cutoff, note.EarliestHitTimeMs.Value);
+
+                // It is possible that latestNote has an overlapping timing window, but it is already truncated so that
+                // the midpoint of the two notes is _not_ contained within its timing window. In this case we shouldn't
+                // truncate the window past the latest LatestHitTimeMs of an overlapping note. Such a truncation could
+                // leave some period of time that is outside any note's window.
+                float latestOverlapTimeMs = overlappingNotes.Max(overlappingNote => overlappingNote.LatestHitTimeMs!.Value);
+                // Note: since we know that latestNote.LatestHitTimeMs > note.EarliestHitTimeMs, this still preserves
+                // cutoff >= latestNote.LatestHitTime > note.EarliestHitTimeMs.
+                cutoff = Math.Min(cutoff, latestOverlapTimeMs);
+
                 note.EarliestHitTimeMs = cutoff;
                 foreach (Note otherNote in overlappingNotes)
+                    // Use Math.Min here to avoid expanding any windows - keep in mind that just because the windows
+                    // overlap, we don't know that the calculated cutoff will actually be within the window.
                     otherNote.LatestHitTimeMs = Math.Min(otherNote.LatestHitTimeMs!.Value, cutoff);
             }
 
