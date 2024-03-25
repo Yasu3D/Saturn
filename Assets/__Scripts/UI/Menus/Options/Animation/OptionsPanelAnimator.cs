@@ -48,7 +48,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         const float time = 0.05f;
         const Ease ease = Ease.Linear;
 
-        if (screen.screenType is UIScreen.UIScreenType.Radial) animateRadial();
+        if (screen.ScreenType is UIScreen.UIScreenType.Radial) animateRadial();
         else animateLinear();
         return;
 
@@ -74,9 +74,9 @@ public class OptionsPanelAnimator : MonoBehaviour
                 if (!wrap) continue;
 
                 int itemIndex = currentIndex + LinearHalfCount * (int)direction;
-                bool active = itemIndex >= 0 && itemIndex < screen.listItems.Count;
+                bool active = itemIndex >= 0 && itemIndex < screen.ListItems.Count;
                 panel.gameObject.SetActive(active);
-                if (active) SetPanelLinear(screen, screen.listItems[itemIndex], panel);
+                if (active) SetPanelLinear(screen, screen.ListItems[itemIndex], panel);
             }
         }
 
@@ -100,9 +100,9 @@ public class OptionsPanelAnimator : MonoBehaviour
                 if (!wrap) continue;
 
                 int itemIndex = currentIndex + RadialHalfCount * (int)direction;
-                bool active = itemIndex >= 0 && itemIndex < screen.listItems.Count;
+                bool active = itemIndex >= 0 && itemIndex < screen.ListItems.Count;
                 panel.gameObject.SetActive(active);
-                if (active) SetPanelRadial(screen.listItems[itemIndex], panel);
+                if (active) SetPanelRadial(screen.ListItems[itemIndex], panel);
             }
         }
     }
@@ -110,9 +110,9 @@ public class OptionsPanelAnimator : MonoBehaviour
     public void Anim_ShowPanels([NotNull] UIScreen previous, [NotNull] UIScreen next)
     {
         bool prevLinear =
-            previous.screenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+            previous.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
         bool nextLinear =
-            next.screenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+            next.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
 
         if (!nextLinear)
         {
@@ -134,9 +134,9 @@ public class OptionsPanelAnimator : MonoBehaviour
     public void Anim_HidePanels([NotNull] UIScreen previous, [NotNull] UIScreen next)
     {
         bool prevLinear =
-            previous.screenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+            previous.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
         bool nextLinear =
-            next.screenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+            next.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
 
         if (!prevLinear)
         {
@@ -357,21 +357,21 @@ public class OptionsPanelAnimator : MonoBehaviour
 
     public void SetPrimaryPanel([NotNull] UIListItem item)
     {
-        bool dynamic = item.itemType is UIListItem.ItemTypes.SubMenu &&
-                       item.subtitleType is UIListItem.SubtitleTypes.Dynamic;
+        bool dynamic = item.ItemType is UIListItem.ItemTypes.SubMenu &&
+                       item.SubtitleType is UIListItem.SubtitleTypes.Dynamic;
 
-        primaryPanel.Title = item.title;
-        primaryPanel.Subtitle = dynamic ? GetSelectedString(item) : item.subtitle;
+        primaryPanel.Title = item.Title;
+        primaryPanel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
         primaryPanel.SetRadialPanelColor(item);
     }
 
     public void GetPanels([NotNull] UIScreen screen, int currentIndex = 0)
     {
-        currentIndex = Mathf.Clamp(currentIndex, 0, screen.listItems.Count);
+        currentIndex = Mathf.Clamp(currentIndex, 0, screen.ListItems.Count);
 
-        if (screen.listItems.Count == 0) return;
+        if (screen.ListItems.Count == 0) return;
 
-        if (screen.screenType is UIScreen.UIScreenType.Radial) getRadial();
+        if (screen.ScreenType is UIScreen.UIScreenType.Radial) getRadial();
         else getLinear();
         return;
 
@@ -380,8 +380,8 @@ public class OptionsPanelAnimator : MonoBehaviour
             linearPanelGroup.SetActive(true);
             radialPanelGroup.SetActive(false);
 
-            SetPrimaryPanel(screen.listItems[currentIndex]);
-            primaryPanel.SetType(screen.screenType);
+            SetPrimaryPanel(screen.ListItems[currentIndex]);
+            primaryPanel.SetType(screen.ScreenType);
 
             LinearCenterIndex = LinearHalfCount;
 
@@ -390,13 +390,13 @@ public class OptionsPanelAnimator : MonoBehaviour
                 OptionPanelLinear panel = linearPanels[i];
                 int itemIndex = currentIndex - LinearCenterIndex + i;
 
-                if (itemIndex >= screen.listItems.Count || itemIndex < 0)
+                if (itemIndex >= screen.ListItems.Count || itemIndex < 0)
                 {
                     panel.gameObject.SetActive(false);
                     continue;
                 }
 
-                UIListItem item = screen.listItems[itemIndex];
+                UIListItem item = screen.ListItems[itemIndex];
                 SetPanelLinear(screen, item, panel);
 
                 Vector2 position = GetLinearPosition(i);
@@ -413,8 +413,8 @@ public class OptionsPanelAnimator : MonoBehaviour
             linearPanelGroup.SetActive(false);
             radialPanelGroup.SetActive(true);
 
-            SetPrimaryPanel(screen.listItems[currentIndex]);
-            primaryPanel.SetType(screen.screenType);
+            SetPrimaryPanel(screen.ListItems[currentIndex]);
+            primaryPanel.SetType(screen.ScreenType);
 
             RadialCenterIndex = RadialHalfCount;
 
@@ -423,13 +423,13 @@ public class OptionsPanelAnimator : MonoBehaviour
                 OptionPanelRadial panel = radialPanels[i];
                 int itemIndex = currentIndex - RadialCenterIndex + i;
 
-                if (itemIndex >= screen.listItems.Count || itemIndex < 0)
+                if (itemIndex >= screen.ListItems.Count || itemIndex < 0)
                 {
                     panel.gameObject.SetActive(false);
                     continue;
                 }
 
-                UIListItem item = screen.listItems[itemIndex];
+                UIListItem item = screen.ListItems[itemIndex];
                 SetPanelRadial(item, panel);
 
                 Vector3 angle = GetRadialAngle(i);
@@ -442,29 +442,29 @@ public class OptionsPanelAnimator : MonoBehaviour
 
     private static string GetSelectedString([NotNull] UIListItem item)
     {
-        int settingsIndex = SettingsManager.Instance.PlayerSettings.GetParameter(item.settingsBinding);
+        int settingsIndex = SettingsManager.Instance.PlayerSettings.GetParameter(item.SettingsBinding);
 
         if (settingsIndex == -1)
         {
-            Debug.LogWarning($"Setting \"{item.settingsBinding}\" was not found!");
+            Debug.LogWarning($"Setting \"{item.SettingsBinding}\" was not found!");
             return "???";
         }
 
-        if (item.nextScreen == null)
+        if (item.NextScreen == null)
         {
-            Debug.LogWarning($"NextScreen of [{item.title}] has not been set!");
+            Debug.LogWarning($"NextScreen of [{item.Title}] has not been set!");
             return "???";
         }
 
-        if (item.nextScreen.listItems.Count == 0)
+        if (item.NextScreen.ListItems.Count == 0)
         {
-            Debug.LogWarning($"NextScreen of [{item.title}] has no List Items!");
+            Debug.LogWarning($"NextScreen of [{item.Title}] has no List Items!");
             return "???";
         }
 
-        UIListItem selectedItem = item.nextScreen.listItems.FirstOrDefault(x => x.settingsValue == settingsIndex);
+        UIListItem selectedItem = item.NextScreen.ListItems.FirstOrDefault(x => x.SettingsValue == settingsIndex);
 
-        if (selectedItem != null) return selectedItem.title;
+        if (selectedItem != null) return selectedItem.Title;
 
         Debug.LogWarning($"No item with matching index [{settingsIndex}] was found!");
         return "???";
@@ -497,17 +497,17 @@ public class OptionsPanelAnimator : MonoBehaviour
     private static void SetPanelLinear([NotNull] UIScreen screen, [NotNull] UIListItem item,
         [NotNull] OptionPanelLinear panel)
     {
-        bool dynamic = item.itemType is UIListItem.ItemTypes.SubMenu &&
-                       item.subtitleType is UIListItem.SubtitleTypes.Dynamic;
+        bool dynamic = item.ItemType is UIListItem.ItemTypes.SubMenu &&
+                       item.SubtitleType is UIListItem.SubtitleTypes.Dynamic;
 
-        panel.Title = item.title;
-        panel.Subtitle = dynamic ? GetSelectedString(item) : item.subtitle;
-        panel.SetType(screen.screenType);
+        panel.Title = item.Title;
+        panel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
+        panel.SetType(screen.ScreenType);
     }
 
     private static void SetPanelRadial([NotNull] UIListItem item, [NotNull] OptionPanelRadial panel)
     {
-        panel.Title = item.title;
+        panel.Title = item.Title;
         panel.SetRadialPanelColor(item);
     }
 }
