@@ -1,4 +1,6 @@
 namespace SaturnGame.RhythmGame
 {
-    public class SwipeObjectPool : MonoBehaviourPool<SwipeContainer> { }
+public class SwipeObjectPool : MonoBehaviourPool<SwipeContainer>
+{
+}
 }

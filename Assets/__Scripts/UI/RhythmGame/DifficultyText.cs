@@ -8,8 +8,7 @@ public class DifficultyText : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private ArcTextMeshPro arc;
 
-    [Space(10)]
-    [SerializeField] private Color normalColor = new(0.1019f, 0.4823f, 1f, 1f);
+    [Space(10)] [SerializeField] private Color normalColor = new(0.1019f, 0.4823f, 1f, 1f);
     [SerializeField] private Color hardColor = new(1f, 0.7647f, 0f, 1f);
     [SerializeField] private Color expertColor = new(1f, 0f, 0.5176f, 1f);
     [SerializeField] private Color infernoColor = new(0.2509f, 0f, 0.2627f, 1f);

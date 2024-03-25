@@ -1,4 +1,6 @@
 namespace SaturnGame.RhythmGame
 {
-    public class SyncObjectPool : MonoBehaviourPool<GenericContainer> { }
+public class SyncObjectPool : MonoBehaviourPool<GenericContainer>
+{
+}
 }

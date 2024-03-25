@@ -10,6 +10,6 @@ public class DateTimeDisplay : MonoBehaviour
     private void Update()
     {
         DateTime localDate = DateTime.Now;
-        dateTimeTMP.text = localDate.ToString(new CultureInfo ("ja-JP"));
+        dateTimeTMP.text = localDate.ToString(new CultureInfo("ja-JP"));
     }
 }

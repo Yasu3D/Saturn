@@ -1,4 +1,6 @@
 namespace SaturnGame.RhythmGame
 {
-    public class REffectObjectPool : MonoBehaviourPool<GenericContainer> { }
+public class REffectObjectPool : MonoBehaviourPool<GenericContainer>
+{
+}
 }

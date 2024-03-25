@@ -9,8 +9,7 @@ public class ScoreText : MonoBehaviour
     [SerializeField] private ArcTextMeshPro arc;
     [SerializeField] [Range(0, 1000000)] private int displayedScore;
 
-    [Header("MANAGERS")]
-    [SerializeField] private ScoringManager scoringManager;
+    [Header("MANAGERS")] [SerializeField] private ScoringManager scoringManager;
 
     private int prevScore;
 

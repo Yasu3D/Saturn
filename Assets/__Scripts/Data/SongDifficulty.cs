@@ -18,10 +18,13 @@ public struct SongDifficulty
     public float DiffLevel;
     public string AudioFilepath;
     [UsedImplicitly] public float AudioOffset;
+
     // ReSharper disable NotAccessedField.Global - will be used later
     public string MovieFilepath;
+
     public float MovieOffset;
     // ReSharper restore NotAccessedField.Global
+
     public string ChartFilepath;
     public string Charter;
     public float PreviewStart;

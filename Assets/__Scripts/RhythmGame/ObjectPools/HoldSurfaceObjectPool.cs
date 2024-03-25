@@ -1,5 +1,8 @@
 using SaturnGame.Rendering;
+
 namespace SaturnGame.RhythmGame
 {
-    public class HoldSurfaceObjectPool : MonoBehaviourPool<HoldSurfaceRenderer> { }
+public class HoldSurfaceObjectPool : MonoBehaviourPool<HoldSurfaceRenderer>
+{
+}
 }

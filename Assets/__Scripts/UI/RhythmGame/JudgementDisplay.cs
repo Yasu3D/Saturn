@@ -7,8 +7,7 @@ public class JudgementDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
-    [Header("MANAGERS")]
-    [SerializeField] private ScoringManager scoringManager;
+    [Header("MANAGERS")] [SerializeField] private ScoringManager scoringManager;
     [SerializeField] private TimeManager timeManager;
 
     private void Update()
@@ -19,11 +18,13 @@ public class JudgementDisplay : MonoBehaviour
             text.enabled = false;
             return;
         }
+
         if (scoringManager.LastJudgementTimeMs.Value + 1000 < timeManager.RawVisualTimeMs)
         {
             text.enabled = false;
             return;
         }
+
         Judgement judgement = scoringManager.LastJudgement;
         switch (judgement)
         {
@@ -63,6 +64,7 @@ public class JudgementDisplay : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
             }
         }
+
         text.enabled = true;
     }
 }

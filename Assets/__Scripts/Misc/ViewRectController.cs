@@ -24,6 +24,7 @@ public class ViewRectController : MonoBehaviour
             Screen.MoveMainWindowTo(display, Vector2Int.zero);
             break;
         }
+
         Resolution resolution = Screen.resolutions
             .OrderByDescending(r => r.height)
             .ThenByDescending(r => r.width)
@@ -86,7 +87,7 @@ public class ViewRectController : MonoBehaviour
             x += w * (0.5f / scale - 0.5f);
         }
 
-        Camera.main.rect = new Rect(x,y,w,h);
+        Camera.main.rect = new Rect(x, y, w, h);
     }
 
     private void SetMask(float currentAspect, float pos, float scale)

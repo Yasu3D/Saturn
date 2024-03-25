@@ -4,7 +4,8 @@ using UnityEngine.Serialization;
 
 public class UIRectController : MonoBehaviour
 {
-    [FormerlySerializedAs("UI")] [SerializeField] private RectTransform ui;
+    [FormerlySerializedAs("UI")] [SerializeField]
+    private RectTransform ui;
 
     [SerializeField] private Vector2 oBounds = new(0, 840);
 
@@ -38,9 +39,11 @@ public class UIRectController : MonoBehaviour
 
         float o = Mathf.LerpUnclamped(oBounds.x, oBounds.y, p);
 
-        ui.localPosition = currentAspect < 1.0f ?
+        ui.localPosition = currentAspect < 1.0f
+            ?
             // Portrait
-            new Vector3(0, o, 0) :
+            new Vector3(0, o, 0)
+            :
             // Landscape
             new Vector3(o, 0, 0);
 

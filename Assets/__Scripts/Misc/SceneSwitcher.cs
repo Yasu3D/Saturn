@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
 {
     [SerializeField] private MenuWipeAnimator menuWipe;
+
     // Warning: atomicity only guaranteed on main thread.
     private bool LoadInProgress { get; set; }
+
     // Warning: may be inaccurate if a load is in progress. Recommended to read on Awake() only.
     [CanBeNull] public string LastScene { get; private set; }
 

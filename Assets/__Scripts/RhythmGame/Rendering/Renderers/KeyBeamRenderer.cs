@@ -5,19 +5,18 @@ using SaturnGame.RhythmGame;
 
 namespace SaturnGame.Rendering
 {
-    public class KeyBeamRenderer : MonoBehaviour
+public class KeyBeamRenderer : MonoBehaviour
+{
+    [SerializeField] private List<GameObject> laneSegments;
+    [SerializeField] private InputManager inputManager;
+
+    private void Update()
     {
-        [SerializeField] private List<GameObject> laneSegments;
-        [SerializeField] private InputManager inputManager;
+        TouchState touchState = inputManager.CurrentTouchState;
+        if (touchState is null) return;
 
-        private void Update()
-        {
-            TouchState touchState = inputManager.CurrentTouchState;
-            if (touchState is null) return;
-
-            foreach (int anglePos in Enumerable.Range(0, 60))
-                laneSegments[anglePos].SetActive(touchState.AnglePosPressedAtAnyDepth(anglePos));
-        }
+        foreach (int anglePos in Enumerable.Range(0, 60))
+            laneSegments[anglePos].SetActive(touchState.AnglePosPressedAtAnyDepth(anglePos));
     }
-
+}
 }
