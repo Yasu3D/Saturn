@@ -15,9 +15,7 @@ namespace SaturnGame.UI
         public void SetActiveButtons(int index)
         {
             for (int i = 0; i < buttonGroups.Count; i++)
-            {
                 buttonGroups[i].gameObject.SetActive(i == index);
-            }
         }
         public async void SwitchButtons(int index)
         {

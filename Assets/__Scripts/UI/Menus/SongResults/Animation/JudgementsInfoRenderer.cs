@@ -1,16 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using SaturnGame.RhythmGame;
+using TMPro;
 using UnityEngine;
 
 public class JudgementsInfoRenderer : MonoBehaviour
 {
-    [SerializeField] private TMPro.TextMeshProUGUI marvelousCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI greatCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI goodCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI missCountText;
+    [SerializeField] private TMP_Text marvelousCountText;
+    [SerializeField] private TMP_Text greatCountText;
+    [SerializeField] private TMP_Text goodCountText;
+    [SerializeField] private TMP_Text missCountText;
 
-    public void SetJudgementCountTexts(Dictionary<Judgement, int> judgementCounts)
+    public void SetJudgementCountTexts([NotNull] Dictionary<Judgement, int> judgementCounts)
     {
         // warning, not protected against missing judgement in judgementCounts
         marvelousCountText.text = judgementCounts[Judgement.Marvelous].ToString();

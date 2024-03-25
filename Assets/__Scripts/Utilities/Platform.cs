@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 
 namespace SaturnGame
 {
@@ -7,7 +8,8 @@ namespace SaturnGame
     /// </summary>
     public static class Platform
     {
-        public static Uri PathToWebUri(string absolutePath)
+        [NotNull]
+        public static Uri PathToWebUri([NotNull] string absolutePath)
         {
             // Note: Windows should get a path like "file:///C:/path/to/file.mp3"
             // Linux should get a path like "file:///path/to/file.mp3"
@@ -23,7 +25,7 @@ namespace SaturnGame
             //   filesystems, but that seems like the caller's problem.
             // See also https://stackoverflow.com/questions/575440/url-encoding-using-c-sharp/16894322
             // God help me if we find more cases where this breaks.
-            return new ("file:///" + Uri.EscapeDataString(pathWithoutLeadingSlash));
+            return new Uri("file:///" + Uri.EscapeDataString(pathWithoutLeadingSlash));
         }
     }
 }

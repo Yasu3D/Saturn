@@ -598,8 +598,8 @@ namespace SaturnGame.RhythmGame
             for (int i = 1; i < Chart.BGMDataGimmicks.Count; i++)
             {
                 float lastTime = Chart.BGMDataGimmicks[i - 1].TimeMs;
-                float currentMeasure = Chart.BGMDataGimmicks[i].ChartTick * SaturnMath.tickToMeasure;
-                float lastMeasure = Chart.BGMDataGimmicks[i - 1].ChartTick * SaturnMath.tickToMeasure;
+                float currentMeasure = Chart.BGMDataGimmicks[i].ChartTick * SaturnMath.TickToMeasure;
+                float lastMeasure = Chart.BGMDataGimmicks[i - 1].ChartTick * SaturnMath.TickToMeasure;
                 float timeSig = Chart.BGMDataGimmicks[i - 1].TimeSig.Ratio;
                 float bpm = Chart.BGMDataGimmicks[i - 1].BeatsPerMinute;
 

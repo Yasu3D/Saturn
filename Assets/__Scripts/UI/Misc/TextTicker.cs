@@ -19,7 +19,7 @@ namespace SaturnGame.UI
         private float textBounds;
         private float offset;
 
-        void Awake()
+        private void Awake()
         {
             // Instantiate and parent a copy of the original text object.
             startPos = rect.anchoredPosition.x;
@@ -31,7 +31,7 @@ namespace SaturnGame.UI
             UpdateComponents();
         }
 
-        void UpdateComponents()
+        private void UpdateComponents()
         {
             prevText = text.text;
 
@@ -41,7 +41,7 @@ namespace SaturnGame.UI
 
             // Reset offset and text positions.
             offset = 0;
-            rect.anchoredPosition = new(startPos + offset, 0);
+            rect.anchoredPosition = new Vector2(startPos + offset, 0);
             cloneRect.anchoredPosition = rect.anchoredPosition + new Vector2(textBounds, 0);
             cloneRect.localScale = Vector3.one; // I hate this
             
@@ -50,7 +50,7 @@ namespace SaturnGame.UI
             cloneText.gameObject.SetActive(enableScroll);
         }
 
-        void Update()
+        private void Update()
         {
             if (text.text != prevText) UpdateComponents();
             
@@ -61,7 +61,7 @@ namespace SaturnGame.UI
             }
             else offset = 0;
 
-            rect.anchoredPosition = new(startPos + offset, 0);
+            rect.anchoredPosition = new Vector2(startPos + offset, 0);
         }
     }
 }

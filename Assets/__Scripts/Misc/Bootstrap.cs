@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class Bootstrap
+public static class Bootstrap
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void LoadStartup()
     {
-        GameObject startup = GameObject.Instantiate(Resources.Load("Startup")) as GameObject;
-        GameObject.DontDestroyOnLoad(startup);
+        Object startup = Object.Instantiate(Resources.Load("Startup"));
+        Object.DontDestroyOnLoad(startup);
     }
 }

@@ -40,8 +40,8 @@ namespace SaturnGame.RhythmGame
             Gimmick lastBgmData = bgmDataGimmicks.LastOrDefault(x => x.Measure * 1920 + x.Tick < timeStamp) ?? bgmDataGimmicks[0];
 
             float lastTime = lastBgmData.TimeMs;
-            float currentMeasure = (Measure * 1920 + Tick) * SaturnMath.tickToMeasure;
-            float lastMeasure = (lastBgmData.Measure * 1920 + lastBgmData.Tick) * SaturnMath.tickToMeasure;
+            float currentMeasure = (Measure * 1920 + Tick) * SaturnMath.TickToMeasure;
+            float lastMeasure = (lastBgmData.Measure * 1920 + lastBgmData.Tick) * SaturnMath.TickToMeasure;
             float timeSig = lastBgmData.TimeSig.Ratio;
             float bpm = lastBgmData.BeatsPerMinute;
 

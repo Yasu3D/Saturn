@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SaturnGame.UI
@@ -10,17 +8,17 @@ namespace SaturnGame.UI
         [SerializeField] private Vector3 speed;
         private Vector3 startRotation;
 
-        void Awake()
+        private void Awake()
         {
             startRotation = rect.eulerAngles;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             rect.eulerAngles = startRotation;
         }
 
-        void Update()
+        private void Update()
         {
             rect.eulerAngles += speed * Time.deltaTime;
         }

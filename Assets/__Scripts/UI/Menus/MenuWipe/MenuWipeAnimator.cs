@@ -12,10 +12,10 @@ namespace SaturnGame.UI
         [SerializeField] private RectTransform ring1;
         [SerializeField] private RectTransform ring2;
         [SerializeField] private RectTransform ring3;
-        private const float maskDuration = 0.65f;
-        private const float ring1Duration = 0.12f;
-        private const float ring2Duration = 0.12f;
-        private const float ring3Duration = 0.12f;
+        private const float MaskDuration = 0.65f;
+        private const float Ring1Duration = 0.12f;
+        private const float Ring2Duration = 0.12f;
+        private const float Ring3Duration = 0.12f;
         private readonly Vector2 viewMaskMin = new(0, 0);
         private readonly Vector2 viewMaskMed = new(350, 350);
         private readonly Vector2 viewMaskMax = new(1080, 1080);
@@ -46,10 +46,10 @@ namespace SaturnGame.UI
             ring2.sizeDelta = ring2Min;
             ring3.sizeDelta = ring3Min;
 
-            currentSequence.Append(viewMask.DOSizeDelta(viewMaskMed, maskDuration).SetEase(viewEase));
-            currentSequence.Insert(0.3f, ring1.DOSizeDelta(ring1Max, ring1Duration).SetEase(ringEase));
-            currentSequence.Insert(0.4f, ring2.DOSizeDelta(ring2Max, ring2Duration).SetEase(ringEase));
-            currentSequence.Insert(0.45f, ring3.DOSizeDelta(ring3Max, ring3Duration).SetEase(ringEase));
+            currentSequence.Append(viewMask.DOSizeDelta(viewMaskMed, MaskDuration).SetEase(viewEase));
+            currentSequence.Insert(0.3f, ring1.DOSizeDelta(ring1Max, Ring1Duration).SetEase(ringEase));
+            currentSequence.Insert(0.4f, ring2.DOSizeDelta(ring2Max, Ring2Duration).SetEase(ringEase));
+            currentSequence.Insert(0.45f, ring3.DOSizeDelta(ring3Max, Ring3Duration).SetEase(ringEase));
 
             currentSequence.Insert(0.9f, viewMask.DOSizeDelta(viewMaskMin, 0.12f));
             currentSequence.Insert(0.95f, ring3.DOSizeDelta(ring3Min, 0.12f));
@@ -93,8 +93,8 @@ namespace SaturnGame.UI
             viewMask.gameObject.SetActive(false);
             textMask.gameObject.SetActive(false);
         }
-    
-        public void RandomizeSplashText()
+
+        private void RandomizeSplashText()
         {
             string[] messages =
             {
@@ -108,6 +108,7 @@ namespace SaturnGame.UI
                 "ALL Marvelous!",
                 "Also try AstroDX!",
                 "Also try Umiguri!",
+                // ReSharper disable once StringLiteralTypo
                 "Carg!",
                 "Closing game... just kidding.",
                 "Don't forget to hydrate!",
@@ -129,6 +130,7 @@ namespace SaturnGame.UI
                 "KILL KILL KILL KILL KILL KILL",
                 "MASTER",
                 "Missless!",
+                // ReSharper disable once StringLiteralTypo
                 "nihao bro wo ai SaturnGame.exe",
                 "Not a washing machine!",
                 "Okay let's do this thing!",
@@ -137,7 +139,7 @@ namespace SaturnGame.UI
                 "SSS+",
                 "Support your local arcades!",
                 "Thank you for playing! :]",
-                "Unexpected item in bagging area"
+                "Unexpected item in bagging area",
             };
 
             int randomID = Random.Range(0, messages.Length - 1);

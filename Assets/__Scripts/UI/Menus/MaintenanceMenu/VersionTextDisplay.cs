@@ -4,7 +4,8 @@ using TMPro;
 public class VersionTextDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI versionTMP;
-    void Awake()
+
+    private void Awake()
     {
         versionTMP.text = $"Version : {Application.version}";
     }

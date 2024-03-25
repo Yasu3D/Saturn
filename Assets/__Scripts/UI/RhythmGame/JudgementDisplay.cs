@@ -1,4 +1,4 @@
-using SaturnGame.UI;
+using System;
 using SaturnGame.RhythmGame;
 using TMPro;
 using UnityEngine;
@@ -11,8 +11,7 @@ public class JudgementDisplay : MonoBehaviour
     [SerializeField] private ScoringManager scoringManager;
     [SerializeField] private TimeManager timeManager;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Should use VisualTime or RawVisualTime??
         if (scoringManager.LastJudgementTimeMs is null)
@@ -58,6 +57,10 @@ public class JudgementDisplay : MonoBehaviour
                 text.text = "Marvelous";
                 text.color = Color.magenta;
                 break;
+            }
+            default:
+            {
+                throw new ArgumentOutOfRangeException();
             }
         }
         text.enabled = true;

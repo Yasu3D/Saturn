@@ -1,34 +1,35 @@
-using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using SaturnGame.RhythmGame;
+using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class EarlyLateInfoRenderer : MonoBehaviour
 {
-    [SerializeField] private TMPro.TextMeshProUGUI earlyCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI lateCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI earlyMarvelousCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI earlyGreatCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI earlyGoodCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI lateMarvelousCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI lateGreatCountText;
-    [SerializeField] private TMPro.TextMeshProUGUI lateGoodCountText;
+    [SerializeField] private TMP_Text earlyCountText;
+    [SerializeField] private TMP_Text lateCountText;
+    [SerializeField] private TMP_Text earlyMarvelousCountText;
+    [SerializeField] private TMP_Text earlyGreatCountText;
+    [SerializeField] private TMP_Text earlyGoodCountText;
+    [SerializeField] private TMP_Text lateMarvelousCountText;
+    [SerializeField] private TMP_Text lateGreatCountText;
+    [SerializeField] private TMP_Text lateGoodCountText;
 
-    private void setTextsFromJudgementCounts(Dictionary<Judgement, int> countsByJudgement,
-        TMPro.TextMeshProUGUI marvelousCountText, TMPro.TextMeshProUGUI greatCountText,
-        TMPro.TextMeshProUGUI goodCountText)
+    private static void SetTextsFromJudgementCounts([NotNull] Dictionary<Judgement, int> countsByJudgement,
+        [NotNull] TMP_Text marvelousCountText, [NotNull] TMP_Text greatCountText,
+        [NotNull] TMP_Text goodCountText)
     {
         marvelousCountText.text = countsByJudgement[Judgement.Marvelous].ToString();
         greatCountText.text = countsByJudgement[Judgement.Great].ToString();
         goodCountText.text = countsByJudgement[Judgement.Good].ToString();
     }
-    
-    public void SetEarlyLateCountTexts(int earlyCount, int lateCount, Dictionary<Judgement, int> earlyCounts, Dictionary<Judgement, int> lateCounts)
+
+    public void SetEarlyLateCountTexts(int earlyCount, int lateCount, [NotNull] Dictionary<Judgement, int> earlyCounts,
+        [NotNull] Dictionary<Judgement, int> lateCounts)
     {
         earlyCountText.text = earlyCount.ToString();
         lateCountText.text = lateCount.ToString();
-        setTextsFromJudgementCounts(earlyCounts, earlyMarvelousCountText, earlyGreatCountText, earlyGoodCountText);
-        setTextsFromJudgementCounts(lateCounts, lateMarvelousCountText, lateGreatCountText, lateGoodCountText);
+        SetTextsFromJudgementCounts(earlyCounts, earlyMarvelousCountText, earlyGreatCountText, earlyGoodCountText);
+        SetTextsFromJudgementCounts(lateCounts, lateMarvelousCountText, lateGreatCountText, lateGoodCountText);
     }
 }

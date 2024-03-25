@@ -1,3 +1,5 @@
+// This file was added from an external source and has been modified by Saturn.
+
 //MIT License
 
 //Copyright(c) 2019 Antony Vitillo(a.k.a. "Skarredghost")
@@ -23,6 +25,7 @@
 // Simplified version of CurvedTextMeshPro, which can be found here:
 // https://github.com/TonyViT/CurvedTextMeshPro
 
+using JetBrains.Annotations;
 using UnityEngine;
 using TMPro;
 
@@ -45,7 +48,13 @@ namespace SaturnGame.UI
 
         private bool ParametersChanged()
         {
-            bool value = hasResized || prevLetterSpacing != letterSpacing || prevRadius != radius || prevAngleOffset != angleOffset || prevFlipText != flipText;
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            bool value = hasResized ||
+                         prevLetterSpacing != letterSpacing ||
+                         prevRadius != radius ||
+                         prevAngleOffset != angleOffset ||
+                         prevFlipText != flipText;
+            // ReSharper restore CompareOfFloatsByEqualityOperator
 
             prevLetterSpacing = letterSpacing;
             prevRadius = radius;
@@ -55,7 +64,7 @@ namespace SaturnGame.UI
             return value;
         }
 
-        void Awake()
+        private void Awake()
         {
             if (textComponent == null)
                 textComponent = gameObject.GetComponent<TMP_Text>();
@@ -63,17 +72,17 @@ namespace SaturnGame.UI
             UpdateText();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             UpdateText();
         }
 
-        void OnRectTransformDimensionsChange()
+        private void OnRectTransformDimensionsChange()
         {
             hasResized = true;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             if (!ParametersChanged() && !textComponent.havePropertiesChanged) return;
 
@@ -82,9 +91,6 @@ namespace SaturnGame.UI
 
         public void UpdateText()
         {
-            Vector3[] vertices;
-            Matrix4x4 matrix;
-
             textComponent.ForceMeshUpdate();
             
             TMP_TextInfo textInfo = textComponent.textInfo;
@@ -101,9 +107,11 @@ namespace SaturnGame.UI
 
                 int vertexIndex = textInfo.characterInfo[i].vertexIndex;
                 int materialIndex = textInfo.characterInfo[i].materialReferenceIndex;
-                vertices = textInfo.meshInfo[materialIndex].vertices;
+                Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
 
-                Vector3 charMidBaselinePos = new Vector2((vertices[vertexIndex + 0].x + vertices[vertexIndex + 2].x) * 0.5f, textInfo.characterInfo[i].baseLine);
+                Vector3 charMidBaselinePos =
+                    new Vector2((vertices[vertexIndex + 0].x + vertices[vertexIndex + 2].x) * 0.5f,
+                        textInfo.characterInfo[i].baseLine);
                 float zeroToOnePos = Mathf.InverseLerp(boundsMin, boundsMax, charMidBaselinePos.x);
 
                 if (flipText)
@@ -120,7 +128,7 @@ namespace SaturnGame.UI
                 vertices[vertexIndex + 2] -= charMidBaselinePos;
                 vertices[vertexIndex + 3] -= charMidBaselinePos;
 
-                matrix = GetMatrix(zeroToOnePos, textInfo, i);
+                Matrix4x4 matrix = GetMatrix(zeroToOnePos, textInfo, i);
 
                 vertices[vertexIndex + 0] = matrix.MultiplyPoint3x4(vertices[vertexIndex + 0]);
                 vertices[vertexIndex + 1] = matrix.MultiplyPoint3x4(vertices[vertexIndex + 1]);
@@ -131,7 +139,7 @@ namespace SaturnGame.UI
             textComponent.UpdateVertexData();
         }
 
-        private Matrix4x4 GetMatrix(float zeroToOnePos, TMP_TextInfo textInfo, int charIndex)
+        private Matrix4x4 GetMatrix(float zeroToOnePos, [NotNull] TMP_TextInfo textInfo, int charIndex)
         {
             float scaledLetterSpacing = letterSpacing * textComponent.rectTransform.rect.width * 0.15f;
             float angle = ((zeroToOnePos * scaledLetterSpacing) + angleOffset) * Mathf.Deg2Rad;
@@ -140,11 +148,13 @@ namespace SaturnGame.UI
             float x0 = Mathf.Cos(angle);
             float y0 = Mathf.Sin(angle);
 
-            float lineRadius = radius - textInfo.lineInfo[0].lineExtents.max.y * textInfo.characterInfo[charIndex].lineNumber;
+            float lineRadius =
+                radius - textInfo.lineInfo[0].lineExtents.max.y * textInfo.characterInfo[charIndex].lineNumber;
 
             Vector2 newMidBaselinePos = new(x0 * lineRadius, -y0 * lineRadius);
 
-            return Matrix4x4.TRS(newMidBaselinePos, Quaternion.AngleAxis(-Mathf.Atan2(y0, x0) * Mathf.Rad2Deg - 90, Vector3.forward), Vector3.one);
+            return Matrix4x4.TRS(newMidBaselinePos,
+                Quaternion.AngleAxis(-Mathf.Atan2(y0, x0) * Mathf.Rad2Deg - 90, Vector3.forward), Vector3.one);
         }
     }
 }

@@ -1,11 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.UI
 {
     public class OptionPanelLinear : MonoBehaviour
     {
-        public RectTransform rect;
+        [FormerlySerializedAs("rect")] public RectTransform Rect;
         public string Title
         {
             get => title0TMP == null ? "" : title0TMP.text;

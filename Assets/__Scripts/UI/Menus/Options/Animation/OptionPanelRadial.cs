@@ -1,12 +1,14 @@
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SaturnGame.UI
 {
     public class OptionPanelRadial : MonoBehaviour
     {
-        public RectTransform rect;
+        [FormerlySerializedAs("rect")] public RectTransform Rect;
         public string Title
         {
             get => title0TMP == null ? "" : title0TMP.text;
@@ -16,7 +18,7 @@ namespace SaturnGame.UI
             }
         }
 
-        public void SetRadialPanelColor(UIListItem item)
+        public void SetRadialPanelColor([NotNull] UIListItem item)
         {
             radialPanel.color = item.color;
         }

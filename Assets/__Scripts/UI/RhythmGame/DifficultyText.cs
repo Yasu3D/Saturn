@@ -1,3 +1,4 @@
+using System.Globalization;
 using SaturnGame.UI;
 using TMPro;
 using UnityEngine;
@@ -14,17 +15,17 @@ public class DifficultyText : MonoBehaviour
     [SerializeField] private Color infernoColor = new(0.2509f, 0f, 0.2627f, 1f);
     [SerializeField] private Color beyondColor = new(0f, 0f, 0f, 1f);
 
-    [SerializeField] private int difficultyIndex = 0;
-    [SerializeField] private float difficultyLevel = 0;
-    void Update()
+    [SerializeField] private int difficultyIndex;
+    [SerializeField] private float difficultyLevel;
+
+    private void Update()
     {
         SetDifficultyText(difficultyIndex, difficultyLevel);
     }
 
-    void SetDifficultyText(int index, float level)
+    private void SetDifficultyText(int index, float level)
     {
         string diffName;
-        string diffLevel;
         Color color;
         switch (index)
         {
@@ -65,7 +66,7 @@ public class DifficultyText : MonoBehaviour
         }
 
         // TODO: Eventually replace with SongData.GetDifficultyString();
-        diffLevel = Mathf.Floor(level).ToString();
+        string diffLevel = Mathf.Floor(level).ToString(CultureInfo.InvariantCulture);
         if (level % 1 > 0.6f) diffLevel += "+";
 
         text.text = $"{diffName}/Lv.{diffLevel}";

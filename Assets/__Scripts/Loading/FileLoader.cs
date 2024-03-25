@@ -2,20 +2,22 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace SaturnGame.Loading
 {
-    public class MerLoader
+    public static class MerLoader
     {
         /// <summary>
         /// Converts a Stream into a List of strings for parsing.
         /// </summary>
-        public static List<string> LoadMer(Stream stream)
+        [NotNull]
+        public static List<string> LoadMer([NotNull] Stream stream)
         {
-            List<string> lines = new List<string>();
-            StreamReader reader = new StreamReader(stream);
+            List<string> lines = new();
+            StreamReader reader = new(stream);
             while (!reader.EndOfStream)
                 lines.Add(reader.ReadLine() ?? "");
             return lines;
@@ -25,16 +27,16 @@ namespace SaturnGame.Loading
         /// <summary>
         /// Finds Metadata tags like "#OFFSET" in a string and return whatever value comes after.
         /// </summary>
-        public static string GetMetadata(string input, string tag)
+        [CanBeNull]
+        public static string GetMetadata([NotNull] string input, [NotNull] string tag)
         {
-            if (input.Contains(tag))
-                return input.Substring(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length).TrimStart();
-
-            return null;
+            return input.Contains(tag)
+                ? input[(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length)..].TrimStart()
+                : null;
         }
     }
 
-    public class AudioLoader
+    public static class AudioLoader
     {
         public static async Task<AudioClip> LoadBgm(string path)
         {
@@ -54,22 +56,18 @@ namespace SaturnGame.Loading
             Uri uri = Platform.PathToWebUri(path);
             try
             {
-                using(UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(uri, type))
-                {
-                    await webRequest.SendWebRequest();
+                using UnityWebRequest webRequest = UnityWebRequestMultimedia.GetAudioClip(uri, type);
+                await webRequest.SendWebRequest();
 
-                    if (webRequest.result == UnityWebRequest.Result.Success)
-                    {
-                        var handler = (DownloadHandlerAudioClip) webRequest.downloadHandler;
-                        handler.streamAudio = true;
-                        var test = handler.audioClip;
-                        return test;
-                    }
-                    else
-                    {
-                        Debug.Log($"[BGM] Error loading: {webRequest.error}");
-                    }
+                if (webRequest.result == UnityWebRequest.Result.Success)
+                {
+                    DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip) webRequest.downloadHandler;
+                    handler.streamAudio = true;
+                    AudioClip test = handler.audioClip;
+                    return test;
                 }
+
+                Debug.Log($"[BGM] Error loading: {webRequest.error}");
             }
             catch(Exception error)
             {
@@ -80,7 +78,7 @@ namespace SaturnGame.Loading
             return null;
         }
 
-        public static AudioType GetAudioType(string path)
+        private static AudioType GetAudioType([CanBeNull] string path)
         {
             // Somewhat primitive approach, but works well enough.
             if (string.IsNullOrEmpty(path)) return AudioType.UNKNOWN;
@@ -98,9 +96,9 @@ namespace SaturnGame.Loading
         }
     }
 
-    public class ImageLoader
+    public static class ImageLoader
     {
-        public async static Task<Texture2D> LoadImageWebRequest(string path)
+        public static async Task<Texture2D> LoadImageWebRequest(string path)
         {
             if (!File.Exists(path)) return null;
 
@@ -108,14 +106,9 @@ namespace SaturnGame.Loading
             await uwr.SendWebRequest();
 
             if (uwr.result == UnityWebRequest.Result.Success)
-            {
                 return DownloadHandlerTexture.GetContent(uwr);
-            }
-            else
-            {
-                Debug.Log($"[Image] Error loading: {uwr.error} for path {path}");
-            }
 
+            Debug.Log($"[Image] Error loading: {uwr.error} for path {path}");
             return null;
         }
     }

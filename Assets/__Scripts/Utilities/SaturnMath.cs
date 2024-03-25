@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using SaturnGame.JetBrains.Annotations;
+using UnityEngine;
 
 namespace SaturnGame
 {
@@ -16,7 +13,7 @@ namespace SaturnGame
         /// <i>This conversion should happen as late as possible!</i><br />
         /// <c>measureFraction = ticks * SaturnMath.tickToMeasure;</c>
         /// </summary>
-        public const float tickToMeasure = 1.0f / 1920.0f;
+        public const float TickToMeasure = 1.0f / 1920.0f;
 
         /// <summary>
         /// Unclamped version of Unity's <c>Mathf.InverseLerp</c>.
@@ -26,12 +23,10 @@ namespace SaturnGame
         /// </returns>
         public static float InverseLerp(float a, float b, float value)
         {
-            if (a != b)
-            {
-                return (value - a) / (b - a);
-            }
+            // ReSharper disable once CompareOfFloatsByEqualityOperator - protection against divide by zero
+            if (a == b) return 0f;
 
-            return 0f;
+            return (value - a) / (b - a);
         }
 
         /// <summary>
@@ -69,8 +64,10 @@ namespace SaturnGame
         /// </summary>
         public static float Remap(float input, float inMin, float inMax, float outMin, float outMax, bool clamp = false)
         {
-            if (inMin == inMax || outMin == outMax) return 0;
-            if (inMin == outMin && inMax == outMax) return input;
+            // ReSharper disable CompareOfFloatsByEqualityOperator - protection against divide by zero
+            if (inMin == inMax) return 0;
+            if (inMin == outMin && inMax == outMax) return input; // note: is this actually needed?
+            // ReSharper restore CompareOfFloatsByEqualityOperator
 
             float result = outMin + (input - inMin) * (outMax - outMin) / (inMax - inMin);
             return clamp ? Mathf.Clamp(result, outMin, outMax) : result;
@@ -81,18 +78,20 @@ namespace SaturnGame
         /// </summary>
         public static float LerpRound(int a, int b, float t, int m)
         {
-            if (Mathf.Abs(a - b) > m * 0.5f)
-            {
-                if (a > b) b += m;
-                else a += m;
-            }
+            if (!(Mathf.Abs(a - b) > m * 0.5f)) return Mathf.Lerp(a, b, t);
+
+            if (a > b)
+                b += m;
+            else
+                a += m;
 
             return Mathf.Lerp(a, b, t);
         }
 
+        [NotNull]
         public static string GetDifficultyString(float difficulty)
         {
-            return ((int)difficulty).ToString() + (difficulty % 1 > 0.6f ? "+" : "");
+            return (int)difficulty + (difficulty % 1 > 0.6f ? "+" : "");
         }
 
         public static class Ease
@@ -246,27 +245,22 @@ namespace SaturnGame
                 /// <summary>Starts fast and slows down.</summary>
                 public static float Out(float x)
                 {
-                    float div = 2.75f;
-                    float mult = 7.5625f;
+                    const float div = 2.75f;
+                    const float mult = 7.5625f;
 
-                    if (x < 1 / div)
+                    switch (x)
                     {
-                        return mult * x * x;
-                    }
-                    else if (x < 2 / div)
-                    {
-                        x -= 1.5f / div;
-                        return mult * x * x + 0.75f;
-                    }
-                    else if (x < 2.5 / div)
-                    {
-                        x -= 2.25f / div;
-                        return mult * x * x + 0.9375f;
-                    }
-                    else
-                    {
-                        x -= 2.625f / div;
-                        return mult * x * x + 0.984375f;
+                        case < 1 / div:
+                            return mult * x * x;
+                        case < 2 / div:
+                            x -= 1.5f / div;
+                            return mult * x * x + 0.75f;
+                        case < 2.5f / div:
+                            x -= 2.25f / div;
+                            return mult * x * x + 0.9375f;
+                        default:
+                            x -= 2.625f / div;
+                            return mult * x * x + 0.984375f;
                     }
                 }
                 /// <summary>Starts slow, speeds up, then ends slow.</summary>

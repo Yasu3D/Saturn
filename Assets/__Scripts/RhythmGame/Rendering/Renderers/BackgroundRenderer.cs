@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.Settings;
 using UnityEngine;
 
 public class BackgroundRenderer : MonoBehaviour
 {
     [SerializeField] private MeshRenderer meshRenderer;
-    void Awake()
+    private static readonly int MaskAddPropertyID = Shader.PropertyToID("_MaskAdd");
+
+    private void Awake()
     {
         GameSettings settings = SettingsManager.Instance.PlayerSettings.GameSettings;
-        meshRenderer.material.SetFloat("_MaskAdd", settings.MaskDensity);
+        meshRenderer.material.SetFloat(MaskAddPropertyID, settings.MaskDensity);
     }
 }

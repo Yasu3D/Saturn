@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace SaturnGame.UI
@@ -13,13 +12,13 @@ namespace SaturnGame.UI
         {
             LinearSimple,
             LinearDetailed,
-            Radial
+            Radial,
         }
 
-        public string screenName;
-        public UIScreenType screenType;
-        public int defaultItemIndex;
-        public List<UIListItem> listItems;
+        [FormerlySerializedAs("screenName")] public string ScreenName;
+        [FormerlySerializedAs("screenType")] public UIScreenType ScreenType;
+        [FormerlySerializedAs("defaultItemIndex")] public int DefaultItemIndex;
+        [FormerlySerializedAs("listItems")] public List<UIListItem> ListItems;
     }
 
     [Serializable]
@@ -28,27 +27,27 @@ namespace SaturnGame.UI
         public enum ItemTypes
         {
             ValueSetter,
-            SubMenu
+            SubMenu,
         }
 
         public enum SubtitleTypes
         {
             Static,
-            Dynamic
+            Dynamic,
         }
 
-        public SubtitleTypes subtitleType;
-        public ItemTypes itemType;
+        [FormerlySerializedAs("subtitleType")] public SubtitleTypes SubtitleType;
+        [FormerlySerializedAs("itemType")] public ItemTypes ItemType;
 
-        public Color color;
-        public string title;
-        public string subtitle;
+        [FormerlySerializedAs("color")] public Color Color;
+        [FormerlySerializedAs("title")] public string Title;
+        [FormerlySerializedAs("subtitle")] public string Subtitle;
 
-        public string settingsBinding;
+        [FormerlySerializedAs("settingsBinding")] public string SettingsBinding;
 
-        public UIScreen nextScreen;
+        [FormerlySerializedAs("nextScreen")] public UIScreen NextScreen;
 
-        public string settingsParameter;
-        public int settingsValue;
+        [FormerlySerializedAs("settingsParameter")] public string SettingsParameter;
+        [FormerlySerializedAs("settingsValue")] public int SettingsValue;
     }
 }

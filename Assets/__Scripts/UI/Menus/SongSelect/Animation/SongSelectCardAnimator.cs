@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using SaturnGame.Data;
 using UnityEngine.Serialization;

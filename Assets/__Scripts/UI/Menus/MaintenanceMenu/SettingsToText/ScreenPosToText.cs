@@ -5,7 +5,8 @@ using SaturnGame.Settings;
 public class ScreenPosToText : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
-    void Update()
+
+    private void Update()
     {
         text.text = SettingsManager.Instance.DeviceSettings.DisplaySettings.ViewRectPosition.ToString();
     }

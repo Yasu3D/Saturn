@@ -1,4 +1,3 @@
-using System.Threading;
 using JetBrains.Annotations;
 using SaturnGame.UI;
 using UnityEngine;
@@ -8,19 +7,16 @@ public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
 {
     [SerializeField] private MenuWipeAnimator menuWipe;
     // Warning: atomicity only guaranteed on main thread.
-    public bool LoadInProgress { get; private set; }
+    private bool LoadInProgress { get; set; }
     // Warning: may be inaccurate if a load is in progress. Recommended to read on Awake() only.
     [CanBeNull] public string LastScene { get; private set; }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            LoadMaintenanceMenu();
-        }
+        if (Input.GetKeyDown(KeyCode.Delete)) LoadMaintenanceMenu();
     }
 
-    public void LoadMaintenanceMenu()
+    private void LoadMaintenanceMenu()
     {
         menuWipe.Anim_ForceEnd();
         SceneManager.LoadSceneAsync("_MaintenanceMenu");

@@ -64,8 +64,8 @@ namespace SaturnGame.UI
                     float scale = GetLinearScale(index);
                     float duration = wrap ? 0 : time;
 
-                    panel.rect.DOAnchorPos(position, duration).SetEase(ease);
-                    panel.rect.DOScale(scale, duration).SetEase(ease);
+                    panel.Rect.DOAnchorPos(position, duration).SetEase(ease);
+                    panel.Rect.DOScale(scale, duration).SetEase(ease);
 
                     if (!wrap) continue;
 
@@ -91,7 +91,7 @@ namespace SaturnGame.UI
                     Vector3 angle = GetRadialAngle(index);
                     float duration = wrap ? 0 : time;
 
-                    panel.rect.DORotate(angle, duration).SetEase(ease);
+                    panel.Rect.DORotate(angle, duration).SetEase(ease);
 
                     if (!wrap) continue;
 
@@ -398,8 +398,8 @@ namespace SaturnGame.UI
                     Vector2 position = GetLinearPosition(i);
                     float scale = GetLinearScale(i);
 
-                    panel.rect.anchoredPosition = position;
-                    panel.rect.localScale = Vector3.one * scale;
+                    panel.Rect.anchoredPosition = position;
+                    panel.Rect.localScale = Vector3.one * scale;
                     panel.gameObject.SetActive(true);
                 }
             }
@@ -430,7 +430,7 @@ namespace SaturnGame.UI
 
                     Vector3 angle = GetRadialAngle(i);
                     
-                    panel.rect.eulerAngles = angle;
+                    panel.Rect.eulerAngles = angle;
                     panel.gameObject.SetActive(true);
                 }
             }

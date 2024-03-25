@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using UnityEngine;
 

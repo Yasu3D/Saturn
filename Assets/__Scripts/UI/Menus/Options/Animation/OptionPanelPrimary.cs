@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,7 @@ namespace SaturnGame.UI
             if (radial != null) radial.SetActive(type is UIScreen.UIScreenType.Radial);
         }
 
-        public void SetRadialPanelColor(UIListItem item)
+        public void SetRadialPanelColor([NotNull] UIListItem item)
         {
             radialPanel.color = item.color;
         }

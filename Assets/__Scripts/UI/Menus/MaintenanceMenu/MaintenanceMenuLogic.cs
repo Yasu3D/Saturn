@@ -1,12 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using SaturnGame.Settings;
-using UnityEngine.Events;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace SaturnGame.UI
 {
@@ -42,14 +39,14 @@ namespace SaturnGame.UI
         [Header("OTHER")]
         [SerializeField] private AudioTester audioTester;
 
-        private int mainMenuIndex = 0;
-        private int settingsMenuIndex = 0;
-        private int hardwareTestIndex = 0;
+        private int mainMenuIndex;
+        private int settingsMenuIndex;
+        private int hardwareTestIndex;
 
         private bool changingNumericValue;
-        private int numericIndex = 0;
+        private int numericIndex;
 
-        void Awake()
+        private void Awake()
         {
             // Main Menu Buttons
             mainMenuButtons[0].onClick.AddListener(OpenCreditLog);
@@ -122,7 +119,7 @@ namespace SaturnGame.UI
             graphicsSettingsButtons[0].onClick.AddListener(OpenSystemSettings);
         }
 
-        void CloseAll()
+        private void CloseAll()
         {
             foreach (GameObject menu in mainMenus)
                 menu.SetActive(false);
@@ -134,12 +131,12 @@ namespace SaturnGame.UI
                 menu.SetActive(false);
         }
 
-        void ReturnToGame()
+        private static void ReturnToGame()
         {
             SceneManager.LoadSceneAsync("_TitleScreen");
         }
 
-        void Update()
+        private void Update()
         {
             if (!changingNumericValue) return;
 
@@ -151,7 +148,7 @@ namespace SaturnGame.UI
         }
 
         // ==== MAIN MENUS
-        void OpenMain()
+        private void OpenMain()
         {
             CloseAll();
             mainMenus[0].SetActive(true);
@@ -159,14 +156,14 @@ namespace SaturnGame.UI
             EventSystem.current.SetSelectedGameObject(mainMenuButtons[mainMenuIndex].gameObject);
         }
 
-        void OpenCreditLog()
+        private void OpenCreditLog()
         {
             CloseAll();
             mainMenus[1].SetActive(true);
             mainMenuIndex = 0;
         }
 
-        void OpenHardwareTest()
+        private void OpenHardwareTest()
         {
             CloseAll();
             mainMenus[2].SetActive(true);
@@ -174,14 +171,14 @@ namespace SaturnGame.UI
             EventSystem.current.SetSelectedGameObject(hardwareTestButtons[hardwareTestIndex].gameObject);
         }
 
-        void OpenHardwareInfo()
+        private void OpenHardwareInfo()
         {
             CloseAll();
             mainMenus[3].SetActive(true);
             mainMenuIndex = 2;
         }
 
-        void OpenSystemSettings()
+        private void OpenSystemSettings()
         {
             CloseAll();
             mainMenus[4].SetActive(true);
@@ -190,14 +187,14 @@ namespace SaturnGame.UI
         }
 
         // ==== SUBMENUS
-        void OpenSettingsSubMenu(int id)
+        private void OpenSettingsSubMenu(int id)
         {
             CloseAll();
             settingsMenus[id].SetActive(true);
             settingsMenuIndex = id;
         }
 
-        void OpenHardwareTestSubMenu(int id)
+        private void OpenHardwareTestSubMenu(int id)
         {
             CloseAll();
             hardwareTestMenus[id].SetActive(true);
@@ -205,20 +202,20 @@ namespace SaturnGame.UI
         }
     
         // ==== VALUE ADJUSTMENTS
-        void SelectDisplayValueButton(int id)
+        private void SelectDisplayValueButton(int id)
         {
             changingNumericValue = true;
             numericIndex = id;
             EventSystem.current.SetSelectedGameObject(displaySettingsValueButtons[id].gameObject);
         }
 
-        void SelectDisplayButton(int id)
+        private void SelectDisplayButton(int id)
         {
             changingNumericValue = false;
             EventSystem.current.SetSelectedGameObject(displaySettingsButtons[id].gameObject);
         }
 
-        void NumericValueUp()
+        private void NumericValueUp()
         {
             DisplaySettings display = SettingsManager.Instance.DeviceSettings.DisplaySettings;
 
@@ -226,18 +223,20 @@ namespace SaturnGame.UI
             {
                 case 0:
                 {
-                    display.ViewRectPosition++;
-                    if (display.ViewRectPosition > 100)
-                        display.ViewRectPosition -= 101;
+                    int newPosition = display.ViewRectPosition + 1;
+                    if (newPosition > 100)
+                        newPosition -= 101;
+                    display.ViewRectPosition = newPosition;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
                 }
 
                 case 1:
                 {
-                    display.ViewRectScale++;
-                    if (display.ViewRectScale > 100)
-                        display.ViewRectScale -= 51;
+                    int newScale = display.ViewRectScale + 1;
+                    if (newScale > 100)
+                        newScale -= 51;
+                    display.ViewRectScale = newScale;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
                 }
@@ -254,7 +253,7 @@ namespace SaturnGame.UI
             }
         }
 
-        void NumericValueDown()
+        private void NumericValueDown()
         {
             DisplaySettings display = SettingsManager.Instance.DeviceSettings.DisplaySettings;
 
@@ -262,18 +261,20 @@ namespace SaturnGame.UI
             {
                 case 0:
                 {
-                    display.ViewRectPosition--;
-                    if (display.ViewRectPosition < 0)
-                        display.ViewRectPosition += 101;
+                    int newPosition = display.ViewRectPosition - 1;
+                    if (newPosition < 0)
+                        newPosition += 101;
+                    display.ViewRectPosition = newPosition;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
                 }
 
                 case 1:
                 {
-                    display.ViewRectScale--;
-                    if (display.ViewRectScale < 50)
-                        display.ViewRectScale += 51;
+                    int newScale = display.ViewRectScale - 1;
+                    if (newScale < 50)
+                        newScale += 51;
+                    display.ViewRectScale = newScale;
                     EventManager.InvokeEvent("UpdateViewRect");
                     break;
                 }

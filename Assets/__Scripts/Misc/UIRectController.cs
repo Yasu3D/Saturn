@@ -1,37 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.Settings;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Serialization;
 
 public class UIRectController : MonoBehaviour
 {
-    [SerializeField] private RectTransform UI;
+    [FormerlySerializedAs("UI")] [SerializeField] private RectTransform ui;
 
     [SerializeField] private Vector2 oBounds = new(0, 840);
 
-    void Start()
+    private void Start()
     {
         OnUpdateViewRect();
     }
-    
-    void OnEnable()
+
+    private void OnEnable()
     {
         EventManager.AddListener("UpdateViewRect", OnUpdateViewRect);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         EventManager.RemoveListener("UpdateViewRect", OnUpdateViewRect);
     }
 
-    public void OnUpdateViewRect()
+    private void OnUpdateViewRect()
     {
         DisplaySettings settings = SettingsManager.Instance.DeviceSettings.DisplaySettings;
         SetViewRect(settings.ViewRectPosition, settings.ViewRectScale);
     }
 
-    public void SetViewRect(int position, int scale)
+    private void SetViewRect(int position, int scale)
     {
         float currentAspect = (float)Screen.width / Screen.height;
 
@@ -39,18 +37,13 @@ public class UIRectController : MonoBehaviour
         float s = scale * 0.01f;
 
         float o = Mathf.LerpUnclamped(oBounds.x, oBounds.y, p);
-        
-        if (currentAspect < 1.0f)
-        {
-            // Portrait
-            UI.localPosition = new(0, o, 0);
-        }
-        else
-        {
-            // Landscape
-            UI.localPosition = new(o, 0, 0);
-        }
 
-        UI.localScale = new(s, s, s);
+        ui.localPosition = currentAspect < 1.0f ?
+            // Portrait
+            new Vector3(0, o, 0) :
+            // Landscape
+            new Vector3(o, 0, 0);
+
+        ui.localScale = new Vector3(s, s, s);
     }
 }
