@@ -4,10 +4,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [AddComponentMenu("SaturnGame/Rendering/Containers/Swipe Container")]
-    public class SwipeContainer : MonoBehaviour
+    public class SwipeContainer : AbstractPositionedChartElementContainer<SwipeNote, SwipeRenderer>
     {
-        public SwipeNote note;
-        new public SwipeRenderer renderer;
-        public bool reverse = false;
     }
 }

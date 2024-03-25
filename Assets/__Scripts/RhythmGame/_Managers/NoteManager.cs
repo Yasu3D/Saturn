@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using SaturnGame.Rendering;
 using SaturnGame.Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.RhythmGame
 {
@@ -291,8 +293,8 @@ namespace SaturnGame.RhythmGame
                     container.gameObject.SetActive(!container.reverse);
 
                 if (!container.reverse)
-                    AnimateObject(container, holdEndGarbage, container.holdEnd.ScaledVisualTime, container.holdEnd.ScaledVisualTime, 0.25f, container.transform, true);
-                else ReverseAnimateObject(container, holdEndGarbage, container.holdEnd.ScaledVisualTime, container.holdEnd.ScaledVisualTime, 1.0f, container.transform, true);
+                    AnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 0.25f, container.transform, true);
+                else ReverseAnimateObject(container, holdEndGarbage, container.note.ScaledVisualTime, container.note.ScaledVisualTime, 1.0f, container.transform, true);
             }
 
             foreach (HoldSurfaceRenderer renderer in holdSurfacePool.ActiveObjects)
@@ -420,7 +422,8 @@ namespace SaturnGame.RhythmGame
 
             container.note = input;
             int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
-            container.renderer.SetRenderer(input, noteWidth);
+            container.renderer.Width = noteWidth;
+            container.renderer.SetRenderer(input);
             container.reverse = reverse;
 
             container.transform.SetParent(activeObjectsContainer);
@@ -461,7 +464,7 @@ namespace SaturnGame.RhythmGame
         {
             HoldEndContainer container = holdEndPool.GetObject();
 
-            container.holdEnd = input;
+            container.note = input;
             container.renderer.SetRenderer(input);
             container.reverse = reverse;
 
@@ -491,7 +494,7 @@ namespace SaturnGame.RhythmGame
             GenericContainer container = r_EffectPool.GetObject();
 
             container.note = input;
-            container.renderer.SetRenderer(input.Size, input.Position);
+            container.renderer.SetRenderer(input);
             container.reverse = reverse;
 
             container.transform.SetParent(activeObjectsContainer);
@@ -516,7 +519,7 @@ namespace SaturnGame.RhythmGame
             GenericContainer container = syncPool.GetObject();
 
             container.note = input;
-            container.renderer.SetRenderer(input.Size, input.Position);
+            container.renderer.SetRenderer(input);
 
             container.transform.SetParent(activeObjectsContainer);
             container.gameObject.SetActive(true);

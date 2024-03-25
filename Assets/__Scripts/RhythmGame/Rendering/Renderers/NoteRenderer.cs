@@ -7,19 +7,16 @@ namespace SaturnGame.Rendering
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     [AddComponentMenu("SaturnGame/Rendering/Note Renderer")]
-    public class NoteRenderer : IObjectRenderer
+    public class NoteRenderer : AbstractPositionedChartElementRenderer<Note>
     {
         // ==== MESH ====
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
 
         // ==== NOTE INFO ====
-        public int Size { get; private set; }
-        public int Position { get; private set; }
-
         public Color Color { get; private set; }
         public float SubStrength { get; private set; }
-        public int Width { get; private set; } = 3;
+        public int Width { get; set; } = 3;
         public bool IsSync { get; private set; } = false;
         public bool IsBonus { get; private set; } = false;
         public bool IsChain { get; private set; } = false;
@@ -29,7 +26,7 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRenderer(Note note, int width)
+        public override void SetRenderer(Note note)
         {
             Size = note.Size;
             Position = note.Position;
@@ -38,7 +35,6 @@ namespace SaturnGame.Rendering
 
             Color = color;
             SubStrength = subStrength;
-            Width = width;
 
             IsSync = note.IsSync;
             IsBonus = note.BonusType is Note.NoteBonusType.Bonus;

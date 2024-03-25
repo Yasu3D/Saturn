@@ -4,10 +4,7 @@ using UnityEngine;
 namespace SaturnGame.RhythmGame
 {
     [AddComponentMenu("SaturnGame/Rendering/Containers/Note Container")]
-    public class NoteContainer : MonoBehaviour
+    public class NoteContainer : AbstractPositionedChartElementContainer<Note, NoteRenderer>
     {
-        public Note note;
-        new public NoteRenderer renderer;
-        public bool reverse = false;
     }
 }

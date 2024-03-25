@@ -1,13 +1,11 @@
 using SaturnGame.Rendering;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.RhythmGame
 {
     [AddComponentMenu("SaturnGame/Rendering/Containers/Hold End Container")]
-    public class HoldEndContainer : MonoBehaviour
+    public class HoldEndContainer : AbstractPositionedChartElementContainer<HoldSegment, HoldEndRenderer>
     {
-        public HoldSegment holdEnd;
-        new public HoldEndRenderer renderer;
-        public bool reverse = false;
     }
 }

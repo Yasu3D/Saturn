@@ -6,14 +6,12 @@ namespace SaturnGame.Rendering
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     [AddComponentMenu("SaturnGame/Rendering/Hold End Renderer")]
-    public class HoldEndRenderer : IObjectRenderer
+    public class HoldEndRenderer : AbstractPositionedChartElementRenderer<HoldSegment>
     {
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
 
         // ==== NOTE INFO ====
-        public int Size { get; private set; }
-        public int Position { get; private set; }
 
         public int ColorID { get; private set; }
 
@@ -22,7 +20,7 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRenderer(HoldSegment note)
+        public override void SetRenderer(HoldSegment note)
         {
             Size = note.Size;
             Position = note.Position;

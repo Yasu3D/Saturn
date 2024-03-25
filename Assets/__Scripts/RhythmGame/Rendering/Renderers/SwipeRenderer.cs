@@ -6,13 +6,10 @@ namespace SaturnGame.Rendering
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     [AddComponentMenu("SaturnGame/Rendering/Swipe Renderer")]
-    public class SwipeRenderer : IObjectRenderer
+    public class SwipeRenderer : AbstractPositionedChartElementRenderer<SwipeNote>
     {
         [SerializeField] private Material materialTemplate;
         private Material materialInstance;
-
-        public int Size { get; private set; }
-        public int Position { get; private set; }
 
         public Color Color { get; private set; }
         public string Direction { get; private set; } = "_COUNTERCLOCKWISE";
@@ -22,7 +19,7 @@ namespace SaturnGame.Rendering
             materialInstance = new(materialTemplate);
         }
 
-        public void SetRenderer(SwipeNote note)
+        public override void SetRenderer(SwipeNote note)
         {
             Size = note.Size;
             Position = note.Position;
