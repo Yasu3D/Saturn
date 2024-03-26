@@ -12,96 +12,106 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_1_Sound
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  screenName: Sound
-  screenType: 0
-  listItems:
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: TOUCH SE
-    subtitle: 
-    settingsBinding: TouchSE
-    nextScreen: {fileID: 11400000, guid: 1513760608388d948be9983e6a93e891, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: BGM VOLUME
-    subtitle: 
-    settingsBinding: BGMVolume
-    nextScreen: {fileID: 11400000, guid: a5565a27d17a2ce4ea7497161322a548, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: GUIDE VOLUME
-    subtitle: 
-    settingsBinding: GuideVolume
-    nextScreen: {fileID: 11400000, guid: d550035d50318994b88b67da8c418198, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: TOUCH NOTE VOLUME
-    subtitle: 
-    settingsBinding: TouchNoteVolume
-    nextScreen: {fileID: 11400000, guid: a94a8062e11685042b4da754347671b5, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: HOLD NOTE VOLUME
-    subtitle: 
-    settingsBinding: HoldNoteVolume
-    nextScreen: {fileID: 11400000, guid: 6b0fdd1482f488d4c9a88b4c46fdc0f0, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SLIDE NOTE VOLUME
-    subtitle: 
-    settingsBinding: SlideNoteVolume
-    nextScreen: {fileID: 11400000, guid: f49e83e0b7af9294eb51a74c4d51858b, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SNAP NOTE VOLUME
-    subtitle: 
-    settingsBinding: SnapNoteVolume
-    nextScreen: {fileID: 11400000, guid: 5c9f439691407394bad3b58502377607, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: CHAIN NOTE VOLUME
-    subtitle: 
-    settingsBinding: ChainNoteVolume
-    nextScreen: {fileID: 11400000, guid: 89bbb18e897d9ad4a965693e1a3ecfdd, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: BONUS EFFECT VOLUME
-    subtitle: 
-    settingsBinding: BonusEffectVolume
-    nextScreen: {fileID: 11400000, guid: 7e56a4259ea865e44a960da7cd2d8dec, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: R-NOTE EFFECT VOLUME
-    subtitle: 
-    settingsBinding: RNoteEffectVolume
-    nextScreen: {fileID: 11400000, guid: 3f2733f53f9ba8f4a96098f093dbeaa2, type: 2}
-    settingsParameter: 
-    settingsValue: 0
+  ScreenName: Sound
+  ScreenType: 0
+  DefaultItemIndex: 0
+  ListItems:
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: TOUCH SE
+    Subtitle: 
+    SettingsBinding: TouchSE
+    NextScreen: {fileID: 11400000, guid: 1513760608388d948be9983e6a93e891, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: BGM VOLUME
+    Subtitle: 
+    SettingsBinding: BGMVolume
+    NextScreen: {fileID: 11400000, guid: a5565a27d17a2ce4ea7497161322a548, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: HITSOUND OVERALL VOLUME
+    Subtitle: 
+    SettingsBinding: HitsoundOverallVolume
+    NextScreen: {fileID: 11400000, guid: d772acb2ebb2e350aafeabf8f67dd7a5, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: GUIDE VOLUME
+    Subtitle: 
+    SettingsBinding: GuideVolume
+    NextScreen: {fileID: 11400000, guid: d550035d50318994b88b67da8c418198, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: TOUCH NOTE VOLUME
+    Subtitle: 
+    SettingsBinding: TouchNoteVolume
+    NextScreen: {fileID: 11400000, guid: a94a8062e11685042b4da754347671b5, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: HOLD NOTE VOLUME
+    Subtitle: 
+    SettingsBinding: HoldNoteVolume
+    NextScreen: {fileID: 11400000, guid: 6b0fdd1482f488d4c9a88b4c46fdc0f0, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SLIDE NOTE VOLUME
+    Subtitle: 
+    SettingsBinding: SlideNoteVolume
+    NextScreen: {fileID: 11400000, guid: f49e83e0b7af9294eb51a74c4d51858b, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SNAP NOTE VOLUME
+    Subtitle: 
+    SettingsBinding: SnapNoteVolume
+    NextScreen: {fileID: 11400000, guid: 5c9f439691407394bad3b58502377607, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: CHAIN NOTE VOLUME
+    Subtitle: 
+    SettingsBinding: ChainNoteVolume
+    NextScreen: {fileID: 11400000, guid: 89bbb18e897d9ad4a965693e1a3ecfdd, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: BONUS EFFECT VOLUME
+    Subtitle: 
+    SettingsBinding: BonusEffectVolume
+    NextScreen: {fileID: 11400000, guid: 7e56a4259ea865e44a960da7cd2d8dec, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: R-NOTE EFFECT VOLUME
+    Subtitle: 
+    SettingsBinding: RNoteEffectVolume
+    NextScreen: {fileID: 11400000, guid: 3f2733f53f9ba8f4a96098f093dbeaa2, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
