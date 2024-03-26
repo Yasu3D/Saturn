@@ -106,12 +106,12 @@ public class SongSelectCardAnimator : MonoBehaviour
         jacket1.texture = jacket;
     }
 
-    public void SetSongData(int cardIndex, int diffIndex, [NotNull] SongData data)
+    public void SetSongData(int cardIndex, int diffIndex, [NotNull] Song data)
     {
         SongCard card = SongCards[cardIndex];
         card.ArtistText.text = data.Artist;
         card.TitleText.text = data.Title;
-        card.DifficultyText.text = SaturnMath.GetDifficultyString(data.SongDiffs[diffIndex].DiffLevel);
+        card.DifficultyText.text = SaturnMath.GetDifficultyString(data.SongDiffs[diffIndex].Level);
     }
 
     public void SetSelectedJacket(Texture2D jacket)

@@ -479,8 +479,7 @@ MonoBehaviour:
   expertColor: {r: 1, g: 0, b: 0.5176471, a: 1}
   infernoColor: {r: 0.2509, g: 0, b: 0.2627, a: 1}
   beyondColor: {r: 0, g: 0, b: 0, a: 1}
-  difficultyIndex: 0
-  difficultyLevel: 0
+  difficulty: 0
 --- !u!1 &706749778 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 512735363330519860, guid: 41a3e9d3bb4468879892c37efd25f921,
@@ -812,8 +811,8 @@ GameObject:
   - component: {fileID: 1183298164}
   - component: {fileID: 1183298168}
   - component: {fileID: 1183298167}
-  - component: {fileID: 1183298166}
   - component: {fileID: 1183298165}
+  - component: {fileID: 1183298166}
   m_Layer: 5
   m_Name: ScoreNumber
   m_TagString: Untagged
@@ -1476,13 +1475,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeManager: {fileID: 1783936258}
-  bgmPlayer: {fileID: 1534859774}
   activeObjectsContainer: {fileID: 1217854417}
   barLinePool: {fileID: 1647205787}
   holdEndPool: {fileID: 1129053362}
   holdSurfacePool: {fileID: 1675162346}
   notePool: {fileID: 1651593462}
-  r_EffectPool: {fileID: 2054891255}
+  rEffectPool: {fileID: 2054891255}
   snapPool: {fileID: 1299027263}
   swipePool: {fileID: 1564455300}
   syncPool: {fileID: 586643893}
@@ -1514,8 +1512,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1523442697}
   - component: {fileID: 1523442700}
-  - component: {fileID: 1523442701}
   - component: {fileID: 1523442699}
+  - component: {fileID: 1523442701}
+  - component: {fileID: 1523442702}
   m_Layer: 5
   m_Name: SongTitle
   m_TagString: Untagged
@@ -1657,6 +1656,20 @@ MonoBehaviour:
   radius: 474
   angleOffset: -40
   flipText: 0
+--- !u!114 &1523442702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523442696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8245b2ac105749d9a338d0ef43ecda44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1523442699}
+  arc: {fileID: 1523442701}
 --- !u!1 &1525100965 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 795279240991031412, guid: 41a3e9d3bb4468879892c37efd25f921,
@@ -2748,7 +2761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3606da3a51cc724290d6a37d6fbf8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI: {fileID: 2020441783}
+  ui: {fileID: 2020441783}
   oBounds: {x: 0, y: 840}
 --- !u!1 &2021962892 stripped
 GameObject:

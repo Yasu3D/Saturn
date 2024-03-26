@@ -1,4 +1,5 @@
-using System.Globalization;
+using System;
+using SaturnGame;
 using SaturnGame.UI;
 using TMPro;
 using UnityEngine;
@@ -14,61 +15,70 @@ public class DifficultyText : MonoBehaviour
     [SerializeField] private Color infernoColor = new(0.2509f, 0f, 0.2627f, 1f);
     [SerializeField] private Color beyondColor = new(0f, 0f, 0f, 1f);
 
-    [SerializeField] private int difficultyIndex;
-    [SerializeField] private float difficultyLevel;
+    [SerializeField] private Difficulty difficulty;
+    // decimal is not serializable
+    private decimal difficultyLevel;
 
-    private void Update()
+
+    private void Start()
     {
-        SetDifficultyText(difficultyIndex, difficultyLevel);
+        SongDifficulty songDifficulty = PersistentStateManager.Instance.LastSelectedDifficulty;
+        difficulty = songDifficulty.Difficulty;
+        difficultyLevel = songDifficulty.Level;
+        UpdateDifficultyText();
     }
 
-    private void SetDifficultyText(int index, float level)
+    private void UpdateDifficultyText()
     {
         string diffName;
         Color color;
-        switch (index)
+        switch (difficulty)
         {
-            case 0:
+            case Difficulty.Normal:
             {
                 diffName = "NORMAL";
                 color = normalColor;
                 break;
             }
 
-            case 1:
+            case Difficulty.Hard:
             {
                 diffName = "HARD";
                 color = hardColor;
                 break;
             }
 
-            case 2:
+            case Difficulty.Expert:
             {
                 diffName = "EXPERT";
                 color = expertColor;
                 break;
             }
 
-            case 3:
+            case Difficulty.Inferno:
             {
                 diffName = "INFERNO";
                 color = infernoColor;
                 break;
             }
 
-            default:
+            case Difficulty.Beyond:
             {
                 diffName = "BEYOND";
                 color = beyondColor;
                 break;
             }
+
+            default:
+            {
+                throw new ArgumentOutOfRangeException();
+            }
         }
 
         // TODO: Eventually replace with SongData.GetDifficultyString();
-        string diffLevel = Mathf.Floor(level).ToString(CultureInfo.InvariantCulture);
-        if (level % 1 > 0.6f) diffLevel += "+";
+        string diffLevelName = SaturnMath.GetDifficultyString(difficultyLevel);
 
-        text.text = $"{diffName}/Lv.{diffLevel}";
+        text.text = $"{diffName}/Lv.{diffLevelName}";
         text.color = color;
         arc.UpdateText();
     }

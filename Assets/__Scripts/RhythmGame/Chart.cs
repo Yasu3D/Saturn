@@ -4,6 +4,10 @@ using JetBrains.Annotations;
 
 namespace SaturnGame.RhythmGame
 {
+/// <summary>
+/// Chart contains all the info needed to play and judge a chart.
+/// Warning: Chart is _not_ an immutable structure, and is modified during gameplay with gameplay results.
+/// </summary>
 [Serializable]
 public class Chart
 {
