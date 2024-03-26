@@ -302,16 +302,13 @@ public class ScoringManager : MonoBehaviour
                 HitNote(hitTimeMs, note);
                 break;
             }
-            case ChainNote:
+            case ChainNote chainNote:
             {
-                if (!note.Touched(touchState)) break;
+                if (chainNote.Touched(touchState))
+                    chainNote.HasBeenTouched = true;
 
-                // Warning: need to adjust judgement and hitsounds to play at the exact time of the note, even if it is hit early.
-                // Warning: even if the input is the same, this requires HandleInput to be called within the note's timing window.
-                // Ideally, any chain notes between this input and the last should be hit.
-                // Warning: currently, the timing window is totally wrong, it's huge.
-                //ShowDebugText($"{noteScanIndex}: chain");
-                HitNote(hitTimeMs, note);
+                if (chainNote.HasBeenTouched && hitTimeMs >= chainNote.TimeMs)
+                    HitNote(hitTimeMs, chainNote);
                 break;
             }
             case HoldNote holdNote:

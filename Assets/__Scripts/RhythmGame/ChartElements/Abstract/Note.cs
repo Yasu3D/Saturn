@@ -42,6 +42,7 @@ public abstract class Note : PositionedChartElement
 
     // For a HoldNote, hit time of start, otherwise the hit time of the note.
     // A null HitTimeMs is possible if the HitWindows were judged as a Miss, or if the note hasn't been hit yet.
+    // Note that HitTimeMs may be unreliable for ChainNotes - see ChainNote.cs for details.
     public float? HitTimeMs;
 
     // The error in ms of this input compared to a perfectly-timed input.
