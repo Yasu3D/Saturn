@@ -51,7 +51,9 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 5699019780340ccd88494330eebabaa8
+    name: HitsoundAttenuationLevel
   m_AudioMixerGroupViews:
   - guids:
     - 220c9e3a757c35475ba1c47a77e3c19d
@@ -105,9 +107,11 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: dacb5f1c21d9535b7a7fb5d99722f655
   m_FloatValues:
+    7dd3b702d6eda4554978057da2976411: 0
     c47c55d68ba7293c4865adacf112aa20: 10
+    5699019780340ccd88494330eebabaa8: 0
     1a9e601c38c01119396076989bc669ad: 20
-    0ab8662d781e5618bbda82c4616688b8: -20
+    0ab8662d781e5618bbda82c4616688b8: -14.9
   m_TransitionOverrides: {}
 --- !u!244 &4566249576731349285
 AudioMixerEffectController:

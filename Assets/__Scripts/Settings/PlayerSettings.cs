@@ -175,6 +175,11 @@ public class PlayerSettings
                 SoundSettings.BGMVolume = value;
                 break;
             }
+            case "HitsoundOverallVolume":
+            {
+                SoundSettings.HitsoundOverallVolume = value;
+                break;
+            }
             case "GuideVolume":
             {
                 SoundSettings.GuideVolume = value;
@@ -254,6 +259,7 @@ public class PlayerSettings
             "ShowRNoteEffect" => DesignSettings.ShowRNoteEffect,
             "TouchSE" => SoundSettings.TouchSE,
             "BGMVolume" => SoundSettings.BGMVolume,
+            "HitsoundOverallVolume" => SoundSettings.HitsoundOverallVolume,
             "GuideVolume" => SoundSettings.GuideVolume,
             "TouchNoteVolume" => SoundSettings.TouchNoteVolume,
             "HoldNoteVolume" => SoundSettings.HoldNoteVolume,
@@ -318,6 +324,7 @@ public class SoundSettings
 {
     public int TouchSE = 0;
     public int BGMVolume = 100;
+    public int HitsoundOverallVolume = 70;
     public int GuideVolume = 30;
     public int TouchNoteVolume = 80;
     public int HoldNoteVolume = 80;
