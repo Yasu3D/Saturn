@@ -1,5 +1,5 @@
-using SaturnGame.UI;
 using SaturnGame.RhythmGame;
+using SaturnGame.UI;
 using TMPro;
 using UnityEngine;
 
@@ -9,18 +9,19 @@ public class ScoreText : MonoBehaviour
     [SerializeField] private ArcTextMeshPro arc;
     [SerializeField] [Range(0, 1000000)] private int displayedScore;
 
-    [Header("MANAGERS")]
-    [SerializeField] private ScoringManager scoringManager;
+    [Header("MANAGERS")] [SerializeField] private ScoringManager scoringManager;
 
-    private int prevScore = 0;
-    void Update()
+    private int prevScore;
+
+    private void Update()
     {
         displayedScore = scoringManager.CurrentScoreData().Score;
-        if (displayedScore != prevScore)
-        {
-            text.text = $"<mspace=0.7em>{displayedScore:D7}</mspace>";
-            arc.UpdateText();
-            prevScore = displayedScore;
-        }
+        if (displayedScore == prevScore) return;
+
+        // ReSharper disable StringLiteralTypo
+        text.text = $"<mspace=0.7em>{displayedScore:D7}</mspace>";
+        // ReSharper restore StringLiteralTypo
+        arc.UpdateText();
+        prevScore = displayedScore;
     }
 }

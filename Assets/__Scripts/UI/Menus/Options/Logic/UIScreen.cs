@@ -1,54 +1,60 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace SaturnGame.UI
 {
-    [CreateAssetMenu(fileName = "UIScreen", menuName = "UI Logic/UI Screen")]
-    public class UIScreen : ScriptableObject
+[CreateAssetMenu(fileName = "UIScreen", menuName = "UI Logic/UI Screen")]
+public class UIScreen : ScriptableObject
+{
+    public enum UIScreenType
     {
-        public enum UIScreenType
-        {
-            LinearSimple,
-            LinearDetailed,
-            Radial
-        }
-
-        public string screenName;
-        public UIScreenType screenType;
-        public int defaultItemIndex;
-        public List<UIListItem> listItems;
+        LinearSimple,
+        LinearDetailed,
+        Radial,
     }
 
-    [Serializable]
-    public class UIListItem
+    [FormerlySerializedAs("screenName")] public string ScreenName;
+    [FormerlySerializedAs("screenType")] public UIScreenType ScreenType;
+
+    [FormerlySerializedAs("defaultItemIndex")]
+    public int DefaultItemIndex;
+
+    [FormerlySerializedAs("listItems")] public List<UIListItem> ListItems;
+}
+
+[Serializable]
+public class UIListItem
+{
+    public enum ItemTypes
     {
-        public enum ItemTypes
-        {
-            ValueSetter,
-            SubMenu
-        }
-
-        public enum SubtitleTypes
-        {
-            Static,
-            Dynamic
-        }
-
-        public SubtitleTypes subtitleType;
-        public ItemTypes itemType;
-
-        public Color color;
-        public string title;
-        public string subtitle;
-
-        public string settingsBinding;
-
-        public UIScreen nextScreen;
-
-        public string settingsParameter;
-        public int settingsValue;
+        ValueSetter,
+        SubMenu,
     }
+
+    public enum SubtitleTypes
+    {
+        Static,
+        Dynamic,
+    }
+
+    [FormerlySerializedAs("subtitleType")] public SubtitleTypes SubtitleType;
+    [FormerlySerializedAs("itemType")] public ItemTypes ItemType;
+
+    [FormerlySerializedAs("color")] public Color Color;
+    [FormerlySerializedAs("title")] public string Title;
+    [FormerlySerializedAs("subtitle")] public string Subtitle;
+
+    [FormerlySerializedAs("settingsBinding")]
+    public string SettingsBinding;
+
+    [FormerlySerializedAs("nextScreen")] public UIScreen NextScreen;
+
+    [FormerlySerializedAs("settingsParameter")]
+    public string SettingsParameter;
+
+    [FormerlySerializedAs("settingsValue")]
+    public int SettingsValue;
+}
 }

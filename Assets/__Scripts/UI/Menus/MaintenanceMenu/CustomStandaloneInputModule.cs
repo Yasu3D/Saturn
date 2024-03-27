@@ -1,3 +1,5 @@
+// ReSharper disable All - this file is a modified version of an external file and will not abide by Saturn's code style
+
 using System;
 using UnityEngine.Serialization;
  

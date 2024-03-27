@@ -1,4 +1,6 @@
 namespace SaturnGame.RhythmGame
 {
-    public class HoldEndObjectPool : MonobehaviourPool<HoldEndContainer> { }
+public class HoldEndObjectPool : MonoBehaviourPool<HoldEndContainer>
+{
+}
 }

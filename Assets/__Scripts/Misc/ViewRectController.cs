@@ -12,20 +12,20 @@ public class ViewRectController : MonoBehaviour
     [SerializeField] private Vector2 rBounds = new(0, 0.3237f);
     [SerializeField] private Vector2 oBounds = new(0, 840);
 
-    void Awake()
+    private static readonly int RadiusNameID = Shader.PropertyToID("_Radius");
+
+    private void Awake()
     {
         Screen.fullScreen = false;
         List<DisplayInfo> displays = new();
         Screen.GetDisplayLayout(displays);
-        foreach (DisplayInfo display in displays)
+        foreach (DisplayInfo display in displays.Where(display => display.height > display.width))
         {
-            if (display.height > display.width)
-            {
-                Screen.MoveMainWindowTo(display, Vector2Int.zero);
-                break;
-            }
+            Screen.MoveMainWindowTo(display, Vector2Int.zero);
+            break;
         }
-        var resolution = Screen.resolutions
+
+        Resolution resolution = Screen.resolutions
             .OrderByDescending(r => r.height)
             .ThenByDescending(r => r.width)
             .First();
@@ -33,23 +33,23 @@ public class ViewRectController : MonoBehaviour
         OnUpdateViewRect();
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         EventManager.AddListener("UpdateViewRect", OnUpdateViewRect);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         EventManager.RemoveListener("UpdateViewRect", OnUpdateViewRect);
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
     {
         OnUpdateViewRect();
     }
 
-    public void OnUpdateViewRect()
+    private void OnUpdateViewRect()
     {
         DisplaySettings settings = SettingsManager.Instance.DeviceSettings.DisplaySettings;
 
@@ -61,7 +61,7 @@ public class ViewRectController : MonoBehaviour
         SetMask(currentAspect, pos, scale);
     }
 
-    public void SetViewRect(float currentAspect, float pos, float scale)
+    private static void SetViewRect(float currentAspect, float pos, float scale)
     {
         if (Camera.main == null) return;
 
@@ -74,23 +74,23 @@ public class ViewRectController : MonoBehaviour
             w = scale;
             h = currentAspect * scale;
 
-            y += h * ((0.5f / scale) - 0.5f);
+            y += h * (0.5f / scale - 0.5f);
         }
         else
         {
             // Landscape
-            x = (1 - (1 / currentAspect)) * 0.5f + pos * (1 - (1 / currentAspect));
+            x = (1 - 1 / currentAspect) * 0.5f + pos * (1 - 1 / currentAspect);
             y = 0.5f * (1 - scale);
             w = 1 / currentAspect * scale;
             h = scale;
 
-            x += w * ((0.5f / scale) - 0.5f);
+            x += w * (0.5f / scale - 0.5f);
         }
 
-        Camera.main.rect = new(x,y,w,h);
+        Camera.main.rect = new Rect(x, y, w, h);
     }
 
-    public void SetMask(float currentAspect, float pos, float scale)
+    private void SetMask(float currentAspect, float pos, float scale)
     {
         float radius = Mathf.Lerp(rBounds.x, rBounds.y, scale);
         float offset = Mathf.LerpUnclamped(oBounds.x, oBounds.y, pos);
@@ -106,6 +106,6 @@ public class ViewRectController : MonoBehaviour
             mask.rectTransform.localPosition = new(offset, 0, 0);
         }
 
-        mask.material.SetFloat("_Radius", radius);
+        mask.material.SetFloat(RadiusNameID, radius);
     }
 }

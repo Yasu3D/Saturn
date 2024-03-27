@@ -1,4 +1,6 @@
 namespace SaturnGame.RhythmGame
 {
-    public class SnapObjectPool : MonobehaviourPool<SnapContainer> { }
+public class SnapObjectPool : MonoBehaviourPool<SnapContainer>
+{
+}
 }

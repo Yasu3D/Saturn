@@ -1,22 +1,24 @@
 namespace SaturnGame.RhythmGame
 {
-    [System.Serializable]
-    public class ChainNote : Note
+[System.Serializable]
+public class ChainNote : Note
+{
+    public ChainNote(
+        int measure,
+        int tick,
+        int position,
+        int size,
+        NoteBonusType bonusType = NoteBonusType.None,
+        bool isSync = false
+    ) : base(measure, tick, position, size, bonusType, isSync)
     {
-        public ChainNote(
-            int measure,
-            int tick,
-            int position,
-            int size,
-            NoteBonusType bonusType = NoteBonusType.None,
-            bool isSync = false
-            ) : base(measure, tick, position, size, bonusType, isSync)
-        {
-        }
-
-        private static HitWindow[] _hitWindows = {
-            new HitWindow(-4 * _FRAMEMS, 4 * _FRAMEMS, RhythmGame.Judgement.Marvelous),
-        };
-        public override HitWindow[] HitWindows => _hitWindows;
     }
+
+    private static HitWindow[] hitWindows =
+    {
+        new(-4 * FrameMS, 4 * FrameMS, RhythmGame.Judgement.Marvelous),
+    };
+
+    public override HitWindow[] HitWindows => hitWindows;
+}
 }

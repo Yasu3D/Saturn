@@ -1,153 +1,159 @@
-using SaturnGame.Settings;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
 {
-    public class TimeManager : MonoBehaviour
+public class TimeManager : MonoBehaviour
+{
+    [SerializeField] private AudioSource bgmPlayer;
+
+    //public float StaticAudioOffset {get; private set; } = -20;
+    public float StaticAudioOffset = -10;
+    public float PlaybackSpeed { get; private set; } = 1.0f;
+
+    [Space(20)] [SerializeField] private float visualTimeScale = 1.0f;
+    [SerializeField] private float timeWarpMultiplier = 1.0f;
+    [SerializeField] private float forceSyncDiscrepancy = 50f;
+
+    public enum SongState
     {
-        [SerializeField] private AudioSource bgmPlayer;
+        NotYetStarted,
+        Playing,
+        Finished,
+    }
 
-        //public float StaticAudioOffset {get; private set; } = -20;
-        public float StaticAudioOffset = -20;
-        public float PlaybackSpeed {get; private set; } = 1.0f;
+    public SongState State { get; private set; } = SongState.NotYetStarted;
 
-        [Space(20)]
-        [SerializeField] private float VisualTimeScale = 1.0f;
-        [SerializeField] private float timeWarpMultiplier = 1.0f;
-        [SerializeField] private float forceSyncDiscrepancy = 50f;
+    private void SetPlaybackSpeed(float speed, bool clamp = true)
+    {
+        float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
+        PlaybackSpeed = clampedSpeed;
+        bgmPlayer.pitch = clampedSpeed;
+    }
 
-        public enum SongState
+    /// <summary>
+    /// Returns Song Position in ms.
+    /// </summary>
+    /// <returns></returns>
+    private float BgmTime()
+    {
+        if (bgmPlayer.clip == null)
+            return -1;
+
+        return Mathf.Max(0, 1000 * (bgmPlayer.time + ChartManager.Instance.Chart.AudioOffset));
+    }
+
+    /// <summary>
+    /// <b>Use VisualTime! This does NOT include any offsets!</b><br />
+    /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
+    /// </summary>
+    public float RawVisualTimeMs { get; private set; }
+
+    private float LastFrameRawVisualTimeMs { get; set; }
+
+    private float TotalOffsetMs =>
+        StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */;
+
+    /// <summary>
+    /// <b>Includes sync calibration and user offsets!</b> <br />
+    /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
+    /// </summary>
+    public float VisualTimeMs => RawVisualTimeMs + TotalOffsetMs;
+
+    public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
+
+    private void UpdateVisualTime()
+    {
+        if (State != SongState.Playing) return;
+
+        LastFrameRawVisualTimeMs = RawVisualTimeMs;
+        RawVisualTimeMs += Time.deltaTime * visualTimeScale * 1000;
+    }
+
+    /// <summary>
+    /// Synchronises VisualTime with BgmTime if they drift apart too much. <br />
+    /// Huge thanks to AllPoland for sharing this code from ArcViewer with me.
+    /// </summary>
+    private void ReSync()
+    {
+        if (!bgmPlayer.isPlaying)
         {
-            NotYetStarted,
-            Playing,
-            Finished,
+            // If the song is not playing, just use the gameplay clock (Time.deltaTime).
+            // So VisualTimeScale should just be exactly the PlaybackSpeed.
+            visualTimeScale = PlaybackSpeed;
+            return;
         }
 
-        public SongState State { get; private set; } = SongState.NotYetStarted;
+        float discrepancy = RawVisualTimeMs - BgmTime();
+        float absDiscrepancy = Mathf.Abs(discrepancy);
 
-        public void SetPlaybackSpeed(float speed, bool clamp = true)
+        if (absDiscrepancy >= forceSyncDiscrepancy || PlaybackSpeed == 0)
         {
-            float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
-            PlaybackSpeed = clampedSpeed;
-            bgmPlayer.pitch = clampedSpeed;
+            // Snap directly to BgmTime if discrepancy gets too high.
+            Debug.Log($"Force correcting by {discrepancy}");
+            RawVisualTimeMs = BgmTime();
         }
 
-        /// <summary>
-        /// Returns Song Position in ms.
-        /// </summary>
-        /// <returns></returns>
-        public float BgmTime()
+        // Warp VisualTime to re-align with audio
+        // * 0.001f because SaturnGame uses milliseconds for all timing.
+        float timeWarp = discrepancy * timeWarpMultiplier * 0.001f;
+        visualTimeScale = PlaybackSpeed - timeWarp;
+    }
+
+    private void UpdateState()
+    {
+        switch (State)
         {
-            if (bgmPlayer.clip == null)
-                return -1;
-
-            return Mathf.Max(0, 1000 * (bgmPlayer.time + ChartManager.Instance.chart.audioOffset));
-        }
-
-        /// <summary>
-        /// <b>Use VisualTime! This does NOT include any offsets!</b><br />
-        /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
-        /// </summary>
-        public float RawVisualTimeMs { get; private set; }
-        public float LastFrameRawVisualTimeMs { get; private set; }
-
-        public float TotalOffsetMs => StaticAudioOffset + (SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */);
-        /// <summary>
-        /// <b>Includes sync calibration and user offsets!</b> <br />
-        /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
-        /// </summary>
-        public float VisualTimeMs => RawVisualTimeMs + TotalOffsetMs;
-        public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
-        public void UpdateVisualTime()
-        {
-            if (State != SongState.Playing) return;
-
-            LastFrameRawVisualTimeMs = RawVisualTimeMs;
-            RawVisualTimeMs += Time.deltaTime * VisualTimeScale * 1000;
-        }
-
-        /// <summary>
-        /// Synchronises VisualTime with BgmTime if they drift apart too much. <br />
-        /// Huge thanks to AllPoland for sharing this code from ArcViewer with me.
-        /// </summary>
-        public void ReSync()
-        {
-            if (!bgmPlayer.isPlaying)
+            case SongState.NotYetStarted:
             {
-                // If the song is not playing, just use the gameplay clock (Time.detlaTime).
-                // So VisualTimeScale should just be exactly the PlaybackSpeed.
-                VisualTimeScale = PlaybackSpeed;
-                return;
+                // Wait for playback to start, don't update here.
+                break;
             }
-
-            float discrepancy = RawVisualTimeMs - BgmTime();
-            float absDiscrepancy = Mathf.Abs(discrepancy);
-
-            if (absDiscrepancy >= forceSyncDiscrepancy || PlaybackSpeed == 0)
+            case SongState.Playing:
             {
-                // Snap directly to BgmTime if discrepancy gets too high.
-                Debug.Log($"Force correcting by {discrepancy}");
-                RawVisualTimeMs = BgmTime();
+                if (VisualTimeMs > ChartManager.Instance.Chart.EndOfChart.TimeMs)
+                    State = SongState.Finished;
+                break;
             }
-
-            // Warp VisualTime to re-align with audio
-            // * 0.001f because SaturnGame uses milliseconds for all timing.
-            float timeWarp = discrepancy * timeWarpMultiplier * 0.001f;
-            VisualTimeScale = PlaybackSpeed - timeWarp;
-        }
-
-        private void UpdateState()
-        {
-            switch (State)
+            case SongState.Finished:
             {
-                case SongState.NotYetStarted:
-                {
-                    // Wait for playback to start, don't update here.
-                    break;
-                }
-                case SongState.Playing:
-                {
-                    if (VisualTimeMs > ChartManager.Instance.chart.endOfChart.TimeMs)
-                        State = SongState.Finished;
-                    break;
-                }
-                case SongState.Finished:
-                {
-                    // Terminal.
-                    break;
-                }
+                // Terminal.
+                break;
             }
-        }
-
-        void Update()
-        {
-            UpdateVisualTime();
-            ReSync();
-            UpdateState();
-
-            if (Input.GetKeyDown(KeyCode.P))
+            default:
             {
-                Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
-                var bgm = ChartManager.Instance.bgmClip;
-                bgmPlayer.clip = bgm;
-                State = SongState.Playing;
-                bgmPlayer.Play();
+                throw new ArgumentOutOfRangeException();
             }
-
-            if (Input.GetKey(KeyCode.M))
-                SetPlaybackSpeed(1);
-
-            if (Input.GetKeyDown(KeyCode.I))
-                SetPlaybackSpeed(2 * PlaybackSpeed, false);
-
-            if (Input.GetKeyDown(KeyCode.J))
-                SetPlaybackSpeed(0.5f * PlaybackSpeed, false);
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-                SceneSwitcher.Instance.LoadScene("_SongSelect");
         }
     }
+
+    private void Update()
+    {
+        UpdateVisualTime();
+        ReSync();
+        UpdateState();
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
+            AudioClip bgm = ChartManager.Instance.BGMClip;
+            bgmPlayer.clip = bgm;
+            State = SongState.Playing;
+            bgmPlayer.Play();
+        }
+
+        if (Input.GetKey(KeyCode.M))
+            SetPlaybackSpeed(1);
+
+        if (Input.GetKeyDown(KeyCode.I))
+            SetPlaybackSpeed(2 * PlaybackSpeed, false);
+
+        if (Input.GetKeyDown(KeyCode.J))
+            SetPlaybackSpeed(0.5f * PlaybackSpeed, false);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SceneSwitcher.Instance.LoadScene("_SongSelect");
+    }
+}
 }

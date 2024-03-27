@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +16,8 @@ public class TitleScreenBackgroundColorRandomizer : MonoBehaviour
         // Super secret and cool awesome greyscale title screen :O
         if (bgHue < 0.01f)
         {
-            bgColor = new(0.32f, 0.32f, 0.32f, 1.00f);
-            checkerColor = new(1.00f, 1.00f, 1.00f, 0.12f);
+            bgColor = new Color(0.32f, 0.32f, 0.32f, 1.00f);
+            checkerColor = new Color(1.00f, 1.00f, 1.00f, 0.12f);
         }
         else
         {

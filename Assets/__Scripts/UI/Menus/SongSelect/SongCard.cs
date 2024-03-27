@@ -1,17 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using DG.Tweening;
-using SaturnGame.Data;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.UI
 {
-    public class SongCard : MonoBehaviour
-    {
-        public RectTransform rect;
-        public TextMeshProUGUI titleText;
-        public TextMeshProUGUI artistText;
-        public TextMeshProUGUI difficultyText;
-        public RawImage jacketImage;
-    }
+public class SongCard : MonoBehaviour
+{
+    [FormerlySerializedAs("rect")] public RectTransform Rect;
+    [FormerlySerializedAs("titleText")] public TextMeshProUGUI TitleText;
+    [FormerlySerializedAs("artistText")] public TextMeshProUGUI ArtistText;
+
+    [FormerlySerializedAs("difficultyText")]
+    public TextMeshProUGUI DifficultyText;
+
+    [FormerlySerializedAs("jacketImage")] public RawImage JacketImage;
+}
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.RhythmGame;
 using UnityEngine;
 
@@ -9,20 +7,17 @@ public class SongResultsLogic : MonoBehaviour
     [SerializeField] private JudgementsInfoRenderer judgementsInfoRenderer;
     [SerializeField] private EarlyLateInfoRenderer earlyLateInfoRenderer;
 
-    void Start()
+    private void Start()
     {
-        var scoreData = ChartManager.Instance.LastScoreData;
+        ScoreData scoreData = ChartManager.Instance.LastScoreData;
         scoreNumRenderer.SetScoreNum(scoreData.Score);
         judgementsInfoRenderer.SetJudgementCountTexts(scoreData.JudgementCounts);
         earlyLateInfoRenderer.SetEarlyLateCountTexts(scoreData.EarlyCount, scoreData.LateCount,
             scoreData.EarlyCountByJudgement, scoreData.LateCountByJudgement);
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SceneSwitcher.Instance.LoadScene("_SongSelect");
-        }
+        if (Input.GetKeyDown(KeyCode.Space)) SceneSwitcher.Instance.LoadScene("_SongSelect");
     }
 }

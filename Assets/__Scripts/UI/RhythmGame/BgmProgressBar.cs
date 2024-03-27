@@ -9,14 +9,15 @@ public class BgmProgressBar : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private Material material;
     private Material instance;
+    private static readonly int ProgressPropertyID = Shader.PropertyToID("_Progress");
 
-    void Awake()
+    private void Awake()
     {
         instance = new Material(material);
         image.material = instance;
     }
 
-    void Update()
+    private void Update()
     {
         if (bgmPlayer.clip == null) return;
         float length = bgmPlayer.clip.length * 1000;
@@ -24,6 +25,6 @@ public class BgmProgressBar : MonoBehaviour
 
         float progress = Mathf.InverseLerp(0, length, time);
 
-        instance.SetFloat("_Progress", progress);
+        instance.SetFloat(ProgressPropertyID, progress);
     }
 }
