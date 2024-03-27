@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class SampleTest
+public class SampleTests
 {
     [Test]
     public void SampleTestAlwaysPasses()
