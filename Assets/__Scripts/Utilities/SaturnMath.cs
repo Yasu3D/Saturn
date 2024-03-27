@@ -1,3 +1,4 @@
+using System;
 using SaturnGame.JetBrains.Annotations;
 using UnityEngine;
 
@@ -289,6 +290,43 @@ public static class SaturnMath
                 return x < 0.5 ? In(x * 2) * 0.5f : 1 - In((1 - x) * 2) * 0.5f;
             }
         }
+    }
+
+    /// <summary>
+    /// Converts a user-friendly volume level between 0 and 1 to a decibel offset that can be used in the mixer.
+    /// For values from 0.1 to 1, the scale is from -20dB to 0dB.
+    /// For 0.01 to 0.1, the scale is from -40dB to -20dB.
+    /// Then 0 to 0.01 scales all the way down to -80dB.
+    /// </summary>
+    /// <param name="fraction">loudness level from 0 to 1</param>
+    /// <returns>A decibel offset, between -80dB and 0dB.</returns>
+    public static float FractionToDecibel(float fraction)
+    {
+        return fraction switch
+        {
+            >= 0.1f => Remap(fraction, 0.1f, 1f, -20f, 0f, true),
+            >= 0.01f and < 0.1f => Remap(fraction, 0.01f, 0.1f, -40f, -20f, true),
+            < 0.01f => Remap(fraction, 0f, 0.01f, -80f, -40f, true),
+            float.NaN => throw new ArgumentException("fraction must be a valid number"),
+        };
+    }
+
+    /// <summary>
+    /// Converts decibel offset to a user-friendly volume level.
+    /// This is the inverse of FractionToDecibel.
+    /// </summary>
+    /// <param name="decibel">A relative decibel offset where 0dB = 100% volume.</param>
+    /// <param name="clamp">Whether to clamp to [0, 1] range for values outside [-80dB, 0dB]</param>
+    /// <returns>User-friendly volume level. Can go beyond the typical [0, 1] range if clamp is false</returns>
+    public static float DecibelToFraction(float decibel, bool clamp = false)
+    {
+        return decibel switch
+        {
+            >= -20f => Remap(decibel, -20f, 0f, 0.1f, 1f, clamp),
+            >= -40f and < -20f => Remap(decibel, -40f, -20f, 0.01f, 0.1f, clamp),
+            < -40f => Remap(decibel, -80f, -40f, 0f, 0.01f, clamp),
+            float.NaN => throw new ArgumentException("decibel must be a valid number"),
+        };
     }
 }
 }

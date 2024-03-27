@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -26,6 +27,16 @@ public class HitsoundManager : MonoBehaviour
     private void Start()
     {
         EnsurePoolSize();
+
+        SetHitsoundMixerLevel();
+    }
+
+    private void SetHitsoundMixerLevel()
+    {
+        float settingsHitsoundVolume = SettingsManager.Instance.PlayerSettings.SoundSettings.HitsoundOverallVolume;
+        float newDbLevel = SaturnMath.FractionToDecibel(settingsHitsoundVolume / 100f);
+        hitsoundSourcePrefab.outputAudioMixerGroup.audioMixer.SetFloat("HitsoundAttenuationLevel", newDbLevel);
+        Debug.Log($"set hitsound level to {newDbLevel}dB ({settingsHitsoundVolume})");
     }
 
     private void EnsurePoolSize()

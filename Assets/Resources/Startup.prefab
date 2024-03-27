@@ -431,23 +431,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3428c0837032c4aa76a61a5da4f8c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmClip: {fileID: 0}
-  chart:
-    difficulty: 0
-    clearThreshold: 0
-    audioOffset: 0
-    movieOffset: 0
-    bgmDataGimmicks: []
-    hiSpeedGimmicks: []
-    reverseGimmicks: []
-    holdNotes: []
-    masks: []
-    barLines: []
-    syncs: []
-    endOfChart:
+  BGMClip: {fileID: 0}
+  Chart:
+    Difficulty: 0
+    ClearThreshold: 0
+    AudioOffset: 0
+    MovieOffset: 0
+    BGMDataGimmicks: []
+    HiSpeedGimmicks: []
+    ReverseGimmicks: []
+    HoldNotes: []
+    Masks: []
+    BarLines: []
+    Syncs: []
+    EndOfChart:
       TimeMs: 0
       ScaledVisualTime: 0
-    reverseHoldNotes: []
+    ReverseHoldNotes: []
 --- !u!114 &5486481827663078258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,21 +482,22 @@ MonoBehaviour:
       RingColor: 0
       JudgeLineColor: 2
       NoteWidth: 3
-      NoteColorID_Touch: 0
-      NoteColorID_Chain: 1
-      NoteColorID_SwipeClockwise: 2
-      NoteColorID_SwipeCounterclockwise: 3
-      NoteColorID_SnapForward: 4
-      NoteColorID_SnapBackward: 5
-      NoteColorID_Hold: 12
+      NoteColorIDTouch: 0
+      NoteColorIDChain: 1
+      NoteColorIDSwipeClockwise: 2
+      NoteColorIDSwipeCounterclockwise: 3
+      NoteColorIDSnapForward: 4
+      NoteColorIDSnapBackward: 5
+      NoteColorIDHold: 6
       InvertSlideColor: 0
       TouchEffect: 0
-      ShootEffect: 1
+      ShowShootEffect: 1
       ShowKeyBeams: 1
-      ShowR_NoteEffect: 1
+      ShowRNoteEffect: 1
     SoundSettings:
       TouchSE: 0
       BGMVolume: 100
+      HitsoundOverallVolume: 70
       GuideVolume: 30
       TouchNoteVolume: 80
       HoldNoteVolume: 80
@@ -522,11 +523,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e9eaa184578f36419f05b4f49783e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui_Back: {fileID: 8300000, guid: 8d352342e44d84a4ca0877f5a3d27137, type: 3}
-  ui_Confirm: {fileID: 8300000, guid: a4d6f5a8b1acafa408c2338ba0972781, type: 3}
-  ui_Impact: {fileID: 8300000, guid: 5d30f27b51c44844caeea67302d8c615, type: 3}
-  ui_StartGame: {fileID: 8300000, guid: 2ff4d896efa914a4f8b93802ffaa082f, type: 3}
-  ui_Navigate: {fileID: 8300000, guid: 162d2bf806c67e2488cd21a6fef72ed0, type: 3}
+  uiBack: {fileID: 8300000, guid: 8d352342e44d84a4ca0877f5a3d27137, type: 3}
+  uiConfirm: {fileID: 8300000, guid: a4d6f5a8b1acafa408c2338ba0972781, type: 3}
+  uiImpact: {fileID: 8300000, guid: 5d30f27b51c44844caeea67302d8c615, type: 3}
+  uiStartGame: {fileID: 8300000, guid: 2ff4d896efa914a4f8b93802ffaa082f, type: 3}
+  uiNavigate: {fileID: 8300000, guid: 162d2bf806c67e2488cd21a6fef72ed0, type: 3}
   source: {fileID: 8911741170061980900}
 --- !u!114 &3978765153090999763
 MonoBehaviour:
@@ -540,6 +541,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b0f17cfb538b67ca0267a33ff5d5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LastSelectedSongPath: 
+  LastSelectedDifficulty: 0
 --- !u!1001 &6578886929652071952
 PrefabInstance:
   m_ObjectHideFlags: 0
