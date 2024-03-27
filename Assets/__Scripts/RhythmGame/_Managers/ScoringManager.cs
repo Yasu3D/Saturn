@@ -671,8 +671,6 @@ namespace SaturnGame.RhythmGame
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
 
-
-
             if (Input.GetKeyDown(KeyCode.F12))
             {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -688,13 +686,6 @@ namespace SaturnGame.RhythmGame
                 // For now, copy the replay you want to view to "replay.json.gz" in the persistentDataPath.
                 ReadReplayFile(Path.Combine(Application.persistentDataPath, "replay.json.gz"));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            }
-
-            if (Chart?.endOfChart is not null && Chart.endOfChart.TimeMs < timeManager.VisualTimeMs)
-            {
-                // chart is done
-                ChartManager.Instance.LastScoreData = CurrentScoreData();
-                SceneSwitcher.Instance.LoadScene("_SongResults");
             }
         }
 

@@ -15,7 +15,7 @@ namespace SaturnGame.RhythmGame
 
         [Header("MANAGERS")]
         [SerializeField] private ScoringManager scoringManager;
-        [SerializeField] private AudioSource bgmPlayer;
+        [SerializeField] private TimeManager timeManager;
 
         public TouchState CurrentTouchState;
 
@@ -38,7 +38,7 @@ namespace SaturnGame.RhythmGame
                 await InitializeTouchController();
             }
         }
-        
+
         // Touch controller code is adapted from yellowberryHN/LilyConsole
         private async Awaitable InitializeTouchController()
         {
@@ -149,11 +149,11 @@ namespace SaturnGame.RhythmGame
             while (port.BytesToRead >= buffer.Length)
             {
                 int readCommandByte = port.BaseStream.Read(buffer, 0, 1);
-                if (readCommandByte != 1) 
+                if (readCommandByte != 1)
                 {
                     Debug.Log("Didn't successfully read touch command.");
                 }
-                if (buffer[0] != (byte)SerialCommand.TOUCH_DATA) 
+                if (buffer[0] != (byte)SerialCommand.TOUCH_DATA)
                 {
                     Debug.Log($"Found {BitConverter.ToString(new byte[] { buffer[0] })} instead of a TOUCH_DATA command (81)!");
                     continue;
@@ -186,7 +186,7 @@ namespace SaturnGame.RhythmGame
             //  9 bytes: ???
             //  1 byte : Loop state, increases by 1 every time the sync board sends a frame
             //  1 byte : Checksum, already validated above
-            
+
             if (buffer[0] != (byte)SerialCommand.TOUCH_DATA)
             {
                 throw new Exception($"Expected to receive TOUCH_DATA, but got {BitConverter.ToString(new byte[] { buffer[0] })}");
@@ -219,7 +219,7 @@ namespace SaturnGame.RhythmGame
         // Update is called once per frame
         void Update()
         {
-            if (!bgmPlayer.isPlaying) return;
+            if (timeManager.State != TimeManager.SongState.Playing) return;
 
             // Initializes to all false.
             var segments = new bool[60, 4];
@@ -417,7 +417,7 @@ namespace SaturnGame.RhythmGame
     /// <summary>
     /// TouchState is an immutable representation of the touch array state.
     /// </summary>
-    [JsonObject(MemberSerialization.OptIn)] 
+    [JsonObject(MemberSerialization.OptIn)]
     public class TouchState
     {
         // Segments is a 2d array:

@@ -29,14 +29,22 @@ public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
     public async void LoadScene(string scenePath)
     {
         await Awaitable.MainThreadAsync();
-        if (LoadInProgress) return;
+        Debug.Log($"Loading scene: {scenePath}");
+        if (LoadInProgress)
+        {
+            Debug.LogWarning("Aborting scene load: another load is in progress.");
+            return;
+        }
 
         LoadInProgress = true;
         menuWipe.Anim_StartTransition();
         await Awaitable.WaitForSecondsAsync(1.5f);
         LastScene = SceneManager.GetActiveScene().name;
+        Debug.Log($"Previous scene was {LastScene}, now loading {scenePath}");
         await SceneManager.LoadSceneAsync(scenePath);
+        Debug.Log($"Scene {scenePath} loaded, finishing animation.");
         menuWipe.Anim_EndTransition();
+        Debug.Log($"Load animation finished.");
         LoadInProgress = false;
     }
 }

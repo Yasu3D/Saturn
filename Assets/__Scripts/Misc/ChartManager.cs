@@ -140,6 +140,10 @@ namespace SaturnGame.RhythmGame
             Note tempNote;
             Note lastNote = null; // make lastNote start as null so the compiler doesn't scream
             Gimmick tempGimmick;
+            // (incomplete HoldNote, next segment noteId)
+            List<(HoldNote, int)> incompleteHoldNotes = new();
+            // noteId -> (segment, next segment noteId)
+            Dictionary<int, (HoldSegment, int?)> allHoldSegments = new();
 
             for (int i = readerIndex; i < merFile.Count; i++)
             {
@@ -166,9 +170,6 @@ namespace SaturnGame.RhythmGame
                         continue;
                     }
 
-                    // skip hold segment and hold end. they're handled separately.
-                    if (noteTypeID is 10 or 11) continue;
-
                     int position = Convert.ToInt32(splitLine[5]);
                     int size = Convert.ToInt32(splitLine[6]);
 
@@ -176,48 +177,22 @@ namespace SaturnGame.RhythmGame
                     if (noteTypeID is 9 or 25)
                     {
                         HoldSegment holdStart = new HoldSegment(measure, tick, position, size, true);
-                        // .... it ain't pretty but it does the job. I hope.
-                        // start another loop that begins at the hold start
-                        // and looks for a referenced note.
-                        int referencedNoteIndex = Convert.ToInt32(splitLine[8]);
-                        List<HoldSegment> holdSegments = new() { holdStart };
+                        int nextNoteID = Convert.ToInt32(splitLine[8]);
 
-                        for (int j = i; j < merFile.Count; j++)
-                        {
-                            string[] tempSplitLine = merFile[j].Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
-
-                            int tempNoteIndex = Convert.ToInt32(tempSplitLine[4]);
-
-                            // found the next referenced note
-                            if (tempNoteIndex == referencedNoteIndex)
-                            {
-                                int tempMeasure = Convert.ToInt32(tempSplitLine[0]);
-                                int tempTick = Convert.ToInt32(tempSplitLine[1]);
-                                int tempNoteTypeID = Convert.ToInt32(tempSplitLine[3]);
-                                int tempPosition = Convert.ToInt32(tempSplitLine[5]);
-                                int tempSize = Convert.ToInt32(tempSplitLine[6]);
-                                bool tempRenderFlag = Convert.ToInt32(tempSplitLine[7]) == 1;
-
-                                HoldSegment tempSegmentNote = new(tempMeasure, tempTick, tempPosition, tempSize, tempRenderFlag);
-                                holdSegments.Add(tempSegmentNote);
-
-                                if (tempNoteTypeID == 10)
-                                {
-                                    referencedNoteIndex = Convert.ToInt32(tempSplitLine[8]);
-                                }
-
-                                // noteType 11 = hold end
-                                if (tempNoteTypeID == 11)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        HoldNote hold = new(holdSegments.ToArray());
+                        HoldNote hold = new(holdStart);
                         hold.SetBonusTypeFromNoteID(noteTypeID);
+                        incompleteHoldNotes.Add((hold, nextNoteID));
+
                         tempNote = hold;
                         chart.holdNotes.Add(hold);
+                    }
+                    else if (noteTypeID is 10 or 11)
+                    {
+                        int noteId = Convert.ToInt32(splitLine[4]);
+                        bool renderFlag = Convert.ToInt32(splitLine[7]) == 1;
+                        int? nextNoteId = noteTypeID == 10 ? Convert.ToInt32(splitLine[8]) : null;
+                        allHoldSegments.Add(noteId, (new HoldSegment(measure, tick, position, size, renderFlag), nextNoteId));
+                        continue; // don't proceed to sync check for hold segments
                     }
                     // mask notes
                     else if (noteTypeID is 12 or 13)
@@ -252,10 +227,18 @@ namespace SaturnGame.RhythmGame
                     object value2 = null;
 
                     // avoid IndexOutOfRangeExceptions :]
-                    if (objectID is 3 && splitLine.Length > 4)
+                    if (objectID is 3)
                     {
-                        value1 = Convert.ToInt32(splitLine[3]);
-                        value2 = Convert.ToInt32(splitLine[4]);
+                        if (splitLine.Length == 4)
+                        {
+                            value1 = Convert.ToInt32(splitLine[3]);
+                            value2 = 4; // yeah.......... this happens in the wild
+                        }
+                        else if (splitLine.Length > 4)
+                        {
+                            value1 = Convert.ToInt32(splitLine[3]);
+                            value2 = Convert.ToInt32(splitLine[4]);
+                        }
                     }
 
                     if (objectID is 2 or 5 && splitLine.Length > 3)
@@ -295,6 +278,22 @@ namespace SaturnGame.RhythmGame
                     }
                 }
             }
+
+            // Assemble holds
+            foreach ((HoldNote holdNote, int? firstNoteId) in incompleteHoldNotes)
+            {
+                List<HoldSegment> holdSegments = holdNote.Notes.ToList();
+                int? currentNoteId = firstNoteId;
+
+                while (currentNoteId is int noteId)
+                {
+                    (HoldSegment segment, int? nextNoteId) = allHoldSegments[noteId];
+                    holdSegments.Add(segment);
+                    currentNoteId = nextNoteId;
+                }
+
+                holdNote.Notes = holdSegments.ToArray();
+            }
         }
 
         /// <summary>
@@ -310,8 +309,9 @@ namespace SaturnGame.RhythmGame
             if (chart.notes.Last().TimeMs > chart.endOfChart.TimeMs)
                 return (false, "Notes behind end of Chart note!");
 
-            if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
-                return (false, "Chart is longer than audio!");
+            // this is fine actually lol
+            //if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
+            //    return (false, "Chart is longer than audio!");
 
             if (chart.bgmDataGimmicks.Count == 0)
                 return (false, "Chart is missing BPM and TimeSignature data!");
@@ -531,60 +531,45 @@ namespace SaturnGame.RhythmGame
             TimeSignature lastTimeSig = timeSigGimmicks[0].TimeSig;
 
             // merge both lists and sort by timestamp
-            chart.bgmDataGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.ChartTick).ToList();
+            IOrderedEnumerable<Gimmick> bpmAndTimeSigGimmicks = bpmGimmicks.Concat(timeSigGimmicks).OrderBy(x => x.ChartTick);
 
-            chart.bgmDataGimmicks[0].BeatsPerMinute = lastBpm;
-            chart.bgmDataGimmicks[0].TimeSig = lastTimeSig;
+            chart.bgmDataGimmicks = new();
 
-            int lastTick = 0;
-
-            List<Gimmick> obsoleteGimmicks = new();
-
-            for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)
+            foreach (Gimmick gimmick in bpmAndTimeSigGimmicks)
             {
-                int currentTick = chart.bgmDataGimmicks[i].ChartTick;
-
-                // Handles two gimmicks at the same time, in case a chart changes
-                // BeatsPerMinute and TimeSignature simultaneously.
-                if (currentTick == lastTick)
+                Gimmick gimmickToUpdate;
+                switch (chart.bgmDataGimmicks.LastOrDefault())
                 {
-                    // if this is a bpm change, then last change must've been a time sig change.
-                    if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.BeatsPerMinute)
+                    case Gimmick lastGimmick when lastGimmick.ChartTick == gimmick.ChartTick:
                     {
-                        chart.bgmDataGimmicks[i - 1].BeatsPerMinute = chart.bgmDataGimmicks[i].BeatsPerMinute;
-                        lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
+                        gimmickToUpdate = lastGimmick;
+                        break;
                     }
-                    if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.TimeSignature)
+                    default:
                     {
-                        chart.bgmDataGimmicks[i - 1].TimeSig = chart.bgmDataGimmicks[i].TimeSig;
-                        lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
+                        Gimmick newGimmick = new(gimmick.Measure, gimmick.Tick, lastBpm, lastTimeSig);
+                        chart.bgmDataGimmicks.Add(newGimmick);
+                        gimmickToUpdate = newGimmick;
+                        break;
                     }
-
-                    // send gimmick to list for removal later
-                    obsoleteGimmicks.Add(chart.bgmDataGimmicks[i]);
-                    continue;
                 }
 
-                if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.BeatsPerMinute)
+                switch (gimmick)
                 {
-                    chart.bgmDataGimmicks[i].TimeSig = lastTimeSig;
-                    lastBpm = chart.bgmDataGimmicks[i].BeatsPerMinute;
+                    case Gimmick {Type: Gimmick.GimmickType.BeatsPerMinute, BeatsPerMinute: var bpm}:
+                    {
+                        gimmickToUpdate.BeatsPerMinute = bpm;
+                        lastBpm = gimmick.BeatsPerMinute;
+                        break;
+                    }
+                    case Gimmick {Type: Gimmick.GimmickType.TimeSignature, TimeSig: var timeSig}:
+                    {
+                        gimmickToUpdate.TimeSig = timeSig;
+                        lastTimeSig = timeSig;
+                        break;
+                    }
                 }
-
-                if (chart.bgmDataGimmicks[i].Type is Gimmick.GimmickType.TimeSignature)
-                {
-                    chart.bgmDataGimmicks[i].BeatsPerMinute = lastBpm;
-                    lastTimeSig = chart.bgmDataGimmicks[i].TimeSig;
-                }
-
-                lastTick = currentTick;
             }
-
-            // clear obsolete gimmicks
-            foreach (Gimmick gimmick in obsoleteGimmicks)
-                chart.bgmDataGimmicks.Remove(gimmick);
-
-            obsoleteGimmicks.Clear();
 
             chart.bgmDataGimmicks[0].TimeMs = 0;
             for (int i = 1; i < chart.bgmDataGimmicks.Count; i++)

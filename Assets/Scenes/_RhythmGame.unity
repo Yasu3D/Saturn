@@ -1411,6 +1411,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugText: {fileID: 1245724631}
+  AutoWriteReplays: 1
+  WritingReplayAndExiting: 0
   timeManager: {fileID: 1783936258}
   NeedTouchHitsound: 0
   NeedSwipeSnapHitsound: 0
@@ -1443,7 +1445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseTouchController: 1
   scoringManager: {fileID: 1472638032}
-  bgmPlayer: {fileID: 1534859774}
+  timeManager: {fileID: 1783936258}
 --- !u!1 &1495675952
 GameObject:
   m_ObjectHideFlags: 0

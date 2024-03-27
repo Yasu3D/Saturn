@@ -19,6 +19,15 @@ namespace SaturnGame.RhythmGame
         [SerializeField] private float timeWarpMultiplier = 1.0f;
         [SerializeField] private float forceSyncDiscrepancy = 50f;
 
+        public enum SongState
+        {
+            NotYetStarted,
+            Playing,
+            Finished,
+        }
+
+        public SongState State { get; private set; } = SongState.NotYetStarted;
+
         public void SetPlaybackSpeed(float speed, bool clamp = true)
         {
             float clampedSpeed = clamp ? Mathf.Clamp01(speed) : speed;
@@ -54,7 +63,7 @@ namespace SaturnGame.RhythmGame
         public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
         public void UpdateVisualTime()
         {
-            if (!bgmPlayer.isPlaying) return;
+            if (State != SongState.Playing) return;
 
             LastFrameRawVisualTimeMs = RawVisualTimeMs;
             RawVisualTimeMs += Time.deltaTime * VisualTimeScale * 1000;
@@ -66,7 +75,13 @@ namespace SaturnGame.RhythmGame
         /// </summary>
         public void ReSync()
         {
-            if (!bgmPlayer.isPlaying) return;
+            if (!bgmPlayer.isPlaying)
+            {
+                // If the song is not playing, just use the gameplay clock (Time.detlaTime).
+                // So VisualTimeScale should just be exactly the PlaybackSpeed.
+                VisualTimeScale = PlaybackSpeed;
+                return;
+            }
 
             float discrepancy = RawVisualTimeMs - BgmTime();
             float absDiscrepancy = Mathf.Abs(discrepancy);
@@ -84,20 +99,45 @@ namespace SaturnGame.RhythmGame
             VisualTimeScale = PlaybackSpeed - timeWarp;
         }
 
+        private void UpdateState()
+        {
+            switch (State)
+            {
+                case SongState.NotYetStarted:
+                {
+                    // Wait for playback to start, don't update here.
+                    break;
+                }
+                case SongState.Playing:
+                {
+                    if (VisualTimeMs > ChartManager.Instance.chart.endOfChart.TimeMs)
+                        State = SongState.Finished;
+                    break;
+                }
+                case SongState.Finished:
+                {
+                    // Terminal.
+                    break;
+                }
+            }
+        }
+
         void Update()
         {
             UpdateVisualTime();
             ReSync();
+            UpdateState();
 
             if (Input.GetKeyDown(KeyCode.P))
             {
                 Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
                 var bgm = ChartManager.Instance.bgmClip;
                 bgmPlayer.clip = bgm;
+                State = SongState.Playing;
                 bgmPlayer.Play();
             }
 
-            if (Input.GetKey(KeyCode.M) && VisualTimeMs > 94000)
+            if (Input.GetKey(KeyCode.M))
                 SetPlaybackSpeed(1);
 
             if (Input.GetKeyDown(KeyCode.I))
