@@ -12,14 +12,8 @@ public class JudgementDisplay : MonoBehaviour
 
     private void Update()
     {
-        // Should use VisualTime or RawVisualTime??
-        if (scoringManager.LastJudgementTimeMs is null)
-        {
-            text.enabled = false;
-            return;
-        }
-
-        if (scoringManager.LastJudgementTimeMs.Value + 1000 < timeManager.RawVisualTimeMs)
+        if (scoringManager.LastJudgementTimeMs is null ||
+            scoringManager.LastJudgementTimeMs.Value + 1000 < timeManager.VisualTimeMs)
         {
             text.enabled = false;
             return;

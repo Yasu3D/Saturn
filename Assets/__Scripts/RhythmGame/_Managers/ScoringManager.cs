@@ -44,8 +44,14 @@ public class ScoringManager : MonoBehaviour
 
     private List<ReplayFrame> Replay { get; set; } = new();
 
+    public int CurrentCombo;
+    public int LastMissChartTick;
     public Judgement LastJudgement { get; private set; } = Judgement.None;
     public float? LastJudgementTimeMs { get; private set; }
+    // LastJudgement and LastHitOffsetMs are split because some judgements do not have any early/late info, such as
+    // chain notes or hold ends.
+    public float? LastHitErrorMs { get; private set; }
+    public float? LastHitErrorMsTimeMs { get; private set; }
     public bool NeedTouchHitsound;
     public bool NeedSwipeSnapHitsound;
 
@@ -254,8 +260,34 @@ public class ScoringManager : MonoBehaviour
     {
         LastJudgement = note.Hit(hitTimeMs);
         LastJudgementTimeMs = hitTimeMs;
+        if (note is not ChainNote && LastJudgement is not Judgement.Marvelous)
+        {
+            // TODO: option to allow showing Early/Late on Marvelous judgements
+            LastHitErrorMs = note.TimeErrorMs;
+            LastHitErrorMsTimeMs = hitTimeMs;
+        }
+
+        // HoldNotes affect combo at hold end
+        if (note is not HoldNote)
+            IncrementCombo(note.ChartTick);
+
         NeedTouchHitsound = true;
         NeedSwipeSnapHitsound = needSnapSwipeHitsound;
+    }
+
+    private void IncrementCombo(int chartTick)
+    {
+        // If we missed a note that was later than the note we just hit, don't count it towards the combo.
+        if (LastMissChartTick <= chartTick)
+            CurrentCombo++;
+        // Warning: we could still miss a note that is earlier than the note we just hit. So, the combo would be the
+        // number of notes hit consecutively, but they would not actually be consecutive notes.
+    }
+
+    private void EndCombo(int chartTick)
+    {
+        CurrentCombo = 0;
+        LastMissChartTick = chartTick;
     }
 
     private void MaybeCalculateHitForNote(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] Note note,
@@ -277,6 +309,9 @@ public class ScoringManager : MonoBehaviour
             note.MissHit();
             LastJudgement = Judgement.Miss;
             LastJudgementTimeMs = hitTimeMs;
+            // HoldNotes affect combo at hold end.
+            if (note is not HoldNote)
+                EndCombo(note.ChartTick);
 
             if (note is HoldNote holdNote)
                 activeHolds.Add(holdNote);
@@ -375,6 +410,21 @@ public class ScoringManager : MonoBehaviour
             LastJudgementTimeMs = hitTimeMs;
             if (holdNote.CurrentlyHeld)
                 NeedTouchHitsound = true;
+            switch (judgement)
+            {
+                case Judgement.Marvelous:
+                case Judgement.Great:
+                case Judgement.Good:
+                {
+                    IncrementCombo(holdNote.End.ChartTick);
+                    break;
+                }
+                case Judgement.Miss:
+                {
+                    EndCombo(holdNote.End.ChartTick);
+                    break;
+                }
+            }
 
             return true;
         }
