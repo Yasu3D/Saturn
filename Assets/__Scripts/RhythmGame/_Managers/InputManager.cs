@@ -445,7 +445,7 @@ public class TouchState
         foreach (int i in Enumerable.Range(0, segments.GetLength(0)))
         foreach (int j in Enumerable.Range(0, segments.GetLength(1)))
         {
-            if (previous is null || (IsPressed(i, j) && !previous.IsPressed(i, j)))
+            if ((previous is null || !previous.IsPressed(i, j)) && IsPressed(i, j))
                 newSegments[i, j] = true;
         }
 
