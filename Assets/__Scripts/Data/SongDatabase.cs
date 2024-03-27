@@ -11,7 +11,7 @@ namespace SaturnGame.Data
 {
 public class SongDatabase : MonoBehaviour
 {
-    public List<SongData> Songs;
+    public List<Song> Songs;
 
     public void LoadAllSongData()
     {
@@ -65,7 +65,7 @@ public class SongDatabase : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             string chartFilepath = Path.Combine(folderPath, merIDs[i]);
-            diffs[i].DiffName = (DifficultyName)i;
+            diffs[i].Difficulty = (Difficulty)i;
 
             if (!File.Exists(chartFilepath))
             {
@@ -88,7 +88,7 @@ public class SongDatabase : MonoBehaviour
 
                 string tempLevel = MerLoader.GetMetadata(merLine, "#LEVEL");
                 if (tempLevel != null)
-                    diffs[i].DiffLevel = Convert.ToSingle(tempLevel, CultureInfo.InvariantCulture);
+                    diffs[i].Level = Convert.ToDecimal(tempLevel, CultureInfo.InvariantCulture);
 
                 string tempAudioFilepath = MerLoader.GetMetadata(merLine, "#AUDIO");
                 if (tempAudioFilepath != null)
@@ -116,7 +116,7 @@ public class SongDatabase : MonoBehaviour
             } while (++readerIndex < merFile.Count);
         }
 
-        Songs.Add(new(title, rubi, artist, bpm, folderPath, jacketPath, diffs));
+        Songs.Add(new Song(title, rubi, artist, bpm, folderPath, jacketPath, diffs));
     }
 }
 }

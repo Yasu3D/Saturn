@@ -1,27 +1,26 @@
 using System;
 using JetBrains.Annotations;
 
-public enum DifficultyName
+public enum Difficulty
 {
-    [UsedImplicitly] Normal,
-    [UsedImplicitly] Hard,
-    [UsedImplicitly] Expert,
-    [UsedImplicitly] Inferno,
-    [UsedImplicitly] Beyond,
+    Normal = 0,
+    Hard = 1,
+    Expert = 2,
+    Inferno = 3,
+    Beyond = 4,
 }
 
 [Serializable]
 public struct SongDifficulty
 {
     public bool Exists;
-    [UsedImplicitly] public DifficultyName DiffName;
-    public float DiffLevel;
+    public Difficulty Difficulty;
+    public decimal Level;
     public string AudioFilepath;
     [UsedImplicitly] public float AudioOffset;
 
     // ReSharper disable NotAccessedField.Global - will be used later
     public string MovieFilepath;
-
     public float MovieOffset;
     // ReSharper restore NotAccessedField.Global
 

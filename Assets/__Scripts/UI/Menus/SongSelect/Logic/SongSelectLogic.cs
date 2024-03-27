@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using SaturnGame.Data;
 using SaturnGame.Loading;
@@ -42,23 +43,7 @@ public class SongSelectLogic : MonoBehaviour
 
         songDatabase.LoadAllSongData();
 
-        SongDifficulty[] diffs = songDatabase.Songs[SelectedSongIndex].SongDiffs;
-        SelectedDifficulty = FindNearestDifficulty(diffs, SelectedDifficulty);
-
-        int songIndex = 0;
-        int difficultyIndex = 0;
-        if (PersistentStateManager.Instance.LastSelectedSongPath is string path)
-        {
-            int foundIndex = songDatabase.Songs.FindIndex(song => song.FolderPath == path);
-            // -1 indicates not found
-            if (foundIndex != -1)
-            {
-                songIndex = foundIndex;
-                difficultyIndex = PersistentStateManager.Instance.LastSelectedDifficulty;
-            }
-        }
-
-        SetSongAndDifficulty(songIndex, difficultyIndex);
+        SetSongAndDiffFromPersistentState();
 
         displayAnimator.SetSongData(songDatabase.Songs[SelectedSongIndex], SelectedDifficulty);
 
@@ -75,10 +60,31 @@ public class SongSelectLogic : MonoBehaviour
         }
     }
 
+    private void SetSongAndDiffFromPersistentState()
+    {
+        int songIndex = 0;
+        int difficultyIndex = 0;
+
+        if (PersistentStateManager.Instance.LastSelectedSong.FolderPath is string path)
+        {
+            int foundIndex = songDatabase.Songs.FindIndex(song => song.FolderPath == path);
+            // -1 indicates not found
+            if (foundIndex != -1)
+            {
+                songIndex = foundIndex;
+                // We aren't guaranteed that this difficulty still exists on this song, but SetSongAndDifficulty will
+                // find the nearest difficulty in case this one no longer exists, so it should be fine.
+                difficultyIndex = (int)PersistentStateManager.Instance.LastSelectedDifficulty.Difficulty;
+            }
+        }
+
+        SetSongAndDifficulty(songIndex, difficultyIndex);
+    }
+
     private void SetSongAndDifficulty(int songIndex, int difficultyIndex)
     {
         SelectedSongIndex = songIndex;
-        PersistentStateManager.Instance.LastSelectedSongPath = songDatabase.Songs[SelectedSongIndex].FolderPath;
+        PersistentStateManager.Instance.LastSelectedSong = songDatabase.Songs[SelectedSongIndex];
         // Always set difficulty after setting the song to avoid leaving difficultyIndex set to a value that is not
         // valid for the current song.
         SetDifficulty(difficultyIndex);
@@ -87,8 +93,9 @@ public class SongSelectLogic : MonoBehaviour
     private void SetDifficulty(int difficultyIndex)
     {
         SongDifficulty[] diffs = songDatabase.Songs[SelectedSongIndex].SongDiffs;
-        SelectedDifficulty = FindNearestDifficulty(diffs, difficultyIndex);
-        PersistentStateManager.Instance.LastSelectedDifficulty = SelectedDifficulty;
+        SongDifficulty nearestDiff = FindNearestDifficulty(diffs, difficultyIndex);
+        SelectedDifficulty = (int)nearestDiff.Difficulty;
+        PersistentStateManager.Instance.LastSelectedDifficulty = nearestDiff;
 
         diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
         diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
@@ -222,7 +229,7 @@ public class SongSelectLogic : MonoBehaviour
         cardAnimator.Anim_ShiftCards(shiftDirection);
         int newSongIndex = SaturnMath.Modulo(SelectedSongIndex + cardAnimator.CardHalfCount * (int)direction,
             songDatabase.Songs.Count);
-        SongData newSong = songDatabase.Songs[newSongIndex];
+        Song newSong = songDatabase.Songs[newSongIndex];
         Texture2D newJacket = await ImageLoader.LoadImageWebRequest(newSong.JacketPath);
 
         cardAnimator.SetSongData(cardAnimator.WrapCardIndex, SelectedDifficulty, newSong);
@@ -268,7 +275,7 @@ public class SongSelectLogic : MonoBehaviour
         {
             int index = SaturnMath.Modulo(SelectedSongIndex + i - cardAnimator.CardHalfCount,
                 songDatabase.Songs.Count);
-            SongData data = songDatabase.Songs[index];
+            Song data = songDatabase.Songs[index];
             string path = data.JacketPath;
 
             Texture2D jacket = await ImageLoader.LoadImageWebRequest(path);
@@ -279,23 +286,27 @@ public class SongSelectLogic : MonoBehaviour
         cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
     }
 
-    private static int FindNearestDifficulty([NotNull] IList<SongDifficulty> diffs, int selectedIndex)
+    // Important note: it is CALLER'S RESPONSIBILITY to ensure the provided diffs param has a SongDifficulty of
+    // [Normal, Hard, Expert, Inferno, Beyond]. This method assumes that the index of the SongDifficulty in the list
+    // matches the Difficulty enum value.
+    private static SongDifficulty FindNearestDifficulty([NotNull] IList<SongDifficulty> diffs, int selectedIndex)
     {
-        if (diffs[selectedIndex].Exists) return selectedIndex;
+        if (diffs[selectedIndex].Exists) return diffs[selectedIndex];
 
         int leftIndex = selectedIndex - 1;
         int rightIndex = selectedIndex + 1;
 
         while (leftIndex >= 0 || rightIndex < diffs.Count)
         {
-            if (leftIndex >= 0 && diffs[leftIndex].Exists) return leftIndex;
-            if (rightIndex < diffs.Count && diffs[rightIndex].Exists) return rightIndex;
+            if (leftIndex >= 0 && diffs[leftIndex].Exists) return diffs[leftIndex];
+            if (rightIndex < diffs.Count && diffs[rightIndex].Exists) return diffs[rightIndex];
 
             leftIndex--;
             rightIndex++;
         }
 
-        return 0;
+        // yikes, consider throwing
+        return default;
     }
 
     private static bool HigherDiffExists([NotNull] IList<SongDifficulty> diffs, int selectedIndex)

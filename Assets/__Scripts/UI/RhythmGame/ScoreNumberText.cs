@@ -3,7 +3,7 @@ using SaturnGame.UI;
 using TMPro;
 using UnityEngine;
 
-public class ScoreText : MonoBehaviour
+public class ScoreNumberText : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private ArcTextMeshPro arc;

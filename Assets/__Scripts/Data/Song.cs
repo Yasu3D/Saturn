@@ -3,9 +3,9 @@ using System;
 namespace SaturnGame.Data
 {
 [Serializable]
-public class SongData
+public class Song
 {
-    public SongData(string title, string rubi, string artist, string bpm, string folderPath, string jacketPath,
+    public Song(string title, string rubi, string artist, string bpm, string folderPath, string jacketPath,
         SongDifficulty[] songDiffs)
     {
         Title = title;
@@ -23,6 +23,8 @@ public class SongData
     public string Bpm;
     public string FolderPath;
     public string JacketPath;
+    // SongDiffs[0] should ALWAYS have Difficulty = Normal, [1] = Hard, ...and so on
+    // SongDiffs should ALWAYS have 5 elements
     public SongDifficulty[] SongDiffs;
 }
 }

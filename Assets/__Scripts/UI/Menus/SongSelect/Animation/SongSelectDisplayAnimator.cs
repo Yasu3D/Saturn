@@ -51,7 +51,7 @@ public class SongSelectDisplayAnimator : MonoBehaviour
     [SerializeField] private TextMeshProUGUI difficultyNameText;
     [SerializeField] private TextMeshProUGUI difficultyLevelText;
 
-    public void SetSongData([NotNull] SongData data, int difficultyIndex)
+    public void SetSongData([NotNull] Song data, int difficultyIndex)
     {
         SongDifficulty diff = data.SongDiffs[difficultyIndex];
         titleText.text = data.Title;
@@ -66,11 +66,11 @@ public class SongSelectDisplayAnimator : MonoBehaviour
         else
         {
             charterText.text = diff.Charter;
-            SetDifficulty(difficultyIndex, diff.DiffLevel);
+            SetDifficulty(difficultyIndex, diff.Level);
         }
     }
 
-    private void SetDifficulty(int index, float? level)
+    private void SetDifficulty(int index, decimal? level)
     {
         int clampedIndex = Mathf.Clamp(index, 0, 4);
         string diffName = index switch
@@ -83,7 +83,7 @@ public class SongSelectDisplayAnimator : MonoBehaviour
         };
 
         difficultyNameText.text = diffName;
-        difficultyLevelText.text = level switch { float val => SaturnMath.GetDifficultyString(val), null => "?" };
+        difficultyLevelText.text = level switch { decimal val => SaturnMath.GetDifficultyString(val), null => "?" };
 
         foreach (Image img in foregroundImages)
         {

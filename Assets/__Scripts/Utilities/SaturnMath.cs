@@ -90,9 +90,9 @@ public static class SaturnMath
     }
 
     [NotNull]
-    public static string GetDifficultyString(float difficulty)
+    public static string GetDifficultyString(decimal difficulty)
     {
-        return (int)difficulty + (difficulty % 1 > 0.6f ? "+" : "");
+        return (int)difficulty + (difficulty % 1 >= 0.7m ? "+" : "");
     }
 
     public static class Ease
