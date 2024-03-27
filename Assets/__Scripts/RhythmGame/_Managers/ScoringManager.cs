@@ -89,71 +89,61 @@ public class ScoringManager : MonoBehaviour
                 { Judgement.Good, 0 },
             },
         };
-        if (notes is null || notes.Count == 0)
-        {
-            return ret;
-        }
+        if (notes is null || notes.Count == 0) return ret;
 
         long maxScoreBeforeNormalization = 0;
         long scoreBeforeNormalization = 0;
         foreach (Note note in notes)
         {
-            maxScoreBeforeNormalization += 100;
-
-            if (note.Judgement is null)
+            int noteMaxScore = 100;
+            int noteEarnedScore = note.Judgement switch
             {
-                continue;
+                null => 0,
+                Judgement.None => 0,
+                Judgement.Miss => 0,
+                Judgement.Good => 50,
+                Judgement.Great => 70,
+                Judgement.Marvelous => 100,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+
+            if (note.BonusType is Note.NoteBonusType.RNote)
+            {
+                noteMaxScore *= 2;
+                noteEarnedScore *= 2;
             }
 
-            switch (note.Judgement)
+            maxScoreBeforeNormalization += noteMaxScore;
+            scoreBeforeNormalization += noteEarnedScore;
+
+            if (note.Judgement is null or Judgement.None) continue;
+
+            ret.JudgementCounts[note.Judgement.Value]++;
+
+            if (note is ChainNote || note.TimeErrorMs is null || note.Judgement is Judgement.Miss) continue;
+            switch (note.TimeErrorMs)
             {
-                case Judgement.None:
-                case Judgement.Miss:
+                case < 0:
                 {
-                    break;
-                }
-                case Judgement.Good:
-                {
-                    scoreBeforeNormalization += 50;
-                    break;
-                }
-                case Judgement.Great:
-                {
-                    scoreBeforeNormalization += 70;
-                    break;
-                }
-                case Judgement.Marvelous:
-                {
-                    scoreBeforeNormalization += 100;
-                    break;
-                }
-            }
-
-            if (note.Judgement is not Judgement.None)
-            {
-                ret.JudgementCounts[note.Judgement.Value]++;
-                if (note is not ChainNote && note.TimeErrorMs is not null && note.Judgement is not Judgement.Miss)
-                {
-                    if (note.TimeErrorMs < 0)
+                    if (note.Judgement is not Judgement.Marvelous)
                     {
-                        if (note.Judgement is not Judgement.Marvelous)
-                        {
-                            // Marvelous notes don't count toward overall early count.
-                            ret.EarlyCount++;
-                        }
-
-                        ret.EarlyCountByJudgement[note.Judgement.Value]++;
+                        // Marvelous notes don't count toward overall early count.
+                        ret.EarlyCount++;
                     }
-                    else if (note.TimeErrorMs > 0)
+
+                    ret.EarlyCountByJudgement[note.Judgement.Value]++;
+                    break;
+                }
+                case > 0:
+                {
+                    if (note.Judgement is not Judgement.Marvelous)
                     {
-                        if (note.Judgement is not Judgement.Marvelous)
-                        {
-                            // Marvelous notes don't count toward overall late count.
-                            ret.LateCount++;
-                        }
-
-                        ret.LateCountByJudgement[note.Judgement.Value]++;
+                        // Marvelous notes don't count toward overall late count.
+                        ret.LateCount++;
                     }
+
+                    ret.LateCountByJudgement[note.Judgement.Value]++;
+                    break;
                 }
             }
         }
@@ -512,10 +502,8 @@ public class ScoringManager : MonoBehaviour
             async Awaitable endSong()
             {
                 WritingReplayAndExiting = true;
-                if (AutoWriteReplays)
-                {
+                if (AutoWriteReplays && !PlayingFromReplay)
                     await WriteReplayFile();
-                }
 
                 ChartManager.Instance.LastScoreData = CurrentScoreData();
                 SceneSwitcher.Instance.LoadScene("_SongResults");
