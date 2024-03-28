@@ -176,6 +176,6 @@ public delegate void TouchStateHandler(TouchState touchState, float? timeMs);
 public interface IInputProvider
 {
     // TouchStateHandler may be called any number of times per frame.
-    public TouchStateHandler TouchStateHandler { set; }
+    [CanBeNull] public TouchStateHandler TouchStateHandler { set; }
 }
 }

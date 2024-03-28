@@ -250,7 +250,7 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
 
         // TODO: once we have sub-frame updates, use a TimedTouchState here.
         // Since timeMs is null, InputManager will use VisualTimeMs from the TimeManager.
-        TouchStateHandler(new TouchState(segments), null);
+        TouchStateHandler?.Invoke(new TouchState(segments), null);
     }
 }
 
