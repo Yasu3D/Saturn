@@ -277,33 +277,142 @@ public class PlayerSettings
 [System.Serializable]
 public class GameSettings
 {
+    /// <summary>
+    /// Note Speed from 10 [1.0] to 60 [6.0]
+    /// </summary>
     public int NoteSpeed = 25;
+    
+    /// <summary>
+    /// Judgement Offset from +100 [10] to -100 [-10]
+    /// </summary>
     public int JudgementOffset = 0;
+    
+    /// <summary>
+    /// Mask Density from 0 to +4
+    /// </summary>
     public int MaskDensity = 2;
+    
+    /// <summary>
+    /// 0 > Ask<br/>
+    /// 1 > Off<br/>
+    /// 2 > On<br/>
+    /// </summary>
     public int BackgroundVideoSetting = 0;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > On<br/>
+    /// </summary>
     public int BonusEffectSetting = 1;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > On<br/>
+    /// </summary>
     public int MirrorNotes = 0;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > No Touch<br/>
+    /// 2 > S Border<br/>
+    /// 3 > SS Border<br/>
+    /// 4 > SSS Border<br/>
+    /// 5 > Personal Best Border<br/>
+    /// </summary>
     public int GiveUpSetting = 0;
 }
 
 [System.Serializable]
 public class UISettings
 {
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > Top<br/>
+    /// 2 > Middle<br/>
+    /// 3 > Bottom<br/>
+    /// </summary>
     public int JudgementDisplayPosition = 0;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > On<br/>
+    /// </summary>
     public int ShowJudgementDetails = 1;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > A<br/>
+    /// 2 > B<br/>
+    /// 3 > C<br/>
+    /// 4 > D<br/>
+    /// 5 > E<br/>
+    /// 6 > F<br/>
+    /// 7 > G<br/>
+    /// </summary>
     public int GuideLaneType = 1;
+    
+    /// <summary>
+    /// 0 >   0%<br/>
+    /// 1 >  20%<br/>
+    /// 2 >  40%<br/>
+    /// 3 >  60%<br/>
+    /// 4 >  80%<br/>
+    /// 5 > 100%<br/>
+    /// </summary>
     public int GuideLaneOpacity = 5;
+    
+    /// <summary>
+    /// 0 >   0%<br/>
+    /// 1 >  20%<br/>
+    /// 2 >  40%<br/>
+    /// 3 >  60%<br/>
+    /// 4 >  80%<br/>
+    /// 5 > 100%<br/>
+    /// </summary>
     public int DisplayOpacity = 3;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > On<br/>
+    /// </summary>
     public int ShowBarLines = 1;
+    
+    /// <summary>
+    /// 0 > Off<br/>
+    /// 1 > Combo<br/>
+    /// 2 > Plus Method<br/>
+    /// 3 > Minus Method<br/>
+    /// 4 > Average Method<br/>
+    /// 5 > S Border<br/>
+    /// 6 > SS Border<br/>
+    /// 7 > SSS Border<br/>
+    /// 8 > Personal Best Border<br/>
+    /// </summary>
     public int CenterDisplayInfo = 0;
+    
+    /// <summary>
+    /// 0 > Plus Method<br/>
+    /// 1 > Minus Method<br/>
+    /// 2 > Average Method<br/>
+    /// </summary>
     public int ScoreDisplayMethod = 0;
 }
 
 [System.Serializable]
 public class DesignSettings
 {
+    /// <summary>
+    /// WIP
+    /// </summary>
     public int RingColor = 0;
+    
+    /// <summary>
+    /// 0 > Original<br/>
+    /// 1 > Lily<br/>
+    /// 2 > Reverse<br/>
+    /// </summary>
     public int JudgeLineColor = 2;
+    
     public int NoteWidth = 3;
     public int NoteColorIDTouch = 0;
     public int NoteColorIDChain = 1;
