@@ -1,6 +1,7 @@
 using System.IO;
 using SaturnGame.Data;
 using SaturnGame.RhythmGame;
+using SaturnGame.Settings;
 using UnityEngine;
 
 public class DebugChartPlayer : MonoBehaviour
@@ -19,6 +20,18 @@ public class DebugChartPlayer : MonoBehaviour
             PersistentStateManager.Instance.SelectedSong = song;
             PersistentStateManager.Instance.SelectedDifficulty = songDiff;
             await chartManager.LoadChart();
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            int speed = ++SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
+            Debug.Log($"Note speed increased to {speed / 10m}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            int speed = --SettingsManager.Instance.PlayerSettings.GameSettings.NoteSpeed;
+            Debug.Log($"Note speed decreased to {speed / 10m}");
         }
     }
 }

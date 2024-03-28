@@ -1,16 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
-using SaturnGame.Data;
 using TMPro;
 using UnityEngine;
-using CompressionLevel = System.IO.Compression.CompressionLevel;
-using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace SaturnGame.RhythmGame
 {
@@ -21,8 +14,6 @@ namespace SaturnGame.RhythmGame
 /// A new ScoringManager should be used for each independent score.
 public class ScoringManager : MonoBehaviour
 {
-    [SerializeField] private ChartManager chartManager;
-    private Chart Chart => chartManager.Chart;
     [SerializeField] private TextMeshProUGUI debugText;
 
     public bool AutoWriteReplays = true;
@@ -30,20 +21,12 @@ public class ScoringManager : MonoBehaviour
     // Only modify on main thread Update()
     public bool WritingReplayAndExiting;
 
-    [Header("MANAGERS")] [SerializeField] private TimeManager timeManager;
+    [Header("MANAGERS")]
+    [SerializeField] private TimeManager timeManager;
+    [SerializeField] private ChartManager chartManager;
+    [SerializeField] private ReplayManager replayManager;
 
-    // If PlayingFromReplay is true, all inputs are ignored, and scoring data is read from Replay instead.
-    // If false, gameplay is normal and inputs are stored into Replay as they happen.
-    private bool PlayingFromReplay { get; set; }
-    private int replayFrameIndex = -1;
-
-    private struct ReplayFrame
-    {
-        public float TimeMs;
-        public TouchState TouchState;
-    }
-
-    private List<ReplayFrame> Replay { get; set; } = new();
+    private Chart Chart => chartManager.Chart;
 
     public int CurrentCombo;
     public int LastMissChartTick;
@@ -362,7 +345,7 @@ public class ScoringManager : MonoBehaviour
     private readonly List<HoldNote> activeHolds = new();
     private TouchState prevTouchState;
 
-    private void HandleInput(float hitTimeMs, TouchState touchState)
+    public void HandleInput(TouchState touchState, float hitTimeMs)
     {
         if (Notes is null)
         {
@@ -414,29 +397,8 @@ public class ScoringManager : MonoBehaviour
         }
     }
 
-
-    public void NewTouchState(TouchState touchState)
-    {
-        if (PlayingFromReplay)
-        {
-            return;
-        }
-
-        Replay.Add(new ReplayFrame { TimeMs = timeManager.VisualTimeMs, TouchState = touchState });
-        HandleInput(timeManager.VisualTimeMs, touchState);
-    }
-
     private async void Update()
     {
-        if (PlayingFromReplay && replayFrameIndex >= 0 && Notes is not null)
-        {
-            while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.VisualTimeMs)
-            {
-                HandleInput(Replay[replayFrameIndex].TimeMs, Replay[replayFrameIndex].TouchState);
-                replayFrameIndex++;
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("judgements:");
@@ -448,14 +410,15 @@ public class ScoringManager : MonoBehaviour
 
         // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
         // of the end of the audio clip.
+        // TODO: move this logic somewhere else lol
         if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs &&
             !WritingReplayAndExiting)
         {
             async Awaitable endSong()
             {
                 WritingReplayAndExiting = true;
-                if (AutoWriteReplays && !PlayingFromReplay)
-                    await WriteReplayFile();
+                if (AutoWriteReplays && !replayManager.PlayingFromReplay)
+                    await replayManager.WriteReplayFile();
 
                 PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
                 SceneSwitcher.Instance.LoadScene("_SongResults");
@@ -463,72 +426,6 @@ public class ScoringManager : MonoBehaviour
             // chart is done
             await endSong();
         }
-
-        if (Input.GetKeyDown(KeyCode.F12))
-        {
-            await WriteReplayFile();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F11))
-        {
-            // For now, copy the replay you want to view to "replay.json.gz" in the persistentDataPath.
-            await ReadReplayFile(Path.Combine(Application.persistentDataPath, "replay.json.gz"));
-        }
-    }
-
-    private static void JsonError(object sender, [NotNull] ErrorEventArgs errorArgs)
-    {
-        Debug.LogError(errorArgs.ErrorContext.Error);
-        errorArgs.ErrorContext.Handled = true;
-    }
-
-    // TODO maybe: stream to file continuously rather than all at the end
-    private async Awaitable WriteReplayFile()
-    {
-        string chartRelativePath = Path.GetRelativePath(SongDatabase.SongPacksPath,
-            PersistentStateManager.Instance.SelectedDifficulty.ChartFilepath);
-        string timestamp = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
-        string replayFileName = $"replay-{chartRelativePath}-{timestamp}.json.gz";
-        string escapedReplayFileName = String.Join('_', replayFileName.Split(Path.GetInvalidFileNameChars()));
-        string replayPath = Path.Combine(Application.persistentDataPath, escapedReplayFileName);
-        Debug.Log($"Writing replay with {Replay.Count} frames to {replayPath}...");
-        await using FileStream replayFileStream = File.Create(replayPath);
-        await using GZipStream compressedStream = new(replayFileStream, CompressionLevel.Fastest);
-        await using StreamWriter writer = new(compressedStream);
-        JsonSerializer serializer = new();
-        serializer.Error += JsonError;
-        // "threadsafe" here is not entirely accurate, but this should hopefully allow us to take a reference
-        // to the Replay that will _not_ be modified as more frames are added, so the JsonSerializer can safely
-        // iterate over it.
-        IEnumerable<ReplayFrame> threadsafeReplay = Replay.Take(Replay.Count);
-        await Awaitable.BackgroundThreadAsync();
-        serializer.Serialize(writer, threadsafeReplay);
-        await Awaitable.MainThreadAsync();
-        Debug.Log($"Replay {replayFileName} successfully written!");
-    }
-
-    private async Awaitable ReadReplayFile([NotNull] string replayPath)
-    {
-        Debug.Log($"Reading replay from {replayPath}");
-        PlayingFromReplay = true;
-        await using FileStream replayFileStream = File.OpenRead(replayPath);
-        await using GZipStream compressedStream = new(replayFileStream, CompressionMode.Decompress);
-        using StreamReader streamReader = new(compressedStream);
-        JsonSerializer serializer = new();
-        serializer.Error += JsonError;
-        await Awaitable.BackgroundThreadAsync();
-        List<ReplayFrame> readReplay =
-            (List<ReplayFrame>)serializer.Deserialize(streamReader, typeof(List<ReplayFrame>));
-        await Awaitable.MainThreadAsync();
-        if (readReplay is null)
-        {
-            PlayingFromReplay = false;
-            throw new Exception("Failed to read replay");
-        }
-
-        Replay = readReplay;
-        Debug.Log($"Loaded replay {replayPath} with {Replay.Count} frames");
-        replayFrameIndex = 0;
     }
 }
 
