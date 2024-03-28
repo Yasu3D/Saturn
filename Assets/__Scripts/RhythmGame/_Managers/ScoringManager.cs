@@ -1,15 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
-using CompressionLevel = System.IO.Compression.CompressionLevel;
-using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace SaturnGame.RhythmGame
 {
@@ -20,8 +14,6 @@ namespace SaturnGame.RhythmGame
 /// A new ScoringManager should be used for each independent score.
 public class ScoringManager : MonoBehaviour
 {
-    private static ChartManager ChartManager => ChartManager.Instance;
-    private static Chart Chart => ChartManager.Chart;
     [SerializeField] private TextMeshProUGUI debugText;
 
     public bool AutoWriteReplays = true;
@@ -29,20 +21,12 @@ public class ScoringManager : MonoBehaviour
     // Only modify on main thread Update()
     public bool WritingReplayAndExiting;
 
-    [Header("MANAGERS")] [SerializeField] private TimeManager timeManager;
+    [Header("MANAGERS")]
+    [SerializeField] private TimeManager timeManager;
+    [SerializeField] private ChartManager chartManager;
+    [SerializeField] private ReplayManager replayManager;
 
-    // If PlayingFromReplay is true, all inputs are ignored, and scoring data is read from Replay instead.
-    // If false, gameplay is normal and inputs are stored into Replay as they happen.
-    private bool PlayingFromReplay { get; set; }
-    private int replayFrameIndex = -1;
-
-    private struct ReplayFrame
-    {
-        public float TimeMs;
-        public TouchState TouchState;
-    }
-
-    private List<ReplayFrame> Replay { get; set; } = new();
+    private Chart Chart => chartManager.Chart;
 
     public int CurrentCombo;
     public int LastMissChartTick;
@@ -58,7 +42,7 @@ public class ScoringManager : MonoBehaviour
     private string loadedChart;
 
     // Notes must be sorted by note TimeMs
-    private List<Note> notes;
+    private List<Note> Notes => Chart.ProcessedNotesForGameplay;
 
     private void ShowDebugText(string text)
     {
@@ -95,11 +79,11 @@ public class ScoringManager : MonoBehaviour
                 { Judgement.Good, 0 },
             },
         };
-        if (notes is null || notes.Count == 0) return ret;
+        if (Notes is null || Notes.Count == 0) return ret;
 
         long maxScoreBeforeNormalization = 0;
         long scoreBeforeNormalization = 0;
-        foreach (Note note in notes)
+        foreach (Note note in Notes)
         {
             int noteMaxScore = 100;
             int noteEarnedScore = note.Judgement switch
@@ -169,92 +153,6 @@ public class ScoringManager : MonoBehaviour
 
     // This should be greater than the maximum early timing window of any note.
     private const float IgnoreFutureNotesThreshold = 300f;
-
-    private static bool SegmentsOverlap([NotNull] PositionedChartElement note1, [NotNull] PositionedChartElement note2)
-    {
-        if (note1.Left == note1.Right || note2.Left == note2.Right)
-        {
-            // Full circle notes always overlap
-            return true;
-        }
-
-        // Bonus reading: https://fgiesen.wordpress.com/2015/09/24/intervals-in-modular-arithmetic/
-        // Each note is a half-open interval in mod60.
-
-        // See point_in_half_open_interval in the link.
-        // This returns true iff point is in the half-open interval [note.Left, note.Right) (mod 60)
-        bool pointWithinNote([NotNull] PositionedChartElement note, int point)
-        {
-            return SaturnMath.Modulo(point - note.Left, 60) < SaturnMath.Modulo(note.Right - note.Left, 60);
-        }
-
-        // See half_open_intervals_overlap in the link.
-        // We know that the interval size is positive, so we don't need to worry about that case.
-        return pointWithinNote(note1, note2.Left) || pointWithinNote(note2, note1.Left);
-    }
-
-    // TODO: just move this into the normal chart loading (ChartManager)
-    private void LoadChart()
-    {
-        List<Note> allNotesFromChart = Chart.Notes.Concat(Chart.HoldNotes).OrderBy(note => note.TimeMs).ToList();
-        // TODO: swipe notes within a hold... that is gonna be hell lmao
-        // TODO: holds with a swipe on the hold start take on the timing window of the swipe??
-        notes = new List<Note>();
-
-        foreach (Note note in allNotesFromChart)
-        {
-            note.EarliestHitTimeMs = note.TimeMs + note.HitWindows[^1].LeftMs;
-            note.LatestHitTimeMs = note.TimeMs + note.HitWindows[^1].RightMs;
-
-            if (Chart.HoldNotes.Any(holdNote =>
-                    holdNote.End.ChartTick == note.ChartTick && SegmentsOverlap(holdNote.End, note)))
-            {
-                // Notes that overlap with a hold end should lose their early window (except Marvelous).
-                note.EarliestHitTimeMs =
-                    Math.Max(note.EarliestHitTimeMs.Value, note.TimeMs + note.HitWindows[0].LeftMs);
-            }
-
-            // Look backwards through the chart to see if any notes overlap with this.
-            // Potential optimization: once a note is out of range (for all possible note type windows!),
-            // we know it can never come back in range. We can keep track of the minimum index into the notes
-            // array that we have to care about, like minNoteIndex below.
-            List<Note> overlappingNotes = notes
-                // Don't try to do anything with notes that are at exactly the same time. Furthermore, we know we
-                // can't find any other notes from an earlier ChartTick, so just break out of the loop.
-                .TakeWhile(otherNote => otherNote.ChartTick != note.ChartTick)
-                .Where(otherNote => otherNote.LatestHitTimeMs!.Value > note.EarliestHitTimeMs.Value &&
-                                    SegmentsOverlap(note, otherNote))
-                .ToList();
-
-            if (overlappingNotes.Any())
-            {
-                // We have overlapping timing windows. Split the difference between the two closest notes.
-                Note latestNote = overlappingNotes.OrderByDescending(overlappingNote => overlappingNote.TimeMs).First();
-                // TODO: If the windows of the two notes are different sizes (e.g. touch vs swipe notes), bias the split point.
-                float cutoff = (latestNote.TimeMs + note.TimeMs) / 2;
-
-                // Use Max here to avoid expanding the window here if it's already truncated.
-                cutoff = Math.Max(cutoff, note.EarliestHitTimeMs.Value);
-
-                // It is possible that latestNote has an overlapping timing window, but it is already truncated so that
-                // the midpoint of the two notes is _not_ contained within its timing window. In this case we shouldn't
-                // truncate the window past the latest LatestHitTimeMs of an overlapping note. Such a truncation could
-                // leave some period of time that is outside any note's window.
-                float latestOverlapTimeMs = overlappingNotes.Max(overlappingNote => overlappingNote.LatestHitTimeMs!.Value);
-                // Note: since we know that latestNote.LatestHitTimeMs > note.EarliestHitTimeMs, this still preserves
-                // cutoff >= latestNote.LatestHitTime > note.EarliestHitTimeMs.
-                cutoff = Math.Min(cutoff, latestOverlapTimeMs);
-
-                note.EarliestHitTimeMs = cutoff;
-                foreach (Note otherNote in overlappingNotes)
-                    // Use Math.Min here to avoid expanding any windows - keep in mind that just because the windows
-                    // overlap, we don't know that the calculated cutoff will actually be within the window.
-                    otherNote.LatestHitTimeMs = Math.Min(otherNote.LatestHitTimeMs!.Value, cutoff);
-            }
-
-            notes.Add(note);
-        }
-    }
 
     private void HitNote(float hitTimeMs, [NotNull] Note note, bool needSnapSwipeHitsound = false)
     {
@@ -447,9 +345,9 @@ public class ScoringManager : MonoBehaviour
     private readonly List<HoldNote> activeHolds = new();
     private TouchState prevTouchState;
 
-    private void HandleInput(float hitTimeMs, TouchState touchState)
+    public void HandleInput(TouchState touchState, float hitTimeMs)
     {
-        if (notes is null)
+        if (Notes is null)
         {
             Debug.LogError("Tried to judge an input, but no chart loaded");
             return;
@@ -460,9 +358,9 @@ public class ScoringManager : MonoBehaviour
             TouchState newSegments = touchState.SegmentsPressedSince(prevTouchState);
 
             // Scan forward, looking for a note that can be hit by this input.
-            for (int noteScanIndex = minNoteIndex; noteScanIndex < notes.Count; noteScanIndex++)
+            for (int noteScanIndex = minNoteIndex; noteScanIndex < Notes.Count; noteScanIndex++)
             {
-                Note note = notes[noteScanIndex];
+                Note note = Notes[noteScanIndex];
 
                 if (hitTimeMs + IgnoreFutureNotesThreshold < note.TimeMs)
                 {
@@ -499,43 +397,12 @@ public class ScoringManager : MonoBehaviour
         }
     }
 
-
-    public void NewTouchState(TouchState touchState)
+    private async void Update()
     {
-        if (PlayingFromReplay)
-        {
-            return;
-        }
-
-        Replay.Add(new ReplayFrame { TimeMs = timeManager.VisualTimeMs, TouchState = touchState });
-        HandleInput(timeManager.VisualTimeMs, touchState);
-    }
-
-    private void Update()
-    {
-        // Maybe find a way to not call this *every frame*. - yasu
-        // (It's not super problematic for now but I think it may make more sense to call this once when starting a song.)
-
-        // note: maybe race if we don't hold LoadingLock here
-        if (!ChartManager.Loading && ChartManager.LoadedChart is not null && ChartManager.LoadedChart != loadedChart)
-        {
-            LoadChart();
-            loadedChart = ChartManager.LoadedChart;
-        }
-
-        if (PlayingFromReplay && replayFrameIndex >= 0 && loadedChart == ChartManager.LoadedChart && notes is not null)
-        {
-            while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.VisualTimeMs)
-            {
-                HandleInput(Replay[replayFrameIndex].TimeMs, Replay[replayFrameIndex].TouchState);
-                replayFrameIndex++;
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("judgements:");
-            foreach (Note note in notes?.Where(note => note.Judgement is not null) ?? Enumerable.Empty<Note>())
+            foreach (Note note in Notes?.Where(note => note.Judgement is not null) ?? Enumerable.Empty<Note>())
             {
                 Debug.Log($"{note.Judgement} by {note.TimeErrorMs ?? 999}ms, note at {note.TimeMs}");
             }
@@ -543,96 +410,22 @@ public class ScoringManager : MonoBehaviour
 
         // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
         // of the end of the audio clip.
+        // TODO: move this logic somewhere else lol
         if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs &&
             !WritingReplayAndExiting)
         {
             async Awaitable endSong()
             {
                 WritingReplayAndExiting = true;
-                if (AutoWriteReplays && !PlayingFromReplay)
-                    await WriteReplayFile();
+                if (AutoWriteReplays && !replayManager.PlayingFromReplay)
+                    await replayManager.WriteReplayFile();
 
-                ChartManager.Instance.LastScoreData = CurrentScoreData();
+                PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
                 SceneSwitcher.Instance.LoadScene("_SongResults");
             }
             // chart is done
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            // Don't await within Update()
-            endSong();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            await endSong();
         }
-
-        if (Input.GetKeyDown(KeyCode.F12))
-        {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            // Don't await within Update()
-            WriteReplayFile();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-        }
-
-        if (Input.GetKeyDown(KeyCode.F11))
-        {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            // Don't await within Update()
-
-            // For now, copy the replay you want to view to "replay.json.gz" in the persistentDataPath.
-            ReadReplayFile(Path.Combine(Application.persistentDataPath, "replay.json.gz"));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-        }
-    }
-
-    private static void JsonError(object sender, [NotNull] ErrorEventArgs errorArgs)
-    {
-        Debug.LogError(errorArgs.ErrorContext.Error);
-        errorArgs.ErrorContext.Handled = true;
-    }
-
-    // TODO maybe: stream to file continuously rather than all at the end
-    private async Awaitable WriteReplayFile()
-    {
-        string chartRelativePath = Path.GetRelativePath(Application.streamingAssetsPath, ChartManager.LoadedChart);
-        string timestamp = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
-        string replayFileName = $"replay-{chartRelativePath}-{timestamp}.json.gz";
-        string escapedReplayFileName = String.Join('_', replayFileName.Split(Path.GetInvalidFileNameChars()));
-        string replayPath = Path.Combine(Application.persistentDataPath, escapedReplayFileName);
-        Debug.Log($"Writing replay with {Replay.Count} frames to {replayPath}...");
-        await using FileStream replayFileStream = File.Create(replayPath);
-        await using GZipStream compressedStream = new(replayFileStream, CompressionLevel.Fastest);
-        await using StreamWriter writer = new(compressedStream);
-        JsonSerializer serializer = new();
-        serializer.Error += JsonError;
-        // "threadsafe" here is not entirely accurate, but this should hopefully allow us to take a reference
-        // to the Replay that will _not_ be modified as more frames are added, so the JsonSerializer can safely
-        // iterate over it.
-        IEnumerable<ReplayFrame> threadsafeReplay = Replay.Take(Replay.Count);
-        await Awaitable.BackgroundThreadAsync();
-        serializer.Serialize(writer, threadsafeReplay);
-        await Awaitable.MainThreadAsync();
-        Debug.Log($"Replay {replayFileName} successfully written!");
-    }
-
-    private async Awaitable ReadReplayFile([NotNull] string replayPath)
-    {
-        Debug.Log($"Reading replay from {replayPath}");
-        PlayingFromReplay = true;
-        await using FileStream replayFileStream = File.OpenRead(replayPath);
-        await using GZipStream compressedStream = new(replayFileStream, CompressionMode.Decompress);
-        using StreamReader streamReader = new(compressedStream);
-        JsonSerializer serializer = new();
-        serializer.Error += JsonError;
-        await Awaitable.BackgroundThreadAsync();
-        List<ReplayFrame> readReplay =
-            (List<ReplayFrame>)serializer.Deserialize(streamReader, typeof(List<ReplayFrame>));
-        await Awaitable.MainThreadAsync();
-        if (readReplay is null)
-        {
-            PlayingFromReplay = false;
-            throw new Exception("Failed to read replay");
-        }
-
-        Replay = readReplay;
-        Debug.Log($"Loaded replay {replayPath} with {Replay.Count} frames");
-        replayFrameIndex = 0;
     }
 }
 

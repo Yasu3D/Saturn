@@ -1642,9 +1642,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49afb9df98cf3024789f840058b230f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: SongPacks/DONOTSHIP/
-  bgm: {fileID: 0}
-  bgmPlayer: {fileID: 1534859774}
+  chartManager: {fileID: 1472638035}
+  folderInSongPacks: DONOTSHIP/
+  difficulty: 2
 --- !u!4 &1332587191
 Transform:
   m_ObjectHideFlags: 0
@@ -1687,8 +1687,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1472638033}
+  - component: {fileID: 1472638035}
   - component: {fileID: 1472638032}
   - component: {fileID: 1472638034}
+  - component: {fileID: 1472638036}
   m_Layer: 0
   m_Name: Gameplay
   m_TagString: Untagged
@@ -1712,7 +1714,10 @@ MonoBehaviour:
   AutoWriteReplays: 1
   WritingReplayAndExiting: 0
   timeManager: {fileID: 1783936258}
+  chartManager: {fileID: 1472638035}
+  replayManager: {fileID: 1472638036}
   CurrentCombo: 0
+  LastMissChartTick: 0
   NeedTouchHitsound: 0
   NeedSwipeSnapHitsound: 0
 --- !u!4 &1472638033
@@ -1742,9 +1747,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a962b7d2219503f94e284ba84e0ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useTouchController: 1
+  CurrentInputSource: 0
   scoringManager: {fileID: 1472638032}
   timeManager: {fileID: 1783936258}
+  replayManager: {fileID: 1472638036}
+--- !u!114 &1472638035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472638031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8c3027c8a2321bdda0ccba9da30acc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Chart:
+    Difficulty: 0
+    ClearThreshold: 0
+    AudioOffset: 0
+    MovieOffset: 0
+    BGMDataGimmicks: []
+    HiSpeedGimmicks: []
+    ReverseGimmicks: []
+    HoldNotes: []
+    Masks: []
+    BarLines: []
+    Syncs: []
+    EndOfChart:
+      TimeMs: 0
+      ScaledVisualTime: 0
+    ReverseHoldNotes: []
+  BGM: {fileID: 0}
+--- !u!114 &1472638036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472638031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d8f9ba2110efe295b32dc2698a2cf8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  replayFile: replay.json.gz
+  timeManager: {fileID: 1783936258}
+  PlayingFromReplay: 0
 --- !u!1 &1495675952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,6 +1824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e940b6c113596641bd443e0b92b70da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chartManager: {fileID: 1472638035}
   timeManager: {fileID: 1783936258}
   activeObjectsContainer: {fileID: 1217854417}
   barLinePool: {fileID: 1647205787}
@@ -2558,6 +2609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb337ba8f7f27a14c8e821793ab0ec9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chartManager: {fileID: 1472638035}
   bgmPlayer: {fileID: 1534859774}
   StaticAudioOffset: -10
   visualTimeScale: 1
@@ -2575,6 +2627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d24b133d74583feb20f905012e5e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chartManager: {fileID: 1472638035}
   timeManager: {fileID: 1783936258}
   scoringManager: {fileID: 1472638032}
   guideSound: {fileID: 8300000, guid: 095d1eb19bf3539238ab8cc42349c8dc, type: 3}

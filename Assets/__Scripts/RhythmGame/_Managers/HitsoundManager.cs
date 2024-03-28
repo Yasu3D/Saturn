@@ -9,6 +9,7 @@ namespace SaturnGame.RhythmGame
 {
 public class HitsoundManager : MonoBehaviour
 {
+    [SerializeField] private ChartManager chartManager;
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private ScoringManager scoringManager;
 
@@ -98,7 +99,7 @@ public class HitsoundManager : MonoBehaviour
 
     private bool ShouldPlayGuideSound()
     {
-        Chart chart = ChartManager.Instance.Chart;
+        Chart chart = chartManager.Chart;
 
         foreach (Note note in chart.Notes)
         {
@@ -124,7 +125,7 @@ public class HitsoundManager : MonoBehaviour
         EnsurePoolSize();
         ReturnFinishedHitsoundsToPool();
 
-        if (ChartManager.Instance.LoadedChart != null)
+        if (chartManager.Chart != null)
         {
             if (ShouldPlayGuideSound())
             {

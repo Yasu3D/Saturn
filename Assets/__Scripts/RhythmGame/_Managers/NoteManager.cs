@@ -13,7 +13,8 @@ namespace SaturnGame.RhythmGame
 /// </summary>
 public class NoteManager : MonoBehaviour
 {
-    private static Chart Chart => ChartManager.Instance.Chart;
+    [SerializeField] private ChartManager chartManager;
+    private Chart Chart => chartManager.Chart;
 
     [Header("MANAGERS")] [SerializeField] private TimeManager timeManager;
 

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using SaturnGame.Data;
 using SaturnGame.Loading;
-using SaturnGame.RhythmGame;
 using UnityEngine;
 
 namespace SaturnGame.UI
@@ -55,8 +53,6 @@ public class SongSelectLogic : MonoBehaviour
         {
             buttonManager.SetActiveButtons(1);
             pageAnimator.ToChartPreviewInstant();
-            string chartPath = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].ChartFilepath;
-            LoadChart(chartPath);
         }
     }
 
@@ -65,7 +61,7 @@ public class SongSelectLogic : MonoBehaviour
         int songIndex = 0;
         int difficultyIndex = 0;
 
-        if (PersistentStateManager.Instance.LastSelectedSong.FolderPath is string path)
+        if (PersistentStateManager.Instance.SelectedSong.FolderPath is string path)
         {
             int foundIndex = songDatabase.Songs.FindIndex(song => song.FolderPath == path);
             // -1 indicates not found
@@ -74,7 +70,7 @@ public class SongSelectLogic : MonoBehaviour
                 songIndex = foundIndex;
                 // We aren't guaranteed that this difficulty still exists on this song, but SetSongAndDifficulty will
                 // find the nearest difficulty in case this one no longer exists, so it should be fine.
-                difficultyIndex = (int)PersistentStateManager.Instance.LastSelectedDifficulty.Difficulty;
+                difficultyIndex = (int)PersistentStateManager.Instance.SelectedDifficulty.Difficulty;
             }
         }
 
@@ -84,7 +80,7 @@ public class SongSelectLogic : MonoBehaviour
     private void SetSongAndDifficulty(int songIndex, int difficultyIndex)
     {
         SelectedSongIndex = songIndex;
-        PersistentStateManager.Instance.LastSelectedSong = songDatabase.Songs[SelectedSongIndex];
+        PersistentStateManager.Instance.SelectedSong = songDatabase.Songs[SelectedSongIndex];
         // Always set difficulty after setting the song to avoid leaving difficultyIndex set to a value that is not
         // valid for the current song.
         SetDifficulty(difficultyIndex);
@@ -95,7 +91,7 @@ public class SongSelectLogic : MonoBehaviour
         SongDifficulty[] diffs = songDatabase.Songs[SelectedSongIndex].SongDiffs;
         SongDifficulty nearestDiff = FindNearestDifficulty(diffs, difficultyIndex);
         SelectedDifficulty = (int)nearestDiff.Difficulty;
-        PersistentStateManager.Instance.LastSelectedDifficulty = nearestDiff;
+        PersistentStateManager.Instance.SelectedDifficulty = nearestDiff;
 
         diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
         diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
@@ -124,8 +120,6 @@ public class SongSelectLogic : MonoBehaviour
 
         bgmPreview.FadeoutBgmPreview();
         bgmPreview.ResetLingerTimer();
-        string chartPath = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].ChartFilepath;
-        LoadChart(chartPath);
     }
 
     private void OnBack()
@@ -179,10 +173,6 @@ public class SongSelectLogic : MonoBehaviour
                 page = MenuPage.ChartPreview;
                 pageAnimator.Anim_ToChartPreview();
                 buttonManager.SwitchButtons(1);
-
-                string chartPath =
-                    songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].ChartFilepath;
-                LoadChart(chartPath);
                 break;
             }
             case MenuPage.ChartPreview:
@@ -338,11 +328,6 @@ public class SongSelectLogic : MonoBehaviour
         float start = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].PreviewStart;
         float duration = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].PreviewDuration;
         bgmPreview.SetBgmValues(path, start, duration);
-    }
-
-    private static void LoadChart(string path)
-    {
-        ChartManager.Instance.LoadChart(path);
     }
 
     private void Update()
