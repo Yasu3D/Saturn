@@ -27,5 +27,7 @@ public class Chart
     public EndOfChart EndOfChart;
     public List<Note> ReverseNotes = new();
     public List<HoldNote> ReverseHoldNotes = new();
+
+    public List<Note> ProcessedNotesForGameplay = new();
 }
 }

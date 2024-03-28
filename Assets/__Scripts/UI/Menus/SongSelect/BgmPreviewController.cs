@@ -103,9 +103,8 @@ public class BgmPreviewController : MonoBehaviour
 
     private async Awaitable LoadBgm()
     {
-        AudioClip bgmClip = await AudioLoader.LoadBgm(bgmPath);
+        AudioClip bgmClip = await AudioLoader.LoadBgm(bgmPath, streamAudio: true);
 
-        ChartManager.Instance.BGMClip = bgmClip;
         bgmSource.clip = bgmClip;
     }
 }
