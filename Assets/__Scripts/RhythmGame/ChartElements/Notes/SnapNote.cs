@@ -23,16 +23,16 @@ public class SnapNote : Note
 
     private static HitWindow[] forwardHitWindows =
     {
-        new(-5 * FrameMS, 7 * FrameMS, RhythmGame.Judgement.Marvelous),
-        new(-8 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Great),
-        new(-10 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Good),
+        new(-5 * FrameMs, 7 * FrameMs, RhythmGame.Judgement.Marvelous),
+        new(-8 * FrameMs, 10 * FrameMs, RhythmGame.Judgement.Great),
+        new(-10 * FrameMs, 10 * FrameMs, RhythmGame.Judgement.Good),
     };
 
     private static HitWindow[] backwardHitWindows =
     {
-        new(-7 * FrameMS, 5 * FrameMS, RhythmGame.Judgement.Marvelous),
-        new(-10 * FrameMS, 8 * FrameMS, RhythmGame.Judgement.Great),
-        new(-10 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Good),
+        new(-7 * FrameMs, 5 * FrameMs, RhythmGame.Judgement.Marvelous),
+        new(-10 * FrameMs, 8 * FrameMs, RhythmGame.Judgement.Great),
+        new(-10 * FrameMs, 10 * FrameMs, RhythmGame.Judgement.Good),
     };
 
     public override HitWindow[] HitWindows => Direction switch

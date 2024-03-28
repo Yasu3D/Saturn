@@ -10,10 +10,21 @@ public static class TestUtils
         return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, args, null);
     }
 
+    public static void InvokePrivateMethod<T>(T instance, string methodName, params object[] parameters)
+    {
+        typeof(T).InvokeMember(methodName,
+            BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, instance, parameters);
+    }
     public static TReturned InvokePrivateMethod<T, TReturned>(T instance, string methodName, params object[] parameters)
     {
         return (TReturned)typeof(T).InvokeMember(methodName,
             BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance, null, instance, parameters);
+    }
+
+    public static void InvokePrivateStaticMethod<T>(string methodName, params object[] parameters)
+    {
+        typeof(T).InvokeMember(methodName,
+            BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Static, null, null, parameters);
     }
 
     public static TReturned InvokePrivateStaticMethod<T, TReturned>(string methodName, params object[] parameters)

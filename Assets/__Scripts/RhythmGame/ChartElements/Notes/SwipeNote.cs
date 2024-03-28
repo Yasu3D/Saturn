@@ -41,9 +41,9 @@ public class SwipeNote : Note
 
     private static HitWindow[] hitWindows =
     {
-        new(-5 * FrameMS, 5 * FrameMS, RhythmGame.Judgement.Marvelous),
-        new(-8 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Great),
-        new(-10 * FrameMS, 10 * FrameMS, RhythmGame.Judgement.Good),
+        new(-5 * FrameMs, 5 * FrameMs, RhythmGame.Judgement.Marvelous),
+        new(-8 * FrameMs, 10 * FrameMs, RhythmGame.Judgement.Great),
+        new(-10 * FrameMs, 10 * FrameMs, RhythmGame.Judgement.Good),
     };
 
     public override HitWindow[] HitWindows => hitWindows;
