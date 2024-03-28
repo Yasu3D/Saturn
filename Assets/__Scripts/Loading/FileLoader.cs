@@ -38,7 +38,7 @@ public static class MerLoader
 
 public static class AudioLoader
 {
-    public static async Task<AudioClip> LoadBgm(string path)
+    public static async Task<AudioClip> LoadBgm(string path, bool streamAudio)
     {
         if (!File.Exists(path))
         {
@@ -62,9 +62,9 @@ public static class AudioLoader
             if (webRequest.result == UnityWebRequest.Result.Success)
             {
                 DownloadHandlerAudioClip handler = (DownloadHandlerAudioClip)webRequest.downloadHandler;
-                handler.streamAudio = true;
-                AudioClip test = handler.audioClip;
-                return test;
+                if (streamAudio)
+                    handler.streamAudio = true;
+                return handler.audioClip;
             }
 
             Debug.Log($"[BGM] Error loading: {webRequest.error}");

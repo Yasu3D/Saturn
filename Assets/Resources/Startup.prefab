@@ -365,7 +365,6 @@ GameObject:
   - component: {fileID: 6924869204272902904}
   - component: {fileID: 6976755023825410440}
   - component: {fileID: 6970803184567568333}
-  - component: {fileID: 7917270714834881232}
   - component: {fileID: 5486481827663078258}
   - component: {fileID: 6885694711510743663}
   - component: {fileID: 3978765153090999763}
@@ -419,35 +418,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fa7efec36bd3c4f91786a35acb91bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7917270714834881232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9093408435962310463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d3428c0837032c4aa76a61a5da4f8c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BGMClip: {fileID: 0}
-  Chart:
-    Difficulty: 0
-    ClearThreshold: 0
-    AudioOffset: 0
-    MovieOffset: 0
-    BGMDataGimmicks: []
-    HiSpeedGimmicks: []
-    ReverseGimmicks: []
-    HoldNotes: []
-    Masks: []
-    BarLines: []
-    Syncs: []
-    EndOfChart:
-      TimeMs: 0
-      ScaledVisualTime: 0
-    ReverseHoldNotes: []
 --- !u!114 &5486481827663078258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,8 +511,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b0f17cfb538b67ca0267a33ff5d5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LastSelectedSongPath: 
-  LastSelectedDifficulty: 0
+  LastSelectedSong:
+    Title: 
+    Rubi: 
+    Artist: 
+    Bpm: 
+    FolderPath: 
+    JacketPath: 
+    SongDiffs: []
+  LastSelectedDifficulty:
+    Exists: 0
+    Difficulty: 0
+    AudioFilepath: 
+    AudioOffset: 0
+    MovieFilepath: 
+    MovieOffset: 0
+    ChartFilepath: 
+    Charter: 
+    PreviewStart: 0
+    PreviewDuration: 0
 --- !u!1001 &6578886929652071952
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ namespace SaturnGame.RhythmGame
 {
 public class TimeManager : MonoBehaviour
 {
+    [SerializeField] private ChartManager chartManager;
     [SerializeField] private AudioSource bgmPlayer;
 
     //public float StaticAudioOffset {get; private set; } = -20;
@@ -41,7 +42,7 @@ public class TimeManager : MonoBehaviour
         if (bgmPlayer.clip == null)
             return -1;
 
-        return Mathf.Max(0, 1000 * (bgmPlayer.time + ChartManager.Instance.Chart.AudioOffset));
+        return Mathf.Max(0, 1000 * (bgmPlayer.time + chartManager.Chart.AudioOffset));
     }
 
     /// <summary>
@@ -112,7 +113,7 @@ public class TimeManager : MonoBehaviour
             }
             case SongState.Playing:
             {
-                if (VisualTimeMs > ChartManager.Instance.Chart.EndOfChart.TimeMs)
+                if (VisualTimeMs > chartManager.Chart.EndOfChart.TimeMs)
                     State = SongState.Finished;
                 break;
             }
@@ -137,8 +138,7 @@ public class TimeManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
-            AudioClip bgm = ChartManager.Instance.BGMClip;
-            bgmPlayer.clip = bgm;
+            bgmPlayer.clip = chartManager.BGM;
             State = SongState.Playing;
             bgmPlayer.Play();
         }

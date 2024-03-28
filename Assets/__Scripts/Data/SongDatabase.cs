@@ -11,23 +11,25 @@ namespace SaturnGame.Data
 {
 public class SongDatabase : MonoBehaviour
 {
+    [NotNull] public static string SongPacksPath => Path.Combine(Application.streamingAssetsPath, "SongPacks");
     public List<Song> Songs;
 
     public void LoadAllSongData()
     {
-        string songPacksPath = Path.Combine(Application.streamingAssetsPath, "SongPacks");
+        string songPacksPath = SongPacksPath;
         IEnumerable<string> songDirectories =
             Directory.EnumerateFiles(songPacksPath, "meta.mer", SearchOption.AllDirectories);
 
-        foreach (string filepath in songDirectories) LoadSongData(filepath);
+        foreach (string filepath in songDirectories) Songs.Add(LoadSongData(filepath));
     }
 
-    private void LoadSongData([NotNull] string path)
+    [NotNull]
+    public static Song LoadSongData([NotNull] string metaMerPath)
     {
-        FileStream metaStream = new(path, FileMode.Open, FileAccess.Read);
+        FileStream metaStream = new(metaMerPath, FileMode.Open, FileAccess.Read);
         List<string> metaFile = MerLoader.LoadMer(metaStream);
 
-        string folderPath = Path.GetDirectoryName(path);
+        string folderPath = Path.GetDirectoryName(metaMerPath);
         string jacketPath = Directory.GetFiles(folderPath).FirstOrDefault(file =>
         {
             string filename = Path.GetFileNameWithoutExtension(file);
@@ -116,7 +118,7 @@ public class SongDatabase : MonoBehaviour
             } while (++readerIndex < merFile.Count);
         }
 
-        Songs.Add(new Song(title, rubi, artist, bpm, folderPath, jacketPath, diffs));
+        return new Song(title, rubi, artist, bpm, folderPath, jacketPath, diffs);
     }
 }
 }

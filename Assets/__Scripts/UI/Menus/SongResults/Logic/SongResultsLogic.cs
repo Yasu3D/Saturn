@@ -16,9 +16,9 @@ public class SongResultsLogic : MonoBehaviour
 
     private void Start()
     {
-        Song song = PersistentStateManager.Instance.LastSelectedSong;
+        Song song = PersistentStateManager.Instance.SelectedSong;
         songTitleText.text = song.Title;
-        SongDifficulty songDifficulty = PersistentStateManager.Instance.LastSelectedDifficulty;
+        SongDifficulty songDifficulty = PersistentStateManager.Instance.SelectedDifficulty;
         difficultyText.text = songDifficulty.Difficulty switch
         {
             Difficulty.Normal => "NORMAL",
@@ -29,7 +29,7 @@ public class SongResultsLogic : MonoBehaviour
             _ => throw new ArgumentOutOfRangeException(),
         };
         levelText.text = SaturnMath.GetDifficultyString(songDifficulty.Level);
-        ScoreData scoreData = ChartManager.Instance.LastScoreData;
+        ScoreData scoreData = PersistentStateManager.Instance.LastScoreData;
         scoreNumRenderer.SetScoreNum(scoreData.Score);
         judgementsInfoRenderer.SetJudgementCountTexts(scoreData.JudgementCounts);
         earlyLateInfoRenderer.SetEarlyLateCountTexts(scoreData.EarlyCount, scoreData.LateCount,
