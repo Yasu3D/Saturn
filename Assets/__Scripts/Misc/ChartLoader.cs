@@ -53,7 +53,7 @@ public class ChartLoader
         CreateBgmData();
         CreateHiSpeedData();
         SetTime();
-        ProcessHitWindows();
+        ProcessHitWindows(chart);
 
         if (chart.ReverseGimmicks.Count != 0)
             GenerateReverseLists();
@@ -699,7 +699,7 @@ public class ChartLoader
         return pointWithinNote(note1, note2.Left) || pointWithinNote(note2, note1.Left);
     }
 
-    private void ProcessHitWindows()
+    private static void ProcessHitWindows([NotNull] Chart chart)
     {
         List<Note> allNotesFromChart = chart.Notes.Concat(chart.HoldNotes).OrderBy(note => note.TimeMs).ToList();
         // TODO: swipe notes within a hold... that is gonna be hell lmao

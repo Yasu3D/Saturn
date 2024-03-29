@@ -202,15 +202,15 @@ public abstract class Note : PositionedChartElement
         RNote,
     }
 
-    protected const float FrameMS = 1000f / 60f;
+    protected const float FrameMs = 1000f / 60f;
 
     protected static HitWindow[] BaseHitWindows =
     {
         // Touch note windows from the original game.
         // Note: these are frame-based, so the feel will be different.
-        new(-3 * FrameMS, 3 * FrameMS, RhythmGame.Judgement.Marvelous),
-        new(-5 * FrameMS, 5 * FrameMS, RhythmGame.Judgement.Great),
-        new(-6 * FrameMS, 6 * FrameMS, RhythmGame.Judgement.Good),
+        new(-3 * FrameMs, 3 * FrameMs, RhythmGame.Judgement.Marvelous),
+        new(-5 * FrameMs, 5 * FrameMs, RhythmGame.Judgement.Great),
+        new(-6 * FrameMs, 6 * FrameMs, RhythmGame.Judgement.Good),
         // There is no early or late Miss window.
         // You get a Miss if all windows pass without hitting the note.
     };

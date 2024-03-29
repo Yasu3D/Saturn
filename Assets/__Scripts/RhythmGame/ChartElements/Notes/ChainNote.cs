@@ -16,7 +16,7 @@ public class ChainNote : Note
 
     private static HitWindow[] hitWindows =
     {
-        new(-4 * FrameMS, 4 * FrameMS, RhythmGame.Judgement.Marvelous),
+        new(-4 * FrameMs, 4 * FrameMs, RhythmGame.Judgement.Marvelous),
     };
 
     public override HitWindow[] HitWindows => hitWindows;
