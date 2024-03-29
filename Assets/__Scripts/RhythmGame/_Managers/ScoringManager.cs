@@ -14,50 +14,51 @@ namespace SaturnGame.RhythmGame
 /// A new ScoringManager should be used for each independent score.
 public class ScoringManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI debugText;
-
+    [Header("DEBUG")]
+    [SerializeField] private TextMeshProUGUI DebugText;
     public bool AutoWriteReplays = true;
-
-    // Only modify on main thread Update()
-    public bool WritingReplayAndExiting;
-
+    public bool WritingReplayAndExiting; // Only modify on main thread Update()
+    
     [Header("MANAGERS")]
-    [SerializeField] private TimeManager timeManager;
-    [SerializeField] private ChartManager chartManager;
-    [SerializeField] private ReplayManager replayManager;
+    [SerializeField] private TimeManager TimeManager;
+    [SerializeField] private ChartManager ChartManager;
+    [SerializeField] private ReplayManager ReplayManager;
 
-    private Chart Chart => chartManager.Chart;
-
+    [Space(10)]
+    
     public int CurrentCombo;
     public int LastMissChartTick;
-    public Judgement LastJudgement { get; private set; } = Judgement.None;
-    public float? LastJudgementTimeMs { get; private set; }
-    // LastJudgement and LastHitOffsetMs are split because some judgements do not have any early/late info, such as
-    // chain notes or hold ends.
     public float? LastHitErrorMs { get; private set; }
-    public float? LastHitErrorMsTimeMs { get; private set; }
+    public float? LastHitTimeMs { get; private set; }
     public bool NeedTouchHitsound;
     public bool NeedSwipeSnapHitsound;
 
+    [Header("VISUALS")]
+    [SerializeField] private CenterDisplay CenterDisplay; 
+    [SerializeField] private JudgementDisplay JudgementDisplay;
+    [SerializeField] private ScoreNumberText ScoreText;
+    
     private string loadedChart;
+    private Chart Chart => ChartManager.Chart;
 
     // Notes must be sorted by note TimeMs
     private List<Note> Notes => Chart.ProcessedNotesForGameplay;
 
     private void ShowDebugText(string text)
     {
-        if (debugText is null)
+        if (DebugText is null)
             return;
 
-        debugText.text = $"{timeManager.VisualTimeMs}\n" + text;
+        DebugText.text = $"{TimeManager.VisualTimeMs}\n" + text;
     }
 
     public ScoreData CurrentScoreData()
     {
-        ScoreData ret = new()
+        ScoreData data = new()
         {
             Score = 0,
-            JudgementCounts = new Dictionary<Judgement, int>
+            MaxScore = 0,
+            JudgementCounts = new()
             {
                 { Judgement.Marvelous, 0 },
                 { Judgement.Great, 0 },
@@ -65,28 +66,32 @@ public class ScoringManager : MonoBehaviour
                 { Judgement.Miss, 0 },
             },
             EarlyCount = 0,
-            LateCount = 0,
-            EarlyCountByJudgement = new Dictionary<Judgement, int>
+            EarlyCountByJudgement = new()
             {
                 { Judgement.Marvelous, 0 },
                 { Judgement.Great, 0 },
                 { Judgement.Good, 0 },
             },
-            LateCountByJudgement = new Dictionary<Judgement, int>
+            LateCount = 0,
+            LateCountByJudgement = new()
             {
                 { Judgement.Marvelous, 0 },
                 { Judgement.Great, 0 },
                 { Judgement.Good, 0 },
             },
         };
-        if (Notes is null || Notes.Count == 0) return ret;
+        
+        if (Notes is null || Notes.Count == 0) return data;
 
-        long maxScoreBeforeNormalization = 0;
-        long scoreBeforeNormalization = 0;
+        // Values aren't normalized to a range of [0 <> 1,000,000] yet.
+        long currentScore = 0;
+        long maxTotalScore = 0;
+        long maxCurrentScore = 0;
+
         foreach (Note note in Notes)
         {
             int noteMaxScore = 100;
-            int noteEarnedScore = note.Judgement switch
+            int noteScore = note.Judgement switch
             {
                 null => 0,
                 Judgement.None => 0,
@@ -100,52 +105,35 @@ public class ScoringManager : MonoBehaviour
             if (note.BonusType is Note.NoteBonusType.RNote)
             {
                 noteMaxScore *= 2;
-                noteEarnedScore *= 2;
+                noteScore *= 2;
             }
 
-            maxScoreBeforeNormalization += noteMaxScore;
-            scoreBeforeNormalization += noteEarnedScore;
+            currentScore += noteScore;
+            maxTotalScore += noteMaxScore;
 
             if (note.Judgement is null or Judgement.None) continue;
 
-            ret.JudgementCounts[note.Judgement.Value]++;
+            maxCurrentScore += noteMaxScore;
+            data.JudgementCounts[note.Judgement.Value]++;
 
             if (note is ChainNote || note.TimeErrorMs is null || note.Judgement is Judgement.Miss) continue;
-            switch (note.TimeErrorMs)
+            
+            if (note.TimeErrorMs < 0)
             {
-                case < 0:
-                {
-                    if (note.Judgement is not Judgement.Marvelous)
-                    {
-                        // Marvelous notes don't count toward overall early count.
-                        ret.EarlyCount++;
-                    }
+                data.EarlyCountByJudgement[note.Judgement.Value]++;
+                if (note.Judgement is not Judgement.Marvelous) data.EarlyCount++;
+            }
 
-                    ret.EarlyCountByJudgement[note.Judgement.Value]++;
-                    break;
-                }
-                case > 0:
-                {
-                    if (note.Judgement is not Judgement.Marvelous)
-                    {
-                        // Marvelous notes don't count toward overall late count.
-                        ret.LateCount++;
-                    }
-
-                    ret.LateCountByJudgement[note.Judgement.Value]++;
-                    break;
-                }
+            if (note.TimeErrorMs > 0)
+            {
+                data.LateCountByJudgement[note.Judgement.Value]++;
+                if (note.Judgement is not Judgement.Marvelous) data.LateCount++;
             }
         }
-
-        ret.Score = maxScoreBeforeNormalization == 0
-            ? 0
-            :
-            // Int conversion should be safe as max score is 1,000,000
-            // (unless we fucked something up, then exception is appropriate anyway)
-            Convert.ToInt32(scoreBeforeNormalization * 1_000_000L / maxScoreBeforeNormalization);
-
-        return ret;
+        
+        data.Score = maxTotalScore == 0 ? 0 : (int)(1_000_000L * currentScore / maxTotalScore);
+        data.MaxScore = maxTotalScore == 0 ? 0 : (int)(1_000_000L * maxCurrentScore / maxTotalScore);
+        return data;
     }
 
     // This should be greater than the maximum late timing window of any note.
@@ -156,19 +144,22 @@ public class ScoringManager : MonoBehaviour
 
     private void HitNote(float hitTimeMs, [NotNull] Note note, bool needSnapSwipeHitsound = false)
     {
-        LastJudgement = note.Hit(hitTimeMs);
-        LastJudgementTimeMs = hitTimeMs;
-        if (note is not ChainNote && LastJudgement is not Judgement.Marvelous)
+        Judgement lastJudgement = note.Hit(hitTimeMs);
+        ScoreData currentScoreData = CurrentScoreData();
+        
+        if (note is not ChainNote && lastJudgement is not Judgement.Marvelous)
         {
-            // TODO: option to allow showing Early/Late on Marvelous judgements
             LastHitErrorMs = note.TimeErrorMs;
-            LastHitErrorMsTimeMs = hitTimeMs;
+            LastHitTimeMs = hitTimeMs;
         }
 
         // HoldNotes affect combo at hold end
-        if (note is not HoldNote)
-            IncrementCombo(note.ChartTick);
-
+        if (note is not HoldNote) IncrementCombo(note.ChartTick);
+        
+        ScoreText.UpdateScore(currentScoreData);
+        CenterDisplay.UpdateScore(currentScoreData);
+        JudgementDisplay.ShowJudgement(lastJudgement, LastHitErrorMs ?? 0);
+        
         NeedTouchHitsound = true;
         NeedSwipeSnapHitsound = needSnapSwipeHitsound;
     }
@@ -180,16 +171,19 @@ public class ScoringManager : MonoBehaviour
             CurrentCombo++;
         // Warning: we could still miss a note that is earlier than the note we just hit. So, the combo would be the
         // number of notes hit consecutively, but they would not actually be consecutive notes.
+
+        CenterDisplay.UpdateCombo(CurrentCombo);
     }
 
     private void EndCombo(int chartTick)
     {
         CurrentCombo = 0;
         LastMissChartTick = chartTick;
+        
+        CenterDisplay.UpdateCombo(CurrentCombo);
     }
 
-    private void MaybeCalculateHitForNote(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] Note note,
-        [NotNull] TouchState newSegments)
+    private void MaybeCalculateHitForNote(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] Note note, [NotNull] TouchState newSegments)
     {
         if (note.IsHit) return;
 
@@ -205,15 +199,17 @@ public class ScoringManager : MonoBehaviour
             //Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
 
             note.MissHit();
-            LastJudgement = Judgement.Miss;
-            LastJudgementTimeMs = hitTimeMs;
             // HoldNotes affect combo at hold end.
             if (note is not HoldNote)
                 EndCombo(note.ChartTick);
 
             if (note is HoldNote holdNote)
                 activeHolds.Add(holdNote);
-
+            
+            ScoreData currentScoreData = CurrentScoreData();
+            ScoreText.UpdateScore(currentScoreData);
+            CenterDisplay.UpdateScore(currentScoreData);
+            JudgementDisplay.ShowJudgement(Judgement.Miss, 0);
             return;
         }
 
@@ -302,12 +298,9 @@ public class ScoringManager : MonoBehaviour
         {
             // Hold note is finished.
             Judgement judgement = holdNote.Judge();
-            ShowDebugText(
-                $"HoldNote\nStart: {holdNote.StartJudgement}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
-            LastJudgement = judgement;
-            LastJudgementTimeMs = hitTimeMs;
-            if (holdNote.CurrentlyHeld)
-                NeedTouchHitsound = true;
+            ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
+            if (holdNote.CurrentlyHeld) NeedTouchHitsound = true;
+            
             switch (judgement)
             {
                 case Judgement.Marvelous:
@@ -324,6 +317,11 @@ public class ScoringManager : MonoBehaviour
                 }
             }
 
+            ScoreData currentScoreData = CurrentScoreData();
+            ScoreText.UpdateScore(currentScoreData);
+            CenterDisplay.UpdateScore(currentScoreData);
+            JudgementDisplay.ShowJudgement(judgement, 0);
+            
             return true;
         }
 
@@ -396,7 +394,7 @@ public class ScoringManager : MonoBehaviour
             prevTouchState = touchState;
         }
     }
-
+    
     private async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -411,14 +409,14 @@ public class ScoringManager : MonoBehaviour
         // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
         // of the end of the audio clip.
         // TODO: move this logic somewhere else lol
-        if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs &&
+        if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < TimeManager.VisualTimeMs &&
             !WritingReplayAndExiting)
         {
             async Awaitable endSong()
             {
                 WritingReplayAndExiting = true;
-                if (AutoWriteReplays && !replayManager.PlayingFromReplay)
-                    await replayManager.WriteReplayFile();
+                if (AutoWriteReplays && !ReplayManager.PlayingFromReplay)
+                    await ReplayManager.WriteReplayFile();
 
                 PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
                 SceneSwitcher.Instance.LoadScene("_SongResults");
@@ -432,10 +430,11 @@ public class ScoringManager : MonoBehaviour
 public struct ScoreData
 {
     public int Score;
+    public int MaxScore;
     public Dictionary<Judgement, int> JudgementCounts;
     public int EarlyCount;
-    public int LateCount;
     public Dictionary<Judgement, int> EarlyCountByJudgement;
+    public int LateCount;
     public Dictionary<Judgement, int> LateCountByJudgement;
 }
 }

@@ -12,8 +12,8 @@ public class EarlyLateDisplay : MonoBehaviour
 
     private void Update()
     {
-        if (scoringManager.LastHitErrorMsTimeMs is null ||
-            scoringManager.LastHitErrorMsTimeMs.Value + 1000 < timeManager.VisualTimeMs)
+        if (scoringManager.LastHitTimeMs is null ||
+            scoringManager.LastHitTimeMs.Value + 1000 < timeManager.VisualTimeMs)
         {
             text.enabled = false;
             return;

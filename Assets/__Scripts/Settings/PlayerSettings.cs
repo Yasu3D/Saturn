@@ -388,7 +388,7 @@ public class UISettings
     /// 7 > SSS Border<br/>
     /// 8 > Personal Best Border<br/>
     /// </summary>
-    public int CenterDisplayInfo = 0;
+    public int CenterDisplayInfo = 1;
     
     /// <summary>
     /// 0 > Plus Method<br/>

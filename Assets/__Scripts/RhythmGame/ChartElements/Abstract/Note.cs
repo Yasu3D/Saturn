@@ -50,13 +50,7 @@ public abstract class Note : PositionedChartElement
     // A null TimeErrorMs is possible if the HitWindows were judged as a Miss, or if the note hasn't been hit yet.
     public float? TimeErrorMs => HitTimeMs - TimeMs;
 
-    protected Note(
-        int measure,
-        int tick,
-        int position,
-        int size,
-        NoteBonusType bonusType,
-        bool isSync = false) : base(measure, tick, position, size)
+    protected Note(int measure, int tick, int position, int size, NoteBonusType bonusType, bool isSync = false) : base(measure, tick, position, size)
     {
         BonusType = bonusType;
         IsSync = isSync;

@@ -447,7 +447,7 @@ MonoBehaviour:
       GuideLaneOpacity: 5
       DisplayOpacity: 0
       ShowBarLines: 1
-      CenterDisplayInfo: 0
+      CenterDisplayInfo: 1
       ScoreDisplayMethod: 0
     DesignSettings:
       RingColor: 0
