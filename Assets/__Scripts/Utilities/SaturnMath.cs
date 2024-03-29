@@ -292,11 +292,31 @@ public static class SaturnMath
         }
     }
 
+    // The fraction <-> decibel conversion is linear past (CrossoverFraction, CrossoverDecibel), up to (1.0, 0dB).
+    // Before that, it's a y=1/x curve that is shifted to pass through (0, -80dB) and
+    // (CrossoverFraction, CrossoverDecibel), and scaled to make the transition a bit more reasonable.
+
+    // Above CrossoverFraction/CrossoverDecibel, the curve is linear up to (1.0, 0dB)
+    private const float CrossoverFraction = 0.5f;
+    private const float CrossoverDecibel = -7f;
+    // MinDecibel is the value we should see at fraction = 0;
+    private const float MinDecibel = -80f;
+    // The curve passes through (X0, Y0) and (X1, Y1).
+    private const float X0 = 0f, Y0 = MinDecibel;
+    private const float X1 = CrossoverFraction, Y1 = CrossoverDecibel;
+    // These are intermediate values useful for calculating XOffset and YOffset appropriately
+    private const float XDiff = X0 - X1;
+    private const float YDiff = Y1 - Y0;
+    // The curve is of the form -ConstantScale / (x + XOffset) = y + YOffset.
+    // XOffset and YOffset are solved to pass through (X0, Y0) and (X1, Y1).
+    // Yes, I spent a silly amount of time working out the math here.
+    private const float ConstantScale = 4.3f; // chosen by trying stuff in Desmos
+    private static readonly float XOffset = (-(XDiff * YDiff) + Mathf.Sqrt(Mathf.Pow(XDiff * YDiff, 2) - 4 * XDiff * YDiff * ConstantScale)) / (2 * YDiff) - X1;
+    private static readonly float YOffset = (XOffset + X1) * YDiff / XDiff - Y0;
+
     /// <summary>
     /// Converts a user-friendly volume level between 0 and 1 to a decibel offset that can be used in the mixer.
-    /// For values from 0.1 to 1, the scale is from -20dB to 0dB.
-    /// For 0.01 to 0.1, the scale is from -40dB to -20dB.
-    /// Then 0 to 0.01 scales all the way down to -80dB.
+    /// See above comments for details of the algorithm.
     /// </summary>
     /// <param name="fraction">loudness level from 0 to 1</param>
     /// <returns>A decibel offset, between -80dB and 0dB.</returns>
@@ -304,9 +324,12 @@ public static class SaturnMath
     {
         return fraction switch
         {
-            >= 0.1f => Remap(fraction, 0.1f, 1f, -20f, 0f, true),
-            >= 0.01f and < 0.1f => Remap(fraction, 0.01f, 0.1f, -40f, -20f, true),
-            < 0.01f => Remap(fraction, 0f, 0.01f, -80f, -40f, true),
+            < 0f => -80f,
+            > 1f => 0f,
+            >= CrossoverFraction => Remap(fraction, CrossoverFraction, 1, CrossoverDecibel, 0),
+            < CrossoverFraction => -ConstantScale / (fraction + XOffset) - YOffset,
+            // ReSharper disable once PatternIsRedundant
+            // Apparent R# bug, see https://youtrack.jetbrains.com/issue/RSRP-493503 and related issues
             float.NaN => throw new ArgumentException("fraction must be a valid number"),
         };
     }
@@ -314,17 +337,20 @@ public static class SaturnMath
     /// <summary>
     /// Converts decibel offset to a user-friendly volume level.
     /// This is the inverse of FractionToDecibel.
+    /// See above comments for details of the algorithm.
     /// </summary>
     /// <param name="decibel">A relative decibel offset where 0dB = 100% volume.</param>
-    /// <param name="clamp">Whether to clamp to [0, 1] range for values outside [-80dB, 0dB]</param>
-    /// <returns>User-friendly volume level. Can go beyond the typical [0, 1] range if clamp is false</returns>
-    public static float DecibelToFraction(float decibel, bool clamp = false)
+    /// <returns>User-friendly volume level</returns>
+    public static float DecibelToFraction(float decibel)
     {
         return decibel switch
         {
-            >= -20f => Remap(decibel, -20f, 0f, 0.1f, 1f, clamp),
-            >= -40f and < -20f => Remap(decibel, -40f, -20f, 0.01f, 0.1f, clamp),
-            < -40f => Remap(decibel, -80f, -40f, 0f, 0.01f, clamp),
+            > 0f => 1f,
+            < MinDecibel => 0f,
+            >= CrossoverDecibel => Remap(decibel, CrossoverDecibel, 0.00f, CrossoverFraction, 1),
+            < CrossoverDecibel => -ConstantScale / (decibel + YOffset) - XOffset,
+            // ReSharper disable once PatternIsRedundant
+            // Apparent R# bug, see https://youtrack.jetbrains.com/issue/RSRP-493503 and related issues
             float.NaN => throw new ArgumentException("decibel must be a valid number"),
         };
     }
