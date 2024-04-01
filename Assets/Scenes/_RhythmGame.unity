@@ -2311,6 +2311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c3027c8a2321bdda0ccba9da30acc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeManager: {fileID: 1783936258}
   Chart:
     Difficulty: 0
     ClearThreshold: 0
@@ -3178,7 +3179,7 @@ MonoBehaviour:
   chartManager: {fileID: 1472638035}
   timeManager: {fileID: 1783936258}
   scoringManager: {fileID: 1472638032}
-  guideSound: {fileID: 0}
+  guideSound: {fileID: 8300000, guid: 095d1eb19bf3539238ab8cc42349c8dc, type: 3}
   touchSound: {fileID: 8300000, guid: c6da9335a7695cb48a86c922be47e5dc, type: 3}
   swipeSound: {fileID: 8300000, guid: 980b3d134a5f9475dafad4405ed12cff, type: 3}
   PoolSize: 30
