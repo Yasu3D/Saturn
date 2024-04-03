@@ -121,14 +121,20 @@ public class InputManager : MonoBehaviour
         return new TouchState(segments);
     }
 
-    private void MaybeHandleNewTouchState(InputSource inputSource, TouchState touchState, float? timeMs)
+    private void MaybeHandleNewTouchState(InputSource inputSource, [CanBeNull] TouchState touchState, float? timeMs)
     {
         if (CurrentInputSource == inputSource)
             NewTouchState(touchState, timeMs ?? timeManager.VisualTimeMs);
     }
 
-    private void NewTouchState(TouchState touchState, float timeMs)
+    private void NewTouchState([CanBeNull] TouchState touchState, float timeMs)
     {
+        if (touchState is null || touchState.EqualsSegments(CurrentTouchState))
+        {
+            scoringManager.HandleInput(null, timeMs);
+            // Don't write to replay.
+            return;
+        }
         CurrentTouchState = touchState;
         if (replayManager != null && !replayManager.PlayingFromReplay)
             replayManager.RecordFrame(touchState, timeMs);
@@ -172,7 +178,7 @@ public class InputManager : MonoBehaviour
     }
 }
 
-public delegate void TouchStateHandler(TouchState touchState, float? timeMs);
+public delegate void TouchStateHandler([CanBeNull] TouchState touchState, float? timeMs);
 public interface IInputProvider
 {
     // TouchStateHandler may be called any number of times per frame.

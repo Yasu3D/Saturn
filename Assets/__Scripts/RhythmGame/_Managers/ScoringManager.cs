@@ -293,9 +293,9 @@ public class ScoringManager : MonoBehaviour
         }
     }
 
-    // Updates the current state of the HoldNote.
+    // Updates the current state of the HoldNote, given prevTouchState was held from prevTouchTimeMs to timeMs.
     // Returns true if the hold is completed and can be removed from further consideration.
-    private bool UpdateHold(float timeMs, [NotNull] TouchState touchState, [NotNull] HoldNote holdNote)
+    private bool UpdateHold(float timeMs, [NotNull] HoldNote holdNote)
     {
         if (timeMs < holdNote.Start.TimeMs)
         {
@@ -319,7 +319,7 @@ public class ScoringManager : MonoBehaviour
                 holdNote.Held = true;
                 if (!holdNote.CurrentlyHeld)
                 {
-                    // This is a regrab, see if the hold was unheld long enough to count as dropped.
+                    // This is a re-grab, see if the hold was not held long enough to count as dropped.
                     float dropTimeMs = curSegment.TimeMs - holdNote.LastHeldTimeMs!.Value;
                     if (dropTimeMs > HoldNote.LeniencyMs && !holdNote.Dropped)
                     {
@@ -331,56 +331,53 @@ public class ScoringManager : MonoBehaviour
                 holdNote.CurrentlyHeld = true;
                 // The note should be held up until at least the earlier of the next segment start or the current time.
                 holdNote.LastHeldTimeMs = Math.Min(timeMs, nextSegment.TimeMs);
-                ShowDebugText($"LastHeldTimeMs: {Math.Min(timeMs, nextSegment.TimeMs)}");
             }
             else
                 holdNote.CurrentlyHeld = false;
         }
 
-        if (timeMs > holdNote.End.TimeMs)
+        if (timeMs < holdNote.End.TimeMs) return false;
+
+        // Hold note is finished.
+        if (holdNote is { CurrentlyHeld: false, Dropped: false } &&
+            holdNote.End.TimeMs - holdNote.LastHeldTimeMs > HoldNote.LeniencyMs)
         {
-            // Hold note is finished.
-            if (holdNote is { CurrentlyHeld: false, Dropped: false } &&
-                holdNote.End.TimeMs - holdNote.LastHeldTimeMs > HoldNote.LeniencyMs)
-            {
-                holdNote.Dropped = true;
-                ShowDebugText($"dropped hold end after {holdNote.End.TimeMs - holdNote.LastHeldTimeMs}");
-            }
-
-            Judgement judgement = holdNote.Judge();
-            ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nCurrentlyHeld: {holdNote.CurrentlyHeld}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
-            if (holdNote.CurrentlyHeld) NeedTouchHitsound = true;
-
-            switch (judgement)
-            {
-                case Judgement.Marvelous:
-                case Judgement.Great:
-                case Judgement.Good:
-                {
-                    IncrementCombo(holdNote.End.ChartTick);
-                    break;
-                }
-                case Judgement.Miss:
-                {
-                    EndCombo(holdNote.End.ChartTick);
-                    break;
-                }
-                case Judgement.None:
-                default:
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            ScoreData currentScoreData = CurrentScoreData();
-            scoreText.UpdateScore(currentScoreData);
-            centerDisplay.UpdateScore(currentScoreData);
-            judgementDisplay.ShowJudgement(judgement, 0);
-
-            return true;
+            holdNote.Dropped = true;
+            ShowDebugText($"dropped hold end after {holdNote.End.TimeMs - holdNote.LastHeldTimeMs}");
         }
 
-        return false;
+        Judgement judgement = holdNote.Judge();
+        ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nCurrentlyHeld: {holdNote.CurrentlyHeld}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
+        if (holdNote.CurrentlyHeld) NeedTouchHitsound = true;
+
+        switch (judgement)
+        {
+            case Judgement.Marvelous:
+            case Judgement.Great:
+            case Judgement.Good:
+            {
+                IncrementCombo(holdNote.End.ChartTick);
+                break;
+            }
+            case Judgement.Miss:
+            {
+                EndCombo(holdNote.End.ChartTick);
+                break;
+            }
+            case Judgement.None:
+            default:
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        ScoreData currentScoreData = CurrentScoreData();
+        scoreText.UpdateScore(currentScoreData);
+        centerDisplay.UpdateScore(currentScoreData);
+        judgementDisplay.ShowJudgement(judgement, 0);
+
+        return true;
+
     }
 
     // minNoteIndex tracks the first note that we need to care about when judging future inputs. It should be greater than
@@ -448,7 +445,7 @@ public class ScoringManager : MonoBehaviour
             {
                 HoldNote holdNote = activeHolds[i];
 
-                bool holdFinished = UpdateHold(timeMs, touchState, holdNote);
+                bool holdFinished = UpdateHold(timeMs, holdNote);
 
                 if (holdFinished)
                     activeHolds.Remove(holdNote);
