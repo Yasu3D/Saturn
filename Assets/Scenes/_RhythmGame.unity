@@ -2255,19 +2255,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa3f905a5f427b4e923a628a2f1f552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugText: {fileID: 1245724631}
+  debugText: {fileID: 1245724631}
   AutoWriteReplays: 1
   WritingReplayAndExiting: 0
-  TimeManager: {fileID: 1783936258}
-  ChartManager: {fileID: 1472638035}
-  ReplayManager: {fileID: 1472638036}
+  timeManager: {fileID: 1783936258}
+  chartManager: {fileID: 1472638035}
+  replayManager: {fileID: 1472638036}
   CurrentCombo: 0
   LastMissChartTick: 0
   NeedTouchHitsound: 0
   NeedSwipeSnapHitsound: 0
-  CenterDisplay: {fileID: 1911480936}
-  JudgementDisplay: {fileID: 934029769}
-  ScoreText: {fileID: 1183298166}
+  centerDisplay: {fileID: 1911480936}
+  judgementDisplay: {fileID: 934029769}
+  scoreText: {fileID: 1183298166}
 --- !u!4 &1472638033
 Transform:
   m_ObjectHideFlags: 0
