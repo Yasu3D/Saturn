@@ -43,7 +43,7 @@ public class OptionsLogic : MonoBehaviour
         panelAnimator.SetPrimaryPanel(startScreen.ListItems[CurrentIndex]);
     }
 
-    private async void OnConfirm()
+    public async void OnConfirm()
     {
         if (state is MenuState.MenuSwitch) return;
 
@@ -110,7 +110,7 @@ public class OptionsLogic : MonoBehaviour
         state = MenuState.Idle;
     }
 
-    private async void OnBack()
+    public async void OnBack()
     {
         if (state is MenuState.MenuSwitch) return;
 
@@ -140,7 +140,7 @@ public class OptionsLogic : MonoBehaviour
         state = MenuState.Idle;
     }
 
-    private void OnNavigateLeft()
+    public void OnNavigateLeft()
     {
         if (state is MenuState.MenuSwitch) return;
         if (screenStack.Count == 0 || indexStack.Count == 0) return;
@@ -154,7 +154,7 @@ public class OptionsLogic : MonoBehaviour
         panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
     }
 
-    private void OnNavigateRight()
+    public void OnNavigateRight()
     {
         if (state is MenuState.MenuSwitch) return;
         if (screenStack.Count == 0 || indexStack.Count == 0) return;
@@ -168,7 +168,7 @@ public class OptionsLogic : MonoBehaviour
         panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
     }
 
-    private async void OnRevert()
+    public async void OnRevert()
     {
         UIListItem selectedItem = CurrentScreen.ListItems[CurrentIndex];
         if (selectedItem.SettingsParameter == "") return;

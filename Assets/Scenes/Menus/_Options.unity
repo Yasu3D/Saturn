@@ -290,6 +290,46 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -66
       objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: position
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 724074678}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnConfirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaturnGame.UI.OptionsLogic, SaturnGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 2918ee8fb1978f8408d021432b992059,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8813558283991467867, guid: 2918ee8fb1978f8408d021432b992059,
         type: 3}
       propertyPath: m_text
@@ -678,6 +718,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
         type: 3}
+      propertyPath: position
+      value: 48
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
       propertyPath: m_Colors.m_NormalColor.a
       value: 1
       objectReference: {fileID: 0}
@@ -710,6 +755,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
       value: 0.19607845
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 724074678}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnNavigateRight
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaturnGame.UI.OptionsLogic, SaturnGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6782211079689194239, guid: 4a37aba8a085f884dbb155b218cb5c65,
         type: 3}
@@ -1499,6 +1579,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
         type: 3}
+      propertyPath: position
+      value: 39
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
       propertyPath: m_Colors.m_NormalColor.a
       value: 1
       objectReference: {fileID: 0}
@@ -1531,6 +1616,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
       value: 0.19607845
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 724074678}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnNavigateLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaturnGame.UI.OptionsLogic, SaturnGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 5195941447639809190, guid: 4a37aba8a085f884dbb155b218cb5c65,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6782211079689194239, guid: 4a37aba8a085f884dbb155b218cb5c65,
         type: 3}
@@ -2101,6 +2221,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
         type: 3}
+      propertyPath: position
+      value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
       propertyPath: m_Colors.m_NormalColor.b
       value: 0.83921576
       objectReference: {fileID: 0}
@@ -2113,6 +2238,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Colors.m_NormalColor.r
       value: 0.3803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 724074678}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnRevert
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaturnGame.UI.OptionsLogic, SaturnGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2538,7 +2698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994888665}
   - component: {fileID: 1994888664}
-  - component: {fileID: 1994888663}
+  - component: {fileID: 1994888666}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -2546,26 +2706,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1994888663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994888662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
 --- !u!114 &1994888664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2596,6 +2736,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1994888666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994888662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f06371c77014c6d810820680f2f8f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
 --- !u!1 &2020441782
 GameObject:
   m_ObjectHideFlags: 0
@@ -2650,7 +2810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3606da3a51cc724290d6a37d6fbf8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI: {fileID: 2020441783}
+  ui: {fileID: 2020441783}
   oBounds: {x: 0, y: 840}
 --- !u!114 &2036872744 stripped
 MonoBehaviour:
@@ -3123,6 +3283,46 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: position
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 724074678}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaturnGame.UI.OptionsLogic, SaturnGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522683792365666324, guid: d92b63c42cf02524596e2821820ac13d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

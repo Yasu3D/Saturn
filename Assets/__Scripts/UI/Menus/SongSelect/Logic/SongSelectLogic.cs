@@ -104,7 +104,7 @@ public class SongSelectLogic : MonoBehaviour
     }
 
 
-    private void OnDifficultyChange(int changeBy)
+    public void OnDifficultyChange(int changeBy)
     {
         if (page == MenuPage.ExitingMenu) return;
         if (SelectedDifficulty + changeBy is < 0 or > 4) return;
@@ -122,7 +122,7 @@ public class SongSelectLogic : MonoBehaviour
         bgmPreview.ResetLingerTimer();
     }
 
-    private void OnBack()
+    public void OnBack()
     {
         if (page == MenuPage.ExitingMenu) return;
         UIAudio.PlaySound(UIAudioController.UISound.Back);
@@ -155,7 +155,7 @@ public class SongSelectLogic : MonoBehaviour
         }
     }
 
-    private void OnConfirm()
+    public void OnConfirm()
     {
         switch (page)
         {
@@ -198,7 +198,7 @@ public class SongSelectLogic : MonoBehaviour
         Right = +1,
     }
 
-    private async void OnNavigateLeftRight(NavigateDirection direction)
+    private async Awaitable OnNavigateLeftRight(NavigateDirection direction)
     {
         if (page == MenuPage.ExitingMenu) return;
         if (page is not MenuPage.SongSelect) return;
@@ -232,6 +232,17 @@ public class SongSelectLogic : MonoBehaviour
         bgmPreview.ResetLingerTimer();
     }
 
+    public async void OnNavigateLeft()
+    {
+        await OnNavigateLeftRight(NavigateDirection.Left);
+    }
+
+
+    public async void OnNavigateRight()
+    {
+        await OnNavigateLeftRight(NavigateDirection.Right);
+    }
+
     public void OnSort()
     {
     }
@@ -240,7 +251,7 @@ public class SongSelectLogic : MonoBehaviour
     {
     }
 
-    private void OnOptions()
+    public void OnOptions()
     {
         if (page == MenuPage.ExitingMenu) return;
 
@@ -332,8 +343,8 @@ public class SongSelectLogic : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A)) OnNavigateLeftRight(NavigateDirection.Left);
-        if (Input.GetKeyDown(KeyCode.D)) OnNavigateLeftRight(NavigateDirection.Right);
+        if (Input.GetKeyDown(KeyCode.A)) OnNavigateLeft();
+        if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
         if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
         if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
         if (Input.GetKeyDown(KeyCode.UpArrow)) OnDifficultyChange(+1);

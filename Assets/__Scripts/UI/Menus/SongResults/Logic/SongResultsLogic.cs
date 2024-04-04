@@ -36,8 +36,13 @@ public class SongResultsLogic : MonoBehaviour
             scoreData.EarlyCountByJudgement, scoreData.LateCountByJudgement);
     }
 
+    public void OnContinue()
+    {
+        SceneSwitcher.Instance.LoadScene("_SongSelect");
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) SceneSwitcher.Instance.LoadScene("_SongSelect");
+        if (Input.GetKeyDown(KeyCode.Space)) OnContinue();
     }
 }

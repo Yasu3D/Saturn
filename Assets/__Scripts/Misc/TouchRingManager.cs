@@ -17,6 +17,7 @@ namespace SaturnGame
 public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputProvider
 {
     public TouchStateHandler TouchStateHandler { private get; set; }
+    public TouchState CurrentTouchState { get; private set; }
 
     // Warning: Please only use BaseStream to read/write. The .NET SerialPort implementation has several issues,
     // especially regarding its internal buffer/cache. This can all be avoided if you use BaseStream directly and
@@ -248,9 +249,11 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
             }
         }
 
+        TouchState state = new(segments);
         // TODO: once we have sub-frame updates, use a TimedTouchState here.
         // Since timeMs is null, InputManager will use VisualTimeMs from the TimeManager.
-        TouchStateHandler?.Invoke(new TouchState(segments), null);
+        TouchStateHandler?.Invoke(state, null);
+        CurrentTouchState = state;
     }
 }
 
