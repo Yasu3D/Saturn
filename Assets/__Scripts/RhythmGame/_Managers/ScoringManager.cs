@@ -52,6 +52,7 @@ public class ScoringManager : MonoBehaviour
         DebugText.text = $"{TimeManager.VisualTimeMs}\n" + text;
     }
 
+    // TODO: rework this to avoid a bajillion allocations
     public ScoreData CurrentScoreData()
     {
         ScoreData data = new()

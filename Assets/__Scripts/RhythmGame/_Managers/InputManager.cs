@@ -97,67 +97,67 @@ public class KeyboardInput : IInputProvider
 
     private static void ReadFromKeyboard(bool[,] segments)
     {
-        foreach (int i in Enumerable.Range(0, 60))
-        foreach (int j in Enumerable.Range(0, 4))
+        for (int i = 0; i < 60; i++)
+        for (int j = 0; j < 4; j++)
             segments[i, j] = false;
 
         if (Input.GetKey("[6]"))
         {
-            foreach (int i in Enumerable.Range(56, 4))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 56; i < 60; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
 
-            foreach (int i in Enumerable.Range(0, 4))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 0; i < 4; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[9]"))
         {
-            foreach (int i in Enumerable.Range(4, 7))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 4; i < 11; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[8]"))
         {
-            foreach (int i in Enumerable.Range(11, 8))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 11; i < 19; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[7]"))
         {
-            foreach (int i in Enumerable.Range(19, 7))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 19; i < 26; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[4]"))
         {
-            foreach (int i in Enumerable.Range(26, 8))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 26; i < 34; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[1]"))
         {
-            foreach (int i in Enumerable.Range(34, 7))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 34; i < 41; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[2]"))
         {
-            foreach (int i in Enumerable.Range(41, 8))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 41; i < 49; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 
         if (Input.GetKey("[3]"))
         {
-            foreach (int i in Enumerable.Range(49, 7))
-            foreach (int j in Enumerable.Range(1, 2))
+            for (int i = 49; i < 56; i++)
+            for (int j = 1; j < 3; j++)
                 segments[i, j] = true;
         }
 

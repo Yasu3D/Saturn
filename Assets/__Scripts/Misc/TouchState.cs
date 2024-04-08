@@ -251,10 +251,11 @@ public readonly struct TouchState
     public void WriteSegmentsPressedSince(ref TouchState dest, TouchState previous)
     {
         TouchState current = this;
+        // TODO: avoid capturing current in the lambda to reduce alloc
         StealAndUpdateSegments(ref dest, newSegments =>
         {
-            foreach (int i in Enumerable.Range(0, current.Segments.GetLength(0)))
-            foreach (int j in Enumerable.Range(0, current.Segments.GetLength(1)))
+            for (int i = 0; i < current.Segments.GetLength(0); i++)
+            for (int j = 0; j < current.Segments.GetLength(1); j++)
                 newSegments[i, j] = !previous.IsPressed(i, j) && current.IsPressed(i, j);
         });
     }
@@ -267,10 +268,11 @@ public readonly struct TouchState
     {
         if (other is null) return false;
         // Assume segments are the same size, should be enforced by constructor.
-        bool[,] thisSegments = Segments;
-        return Enumerable.Range(0, Segments.GetLength(0))
-            .All(i => Enumerable.Range(0, thisSegments.GetLength(1))
-                .All(j => thisSegments[i, j] == other.Value.Segments[i, j]));
+        for (int i = 0; i < Segments.GetLength(0); i++)
+        for (int j = 0; j < Segments.GetLength(1); j++)
+            if (Segments[i, j] != other.Value.Segments[i, j]) return false;
+
+        return true;
     }
 
     public bool IsPressed(int anglePos, int depthPos)
@@ -280,8 +282,10 @@ public readonly struct TouchState
 
     public bool AnglePosPressedAtAnyDepth(int anglePos)
     {
-        TouchState touchState = this;
-        return Enumerable.Range(0, 4).Any(depthPos => touchState.IsPressed(anglePos, depthPos));
+        for (int depthPos = 0; depthPos < 4; depthPos++)
+            if (IsPressed(anglePos, depthPos)) return true;
+
+        return false;
     }
 
     #endregion

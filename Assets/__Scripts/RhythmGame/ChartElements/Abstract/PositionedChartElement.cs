@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -54,8 +53,10 @@ public abstract class PositionedChartElement : ChartElement
 
     public bool Touched(TouchState touchState)
     {
-        return Enumerable.Range(Position, Size)
-            .Any(offset => touchState.AnglePosPressedAtAnyDepth(SaturnMath.Modulo(offset, 60)));
+        for (int offset = Position; offset < Position + Size; offset++)
+            if (touchState.AnglePosPressedAtAnyDepth(SaturnMath.Modulo(offset, 60))) return true;
+
+        return false;
     }
 }
 }
