@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 using SaturnGame.RhythmGame;
 using UnityEngine;
 
@@ -11,18 +9,17 @@ namespace SaturnGame
 {
 /// <summary>
 /// TouchRingManager manages the serial connection with the touch ring (input only, not LEDs).
-/// At the moment this is NOT optimized, and does a fair amount of allocation every frame. When we start optimizing
-/// memory allocations/garbage collection, this will be a good place to start.
 /// </summary>
 public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputProvider
 {
     public TouchStateHandler TouchStateHandler { private get; set; }
-    public TouchState CurrentTouchState { get; private set; }
+    public TouchState CurrentTouchState = TouchState.CreateNew();
 
     // Warning: Please only use BaseStream to read/write. The .NET SerialPort implementation has several issues,
     // especially regarding its internal buffer/cache. This can all be avoided if you use BaseStream directly and
     // never use any of the Read/Write methods on SerialPort itself. I think the mono implementation is actually
-    // basically okay, but let's be cautious and consistent. See https://sparxeng.com/blog/software/must-use-net-system-io-ports-serialport
+    // basically okay, but let's be cautious and consistent.
+    // See https://sparxeng.com/blog/software/must-use-net-system-io-ports-serialport
     private SerialPort leftRingPort;
     private SerialPort rightRingPort;
 
@@ -215,12 +212,8 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
         await InitializeTouchController();
     }
 
-    private void Update()
+    private void UpdateSegments([NotNull] bool[,] segments)
     {
-        // Initializes to all false.
-        // TODO: avoid allocation
-        bool[,] segments = new bool[60, 4];
-
         // LEFT
         if (leftRingPort is not null)
         {
@@ -231,7 +224,10 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
                 int anglePos = SaturnMath.Modulo(angleOffset + 15, 60);
 
                 for (int depthPos = 0; depthPos < 4; depthPos++)
-                    if (leftTouchData[angleOffset, 3 - depthPos]) segments[anglePos, depthPos] = true;
+                {
+                    if (leftTouchData[angleOffset, 3 - depthPos])
+                        segments[anglePos, depthPos] = true;
+                }
             }
         }
 
@@ -245,86 +241,21 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
                 int anglePos = SaturnMath.Modulo(14 - angleOffset, 60);
 
                 for (int depthPos = 0; depthPos < 4; depthPos++)
-                    if (rightTouchData[angleOffset, 3 - depthPos]) segments[anglePos, depthPos] = true;
+                {
+                    if (rightTouchData[angleOffset, 3 - depthPos])
+                        segments[anglePos, depthPos] = true;
+                }
             }
         }
+    }
 
-        TouchState state = new(segments);
+    private void Update()
+    {
+        TouchState.StealAndUpdateSegments(ref CurrentTouchState, UpdateSegments);
+
         // TODO: once we have sub-frame updates, use a TimedTouchState here.
         // Since timeMs is null, InputManager will use VisualTimeMs from the TimeManager.
-        TouchStateHandler?.Invoke(state, null);
-        CurrentTouchState = state;
-    }
-}
-
-/// <summary>
-/// TouchState is an immutable representation of the touch array state.
-/// </summary>
-[JsonObject(MemberSerialization.OptIn)]
-public class TouchState
-{
-    // Segments is a 2d array:
-    // - first index "anglePos": angular segment indicator using polar notation [0, 60)
-    //   (0 is on the right, the top is 14-15)
-    // - second index "depthPos": forward/backward segment indicator [0, 4), outside to inside
-    //   (0 is the outermost segment, 3 is the innermost segment right up against the screen)
-    [JsonProperty("_segments")] // legacy Replay compatibility
-    private readonly bool[,] segments;
-
-    // Note: parameter name here must match the field name in order for JSON deserialization to work.
-    public TouchState([NotNull] [JsonProperty("_segments")] bool[,] segments)
-    {
-        if (segments.GetLength(0) != 60 || segments.GetLength(1) != 4)
-        {
-            throw new ArgumentException(
-                $"Wrong dimensions for touch segments {segments.GetLength(0)}, {segments.GetLength(1)} (should be 60, 4)");
-        }
-
-        // TODO: avoid this - figure out a way to safely reuse without allocation
-        this.segments = (bool[,])segments.Clone();
-    }
-
-    public bool EqualsSegments([CanBeNull] TouchState other)
-    {
-        if (other is null) return false;
-        // Assume segments are the same size, should be enforced by constructor.
-        return Enumerable.Range(0, segments.GetLength(0))
-            .All(i => Enumerable.Range(0, segments.GetLength(1))
-                .All(j => segments[i, j] == other.segments[i, j]));
-    }
-
-    public bool IsPressed(int anglePos, int depthPos)
-    {
-        return segments[anglePos, depthPos];
-    }
-
-    public bool AnglePosPressedAtAnyDepth(int anglePos)
-    {
-        foreach (int depthPos in Enumerable.Range(0, 4))
-            if (IsPressed(anglePos, depthPos)) return true;
-
-        return false;
-    }
-
-    /// <summary>
-    /// SegmentsPressedSince returns a new TouchState that only marks newly activated segments,
-    /// when compared to the provided previous state.
-    /// </summary>
-    /// <param name="previous"></param>
-    /// <returns></returns>
-    [NotNull]
-    public TouchState SegmentsPressedSince([CanBeNull] TouchState previous)
-    {
-        // Initializes to all false.
-        bool[,] newSegments = new bool[60, 4];
-        foreach (int i in Enumerable.Range(0, segments.GetLength(0)))
-        foreach (int j in Enumerable.Range(0, segments.GetLength(1)))
-        {
-            if ((previous is null || !previous.IsPressed(i, j)) && IsPressed(i, j))
-                newSegments[i, j] = true;
-        }
-
-        return new TouchState(newSegments);
+        TouchStateHandler?.Invoke(CurrentTouchState, null);
     }
 }
 }

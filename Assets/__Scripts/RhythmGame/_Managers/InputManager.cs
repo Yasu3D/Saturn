@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
         Keyboard,
         Replay,
     }
+
     public InputSource CurrentInputSource;
 
     [Header("MANAGERS")]
@@ -19,13 +20,87 @@ public class InputManager : MonoBehaviour
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private ReplayManager replayManager;
 
-    public TouchState CurrentTouchState;
+    private readonly KeyboardInput keyboardInput = new();
 
-    [NotNull]
-    private static TouchState ReadFromKeyboard()
+    public TouchState CurrentTouchState = TouchState.CreateNew();
+
+    // Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of this function's
+    // invocation. A persisted copy of TouchState may not behave as expected. See docs on TouchState.
+    private void MaybeHandleNewTouchState(InputSource inputSource, TouchState touchState, float? timeMs)
     {
-        // Initializes to all false.
-        bool[,] segments = new bool[60, 4];
+        if (CurrentInputSource == inputSource)
+            NewTouchState(touchState, timeMs ?? timeManager.VisualTimeMs);
+    }
+
+    private void NewTouchState(TouchState touchState, float timeMs)
+    {
+        CurrentTouchState = touchState;
+        if (replayManager != null && !replayManager.PlayingFromReplay)
+            replayManager.RecordFrame(touchState, timeMs);
+        scoringManager.HandleInput(touchState, timeMs);
+        touchState.CopyTo(ref CurrentTouchState);
+    }
+
+    private void Start()
+    {
+        keyboardInput.TouchStateHandler = (touchState, timeMs) =>
+            MaybeHandleNewTouchState(InputSource.Keyboard, touchState, timeMs);
+
+        if (TouchRingManager.Instance is TouchRingManager touchRingManager)
+        {
+            touchRingManager.TouchStateHandler = (touchState, timeMs) =>
+                MaybeHandleNewTouchState(InputSource.TouchRing, touchState, timeMs);
+        }
+
+        if (replayManager != null)
+        {
+            replayManager.TouchStateHandler = (touchState, timeMs) =>
+                MaybeHandleNewTouchState(InputSource.Replay, touchState, timeMs);
+        }
+    }
+
+    private async void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            Debug.Log("Switched to keyboard input.");
+            CurrentInputSource = InputSource.Keyboard;
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F11) && replayManager != null)
+        {
+            await replayManager.ReadReplayFile();
+            Debug.Log("Loaded replay file, switching to replay input.");
+            CurrentInputSource = InputSource.Replay;
+            return;
+        }
+
+        if (CurrentInputSource is InputSource.Keyboard)
+            keyboardInput.UpdateKeyboardInput();
+    }
+}
+
+// Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of the handler invocation.
+public delegate void TouchStateHandler(TouchState touchState, float? timeMs);
+
+public interface IInputProvider
+{
+    // TouchStateHandler may be called any number of times per frame.
+    [CanBeNull] public TouchStateHandler TouchStateHandler { set; }
+}
+
+public class KeyboardInput : IInputProvider
+{
+    public TouchStateHandler TouchStateHandler { private get; set; }
+    private TouchState currentTouchState = TouchState.CreateNew();
+
+    private static void ReadFromKeyboard(bool[,] segments)
+    {
+        foreach (int i in Enumerable.Range(0, 60))
+        foreach (int j in Enumerable.Range(0, 4))
+            segments[i, j] = false;
+
         if (Input.GetKey("[6]"))
         {
             foreach (int i in Enumerable.Range(56, 4))
@@ -82,7 +157,8 @@ public class InputManager : MonoBehaviour
         if (Input.GetKey("[3]"))
         {
             foreach (int i in Enumerable.Range(49, 7))
-            foreach (int j in Enumerable.Range(1, 2)) segments[i, j] = true;
+            foreach (int j in Enumerable.Range(1, 2))
+                segments[i, j] = true;
         }
 
         // Thank you, ChatGPT
@@ -117,65 +193,12 @@ public class InputManager : MonoBehaviour
         if (Input.GetKey("v")) segments[45, 0] = true;
         if (Input.GetKey("b")) segments[46, 0] = true;
         if (Input.GetKey("n")) segments[47, 0] = true;
-
-        return new TouchState(segments);
     }
 
-    private void MaybeHandleNewTouchState(InputSource inputSource, TouchState touchState, float? timeMs)
+    public void UpdateKeyboardInput()
     {
-        if (CurrentInputSource == inputSource)
-            NewTouchState(touchState, timeMs ?? timeManager.VisualTimeMs);
+        TouchState.StealAndUpdateSegments(ref currentTouchState, ReadFromKeyboard);
+        TouchStateHandler?.Invoke(currentTouchState, null);
     }
-
-    private void NewTouchState(TouchState touchState, float timeMs)
-    {
-        CurrentTouchState = touchState;
-        if (replayManager != null && !replayManager.PlayingFromReplay)
-            replayManager.RecordFrame(touchState, timeMs);
-        scoringManager.HandleInput(touchState, timeMs);
-    }
-
-    private void Start()
-    {
-        if (TouchRingManager.Instance is TouchRingManager touchRingManager)
-        {
-            touchRingManager.TouchStateHandler = (touchState, timeMs) =>
-                MaybeHandleNewTouchState(InputSource.TouchRing, touchState, timeMs);
-        }
-
-        if (replayManager != null)
-        {
-            replayManager.TouchStateHandler = (touchState, timeMs) =>
-                MaybeHandleNewTouchState(InputSource.Replay, touchState, timeMs);
-        }
-    }
-
-    private async void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            Debug.Log("Switched to keyboard input.");
-            CurrentInputSource = InputSource.Keyboard;
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.F11) && replayManager != null)
-        {
-            await replayManager.ReadReplayFile();
-            Debug.Log("Loaded replay file, switching to replay input.");
-            CurrentInputSource = InputSource.Replay;
-            return;
-        }
-
-        if (CurrentInputSource is InputSource.Keyboard)
-            NewTouchState(ReadFromKeyboard(), timeManager.VisualTimeMs);
-    }
-}
-
-public delegate void TouchStateHandler(TouchState touchState, float? timeMs);
-public interface IInputProvider
-{
-    // TouchStateHandler may be called any number of times per frame.
-    [CanBeNull] public TouchStateHandler TouchStateHandler { set; }
 }
 }

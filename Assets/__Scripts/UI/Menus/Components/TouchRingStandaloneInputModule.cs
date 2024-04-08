@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using UnityEngine.EventSystems;
 
 namespace SaturnGame.UI
@@ -9,15 +8,17 @@ namespace SaturnGame.UI
 /// </summary>
 public class TouchRingStandaloneInputModule : StandaloneInputModule
 {
-    [CanBeNull] private TouchState currentTouchState;
-    [CanBeNull] private TouchState previousTouchState;
+    private TouchState currentTouchState = TouchState.CreateNew();
+    private TouchState previousTouchState = TouchState.CreateNew();
 
     // UpdateModule is called every tick, for each input module, regardless of whether it's active.
     // We should track the input method state here.
     public override void UpdateModule()
     {
-        previousTouchState = currentTouchState;
-        currentTouchState = TouchRingManager.Instance.CurrentTouchState;
+        // Swap previous and current. (This avoid having to newly allocate anything.)
+        (previousTouchState, currentTouchState) = (currentTouchState, previousTouchState);
+        // Update current.
+        TouchRingManager.Instance.CurrentTouchState.CopyTo(ref currentTouchState);
 
         base.UpdateModule();
     }

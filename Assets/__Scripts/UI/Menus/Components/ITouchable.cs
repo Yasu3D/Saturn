@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using UnityEngine.EventSystems;
 
 namespace SaturnGame.UI
@@ -8,11 +7,8 @@ public interface ITouchable : IEventSystemHandler
     public int Position { get; }
     public int Size { get; }
 
-    public bool Touched([CanBeNull] TouchState touchState)
+    public bool Touched(TouchState touchState)
     {
-        if (touchState is null)
-            return false;
-
         for (int offset = Position; offset < Position + Size; offset++)
         for (int depthPos = 2; depthPos < 4; depthPos++)
         {

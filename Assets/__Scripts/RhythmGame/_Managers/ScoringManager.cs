@@ -183,7 +183,7 @@ public class ScoringManager : MonoBehaviour
         CenterDisplay.UpdateCombo(CurrentCombo);
     }
 
-    private void MaybeCalculateHitForNote(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] Note note, [NotNull] TouchState newSegments)
+    private void MaybeCalculateHitForNote(float hitTimeMs, TouchState touchState, [NotNull] Note note)
     {
         if (note.IsHit) return;
 
@@ -269,7 +269,7 @@ public class ScoringManager : MonoBehaviour
 
     // Updates the current state of the HoldNote.
     // Returns true if the hold is completed and can be removed from further consideration.
-    private bool UpdateHold(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] HoldNote holdNote)
+    private bool UpdateHold(float hitTimeMs, TouchState touchState, [NotNull] HoldNote holdNote)
     {
         if (hitTimeMs < holdNote.Start.TimeMs)
         {
@@ -341,7 +341,8 @@ public class ScoringManager : MonoBehaviour
     // all notes whose windows have already fully passed or who have been hit.
     private int minNoteIndex;
     private readonly List<HoldNote> activeHolds = new();
-    private TouchState prevTouchState;
+    private TouchState prevTouchState = TouchState.CreateNew();
+    private TouchState newSegments = TouchState.CreateNew();
 
     public void HandleInput(TouchState touchState, float hitTimeMs)
     {
@@ -353,7 +354,7 @@ public class ScoringManager : MonoBehaviour
 
         try
         {
-            TouchState newSegments = touchState.SegmentsPressedSince(prevTouchState);
+            touchState.WriteSegmentsPressedSince(ref newSegments, prevTouchState);
 
             // Scan forward, looking for a note that can be hit by this input.
             for (int noteScanIndex = minNoteIndex; noteScanIndex < Notes.Count; noteScanIndex++)
@@ -373,7 +374,7 @@ public class ScoringManager : MonoBehaviour
                     // We continue on since we still may need to mark this note as missed ("MissHit" it).
                 }
 
-                MaybeCalculateHitForNote(hitTimeMs, touchState, note, newSegments);
+                MaybeCalculateHitForNote(hitTimeMs, touchState, note);
             }
 
             // Note: not using a foreach because we remove finished holds as we iterate
@@ -391,7 +392,8 @@ public class ScoringManager : MonoBehaviour
         }
         finally
         {
-            prevTouchState = touchState;
+            // Don't use direct assignment, since the segment data may not be valid next call.
+            touchState.CopyTo(ref prevTouchState);
         }
     }
     
