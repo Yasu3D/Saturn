@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace SaturnGame.RhythmGame
 {
@@ -397,6 +398,15 @@ public class ScoringManager : MonoBehaviour
             touchState.CopyTo(ref prevTouchState);
         }
     }
+
+    private void Start()
+    {
+        // Disable automatic GC during gameplay to avoid lag spikes
+        // Warning: if allocations are too high, this can cause OOM
+        // Can't change GCMode in editor
+        if (Application.isEditor) return;
+        GarbageCollector.GCMode = GarbageCollector.Mode.Manual;
+    }
     
     private async void Update()
     {
@@ -415,17 +425,18 @@ public class ScoringManager : MonoBehaviour
         if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < TimeManager.VisualTimeMs &&
             !WritingReplayAndExiting)
         {
-            async Awaitable endSong()
-            {
-                WritingReplayAndExiting = true;
-                if (AutoWriteReplays && !ReplayManager.PlayingFromReplay)
-                    await ReplayManager.WriteReplayFile();
-
-                PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
-                SceneSwitcher.Instance.LoadScene("_SongResults");
-            }
             // chart is done
-            await endSong();
+            WritingReplayAndExiting = true;
+
+            // re-enable GC now that gameplay is finished.
+            if (!Application.isEditor)
+                GarbageCollector.GCMode = GarbageCollector.Mode.Enabled;
+                
+            if (AutoWriteReplays && !ReplayManager.PlayingFromReplay)
+                await ReplayManager.WriteReplayFile();
+
+            PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
+            SceneSwitcher.Instance.LoadScene("_SongResults");
         }
     }
 }
