@@ -29,7 +29,8 @@ public class ReplayManager : MonoBehaviour, IInputProvider
         public readonly TouchState TouchState;
         public readonly float TimeMs;
 
-        public ReplayFrame(TouchState touchState, float timeMs)
+        [JsonConstructor]
+        public ReplayFrame([JsonProperty("TouchState")] TouchState touchState, [JsonProperty("TimeMs")] float timeMs)
         {
             // Copy the TouchState so that it persists, since the original underlying array will likely be reused.
             TouchState = touchState.Copy();

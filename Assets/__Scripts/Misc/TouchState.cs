@@ -147,6 +147,7 @@ public readonly struct TouchState
     /// <exception cref="ArgumentException">thrown if the <paramref name="segments"/> is not a 60x4 array</exception>
     // Note: `[JsonProperty("_segments")]` is needed for JSON deserialization of legacy replays to work. Must match
     // the JsonProperty attribute on `Segments`
+    [JsonConstructor]
     public TouchState([NotNull] [JsonProperty("_segments")] bool[,] segments)
     {
         if (segments.GetLength(0) != 60 || segments.GetLength(1) != 4)
