@@ -1,6 +1,7 @@
 using System;
 using SaturnGame.Settings;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace SaturnGame.RhythmGame
 {
@@ -153,7 +154,11 @@ public class TimeManager : MonoBehaviour
             SetPlaybackSpeed(0.5f * PlaybackSpeed, false);
 
         if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!Application.isEditor)
+                GarbageCollector.GCMode = GarbageCollector.Mode.Enabled;
             SceneSwitcher.Instance.LoadScene("_SongSelect");
+        }
     }
 }
 }
