@@ -1,4 +1,3 @@
-using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -26,19 +25,24 @@ public class InputManager : MonoBehaviour
 
     // Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of this function's
     // invocation. A persisted copy of TouchState may not behave as expected. See docs on TouchState.
-    private void MaybeHandleNewTouchState(InputSource inputSource, TouchState touchState, float? timeMs)
+    private void MaybeHandleNewTouchState(InputSource inputSource, TouchState? touchState, float? timeMs)
     {
         if (CurrentInputSource == inputSource)
             NewTouchState(touchState, timeMs ?? timeManager.VisualTimeMs);
     }
 
-    private void NewTouchState(TouchState touchState, float timeMs)
+    private void NewTouchState(TouchState? touchState, float timeMs)
     {
-        CurrentTouchState = touchState;
+        if (touchState is null || touchState.Value.EqualsSegments(CurrentTouchState))
+        {
+            scoringManager.HandleInput(null, timeMs);
+            // Don't write to replay.
+            return;
+        }
         if (replayManager != null && !replayManager.PlayingFromReplay)
-            replayManager.RecordFrame(touchState, timeMs);
-        scoringManager.HandleInput(touchState, timeMs);
-        touchState.CopyTo(ref CurrentTouchState);
+            replayManager.RecordFrame(touchState.Value, timeMs);
+        touchState.Value.CopyTo(ref CurrentTouchState);
+        scoringManager.HandleInput(touchState.Value, timeMs);
     }
 
     private void Start()
@@ -82,7 +86,7 @@ public class InputManager : MonoBehaviour
 }
 
 // Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of the handler invocation.
-public delegate void TouchStateHandler(TouchState touchState, float? timeMs);
+public delegate void TouchStateHandler(TouchState? touchState, float? timeMs);
 
 public interface IInputProvider
 {

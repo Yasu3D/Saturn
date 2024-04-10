@@ -28,6 +28,7 @@ public class Chart
     public List<Note> ReverseNotes = new();
     public List<HoldNote> ReverseHoldNotes = new();
 
+    // Notes must be sorted by note TimeMs
     public List<Note> ProcessedNotesForGameplay = new();
 }
 }

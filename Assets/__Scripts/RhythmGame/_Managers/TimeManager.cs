@@ -130,6 +130,13 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    public void StartSong()
+    {
+        bgmPlayer.clip = chartManager.BGM;
+        State = SongState.Playing;
+        bgmPlayer.Play();
+    }
+
     private void Update()
     {
         UpdateVisualTime();
@@ -138,10 +145,13 @@ public class TimeManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
-            bgmPlayer.clip = chartManager.BGM;
-            State = SongState.Playing;
-            bgmPlayer.Play();
+            if (State == SongState.NotYetStarted)
+            {
+                Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
+                StartSong();
+            }
+            else
+                Debug.LogWarning("Tried to start playback, but already started.");
         }
 
         if (Input.GetKey(KeyCode.M))

@@ -110,6 +110,7 @@ public class ReplayManager : MonoBehaviour, IInputProvider
             TouchStateHandler?.Invoke(Replay[replayFrameIndex].TouchState, Replay[replayFrameIndex].TimeMs);
             replayFrameIndex++;
         }
+        TouchStateHandler?.Invoke(null, timeManager.VisualTimeMs);
     }
 }
 }
