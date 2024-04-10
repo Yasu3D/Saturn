@@ -375,6 +375,46 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: position
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 835659686}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnConfirm
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TitleScreenLogic, SaturnGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737470943376577948, guid: 0eaf71d2d8a1985448d27eb415d25962,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8813558283991467867, guid: 0eaf71d2d8a1985448d27eb415d25962,
         type: 3}
       propertyPath: m_text
@@ -1005,7 +1045,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994888665}
   - component: {fileID: 1994888664}
-  - component: {fileID: 1994888663}
+  - component: {fileID: 1994888666}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1013,26 +1053,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1994888663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994888662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
 --- !u!114 &1994888664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1063,6 +1083,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1994888666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994888662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f06371c77014c6d810820680f2f8f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
 --- !u!1 &2020441782
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,7 +1154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3606da3a51cc724290d6a37d6fbf8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI: {fileID: 2020441783}
+  ui: {fileID: 2020441783}
   oBounds: {x: 0, y: 840}
 --- !u!1 &2036126365
 GameObject:

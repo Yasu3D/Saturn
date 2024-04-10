@@ -9,7 +9,7 @@ public class TitleScreenLogic : MonoBehaviour
         colorRandomizer.RandomizeColor();
     }
 
-    private static void OnConfirm()
+    public static void OnConfirm()
     {
         SceneSwitcher.Instance.LoadScene("_SongSelect");
     }
