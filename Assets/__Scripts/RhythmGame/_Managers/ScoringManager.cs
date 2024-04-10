@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace SaturnGame.RhythmGame
 {
@@ -51,6 +52,7 @@ public class ScoringManager : MonoBehaviour
         debugText.text = $"{timeManager.VisualTimeMs}\n" + text;
     }
 
+    // TODO: rework this to avoid a bajillion allocations
     public ScoreData CurrentScoreData()
     {
         ScoreData data = new()
@@ -180,7 +182,7 @@ public class ScoringManager : MonoBehaviour
         centerDisplay.UpdateCombo(CurrentCombo);
     }
 
-    private void MaybeCalculateHitForNote(float timeMs, [NotNull] TouchState touchState, [NotNull] Note note, [NotNull] TouchState newSegments)
+    private void MaybeCalculateHitForNote(float timeMs, TouchState touchState, [NotNull] Note note)
     {
         if (note.IsHit) return;
 
@@ -384,8 +386,9 @@ public class ScoringManager : MonoBehaviour
     // all notes whose windows have already fully passed or who have been hit.
     private int minNoteIndex;
     private readonly List<HoldNote> activeHolds = new();
-    private TouchState prevTouchState;
     private float prevTouchTimeMs;
+    private TouchState prevTouchState = TouchState.CreateNew();
+    private TouchState newSegments = TouchState.CreateNew();
 
     // - HandleInput must be called with strictly increasing hitTimeMs for each consecutive call.
     // - HandleInput is not thread-safe. It is the caller's responsibility to ensure that multiple HandleInput
@@ -400,7 +403,7 @@ public class ScoringManager : MonoBehaviour
     // - HandleInput can also be called with a null touchState - this means that we know the previous input was held
     //   until at least this timeMs, and we can assign any judgements as appropriate based on that. (This is useful for
     //   triggering scoring updates during sparse input methods such as replays.)
-    public void HandleInput([CanBeNull] TouchState touchState, float timeMs)
+    public void HandleInput(TouchState? touchState, float timeMs)
     {
         if (Notes is null)
         {
@@ -408,16 +411,11 @@ public class ScoringManager : MonoBehaviour
             return;
         }
 
-        touchState ??= prevTouchState;
-        if (touchState is null)
-        {
-            Debug.LogWarning("Tried to judge a null touchState as the first one.");
-            return;
-        }
+        TouchState currentTouchState = touchState ?? prevTouchState;
 
         try
         {
-            TouchState newSegments = touchState.SegmentsPressedSince(prevTouchState);
+            currentTouchState.WriteSegmentsPressedSince(ref newSegments, prevTouchState);
 
             // Scan forward, looking for a note that can be hit by this input.
             for (int noteScanIndex = minNoteIndex; noteScanIndex < Notes.Count; noteScanIndex++)
@@ -437,7 +435,7 @@ public class ScoringManager : MonoBehaviour
                     // We continue on since we still may need to mark this note as missed ("MissHit" it).
                 }
 
-                MaybeCalculateHitForNote(timeMs, touchState, note, newSegments);
+                MaybeCalculateHitForNote(timeMs, currentTouchState, note);
             }
 
             // Note: not using a foreach because we remove finished holds as we iterate
@@ -456,8 +454,18 @@ public class ScoringManager : MonoBehaviour
         finally
         {
             prevTouchTimeMs = timeMs;
-            prevTouchState = touchState;
+            // Don't use direct assignment, since the segment data may not be valid next call.
+            currentTouchState.CopyTo(ref prevTouchState);
         }
+    }
+
+    private void Start()
+    {
+        // Disable automatic GC during gameplay to avoid lag spikes
+        // Warning: if allocations are too high, this can cause OOM
+        // Can't change GCMode in editor
+        if (Application.isEditor) return;
+        GarbageCollector.GCMode = GarbageCollector.Mode.Manual;
     }
 
     private async void Update()
@@ -477,17 +485,18 @@ public class ScoringManager : MonoBehaviour
         if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs &&
             !WritingReplayAndExiting)
         {
-            async Awaitable endSong()
-            {
-                WritingReplayAndExiting = true;
-                if (AutoWriteReplays && !replayManager.PlayingFromReplay)
-                    await replayManager.WriteReplayFile();
-
-                PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
-                SceneSwitcher.Instance.LoadScene("_SongResults");
-            }
             // chart is done
-            await endSong();
+            WritingReplayAndExiting = true;
+
+            // re-enable GC now that gameplay is finished.
+            if (!Application.isEditor)
+                GarbageCollector.GCMode = GarbageCollector.Mode.Enabled;
+
+            if (AutoWriteReplays && !replayManager.PlayingFromReplay)
+                await replayManager.WriteReplayFile();
+
+            PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
+            SceneSwitcher.Instance.LoadScene("_SongResults");
         }
     }
 }

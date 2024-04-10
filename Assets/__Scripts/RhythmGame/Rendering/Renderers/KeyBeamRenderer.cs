@@ -13,9 +13,7 @@ public class KeyBeamRenderer : MonoBehaviour
     private void Update()
     {
         TouchState touchState = inputManager.CurrentTouchState;
-        if (touchState is null) return;
-
-        foreach (int anglePos in Enumerable.Range(0, 60))
+        for (int anglePos = 0; anglePos < 60; anglePos++)
             laneSegments[anglePos].SetActive(touchState.AnglePosPressedAtAnyDepth(anglePos));
     }
 }

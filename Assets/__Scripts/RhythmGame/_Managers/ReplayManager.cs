@@ -24,17 +24,25 @@ public class ReplayManager : MonoBehaviour, IInputProvider
 
     public TouchStateHandler TouchStateHandler { private get; set; }
 
-    private struct ReplayFrame
+    private class ReplayFrame
     {
-        public TouchState TouchState;
-        public float TimeMs;
+        public readonly TouchState TouchState;
+        public readonly float TimeMs;
+
+        [JsonConstructor]
+        public ReplayFrame([JsonProperty("TouchState")] TouchState touchState, [JsonProperty("TimeMs")] float timeMs)
+        {
+            // Copy the TouchState so that it persists, since the original underlying array will likely be reused.
+            TouchState = touchState.Copy();
+            TimeMs = timeMs;
+        }
     }
 
     private List<ReplayFrame> Replay { get; set; } = new();
 
     public void RecordFrame(TouchState touchState, float timeMs)
     {
-        if (!PlayingFromReplay) Replay.Add(new ReplayFrame { TouchState = touchState, TimeMs = timeMs });
+        if (!PlayingFromReplay) Replay.Add(new ReplayFrame(touchState, timeMs));
     }
 
     private static void JsonError(object sender, [NotNull] ErrorEventArgs errorArgs)
