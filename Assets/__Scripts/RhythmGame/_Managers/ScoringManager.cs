@@ -15,41 +15,40 @@ namespace SaturnGame.RhythmGame
 public class ScoringManager : MonoBehaviour
 {
     [Header("DEBUG")]
-    [SerializeField] private TextMeshProUGUI DebugText;
+    [SerializeField] private TextMeshProUGUI debugText;
     public bool AutoWriteReplays = true;
     public bool WritingReplayAndExiting; // Only modify on main thread Update()
-    
+
     [Header("MANAGERS")]
-    [SerializeField] private TimeManager TimeManager;
-    [SerializeField] private ChartManager ChartManager;
-    [SerializeField] private ReplayManager ReplayManager;
+    [SerializeField] private TimeManager timeManager;
+    [SerializeField] private ChartManager chartManager;
+    [SerializeField] private ReplayManager replayManager;
 
     [Space(10)]
-    
+
     public int CurrentCombo;
     public int LastMissChartTick;
-    public float? LastHitErrorMs { get; private set; }
-    public float? LastHitTimeMs { get; private set; }
     public bool NeedTouchHitsound;
     public bool NeedSwipeSnapHitsound;
 
     [Header("VISUALS")]
-    [SerializeField] private CenterDisplay CenterDisplay; 
-    [SerializeField] private JudgementDisplay JudgementDisplay;
-    [SerializeField] private ScoreNumberText ScoreText;
-    
+    [SerializeField] private CenterDisplay centerDisplay;
+    [SerializeField] private JudgementDisplay judgementDisplay;
+    [SerializeField] private ScoreNumberText scoreText;
+
     private string loadedChart;
-    private Chart Chart => ChartManager.Chart;
+    private Chart Chart => chartManager.Chart;
 
     // Notes must be sorted by note TimeMs
     private List<Note> Notes => Chart.ProcessedNotesForGameplay;
 
     private void ShowDebugText(string text)
     {
-        if (DebugText is null)
+        //Debug.Log( $"{timeManager.VisualTimeMs}: {text}");
+        if (debugText is null)
             return;
 
-        DebugText.text = $"{TimeManager.VisualTimeMs}\n" + text;
+        debugText.text = $"{timeManager.VisualTimeMs}\n" + text;
     }
 
     public ScoreData CurrentScoreData()
@@ -80,7 +79,7 @@ public class ScoringManager : MonoBehaviour
                 { Judgement.Good, 0 },
             },
         };
-        
+
         if (Notes is null || Notes.Count == 0) return data;
 
         // Values aren't normalized to a range of [0 <> 1,000,000] yet.
@@ -117,7 +116,7 @@ public class ScoringManager : MonoBehaviour
             data.JudgementCounts[note.Judgement.Value]++;
 
             if (note is ChainNote || note.TimeErrorMs is null || note.Judgement is Judgement.Miss) continue;
-            
+
             if (note.TimeErrorMs < 0)
             {
                 data.EarlyCountByJudgement[note.Judgement.Value]++;
@@ -130,7 +129,7 @@ public class ScoringManager : MonoBehaviour
                 if (note.Judgement is not Judgement.Marvelous) data.LateCount++;
             }
         }
-        
+
         data.Score = maxTotalScore == 0 ? 0 : (int)(1_000_000L * currentScore / maxTotalScore);
         data.MaxScore = maxTotalScore == 0 ? 0 : (int)(1_000_000L * maxCurrentScore / maxTotalScore);
         return data;
@@ -146,20 +145,18 @@ public class ScoringManager : MonoBehaviour
     {
         Judgement lastJudgement = note.Hit(hitTimeMs);
         ScoreData currentScoreData = CurrentScoreData();
-        
-        if (note is not ChainNote && lastJudgement is not Judgement.Marvelous)
-        {
-            LastHitErrorMs = note.TimeErrorMs;
-            LastHitTimeMs = hitTimeMs;
-        }
 
         // HoldNotes affect combo at hold end
         if (note is not HoldNote) IncrementCombo(note.ChartTick);
-        
-        ScoreText.UpdateScore(currentScoreData);
-        CenterDisplay.UpdateScore(currentScoreData);
-        JudgementDisplay.ShowJudgement(lastJudgement, LastHitErrorMs ?? 0);
-        
+
+        scoreText.UpdateScore(currentScoreData);
+        centerDisplay.UpdateScore(currentScoreData);
+        float earlyLateErrorMs = 0;
+        if (note is not ChainNote && lastJudgement is not Judgement.Marvelous)
+            // TimeErrorMs should always be set by Hit
+            earlyLateErrorMs = note.TimeErrorMs!.Value;
+        judgementDisplay.ShowJudgement(lastJudgement, earlyLateErrorMs);
+
         NeedTouchHitsound = true;
         NeedSwipeSnapHitsound = needSnapSwipeHitsound;
     }
@@ -172,44 +169,72 @@ public class ScoringManager : MonoBehaviour
         // Warning: we could still miss a note that is earlier than the note we just hit. So, the combo would be the
         // number of notes hit consecutively, but they would not actually be consecutive notes.
 
-        CenterDisplay.UpdateCombo(CurrentCombo);
+        centerDisplay.UpdateCombo(CurrentCombo);
     }
 
     private void EndCombo(int chartTick)
     {
         CurrentCombo = 0;
         LastMissChartTick = chartTick;
-        
-        CenterDisplay.UpdateCombo(CurrentCombo);
+
+        centerDisplay.UpdateCombo(CurrentCombo);
     }
 
-    private void MaybeCalculateHitForNote(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] Note note, [NotNull] TouchState newSegments)
+    private void MaybeCalculateHitForNote(float timeMs, [NotNull] TouchState touchState, [NotNull] Note note, [NotNull] TouchState newSegments)
     {
         if (note.IsHit) return;
 
-        if (hitTimeMs < note.EarliestHitTimeMs)
+        if (timeMs < note.EarliestHitTimeMs)
         {
             // This note cannot be hit yet.
             return;
         }
 
-        if (hitTimeMs >= note.LatestHitTimeMs)
+        if (timeMs >= note.LatestHitTimeMs)
         {
-            // The note can no longer be hit.
-            //Debug.Log($"Note {noteScanIndex}: Miss after {note.LatestHitTimeMs}");
+            switch (note)
+            {
+                case TouchNote:
+                case SwipeNote:
+                case SnapNote:
+                {
+                    // These note types require an input within the window to hit, so we know they can't have been hit
+                    // between the last input and this one.
+                    note.MissHit();
+                    EndCombo(note.ChartTick);
+                    break;
+                }
+                case ChainNote chainNote:
+                {
+                    // TODO: consolidate this logic with case where EarliestHitTImeMs <= timeMs < LatestHitTimeMs?
+                    // If the note's window overlaps with the range from prevTouchTimeMs to timeMs, and it was held in
+                    // the mean time, mark as touched.
+                    // Note: for checking the time window overlaps, the other boundary is checked above
+                    // (timeMs >= LatestHitTimeMs > EarliestHitTimeMs), so we only check
+                    // prevTouchTimeMs < chainNote.LatestHitTimeMs here.
+                    if (prevTouchTimeMs < chainNote.LatestHitTimeMs && chainNote.Touched(prevTouchState))
+                        chainNote.HasBeenTouched = true;
 
-            note.MissHit();
-            // HoldNotes affect combo at hold end.
-            if (note is not HoldNote)
-                EndCombo(note.ChartTick);
+                    if (chainNote.HasBeenTouched && timeMs >= chainNote.TimeMs)
+                        HitNote(chainNote.TimeMs, chainNote);
+                    else
+                        chainNote.MissHit();
 
-            if (note is HoldNote holdNote)
-                activeHolds.Add(holdNote);
-            
+                    break;
+                }
+                case HoldNote holdNote:
+                {
+                    holdNote.MissHit();
+                    // HoldNotes affect combo at hold end.
+                    activeHolds.Add(holdNote);
+                    break;
+                }
+            }
+
             ScoreData currentScoreData = CurrentScoreData();
-            ScoreText.UpdateScore(currentScoreData);
-            CenterDisplay.UpdateScore(currentScoreData);
-            JudgementDisplay.ShowJudgement(Judgement.Miss, 0);
+            scoreText.UpdateScore(currentScoreData);
+            centerDisplay.UpdateScore(currentScoreData);
+            judgementDisplay.ShowJudgement(Judgement.Miss, 0);
             return;
         }
 
@@ -220,16 +245,17 @@ public class ScoringManager : MonoBehaviour
             {
                 if (!note.Touched(newSegments)) break;
 
-                HitNote(hitTimeMs, note);
+                HitNote(timeMs, note);
                 break;
             }
             case ChainNote chainNote:
             {
-                if (chainNote.Touched(touchState))
+                if (chainNote.Touched(touchState) || chainNote.Touched(prevTouchState))
                     chainNote.HasBeenTouched = true;
 
-                if (chainNote.HasBeenTouched && hitTimeMs >= chainNote.TimeMs)
-                    HitNote(hitTimeMs, chainNote);
+                if (chainNote.HasBeenTouched && timeMs >= chainNote.TimeMs)
+                    // warning, inconsistent HitTimeMs if touched by prevTouchState but not this one.
+                    HitNote(note.TimeMs, chainNote);
                 break;
             }
             case HoldNote holdNote:
@@ -239,19 +265,19 @@ public class ScoringManager : MonoBehaviour
                 //float errorMs = hitTimeMs - holdNote.TimeMs;
                 //ShowDebugText($"{noteScanIndex} (hold): {errorMs} {holdNote.Left} {holdNote.Right}");
 
-                HitNote(hitTimeMs, holdNote);
+                HitNote(timeMs, holdNote);
                 activeHolds.Add(holdNote);
                 break;
             }
             case SwipeNote swipeNote:
             {
-                swipeNote.MaybeUpdateMinAverageOffset(touchState);
+                swipeNote.MaybeUpdateMinAverageOffset(prevTouchState);
                 if (!swipeNote.Swiped(touchState)) break;
 
                 //float errorMs = hitTimeMs - swipeNote.TimeMs;
                 //ShowDebugText($"{noteScanIndex} (swipe): {errorMs}");
 
-                HitNote(hitTimeMs, swipeNote, needSnapSwipeHitsound: true);
+                HitNote(timeMs, swipeNote, needSnapSwipeHitsound: true);
                 break;
             }
             case SnapNote snapNote:
@@ -261,80 +287,97 @@ public class ScoringManager : MonoBehaviour
                 //float errorMs = hitTimeMs - snapNote.TimeMs;
                 //ShowDebugText($"{noteScanIndex} (snap): {errorMs}");
 
-                HitNote(hitTimeMs, snapNote, needSnapSwipeHitsound: true);
+                HitNote(timeMs, snapNote, needSnapSwipeHitsound: true);
                 break;
             }
         }
     }
 
-    // Updates the current state of the HoldNote.
+    // Updates the current state of the HoldNote, given prevTouchState was held from prevTouchTimeMs to timeMs.
     // Returns true if the hold is completed and can be removed from further consideration.
-    private bool UpdateHold(float hitTimeMs, [NotNull] TouchState touchState, [NotNull] HoldNote holdNote)
+    private bool UpdateHold(float timeMs, [NotNull] HoldNote holdNote)
     {
-        if (hitTimeMs < holdNote.Start.TimeMs)
+        if (timeMs < holdNote.Start.TimeMs)
         {
             // Hold was hit early, and we haven't started the actual hold body.
             // Skip doing any judgement on this hold for now.
             return false;
         }
 
-        if (!holdNote.CurrentlyHeld)
+        // Check all segments overlapping the time window between prevTouchTimeMs and timeMs
+        // Don't include the last segment, which is the hold end.
+        for (int i = 0; i < holdNote.Notes.Length - 1; i++)
         {
-            // The note has been dropped for some time, calculate how long that is.
-            // The drop window starts at lastHeldTimeMs.
-            // The drop window is evaluated up until now, but not past the end of the note.
-            float droppedUntil = Math.Min(hitTimeMs, holdNote.End.TimeMs);
-            System.Diagnostics.Debug.Assert(holdNote.LastHeldTimeMs != null,
-                "LastHeldTimeMs is null on an active hold");
-            float dropTimeMs = droppedUntil - holdNote.LastHeldTimeMs.Value;
-            if (dropTimeMs > HoldNote.LeniencyMs && !holdNote.Dropped)
+            HoldSegment curSegment = holdNote.Notes[i];
+            HoldSegment nextSegment = holdNote.Notes[i + 1];
+            if (curSegment.TimeMs >= timeMs || nextSegment.TimeMs < prevTouchTimeMs)
+                // segment is out of time window
+                continue;
+            //ShowDebugText($"check segment {i} ({curSegment.TimeMs} - {nextSegment.TimeMs})");
+            if (curSegment.Touched(prevTouchState))
             {
-                ShowDebugText($"dropped hold after {dropTimeMs}");
-                holdNote.Dropped = true;
+                holdNote.Held = true;
+                if (!holdNote.CurrentlyHeld)
+                {
+                    // This is a re-grab, see if the hold was not held long enough to count as dropped.
+                    float dropTimeMs = curSegment.TimeMs - holdNote.LastHeldTimeMs!.Value;
+                    if (dropTimeMs > HoldNote.LeniencyMs && !holdNote.Dropped)
+                    {
+                        ShowDebugText($"dropped hold after {dropTimeMs} ({curSegment.TimeMs} - {holdNote.LastHeldTimeMs})");
+                        holdNote.Dropped = true;
+                    }
+                }
+
+                holdNote.CurrentlyHeld = true;
+                // The note should be held up until at least the earlier of the next segment start or the current time.
+                holdNote.LastHeldTimeMs = Math.Min(timeMs, nextSegment.TimeMs);
+            }
+            else
+                holdNote.CurrentlyHeld = false;
+        }
+
+        if (timeMs < holdNote.End.TimeMs) return false;
+
+        // Hold note is finished.
+        if (holdNote is { CurrentlyHeld: false, Dropped: false } &&
+            holdNote.End.TimeMs - holdNote.LastHeldTimeMs > HoldNote.LeniencyMs)
+        {
+            holdNote.Dropped = true;
+            ShowDebugText($"dropped hold end after {holdNote.End.TimeMs - holdNote.LastHeldTimeMs}");
+        }
+
+        Judgement judgement = holdNote.Judge();
+        ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nCurrentlyHeld: {holdNote.CurrentlyHeld}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
+        if (holdNote.CurrentlyHeld) NeedTouchHitsound = true;
+
+        switch (judgement)
+        {
+            case Judgement.Marvelous:
+            case Judgement.Great:
+            case Judgement.Good:
+            {
+                IncrementCombo(holdNote.End.ChartTick);
+                break;
+            }
+            case Judgement.Miss:
+            {
+                EndCombo(holdNote.End.ChartTick);
+                break;
+            }
+            case Judgement.None:
+            default:
+            {
+                throw new ArgumentOutOfRangeException();
             }
         }
 
-        if (hitTimeMs > holdNote.End.TimeMs)
-        {
-            // Hold note is finished.
-            Judgement judgement = holdNote.Judge();
-            ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
-            if (holdNote.CurrentlyHeld) NeedTouchHitsound = true;
-            
-            switch (judgement)
-            {
-                case Judgement.Marvelous:
-                case Judgement.Great:
-                case Judgement.Good:
-                {
-                    IncrementCombo(holdNote.End.ChartTick);
-                    break;
-                }
-                case Judgement.Miss:
-                {
-                    EndCombo(holdNote.End.ChartTick);
-                    break;
-                }
-            }
+        ScoreData currentScoreData = CurrentScoreData();
+        scoreText.UpdateScore(currentScoreData);
+        centerDisplay.UpdateScore(currentScoreData);
+        judgementDisplay.ShowJudgement(judgement, 0);
 
-            ScoreData currentScoreData = CurrentScoreData();
-            ScoreText.UpdateScore(currentScoreData);
-            CenterDisplay.UpdateScore(currentScoreData);
-            JudgementDisplay.ShowJudgement(judgement, 0);
-            
-            return true;
-        }
+        return true;
 
-        if (!holdNote.CurrentSegmentFor(hitTimeMs).Touched(touchState))
-        {
-            holdNote.CurrentlyHeld = false;
-            return false;
-        }
-
-        holdNote.CurrentlyHeld = true;
-        holdNote.LastHeldTimeMs = hitTimeMs;
-        holdNote.Held = true;
-        return false;
     }
 
     // minNoteIndex tracks the first note that we need to care about when judging future inputs. It should be greater than
@@ -342,12 +385,33 @@ public class ScoringManager : MonoBehaviour
     private int minNoteIndex;
     private readonly List<HoldNote> activeHolds = new();
     private TouchState prevTouchState;
+    private float prevTouchTimeMs;
 
-    public void HandleInput(TouchState touchState, float hitTimeMs)
+    // - HandleInput must be called with strictly increasing hitTimeMs for each consecutive call.
+    // - HandleInput is not thread-safe. It is the caller's responsibility to ensure that multiple HandleInput
+    //   invocations are never running in parallel. There is no guarantee that HandleInput will be called from the main
+    //   thread or any specific thread.
+    // - HandleInput may be called multiple times per frame, or multiple times in between frames in another thread.
+    // - A call HandleInput(touchState1, time1), followed by a call HandleInput(touchState2, time2) will assume that
+    //   touchState1 was held for the entire time between time1 and time2. And in turn, touchState2 will be assumed to
+    //   be held until the next HandleInput call.
+    //   Thus, consecutive calls with the same touchState are idempotent in terms of the final judgement. They may
+    //   result in notes being assigned a judgement more quickly, but the judgements will ultimately be the same.
+    // - HandleInput can also be called with a null touchState - this means that we know the previous input was held
+    //   until at least this timeMs, and we can assign any judgements as appropriate based on that. (This is useful for
+    //   triggering scoring updates during sparse input methods such as replays.)
+    public void HandleInput([CanBeNull] TouchState touchState, float timeMs)
     {
         if (Notes is null)
         {
             Debug.LogError("Tried to judge an input, but no chart loaded");
+            return;
+        }
+
+        touchState ??= prevTouchState;
+        if (touchState is null)
+        {
+            Debug.LogWarning("Tried to judge a null touchState as the first one.");
             return;
         }
 
@@ -360,20 +424,20 @@ public class ScoringManager : MonoBehaviour
             {
                 Note note = Notes[noteScanIndex];
 
-                if (hitTimeMs + IgnoreFutureNotesThreshold < note.TimeMs)
+                if (timeMs + IgnoreFutureNotesThreshold < note.TimeMs)
                 {
                     // We can stop scanning since this note or any future notes cannot be hit by this input.
                     break;
                 }
 
-                if (note.TimeMs + IgnorePastNotesThreshold < hitTimeMs)
+                if (note.TimeMs + IgnorePastNotesThreshold < timeMs)
                 {
                     // This note can no longer be hit, we don't need to ever look at it or any notes before it again.
                     minNoteIndex = noteScanIndex + 1;
                     // We continue on since we still may need to mark this note as missed ("MissHit" it).
                 }
 
-                MaybeCalculateHitForNote(hitTimeMs, touchState, note, newSegments);
+                MaybeCalculateHitForNote(timeMs, touchState, note, newSegments);
             }
 
             // Note: not using a foreach because we remove finished holds as we iterate
@@ -381,7 +445,7 @@ public class ScoringManager : MonoBehaviour
             {
                 HoldNote holdNote = activeHolds[i];
 
-                bool holdFinished = UpdateHold(hitTimeMs, touchState, holdNote);
+                bool holdFinished = UpdateHold(timeMs, holdNote);
 
                 if (holdFinished)
                     activeHolds.Remove(holdNote);
@@ -391,10 +455,11 @@ public class ScoringManager : MonoBehaviour
         }
         finally
         {
+            prevTouchTimeMs = timeMs;
             prevTouchState = touchState;
         }
     }
-    
+
     private async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -409,14 +474,14 @@ public class ScoringManager : MonoBehaviour
         // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
         // of the end of the audio clip.
         // TODO: move this logic somewhere else lol
-        if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < TimeManager.VisualTimeMs &&
+        if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs &&
             !WritingReplayAndExiting)
         {
             async Awaitable endSong()
             {
                 WritingReplayAndExiting = true;
-                if (AutoWriteReplays && !ReplayManager.PlayingFromReplay)
-                    await ReplayManager.WriteReplayFile();
+                if (AutoWriteReplays && !replayManager.PlayingFromReplay)
+                    await replayManager.WriteReplayFile();
 
                 PersistentStateManager.Instance.LastScoreData = CurrentScoreData();
                 SceneSwitcher.Instance.LoadScene("_SongResults");
