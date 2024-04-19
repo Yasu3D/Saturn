@@ -442,7 +442,7 @@ MonoBehaviour:
       GiveUpSetting: 0
     UISettings:
       JudgementDisplayPosition: 0
-      ShowJudgementDetails: 0
+      ShowJudgementDetails: 1
       GuideLaneType: 1
       GuideLaneOpacity: 5
       DisplayOpacity: 0
