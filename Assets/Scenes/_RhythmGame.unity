@@ -2073,10 +2073,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d0b7f0fefbc144ba83c777d4682a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmPlayer: {fileID: 1534859774}
-  timeManager: {fileID: 1783936258}
   image: {fileID: 1286506600}
   material: {fileID: 2100000, guid: bc6b4168759878e4ca30e98acc957fbd, type: 2}
+  timeManager: {fileID: 1783936258}
+  chartManager: {fileID: 1472638035}
 --- !u!114 &1286506600
 MonoBehaviour:
   m_ObjectHideFlags: 0
