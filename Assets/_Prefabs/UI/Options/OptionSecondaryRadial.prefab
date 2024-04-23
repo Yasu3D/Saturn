@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: -60, y: -10}
+  m_AnchoredPosition: {x: 38.850002, y: 0}
+  m_SizeDelta: {x: -97.69999, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2225009969433020651
 CanvasRenderer:
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
+  m_fontSize: 17.65
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -247,7 +247,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -20, y: 0}
-  m_SizeDelta: {x: 250, y: 50}
+  m_SizeDelta: {x: 270, y: 35.57}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &2358361709660019807
 CanvasRenderer:
@@ -286,7 +286,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1.4
+  m_PixelsPerUnitMultiplier: 2.1
 --- !u!1 &4307412724180532120
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35b1edf7bbf8a2488d2214f16d71bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 3980366800291579280}
+  Rect: {fileID: 3980366800291579280}
   title0TMP: {fileID: 2910131437018080185}
   radialPanel: {fileID: 8975779207838221528}
 --- !u!1 &7088133322308951661

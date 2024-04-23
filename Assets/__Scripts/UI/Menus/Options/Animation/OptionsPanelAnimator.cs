@@ -18,13 +18,14 @@ public class OptionsPanelAnimator : MonoBehaviour
 
     [SerializeField] private OptionPanelPrimary primaryPanel;
     [SerializeField] private CanvasGroup panelGroup;
+    [SerializeField] private CanvasGroup radialCenterGroup;
     [SerializeField] private RectTransform panelGroupRect;
     [SerializeField] private RectTransform gradientRect;
     [SerializeField] private RectTransform spinnyThingRect;
     [SerializeField] private RectTransform navigatorRect;
+    [SerializeField] private RectTransform headerRect;
     [SerializeField] private RectMask2D panelMask;
     [SerializeField] private Image glassImage;
-    [SerializeField] private Image radialCenterImage;
     [SerializeField] private GameObject radialCoverRing;
     [SerializeField] private GameObject radialCoverBackground;
 
@@ -109,10 +110,8 @@ public class OptionsPanelAnimator : MonoBehaviour
 
     public void Anim_ShowPanels([NotNull] UIScreen previous, [NotNull] UIScreen next)
     {
-        bool prevLinear =
-            previous.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
-        bool nextLinear =
-            next.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+        bool prevLinear = previous.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+        bool nextLinear = next.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
 
         if (!nextLinear)
         {
@@ -120,10 +119,8 @@ public class OptionsPanelAnimator : MonoBehaviour
             return;
         }
 
-        if (prevLinear)
-            Anim_ShowPanelsLinearPartial();
-        else
-            Anim_ShowPanelsLinearFull();
+        if (prevLinear) Anim_ShowPanelsLinearPartial();
+        else Anim_ShowPanelsLinearFull();
 
         // Linear -> Linear => Partial
         // Linear -> Radial => Radial
@@ -133,10 +130,8 @@ public class OptionsPanelAnimator : MonoBehaviour
 
     public void Anim_HidePanels([NotNull] UIScreen previous, [NotNull] UIScreen next)
     {
-        bool prevLinear =
-            previous.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
-        bool nextLinear =
-            next.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+        bool prevLinear = previous.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
+        bool nextLinear = next.ScreenType is UIScreen.UIScreenType.LinearSimple or UIScreen.UIScreenType.LinearDetailed;
 
         if (!prevLinear)
         {
@@ -144,10 +139,8 @@ public class OptionsPanelAnimator : MonoBehaviour
             return;
         }
 
-        if (nextLinear)
-            Anim_HidePanelsLinearPartial();
-        else
-            Anim_HidePanelsLinearFull();
+        if (nextLinear) Anim_HidePanelsLinearPartial();
+        else Anim_HidePanelsLinearFull();
 
         // Linear -> Linear => Partial
         // Linear -> Radial => Full
@@ -166,7 +159,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Kill(true);
 
         panelMask.enabled = true;
-        radialCenterImage.gameObject.SetActive(false);
+        radialCenterGroup.gameObject.SetActive(false);
         radialCoverRing.SetActive(false);
         radialCoverBackground.SetActive(false);
 
@@ -191,7 +184,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Kill(true);
 
         panelMask.enabled = true;
-        radialCenterImage.gameObject.SetActive(false);
+        radialCenterGroup.gameObject.SetActive(false);
         radialCoverRing.SetActive(false);
         radialCoverBackground.SetActive(false);
 
@@ -222,7 +215,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Kill(true);
 
         panelMask.enabled = true;
-        radialCenterImage.gameObject.SetActive(false);
+        radialCenterGroup.gameObject.SetActive(false);
         radialCoverRing.SetActive(false);
         radialCoverBackground.SetActive(false);
 
@@ -235,6 +228,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         glassImage.rectTransform.localScale = Vector3.zero;
         glassImage.DOFade(0, 0);
         gradientRect.anchoredPosition = new Vector2(0, 400);
+        headerRect.anchoredPosition = new Vector2(0, 250);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroup.DOFade(1, frame * 3).SetEase(Ease.Linear));
@@ -245,6 +239,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Insert(frame * 2, glassImage.rectTransform.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
         currentSequence.Insert(frame * 2, glassImage.DOFade(1, frame * 4).SetEase(Ease.OutQuad));
         currentSequence.Insert(frame * 2, gradientRect.DOAnchorPosY(652.5f, frame * 4));
+        currentSequence.Insert(frame * 2, headerRect.DOAnchorPosX(-420, frame * 4));
     }
 
     public void Anim_HidePanelsLinearFull()
@@ -265,7 +260,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Kill(true);
 
         panelMask.enabled = true;
-        radialCenterImage.gameObject.SetActive(false);
+        radialCenterGroup.gameObject.SetActive(false);
         radialCoverRing.SetActive(false);
         radialCoverBackground.SetActive(false);
 
@@ -274,6 +269,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         glassImage.rectTransform.localScale = Vector3.one;
         glassImage.DOFade(1, 0);
         gradientRect.anchoredPosition = new Vector2(0, 652.5f);
+        headerRect.anchoredPosition = new Vector2(-420, 250);
 
         panelGroup.alpha = 1;
         navigatorRect.anchoredPosition = new Vector2(270, -400);
@@ -284,6 +280,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Join(glassImage.rectTransform.DOScale(0.5f, frame * 4).SetEase(Ease.InQuad));
         currentSequence.Join(glassImage.DOFade(0, frame * 4).SetEase(Ease.InQuad));
         currentSequence.Join(gradientRect.DOAnchorPosY(400, frame * 4).SetEase(Ease.InQuad));
+        currentSequence.Join(headerRect.DOAnchorPosX(0, frame * 4).SetEase(Ease.InQuad));
 
         currentSequence.Insert(frame * 2, panelGroup.DOFade(0, frame * 2).SetEase(Ease.Linear));
         currentSequence.Insert(frame * 2, navigatorRect.DOAnchorPosX(1250, frame * 6).SetEase(Ease.InQuad));
@@ -304,7 +301,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Kill(true);
 
         panelMask.enabled = false;
-        radialCenterImage.gameObject.SetActive(true);
+        radialCenterGroup.gameObject.SetActive(true);
         radialCoverRing.SetActive(true);
         radialCoverBackground.SetActive(true);
 
@@ -313,12 +310,12 @@ public class OptionsPanelAnimator : MonoBehaviour
         panelGroup.alpha = 0;
         glassImage.rectTransform.localScale = Vector3.zero;
         glassImage.DOFade(0, 0);
-        radialCenterImage.DOFade(0, 0);
+        radialCenterGroup.DOFade(0, 0);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(glassImage.rectTransform.DOScale(1, frame * 8).SetEase(Ease.OutQuad));
         currentSequence.Join(glassImage.DOFade(1, frame * 8).SetEase(Ease.OutQuad));
-        currentSequence.Join(radialCenterImage.DOFade(1, frame * 4).SetEase(Ease.InQuad));
+        currentSequence.Join(radialCenterGroup.DOFade(1, frame * 4).SetEase(Ease.InQuad));
 
         currentSequence.Insert(frame * 4,
             panelGroupRect.DORotate(new Vector3(0, 0, 0), frame * 6).SetEase(Ease.OutQuad));
@@ -339,7 +336,7 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Kill(true);
 
         panelMask.enabled = false;
-        radialCenterImage.gameObject.SetActive(true);
+        radialCenterGroup.gameObject.SetActive(true);
         radialCoverRing.SetActive(true);
         radialCoverBackground.SetActive(true);
 
