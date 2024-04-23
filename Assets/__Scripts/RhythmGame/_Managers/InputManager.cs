@@ -18,6 +18,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private ScoringManager scoringManager;
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private ReplayManager replayManager;
+    [SerializeField] private LedManager ledManager;
 
     private readonly KeyboardInput keyboardInput = new();
 
@@ -43,6 +44,7 @@ public class InputManager : MonoBehaviour
             replayManager.RecordFrame(touchState.Value, timeMs);
         touchState.Value.CopyTo(ref CurrentTouchState);
         scoringManager.HandleInput(touchState.Value, timeMs);
+        ledManager.SetLedsFromTouchState(touchState.Value);
     }
 
     private void Start()
