@@ -224,10 +224,7 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
                 int anglePos = SaturnMath.Modulo(angleOffset + 15, 60);
 
                 for (int depthPos = 0; depthPos < 4; depthPos++)
-                {
-                    if (leftTouchData[angleOffset, 3 - depthPos])
-                        segments[anglePos, depthPos] = true;
-                }
+                    segments[anglePos, depthPos] = leftTouchData[angleOffset, 3 - depthPos];
             }
         }
 
@@ -241,10 +238,7 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
                 int anglePos = SaturnMath.Modulo(14 - angleOffset, 60);
 
                 for (int depthPos = 0; depthPos < 4; depthPos++)
-                {
-                    if (rightTouchData[angleOffset, 3 - depthPos])
-                        segments[anglePos, depthPos] = true;
-                }
+                    segments[anglePos, depthPos] = rightTouchData[angleOffset, 3 - depthPos];
             }
         }
     }
