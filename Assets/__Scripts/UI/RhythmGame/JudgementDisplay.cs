@@ -75,8 +75,8 @@ public class JudgementDisplay : MonoBehaviour
 
         if (SettingsManager.Instance.PlayerSettings.UISettings.ShowJudgementDetails == 1 && judgement is not (Judgement.Marvelous or Judgement.None))
         {
-            if (timeErrorMs > 0) TextFast.SetActive(true);
-            if (timeErrorMs < 0) TextLate.SetActive(true);
+            if (timeErrorMs < 0) TextFast.SetActive(true);
+            if (timeErrorMs > 0) TextLate.SetActive(true);
         }
 
         currentSequence = DOTween.Sequence();
