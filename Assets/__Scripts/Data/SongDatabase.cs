@@ -81,6 +81,10 @@ public class SongDatabase : MonoBehaviour
             diffs[i].Exists = true;
             diffs[i].ChartFilepath = chartFilepath;
 
+            // Fallback preview in case it's not found in the .mer file.
+            // PreviewStart will default to 0f already.
+            diffs[i].PreviewDuration = 10f;
+
             readerIndex = 0;
             do
             {
@@ -105,16 +109,15 @@ public class SongDatabase : MonoBehaviour
                     diffs[i].Charter = tempCharter;
 
                 string tempPreviewStart = MerLoader.GetMetadata(merLine, "#PREVIEW_TIME");
-                if (tempPreviewStart != null)
+                if (!string.IsNullOrEmpty(tempPreviewStart))
                     diffs[i].PreviewStart = Convert.ToSingle(tempPreviewStart, CultureInfo.InvariantCulture);
-                if (tempPreviewStart == "")
-                    diffs[i].PreviewStart = 0;
 
-                string tempPreviewDuration = MerLoader.GetMetadata(merLine, "#PREVIEW_LENGTH");
-                if (tempPreviewDuration != null)
+                // #PREVIEW_DURATION is correct, but #PREVIEW_LENGTH is used in some charts due to
+                // https://github.com/muskit/WacK-Repackager/issues/5
+                string tempPreviewDuration = MerLoader.GetMetadata(merLine, "#PREVIEW_DURATION") ??
+                                             MerLoader.GetMetadata(merLine, "#PREVIEW_LENGTH");
+                if (!string.IsNullOrEmpty(tempPreviewDuration))
                     diffs[i].PreviewDuration = Convert.ToSingle(tempPreviewDuration, CultureInfo.InvariantCulture);
-                if (tempPreviewDuration == "")
-                    diffs[i].PreviewDuration = 10;
             } while (++readerIndex < merFile.Count);
         }
 
