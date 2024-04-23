@@ -21,17 +21,17 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KeyBeam
-  m_Shader: {fileID: 10755, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: -6465566751694194690, guid: cb95396e02e0086e89b63a5b835ca1b8,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
-  - _GLOSSYREFLECTIONS_OFF
   - _LANETYPE_E
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2990
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -118,7 +118,7 @@ Material:
     - _ComboShine: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Depth: 6
+    - _Depth: 3
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -131,12 +131,13 @@ Material:
     - _GuideLaneComboShineEnable: 0
     - _GuideLaneShineScrollSpeed: -2
     - _LANETYPE: 5
+    - _MaxRadius: 0.99
     - _Metallic: 0
     - _Mode: 0
     - _NoteThickness: 3
     - _NoteWidth: 3
     - _OcclusionStrength: 1
-    - _Opacity: 1
+    - _Opacity: 0.5
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: -10
@@ -157,6 +158,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 0.40392157}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _GuideLaneColor: {r: 0.25255814, g: 0.26097676, b: 0.36200002, a: 1}
+    - _KeybeamColor: {r: 1, g: 1, b: 1, a: 0}
     - _LaneShineColor1: {r: 0.23529407, g: 0.24313727, b: 0.33725488, a: 1}
     - _LaneShineColor2: {r: 0.572549, g: 0.68627447, b: 0.737255, a: 1}
     - _Lane_0: {r: 0, g: 0, b: 0, a: 0}
