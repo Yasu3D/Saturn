@@ -98,7 +98,7 @@ public static class AudioLoader
 
 public static class ImageLoader
 {
-    public static async Task<Texture2D> LoadImageWebRequest(string path)
+    public static async Awaitable<Texture2D> LoadImageWebRequest(string path)
     {
         if (!File.Exists(path)) return null;
 

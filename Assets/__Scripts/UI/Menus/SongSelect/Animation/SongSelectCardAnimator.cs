@@ -10,25 +10,29 @@ namespace SaturnGame.UI
 {
 public class SongSelectCardAnimator : MonoBehaviour
 {
-    [Header("Cards")] [FormerlySerializedAs("songCards")]
-    public List<SongCard> SongCards;
+    [Header("Cards")]
+    [FormerlySerializedAs("songCards")] public List<SongCard> SongCards;
 
     [SerializeField] private List<PreviewCard> previewCards;
 
-    [Header("Jackets")] [SerializeField] private Texture2D emptyJacket;
+    [Header("Jackets")]
+    [SerializeField] private Texture2D emptyJacket;
     [SerializeField] private RawImage selectedJacket0;
     [SerializeField] private RawImage selectedJacket1;
     [SerializeField] private RawImage selectedJacket2;
 
-    [Header("Animation")] private const float SongCardScaleA = 0.6f;
+    [Header("Animation")]
+    private const float SongCardScaleA = 0.6f;
     private const float SongCardScaleB = 0.8f;
     private const float TweenDuration = 0.1f;
     private const Ease TweenEase = Ease.OutQuad;
 
+    public string[] CurrentJacketPaths;
+
     /// <summary>
     /// Index of the card that's currently in the center.
     /// </summary>
-    private int CenterCardIndex { get; set; }
+    public int CenterCardIndex { get; private set; }
 
     public int WrapCardIndex { get; private set; }
 
@@ -40,13 +44,15 @@ public class SongSelectCardAnimator : MonoBehaviour
     public enum ShiftDirection
     {
         Left = 1,
-        Right = -1
+        Right = -1,
     }
 
     private void Awake()
     {
         if (SongCards.Count != previewCards.Count)
             Debug.LogWarning("SongCard and PreviewCard count does not match!");
+
+        CurrentJacketPaths = new string[SongCards.Count];
 
         CenterCardIndex = CardHalfCount;
     }

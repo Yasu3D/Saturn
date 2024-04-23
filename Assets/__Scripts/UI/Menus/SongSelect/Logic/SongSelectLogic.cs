@@ -34,7 +34,7 @@ public class SongSelectLogic : MonoBehaviour
     [SerializeField] private GameObject diffMinusButton1;
     private static UIAudioController UIAudio => UIAudioController.Instance;
 
-    private void Awake()
+    private void Start()
     {
         Debug.Log($"Coming from {SceneSwitcher.Instance.LastScene}");
         page = SceneSwitcher.Instance.LastScene == "_Options" ? MenuPage.ChartPreview : MenuPage.SongSelect;
@@ -220,16 +220,18 @@ public class SongSelectLogic : MonoBehaviour
         int newSongIndex = SaturnMath.Modulo(SelectedSongIndex + cardAnimator.CardHalfCount * (int)direction,
             songDatabase.Songs.Count);
         Song newSong = songDatabase.Songs[newSongIndex];
-        Texture2D newJacket = await ImageLoader.LoadImageWebRequest(newSong.JacketPath);
+        Awaitable loadNewJacket = LoadCardJacket(cardAnimator.WrapCardIndex, newSong.JacketPath);
 
         cardAnimator.SetSongData(cardAnimator.WrapCardIndex, SelectedDifficulty, newSong);
-        cardAnimator.SetCardJacket(cardAnimator.WrapCardIndex, newJacket);
 
         cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
         // Audio Preview
         bgmPreview.FadeoutBgmPreview();
         bgmPreview.ResetLingerTimer();
+
+        // Await the jacket which has been loading in the background to make sure we rethrow any errors
+        await loadNewJacket;
     }
 
     public async void OnNavigateLeft()
@@ -269,22 +271,47 @@ public class SongSelectLogic : MonoBehaviour
         SceneSwitcher.Instance.LoadScene("_Options");
     }
 
-
     private async void LoadAllCards()
     {
+        // The loop is async, so SelectedSongIndex can change. However, since all the cards are relative to the initial
+        // values, we want to make sure we capture the initial value for the duration of the loop.
+        int selectedIndex = SelectedSongIndex;
+        List<Awaitable> awaitables = new();
+
+        // Load song data and start loading all the jackets
         for (int i = 0; i < cardAnimator.SongCards.Count; i++)
         {
-            int index = SaturnMath.Modulo(SelectedSongIndex + i - cardAnimator.CardHalfCount,
+            int index = SaturnMath.Modulo(selectedIndex + i - cardAnimator.CardHalfCount,
                 songDatabase.Songs.Count);
             Song data = songDatabase.Songs[index];
             string path = data.JacketPath;
 
-            Texture2D jacket = await ImageLoader.LoadImageWebRequest(path);
-            cardAnimator.SetCardJacket(i, jacket);
+            awaitables.Add(LoadCardJacket(i, path));
             cardAnimator.SetSongData(i, SelectedDifficulty, data);
         }
 
+        // Make sure to await all the jacket loads
+        foreach (Awaitable awaitable in awaitables) await awaitable;
+
         cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
+    }
+
+    private async Awaitable LoadCardJacket(int cardIndex, string jacketPath)
+    {
+        cardAnimator.CurrentJacketPaths[cardIndex] = jacketPath;
+        Texture2D jacket = await ImageLoader.LoadImageWebRequest(jacketPath);
+
+        if (cardAnimator.CurrentJacketPaths[cardIndex] != jacketPath)
+        {
+            // A new jacket has been loaded to this card while we were waiting for this one to load. Abort.
+            Destroy(jacket);
+            return;
+        }
+
+        cardAnimator.SetCardJacket(cardIndex, jacket);
+
+        if (cardAnimator.CenterCardIndex == cardIndex)
+            cardAnimator.SetSelectedJacket(jacket);
     }
 
     // Important note: it is CALLER'S RESPONSIBILITY to ensure the provided diffs param has a SongDifficulty of
