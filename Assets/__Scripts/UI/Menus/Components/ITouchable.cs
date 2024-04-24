@@ -19,14 +19,7 @@ public interface ITouchable : IEventSystemHandler
         return false;
     }
 
-    void OnTouchPress(TouchEventData eventData);
-    void OnTouchRelease(TouchEventData eventData);
-}
-
-public class TouchEventData : BaseEventData
-{
-    public TouchEventData(EventSystem eventSystem) : base(eventSystem)
-    {
-    }
+    void OnTouchPress();
+    void OnTouchRelease();
 }
 }

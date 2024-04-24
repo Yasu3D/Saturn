@@ -35,10 +35,8 @@ public class TouchButton : Button, ITouchable
         TouchRegistry.UnregisterTouchable(this);
     }
 
-    public void OnTouchPress(TouchEventData eventData)
+    public void OnTouchPress()
     {
-        //OnPointerDown(eventData);
-
         if (!IsActive() || !IsInteractable())
             return;
 
@@ -46,10 +44,8 @@ public class TouchButton : Button, ITouchable
         DoStateTransition(SelectionState.Pressed, false);
     }
 
-    public void OnTouchRelease(TouchEventData eventData)
+    public void OnTouchRelease()
     {
-        //OnPointerDown(eventData);
-
         if (!isPressed || !IsActive() || !IsInteractable())
             return;
 
