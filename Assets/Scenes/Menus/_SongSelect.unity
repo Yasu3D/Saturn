@@ -8575,6 +8575,7 @@ MonoBehaviour:
   selectedJacket0: {fileID: 5404127434271881776}
   selectedJacket1: {fileID: 4004119087237746328}
   selectedJacket2: {fileID: 918913827}
+  CurrentJacketPaths: []
 --- !u!114 &1410557163
 MonoBehaviour:
   m_ObjectHideFlags: 0

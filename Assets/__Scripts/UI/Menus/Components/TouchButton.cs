@@ -10,10 +10,17 @@ namespace SaturnGame.UI
 public class TouchButton : Button, ITouchable
 {
     [SerializeField] private int position;
-    public int Position => position;
     [SerializeField] private int size;
+
+    public int Position => position;
+
     public int Size => size;
+
     // it's assumed that buttons always occupy depthPos 2-3
+    public int MinDepthPos => 2;
+    public int MaxDepthPos => 3;
+
+    public Color32 LedColor => targetGraphic.canvasRenderer.GetColor();
 
     private bool isPressed;
 
@@ -25,20 +32,18 @@ public class TouchButton : Button, ITouchable
 
     protected override void OnDisable()
     {
-        base.OnEnable();
+        base.OnDisable();
         TouchRegistry.UnregisterTouchable(this);
     }
 
     protected override void OnDestroy()
     {
-        base.OnEnable();
+        base.OnDestroy();
         TouchRegistry.UnregisterTouchable(this);
     }
 
-    public void OnTouchPress(TouchEventData eventData)
+    public void OnTouchPress()
     {
-        //OnPointerDown(eventData);
-
         if (!IsActive() || !IsInteractable())
             return;
 
@@ -46,10 +51,8 @@ public class TouchButton : Button, ITouchable
         DoStateTransition(SelectionState.Pressed, false);
     }
 
-    public void OnTouchRelease(TouchEventData eventData)
+    public void OnTouchRelease()
     {
-        //OnPointerDown(eventData);
-
         if (!isPressed || !IsActive() || !IsInteractable())
             return;
 
