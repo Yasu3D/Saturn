@@ -66,6 +66,10 @@ public class LedManager : PersistentSingleton<LedManager>
 
     private void Update()
     {
+        // Toggle RingDebug when F2 is pressed
+        if (Input.GetKeyDown(KeyCode.F2))
+            ringDebugManager.gameObject.SetActive(!ringDebugManager.gameObject.activeSelf);
+
         if (TouchRegistry.RegisteredTouchables.Any())
         {
             // We are in a menu, recalculate led state

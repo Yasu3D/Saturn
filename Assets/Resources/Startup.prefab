@@ -622,6 +622,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RingDebug
       objectReference: {fileID: 0}
+    - target: {fileID: 3303272297974874327, guid: ea27af3d7af8917798829105d0a6a88b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8668929126503828956, guid: ea27af3d7af8917798829105d0a6a88b,
         type: 3}
       propertyPath: m_LocalPosition.x
