@@ -25,13 +25,13 @@ public class TouchButton : Button, ITouchable
 
     protected override void OnDisable()
     {
-        base.OnEnable();
+        base.OnDisable();
         TouchRegistry.UnregisterTouchable(this);
     }
 
     protected override void OnDestroy()
     {
-        base.OnEnable();
+        base.OnDestroy();
         TouchRegistry.UnregisterTouchable(this);
     }
 
