@@ -10,10 +10,17 @@ namespace SaturnGame.UI
 public class TouchButton : Button, ITouchable
 {
     [SerializeField] private int position;
-    public int Position => position;
     [SerializeField] private int size;
+
+    public int Position => position;
+
     public int Size => size;
+
     // it's assumed that buttons always occupy depthPos 2-3
+    public int MinDepthPos => 2;
+    public int MaxDepthPos => 3;
+
+    public Color32 LedColor => targetGraphic.canvasRenderer.GetColor();
 
     private bool isPressed;
 
