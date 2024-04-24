@@ -5,7 +5,7 @@ using USBIntLEDDll;
 
 namespace SaturnGame
 {
-public class LedManager : MonoBehaviour
+public class LedManager : PersistentSingleton<LedManager>
 {
     [SerializeField] private RingDebugManager ringDebugManager;
 
