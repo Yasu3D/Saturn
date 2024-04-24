@@ -12,7 +12,7 @@ public class RingDebugManager : MonoBehaviour
     private float InnerRadius => grid.OverallInnerRadius;
     private float OuterRadius => grid.OverallOuterRadius;
 
-    private void Start()
+    private void Awake()
     {
         indicators = new SegmentIndicator[60, 8];
 
@@ -22,7 +22,7 @@ public class RingDebugManager : MonoBehaviour
         {
             for (int depthPos = 0; depthPos < 8; depthPos++)
             {
-                SegmentIndicator indicator = Instantiate(indicatorPrefab, transform);
+                SegmentIndicator indicator = Instantiate(indicatorPrefab, grid.transform);
                 indicator.StartRadians = anglePos * 6 * Mathf.Deg2Rad;
                 indicator.SizeRadians = 6 * Mathf.Deg2Rad;
                 indicator.InnerRadius = InnerRadius + (7 - depthPos) * (OuterRadius - InnerRadius) / 8;
@@ -46,5 +46,7 @@ public class RingDebugManager : MonoBehaviour
             }
         }
     }
+
+    public void ToggleVisibility() => grid.gameObject.SetActive(!grid.gameObject.activeSelf);
 }
 }
