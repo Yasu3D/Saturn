@@ -9,6 +9,7 @@ namespace SaturnGame
 public class LedManager : PersistentSingleton<LedManager>
 {
     [SerializeField] private RingDebugManager ringDebugManager;
+    private NativeLedOutput nativeLedOutput = new();
 
     // Note: index into the array by [angle * 8 + depth] - may change if this is not what USBIntLED uses.
     // angle is the same as anglePos, depth is 2x depthPos (there are 8 depths, two per segment)
@@ -30,6 +31,7 @@ public class LedManager : PersistentSingleton<LedManager>
     {
         int? retVal = USBIntLED.Safe_USBIntLED_Init();
         Debug.Log($"usb initialization returned: {retVal}");
+        nativeLedOutput.Init();
     }
 
     /// <summary>
