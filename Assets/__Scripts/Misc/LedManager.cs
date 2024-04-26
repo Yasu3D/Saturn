@@ -20,7 +20,7 @@ public class LedManager : PersistentSingleton<LedManager>
         ledData = new LedData
         {
             unitCount = 60 * 8,
-            rgbaValues = ledState,
+            rgbaValues = new Color32[480],
         };
     }
 
@@ -76,6 +76,13 @@ public class LedManager : PersistentSingleton<LedManager>
         }
 
         // write to LEDs
+        // LedData 0 is anglepos 45, then LedData is increasing CW (in the negative direction)
+        for (int ledDataAnglePos = 0; ledDataAnglePos < 60; ledDataAnglePos++)
+        for (int depthLedPos = 0; depthLedPos < 8; depthLedPos++)
+        {
+            int anglePos = SaturnMath.Modulo(44 - ledDataAnglePos, 60);
+            ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = ledState[anglePos * 8 + depthLedPos];
+        }
         USBIntLED.Safe_USBIntLED_set(0, ledData);
 
         if (ringDebugManager != null && ringDebugManager.isActiveAndEnabled)
