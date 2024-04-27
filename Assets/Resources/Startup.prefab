@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 6885694711510743663}
   - component: {fileID: 3978765153090999763}
   - component: {fileID: 7016391841873746412}
-  - component: {fileID: 8235143612742342079}
+  - component: {fileID: 8946030093645008022}
   m_Layer: 0
   m_Name: Startup
   m_TagString: Untagged
@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9359c18a2922f5d46a283789d8048b59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8235143612742342079
+--- !u!114 &8946030093645008022
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -504,9 +504,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9093408435962310463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a1c575ed7df2e21996ed432f8563460, type: 3}
+  m_Script: {fileID: 11500000, guid: be56a41c625bb954897e6e88adaf7dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LedDrawableQueue: []
   ringDebugManager: {fileID: 1871815109259628160}
 --- !u!1001 &892859971340810492
 PrefabInstance:
