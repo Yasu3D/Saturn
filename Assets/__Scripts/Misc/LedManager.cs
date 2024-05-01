@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using SaturnGame.UI;
 using UnityEngine;
 using USBIntLEDDll;
@@ -14,6 +15,7 @@ public class LedManager : PersistentSingleton<LedManager>
     private readonly Color32[] ledState = new Color32[480];
 
     private readonly LedData ledData;
+    private bool sendingLedData;
 
     public LedManager()
     {
@@ -64,6 +66,36 @@ public class LedManager : PersistentSingleton<LedManager>
         }
     }
 
+    private async void SetCabLeds()
+    {
+        // makeshift lock - we only grab the lock while on the main thread, and we only check it from the main thread
+        // So I think it should be safe from race conditions.
+        sendingLedData = true;
+
+        try
+        {
+            // write to LEDs
+            // LedData 0 is anglepos 45, then LedData is increasing CW (in the negative direction)
+            for (int ledDataAnglePos = 0; ledDataAnglePos < 60; ledDataAnglePos++)
+            for (int depthLedPos = 0; depthLedPos < 8; depthLedPos++)
+            {
+                int anglePos = SaturnMath.Modulo(44 - ledDataAnglePos, 60);
+                ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = ledState[anglePos * 8 + depthLedPos];
+            }
+
+            await Awaitable.BackgroundThreadAsync();
+            USBIntLED.Safe_USBIntLED_set(0, ledData);
+
+            // wait for LED reset low period (at least 280 microseconds)
+            // 0.5ms (500 us) is still a bit unstable
+            await Awaitable.WaitForSecondsAsync(0.001f);
+        }
+        finally
+        {
+            sendingLedData = false;
+        }
+    }
+
     private void Update()
     {
         // Toggle RingDebug when F2 is pressed
@@ -75,15 +107,8 @@ public class LedManager : PersistentSingleton<LedManager>
             SetLedsFromTouchables();
         }
 
-        // write to LEDs
-        // LedData 0 is anglepos 45, then LedData is increasing CW (in the negative direction)
-        for (int ledDataAnglePos = 0; ledDataAnglePos < 60; ledDataAnglePos++)
-        for (int depthLedPos = 0; depthLedPos < 8; depthLedPos++)
-        {
-            int anglePos = SaturnMath.Modulo(44 - ledDataAnglePos, 60);
-            ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = ledState[anglePos * 8 + depthLedPos];
-        }
-        USBIntLED.Safe_USBIntLED_set(0, ledData);
+        if (!sendingLedData)
+            SetCabLeds();
 
         if (ringDebugManager != null && ringDebugManager.isActiveAndEnabled)
             ringDebugManager.UpdateColors(ledState);
