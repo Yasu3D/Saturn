@@ -15,7 +15,11 @@ public class SceneSwitcher : PersistentSingleton<SceneSwitcher>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Delete)) LoadMaintenanceMenu();
+        if (SceneManager.GetActiveScene().name != "_MaintenanceMenu")
+        {
+            if (Input.GetKeyDown(KeyCode.Delete)) LoadMaintenanceMenu();
+            if (Input.GetKeyDown(KeyCode.JoystickButton9)) LoadMaintenanceMenu();
+        }
     }
 
     private void LoadMaintenanceMenu()
