@@ -43,7 +43,6 @@ public class InputManager : MonoBehaviour
             replayManager.RecordFrame(touchState.Value, timeMs);
         touchState.Value.CopyTo(ref CurrentTouchState);
         scoringManager.HandleInput(touchState.Value, timeMs);
-        LedManager.Instance.SetLedsFromTouchState(touchState.Value);
     }
 
     private void Start()
