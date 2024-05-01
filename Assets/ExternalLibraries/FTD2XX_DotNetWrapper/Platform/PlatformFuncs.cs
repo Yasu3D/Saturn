@@ -1,4 +1,5 @@
 ﻿// Prefer SaturnPlatform.PlatformFuncs
+// ReSharper disable All
 
 /*
 using System;

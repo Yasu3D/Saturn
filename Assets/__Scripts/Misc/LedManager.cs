@@ -8,30 +8,32 @@ namespace SaturnGame
 {
 public class LedManager : PersistentSingleton<LedManager>
 {
+    [SerializeField] private bool useNativeLedImplementation;
+    [SerializeField] [Range(0, 1)] private float ledBrightness;
     [SerializeField] private RingDebugManager ringDebugManager;
-    private NativeLedOutput nativeLedOutput = new();
+
+    private NativeLedOutput nativeLedOutput;
 
     // Note: index into the array by [angle * 8 + depth] - may change if this is not what USBIntLED uses.
     // angle is the same as anglePos, depth is 2x depthPos (there are 8 depths, two per segment)
     private readonly Color32[] ledState = new Color32[480];
 
-    private readonly LedData ledData;
-    private bool sendingLedData;
-
-    public LedManager()
+    private readonly LedData ledData = new()
     {
-        ledData = new LedData
-        {
-            unitCount = 60 * 8,
-            rgbaValues = new Color32[480],
-        };
-    }
+        unitCount = 60 * 8,
+        rgbaValues = new Color32[480],
+    };
+    private bool sendingLedData;
 
     private void Start()
     {
-        int? retVal = USBIntLED.Safe_USBIntLED_Init();
-        Debug.Log($"usb initialization returned: {retVal}");
-        nativeLedOutput.Init();
+        if (useNativeLedImplementation)
+        {
+            nativeLedOutput = new NativeLedOutput();
+            nativeLedOutput.Init();
+        }
+        else
+            USBIntLED.Safe_USBIntLED_Init();
     }
 
     /// <summary>
@@ -68,6 +70,11 @@ public class LedManager : PersistentSingleton<LedManager>
         }
     }
 
+    private byte AdjustBrightness(byte value)
+    {
+        return (byte)(value * ledBrightness);
+    }
+
     private async void SetCabLeds()
     {
         // makeshift lock - we only grab the lock while on the main thread, and we only check it from the main thread
@@ -77,20 +84,27 @@ public class LedManager : PersistentSingleton<LedManager>
         try
         {
             // write to LEDs
-            // LedData 0 is anglepos 45, then LedData is increasing CW (in the negative direction)
+            // LedData 0 is anglePos 45, then LedData is increasing CW (in the negative direction)
             for (int ledDataAnglePos = 0; ledDataAnglePos < 60; ledDataAnglePos++)
             for (int depthLedPos = 0; depthLedPos < 8; depthLedPos++)
             {
                 int anglePos = SaturnMath.Modulo(44 - ledDataAnglePos, 60);
-                ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = ledState[anglePos * 8 + depthLedPos];
+                ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = new Color32(
+                    AdjustBrightness(ledState[anglePos * 8 + depthLedPos].r),
+                    AdjustBrightness(ledState[anglePos * 8 + depthLedPos].g),
+                    AdjustBrightness(ledState[anglePos * 8 + depthLedPos].b), 0);
             }
 
             await Awaitable.BackgroundThreadAsync();
-            USBIntLED.Safe_USBIntLED_set(0, ledData);
+
+            if (useNativeLedImplementation)
+                nativeLedOutput.SetLeds(ledData.rgbaValues);
+            else
+                USBIntLED.Safe_USBIntLED_set(0, ledData);
 
             // wait for LED reset low period (at least 280 microseconds)
-            // 0.5ms (500 us) is still a bit unstable
-            await Awaitable.WaitForSecondsAsync(0.001f);
+            // 0.5ms (500 us) is still a bit unstable - jk idk i think this was fucked up
+            Thread.Sleep(1);
         }
         finally
         {
@@ -114,6 +128,11 @@ public class LedManager : PersistentSingleton<LedManager>
 
         if (ringDebugManager != null && ringDebugManager.isActiveAndEnabled)
             ringDebugManager.UpdateColors(ledState);
+    }
+
+    private void OnDisable()
+    {
+        nativeLedOutput?.Destroy();
     }
 }
 }

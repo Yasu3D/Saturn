@@ -58,7 +58,6 @@ namespace FTD2XX_NET
 
         const string _libpathWindows = "FTD2XX.DLL";
 
-        // path suggested by official FTDI linux installation guide
         const string _libpathLinux = "libftd2xx.so";
 
 

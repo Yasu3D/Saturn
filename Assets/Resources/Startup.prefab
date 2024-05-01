@@ -508,6 +508,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LedDrawableQueue: []
+  useNativeLedImplementation: 1
+  ledBrightness: 0.8
   ringDebugManager: {fileID: 1871815109259628160}
 --- !u!1001 &892859971340810492
 PrefabInstance:
