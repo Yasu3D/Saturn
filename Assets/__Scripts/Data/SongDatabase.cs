@@ -17,8 +17,8 @@ public class SongDatabase : MonoBehaviour
     public void LoadAllSongData()
     {
         string songPacksPath = SongPacksPath;
-        IEnumerable<string> songDirectories =
-            Directory.EnumerateFiles(songPacksPath, "meta.mer", SearchOption.AllDirectories);
+        Directory.CreateDirectory(songPacksPath);
+        IEnumerable<string> songDirectories = Directory.EnumerateFiles(songPacksPath, "meta.mer", SearchOption.AllDirectories);
 
         foreach (string filepath in songDirectories) Songs.Add(LoadSongData(filepath));
     }
