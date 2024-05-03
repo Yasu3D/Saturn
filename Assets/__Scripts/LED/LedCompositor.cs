@@ -34,7 +34,7 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
     {
         if (useNativeLedImplementation)
         {
-            nativeLedOutput = new NativeLedOutput();
+            nativeLedOutput = new();
             nativeLedOutput.Init();
         }
         else
@@ -44,6 +44,11 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
     private byte AdjustBrightness(byte value)
     {
         return (byte)(value * ledBrightness);
+    }
+
+    private void ClearCanvas(Color32 color)
+    {
+        for (int i = 0; i < ledValues.Length; i++) ledValues[i] = color;
     }
 
     private async Awaitable SetCabLeds()
@@ -61,7 +66,7 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
             for (int depthLedPos = 0; depthLedPos < 8; depthLedPos++)
             {
                 int anglePos = SaturnMath.Modulo(44 - ledDataAnglePos, 60);
-                ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = new Color32(
+                ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = new(
                     AdjustBrightness(ledValues[anglePos * 8 + depthLedPos].r),
                     AdjustBrightness(ledValues[anglePos * 8 + depthLedPos].g),
                     AdjustBrightness(ledValues[anglePos * 8 + depthLedPos].b), 0);
@@ -89,9 +94,9 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
     private async void FixedUpdate()
     {
         // Fill all LEDs with black first
-        for (int i = 0; i < ledValues.Length; i++) ledValues[i] = Color.black;
+        ClearCanvas(Color.black);
 
-        foreach (LedDrawable drawable in LedDrawableQueue.OrderBy(x => x.Layer))
+        foreach (LedDrawable drawable in LedDrawableQueue.Where(x => x.Enabled).OrderBy(x => x.Layer))
             drawable.Draw(ref ledValues);
 
         LedDrawableQueue.Clear();
@@ -107,6 +112,13 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
     {
         // Toggle RingDebug when F2 is pressed
         if (Input.GetKeyDown(KeyCode.F2)) ringDebugManager.ToggleVisibility();
+    }
+
+    protected override async void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+        ClearCanvas(Color.black);
+        await SetCabLeds();
     }
 }
 }

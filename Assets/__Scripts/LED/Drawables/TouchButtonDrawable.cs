@@ -1,9 +1,7 @@
-using System;
-using SaturnGame.LED;
 using SaturnGame.UI;
 using UnityEngine;
 
-namespace SaturnGame
+namespace SaturnGame.LED
 {
     /// <summary>
     /// Draws the colored area in front of menu touch buttons

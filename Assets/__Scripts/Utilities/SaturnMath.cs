@@ -95,6 +95,11 @@ public static class SaturnMath
         return (int)difficulty + (difficulty % 1 >= 0.7m ? "+" : "");
     }
 
+    public static Color32 HexToColor32(string hex)
+    {
+        return ColorUtility.TryParseHtmlString(hex, out Color color) ? color : Color.black;
+    }
+    
     public static class Ease
     {
         // This is kinda wrong but looks "good enough".
