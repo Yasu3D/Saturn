@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace SaturnGame.Rendering
 {
+
+// TODO: Rewrite this entire thing. Eventually...
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 [AddComponentMenu("SaturnGame/Rendering/Hold Surface Renderer")]
 public class HoldSurfaceRenderer : MonoBehaviour
@@ -31,8 +33,8 @@ public class HoldSurfaceRenderer : MonoBehaviour
 
     private void Awake()
     {
-        materialInstance = new Material(materialTemplate);
-        holdMesh = new Mesh();
+        materialInstance = new(materialTemplate);
+        holdMesh = new();
         meshFilter.mesh = holdMesh;
     }
 
@@ -55,6 +57,7 @@ public class HoldSurfaceRenderer : MonoBehaviour
     public void GenerateMesh(float scrollDuration)
     {
         float holdStartTime = HoldNote.Start.ScaledVisualTime;
+        float holdEndTime = HoldNote.End.ScaledVisualTime;
 
         int holdWidth = HoldNote.MaxSize;
         int holdLength = HoldNote.RenderedNotes.Length;
@@ -76,8 +79,8 @@ public class HoldSurfaceRenderer : MonoBehaviour
             int endNoteSize = startNoteSize;
             int endNotePos = startNotePos;
 
-            float start = startNote.ScaledVisualTime;
-            float end = start + 1;
+            float startTime = startNote.ScaledVisualTime;
+            float endTime = startTime + 1;
             float interval = 20;
 
             if (y != holdLength - 1)
@@ -85,7 +88,7 @@ public class HoldSurfaceRenderer : MonoBehaviour
                 HoldSegment endNote = sortedRenderedNotes[y + 1];
                 endNoteSize = endNote.Size;
                 endNotePos = endNote.Position;
-                end = endNote.ScaledVisualTime;
+                endTime = endNote.ScaledVisualTime;
 
                 // Hold is straight and doesn't need sub-segments.
                 // Set interval to the whole distance from start to end.
@@ -94,12 +97,13 @@ public class HoldSurfaceRenderer : MonoBehaviour
             }
 
             // For every sub-segment between RenderedNotes.
-            for (float i = start; i < end; i += interval)
+            for (float i = startTime; i < endTime; i += interval)
             {
-                float progress = Mathf.InverseLerp(start, end, i);
+                float localProgress = Mathf.InverseLerp(startTime, endTime, i);
+                float globalProgress = Mathf.InverseLerp(holdStartTime, holdEndTime, i);
 
-                float noteSize = Mathf.Lerp(startNoteSize, endNoteSize, progress);
-                float notePos = SaturnMath.LerpRound(startNotePos, endNotePos, progress, 60);
+                float noteSize = Mathf.Lerp(startNoteSize, endNoteSize, localProgress);
+                float notePos = SaturnMath.LerpRound(startNotePos, endNotePos, localProgress, 60);
 
                 // Shrink hold sizes to fit note mesh
                 if (noteSize < 60)
@@ -108,16 +112,16 @@ public class HoldSurfaceRenderer : MonoBehaviour
                     notePos += 0.8f;
                 }
 
-                float sizeMultiplier = GetAngleInterval(noteSize, holdWidth);
+                float angleInterval = GetAngleInterval(noteSize, holdWidth);
                 float depth = SaturnMath.InverseLerp(0, scrollDuration, i - holdStartTime);
 
                 // Generate an arc of verts
                 for (int x = 0; x <= holdWidth; x++)
                 {
-                    float currentAngle = (sizeMultiplier * x + notePos) * 6;
+                    float currentAngle = (angleInterval * x + notePos) * 6;
 
                     vertList.Add(GetPointOnCylinder(Vector2.zero, TunnelRadius, TunnelLength, currentAngle, depth));
-                    uvList.Add(GetUV(x, holdWidth, y + progress, holdLength - 1));
+                    uvList.Add(GetUV(x, holdWidth, globalProgress));
                 }
 
                 // We've generated one segment. Increment for triangle gen.
@@ -168,21 +172,12 @@ public class HoldSurfaceRenderer : MonoBehaviour
         float y = coneRadius * Mathf.Sin(Mathf.Deg2Rad * angle) + centerPoint.y;
         float z = coneLength * depth;
 
-        return new Vector3(x, y, z);
+        return new(x, y, z);
     }
 
-    private static Vector2 GetUV(float x, float noteSize, float y, float depth)
-    {
-        float u = Mathf.InverseLerp(0, noteSize, x);
-        float v = Mathf.InverseLerp(0, depth, y);
+    private static Vector2 GetUV(float x, float noteSize, float y) => new(Mathf.InverseLerp(0, noteSize, x), y);
 
-        return new Vector2(u, v);
-    }
-
-    private static float GetAngleInterval(float currentNoteSize, int maxNoteSize)
-    {
-        return currentNoteSize / maxNoteSize;
-    }
+    private static float GetAngleInterval(float currentNoteSize, int maxNoteSize) => currentNoteSize / maxNoteSize;
 
 
     [SerializeField] private int debugGizmos;
