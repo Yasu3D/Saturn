@@ -224,9 +224,9 @@ public class OptionsPanelAnimator : MonoBehaviour
         panelGroupRect.anchoredPosition = new Vector2(-250, 0);
         navigatorRect.anchoredPosition = new Vector2(1250, -400);
 
-        spinnyThingRect.localScale = Vector3.one * 2;
-        glassImage.rectTransform.localScale = Vector3.zero;
-        glassImage.DOFade(0, 0);
+        //spinnyThingRect.localScale = Vector3.one * 2;
+        //glassImage.rectTransform.localScale = Vector3.zero;
+        //glassImage.DOFade(0, 0);
         gradientRect.anchoredPosition = new Vector2(0, 400);
         headerRect.anchoredPosition = new Vector2(0, 250);
 
@@ -235,9 +235,9 @@ public class OptionsPanelAnimator : MonoBehaviour
         currentSequence.Join(panelGroupRect.DOAnchorPosX(0, frame * 6).SetEase(Ease.OutQuad));
         currentSequence.Join(navigatorRect.DOAnchorPosX(270, frame * 6).SetEase(Ease.OutQuad));
 
-        currentSequence.Insert(frame * 2, spinnyThingRect.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
-        currentSequence.Insert(frame * 2, glassImage.rectTransform.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
-        currentSequence.Insert(frame * 2, glassImage.DOFade(1, frame * 4).SetEase(Ease.OutQuad));
+        //currentSequence.Insert(frame * 2, spinnyThingRect.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
+        //currentSequence.Insert(frame * 2, glassImage.rectTransform.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
+        //currentSequence.Insert(frame * 2, glassImage.DOFade(1, frame * 4).SetEase(Ease.OutQuad));
         currentSequence.Insert(frame * 2, gradientRect.DOAnchorPosY(652.5f, frame * 4));
         currentSequence.Insert(frame * 2, headerRect.DOAnchorPosX(-420, frame * 4));
     }
@@ -266,8 +266,8 @@ public class OptionsPanelAnimator : MonoBehaviour
 
         panelGroupRect.anchoredPosition = new Vector2(0, 0);
         panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
-        glassImage.rectTransform.localScale = Vector3.one;
-        glassImage.DOFade(1, 0);
+        //glassImage.rectTransform.localScale = Vector3.one;
+        //glassImage.DOFade(1, 0);
         gradientRect.anchoredPosition = new Vector2(0, 652.5f);
         headerRect.anchoredPosition = new Vector2(-420, 250);
 
@@ -276,9 +276,9 @@ public class OptionsPanelAnimator : MonoBehaviour
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroupRect.DOAnchorPosX(-250, frame * 4).SetEase(Ease.InQuad));
-        currentSequence.Join(spinnyThingRect.DOScale(2, frame * 4).SetEase(Ease.InQuad));
-        currentSequence.Join(glassImage.rectTransform.DOScale(0.5f, frame * 4).SetEase(Ease.InQuad));
-        currentSequence.Join(glassImage.DOFade(0, frame * 4).SetEase(Ease.InQuad));
+        //currentSequence.Join(spinnyThingRect.DOScale(2, frame * 4).SetEase(Ease.InQuad));
+        //currentSequence.Join(glassImage.rectTransform.DOScale(0.5f, frame * 4).SetEase(Ease.InQuad));
+        //currentSequence.Join(glassImage.DOFade(0, frame * 4).SetEase(Ease.InQuad));
         currentSequence.Join(gradientRect.DOAnchorPosY(400, frame * 4).SetEase(Ease.InQuad));
         currentSequence.Join(headerRect.DOAnchorPosX(0, frame * 4).SetEase(Ease.InQuad));
 
@@ -308,13 +308,13 @@ public class OptionsPanelAnimator : MonoBehaviour
         panelGroupRect.anchoredPosition = new Vector2(0, 0);
         panelGroupRect.eulerAngles = new Vector3(0, 0, 120);
         panelGroup.alpha = 0;
-        glassImage.rectTransform.localScale = Vector3.zero;
-        glassImage.DOFade(0, 0);
+        //glassImage.rectTransform.localScale = Vector3.zero;
+        //glassImage.DOFade(0, 0);
         radialCenterGroup.DOFade(0, 0);
 
         currentSequence = DOTween.Sequence();
-        currentSequence.Join(glassImage.rectTransform.DOScale(1, frame * 8).SetEase(Ease.OutQuad));
-        currentSequence.Join(glassImage.DOFade(1, frame * 8).SetEase(Ease.OutQuad));
+        //currentSequence.Join(glassImage.rectTransform.DOScale(1, frame * 8).SetEase(Ease.OutQuad));
+        //currentSequence.Join(glassImage.DOFade(1, frame * 8).SetEase(Ease.OutQuad));
         currentSequence.Join(radialCenterGroup.DOFade(1, frame * 4).SetEase(Ease.InQuad));
 
         currentSequence.Insert(frame * 4,
@@ -342,13 +342,13 @@ public class OptionsPanelAnimator : MonoBehaviour
 
         panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
         panelGroup.alpha = 1;
-        glassImage.rectTransform.localScale = Vector3.one;
-        glassImage.DOFade(1, 0);
+        //glassImage.rectTransform.localScale = Vector3.one;
+        //glassImage.DOFade(1, 0);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroup.DOFade(0, frame * 3).SetEase(Ease.OutQuad));
-        currentSequence.Join(glassImage.rectTransform.DOScale(0, frame * 6).SetEase(Ease.Linear));
-        currentSequence.Join(glassImage.DOFade(0, frame * 6).SetEase(Ease.Linear));
+        //currentSequence.Join(glassImage.rectTransform.DOScale(0, frame * 6).SetEase(Ease.Linear));
+        //currentSequence.Join(glassImage.DOFade(0, frame * 6).SetEase(Ease.Linear));
     }
 
 
