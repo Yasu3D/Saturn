@@ -13,9 +13,10 @@ public class TouchButton : Button, ITouchable
     [SerializeField] private int size;
 
     public int Position => position;
-
     public int Size => size;
-
+    public int Thickness => (MaxDepthPos - MinDepthPos) * 2;
+    public int Depth => MinDepthPos * 2;
+    
     // it's assumed that buttons always occupy depthPos 2-3
     public int MinDepthPos => 2;
     public int MaxDepthPos => 3;

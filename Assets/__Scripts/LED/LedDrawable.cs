@@ -14,7 +14,7 @@ namespace SaturnGame.LED
         public bool Enabled = true;
         public int Layer = 0;
         
-        public abstract void Draw(ref Color32[] data);
+        public abstract void Draw(ref Color32[,] data);
         
         private void FixedUpdate()
         {

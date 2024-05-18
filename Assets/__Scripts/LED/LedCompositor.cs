@@ -18,7 +18,7 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
     [SerializeField] private bool useNativeLedImplementation;
     [SerializeField] [Range(0, 1)] private float ledBrightness;
 
-    [SerializeField] private Color32[] ledValues = new Color32[480]; // 60 * 8
+    [SerializeField] private Color32[,] ledValues = new Color32[8,60];
 
     private readonly LedData ledData = new()
     {
@@ -48,7 +48,11 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
 
     private void ClearCanvas(Color32 color)
     {
-        for (int i = 0; i < ledValues.Length; i++) ledValues[i] = color;
+        for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 60; j++)
+        {
+            ledValues[i, j] = color;
+        }
     }
 
     private async Awaitable SetCabLeds()
@@ -62,14 +66,14 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
         {
             // write to LEDs
             // LedData 0 is anglePos 45, then LedData is increasing CW (in the negative direction)
-            for (int ledDataAnglePos = 0; ledDataAnglePos < 60; ledDataAnglePos++)
-            for (int depthLedPos = 0; depthLedPos < 8; depthLedPos++)
+            for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 60; j++)
             {
-                int anglePos = SaturnMath.Modulo(44 - ledDataAnglePos, 60);
-                ledData.rgbaValues[ledDataAnglePos * 8 + depthLedPos] = new(
-                    AdjustBrightness(ledValues[anglePos * 8 + depthLedPos].r),
-                    AdjustBrightness(ledValues[anglePos * 8 + depthLedPos].g),
-                    AdjustBrightness(ledValues[anglePos * 8 + depthLedPos].b), 0);
+                int anglePos = SaturnMath.Modulo(44 - i, 60);
+                ledData.rgbaValues[i * 8 + j] = new(
+                    AdjustBrightness(ledValues[i, j].r),
+                    AdjustBrightness(ledValues[i, j].g),
+                    AdjustBrightness(ledValues[i, j].b), 0);
             }
 
             await Awaitable.BackgroundThreadAsync();

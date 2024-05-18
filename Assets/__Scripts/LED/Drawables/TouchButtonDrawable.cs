@@ -10,14 +10,15 @@ namespace SaturnGame.LED
     {
         [SerializeField] private TouchButton touchButton;
         
-        public override void Draw(ref Color32[] data)
+        public override void Draw(ref Color32[,] data)
         {
-            for (int offset = touchButton.Position; offset < touchButton.Position + touchButton.Size; offset++)
-            for (int depthPos = touchButton.MinDepthPos; depthPos <= touchButton.MaxDepthPos; depthPos++)
+            for (int i = 0; i < touchButton.Size; i++)
+            for (int j = 0; j < touchButton.Thickness; i++)
             {
-                int anglePos = SaturnMath.Modulo(offset, 60);
-                data[anglePos * 8 + depthPos * 2] = touchButton.LedColor;
-                data[anglePos * 8 + depthPos * 2 + 1] = touchButton.LedColor;
+                int x = SaturnMath.Modulo(i + touchButton.Position, 60);
+                int y = Mathf.Min(j + touchButton.Depth, 7);
+
+                data[y, x] = touchButton.LedColor;
             }
         }
     }

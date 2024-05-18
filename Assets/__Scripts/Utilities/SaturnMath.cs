@@ -10,7 +10,7 @@ namespace SaturnGame
 public static class SaturnMath
 {
     /// <summary>
-    /// Used to convert a number of Ticks to it's equivalent fraction of a Measure. <br />
+    /// Used to convert a number of Ticks to its equivalent fraction of a Measure. <br />
     /// <i>This conversion should happen as late as possible!</i><br />
     /// <c>measureFraction = ticks * SaturnMath.tickToMeasure;</c>
     /// </summary>
@@ -30,6 +30,11 @@ public static class SaturnMath
         return (value - a) / (b - a);
     }
 
+    public static float PositiveSine(float x)
+    {
+        return Mathf.Sin(x) * 0.5f + 0.5f;
+    }
+    
     /// <summary>
     /// Returns the Euclidean remainder ("true modulo") of a number. <br />
     /// The result will always be non-negative, unlike using the <c>%</c> operator in C#.

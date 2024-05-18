@@ -19,31 +19,27 @@ public class RingDebugManager : MonoBehaviour
         Color color = new(0, 0, 0, segmentOpacity);
 
         for (int anglePos = 0; anglePos < 60; anglePos++)
+        for (int depthPos = 0; depthPos < 8; depthPos++)
         {
-            for (int depthPos = 0; depthPos < 8; depthPos++)
-            {
-                SegmentIndicator indicator = Instantiate(indicatorPrefab, grid.transform);
-                indicator.StartRadians = anglePos * 6 * Mathf.Deg2Rad;
-                indicator.SizeRadians = 6 * Mathf.Deg2Rad;
-                indicator.InnerRadius = InnerRadius + (7 - depthPos) * (OuterRadius - InnerRadius) / 8;
-                indicator.OuterRadius = InnerRadius + (8 - depthPos) * (OuterRadius - InnerRadius) / 8;
-                indicator.color = color;
+            SegmentIndicator indicator = Instantiate(indicatorPrefab, grid.transform);
+            indicator.StartRadians = anglePos * 6 * Mathf.Deg2Rad;
+            indicator.SizeRadians = 6 * Mathf.Deg2Rad;
+            indicator.InnerRadius = InnerRadius + (7 - depthPos) * (OuterRadius - InnerRadius) / 8;
+            indicator.OuterRadius = InnerRadius + (8 - depthPos) * (OuterRadius - InnerRadius) / 8;
+            indicator.color = color;
 
-                indicators[anglePos, depthPos] = indicator;
-            }
+            indicators[anglePos, depthPos] = indicator;
         }
     }
 
-    public void UpdateColors(Color32[] colors)
+    public void UpdateColors(Color32[,] colors)
     {
-        for (int anglePos = 0; anglePos < 60; anglePos++)
+        for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 60; j++)
         {
-            for (int depthPos = 0; depthPos < 8; depthPos++)
-            {
-                Color newColor = colors[anglePos * 8 + depthPos];
-                newColor.a *= segmentOpacity;
-                indicators[anglePos, depthPos].color = newColor;
-            }
+            Color newColor = colors[i, j];
+            newColor.a *= segmentOpacity;
+            indicators[j, i].color = newColor;
         }
     }
 

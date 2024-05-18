@@ -1,24 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using SaturnGame.LED;
 using UnityEngine;
 
-namespace SaturnGame.LED
+namespace SaturnGame
 {
-    /// <summary>
-    /// Draws a .sca file. Can either be one frame at framerate 0, or an animation with a user-definable framerate and the option to loop.
-    /// </summary>
-    public class ColorArrayDrawable : LedDrawable
+    public class TouchRippleDrawable : LedDrawable
     {
+        public int TouchPosition;
+        
         [SerializeField] private string scaPath;
         [SerializeField] private List<ScaFrame> frames;
         
         public bool Playing;
-        public bool Loop;
-        public int Framerate = 30;
-        public int Frame;
+        private const int Framerate = 60;
+        [SerializeField] private int frame;
         
-        private void OnEnable()
+        /*private void Awake()
         {
             frames = readFile(Path.Combine(Application.streamingAssetsPath, scaPath));
             return;
@@ -34,59 +33,50 @@ namespace SaturnGame.LED
                 using StreamReader streamReader = new(stream);
                 while (!streamReader.EndOfStream) lines.Add(streamReader.ReadLine() ?? "");
 
-                ScaFrame frame = new();
+                ScaFrame frame = new() { Colors = new Color32[126]};
 
-                int fileIndex = 0;
                 int lineIndex = 0;
+                int colorIndex = 0;
 
-                while (fileIndex < lines.Count)
+                while (lineIndex < lines.Count)
                 {
-                    string[] parsed = lines[fileIndex].Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                    
+                    string[] parsed = lines[lineIndex].Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
                     if (parsed.Length is 1)
                     {
-                        if (parsed[0] != "#") throw new ArgumentOutOfRangeException($"Line {fileIndex} contains an invalid character.");
+                        if (parsed[0] != "#") throw new ArgumentOutOfRangeException($"Line {lineIndex} contains an invalid character.");
 
                         colors.Add(frame);
 
                         frame = new();
+                        for (int i = 0; i < 126; i++) frame.Colors[i] = Color.black;
 
-                        fileIndex++;
-                        lineIndex = 0;
+                        colorIndex = 0;
+                        lineIndex++;
                         continue;
                     }
-                    
-                    for (int i = 0; i < 8; i++)
+
+                    for (int i = 0; i < 14; i++)
                     {
-                        frame.Colors[i, lineIndex] = SaturnMath.HexToColor32($"#{parsed[i]}");
+                        frame.Colors[colorIndex + i] = SaturnMath.HexToColor32($"#{parsed[i]}");
                     }
-                    
-                    fileIndex++;
+
+                    colorIndex += 14;
                     lineIndex++;
                 }
 
                 return colors;
             }
-        }
-
-        private void OnValidate()
-        {
-            Framerate = Mathf.Max(Framerate, 0);
-        }
+        }*/
         
         private async void Animate()
         {
-            if (Framerate == 0) return;
-            float interval = 1.0f / Framerate;
-            
+            const float interval = 1.0f / Framerate;
+
             while (Playing)
             {
-                Frame++;
-                if (Frame == frames.Count)
-                {
-                    if (Loop) Frame = 0;
-                    else Stop();
-                }
+                frame++;
+                if (frame == frames.Count) Stop();
 
                 await Awaitable.WaitForSecondsAsync(interval);
             }
@@ -94,18 +84,24 @@ namespace SaturnGame.LED
         
         public override void Draw(ref Color32[,] data)
         {
-            int clampedFrame = Mathf.Clamp(Frame, 0, Mathf.Max(frames.Count - 1, 0));
+            int clampedFrame = Mathf.Clamp(frame, 0, Mathf.Max(frames.Count - 1, 0));
+
+            const int height = 14;
+            const int width = 9;
             
-            for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 60; j++)
+            for (int x = 0; x < 9; x++)
+            for (int y = 0; y < 8; y++)
             {
-                data[i, j] = frames[clampedFrame].Colors[i, j];
+                int angle = SaturnMath.Modulo(x + 0, 60); // +pos
+                int depth = Mathf.Min(y + 0, 7); // +depth
+                
+                //data[angle * 8 + depth] = frames[clampedFrame].Colors[];
             }
         }
 
         public void Play(bool restart = true)
         {
-            if (restart) Frame = 0;
+            if (restart) frame = 0;
             
             if (!Playing)
             {
@@ -127,15 +123,9 @@ namespace SaturnGame.LED
             Enabled = false;
         }
 
-        void Update()
+        private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) Play();
+            if (Input.GetKeyDown(KeyCode.I)) Play();
         }
-    }
-
-    [Serializable]
-    public class ScaFrame
-    {
-        public Color32[,] Colors = new Color32[8,60];
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using SaturnGame.LED;
 using SaturnGame.RhythmGame;
 using UnityEngine;
@@ -14,18 +11,37 @@ namespace SaturnGame
     public class TouchStateDrawable : LedDrawable
     {
         [SerializeField] private InputManager inputManager;
+        [SerializeField] private TouchRipplePool touchRipplePool;
+        [SerializeField] private float blinkSpeed = 2;
         
-        public override void Draw(ref Color32[] data)
+        [SerializeField] private bool[] input = new bool[240];
+        private readonly bool[] prevInput = new bool[240];
+        
+        [SerializeField] private Color colorA = new(1.0f, 1.0f, 1.0f, 1.0f);
+        [SerializeField] private Color colorB = new(0.7f, 0.7f, 0.7f, 1.0f);
+        private Color GetColor() => Color.Lerp(colorA, colorB, SaturnMath.PositiveSine(Time.time * blinkSpeed));
+
+        //private void Update()
+        //{
+        //    for (int i = 0; i < 240; i++)
+        //    {
+        //        if (input[i] && !prevInput[i])
+        //        {
+        //            TouchRippleDrawable drawable = touchRipplePool.GetObject();
+        //            drawable.gameObject.SetActive(true);
+        //            drawable.Layer = Layer;
+        //            drawable.TouchPosition = i;
+        //        }
+        //        
+        //        prevInput[i] = input[i];
+        //    }
+        //}
+        
+        public override void Draw(ref Color32[,] data)
         {
-            // TODO: @cg505 hook this into the inputManager. Keep in mind that LEDs will poll input at 30hz. (33.333hz)
-            // Ideally input data should just *exist* in one place and other scripts should just be able to look at it.
-            
-            for (int anglePos = 0; anglePos < 60; anglePos++)
-            for (int depthPos = 0; depthPos < 4; depthPos++)
+            for (int i = 0; i < 480; i++)
             {
-                // TODO: replace false with proper values. See above^
-                data[anglePos * 8 + 2 * depthPos] = false ? Color.white : Color.black;
-                data[anglePos * 8 + 2 * depthPos + 1] = false ? Color.white : Color.black;
+                data[i % 8, i / 8] += input[i / 2] ? GetColor() : Color.clear;
             }
         }
     }
