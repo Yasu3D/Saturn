@@ -14,7 +14,7 @@ public class TouchButton : Button, ITouchable
 
     public int Position => position;
     public int Size => size;
-    public int Thickness => (MaxDepthPos - MinDepthPos) * 2;
+    public int Thickness => (MaxDepthPos - MinDepthPos + 1) * 2;
     public int Depth => MinDepthPos * 2;
     
     // it's assumed that buttons always occupy depthPos 2-3

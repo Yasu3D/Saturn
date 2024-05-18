@@ -13,7 +13,7 @@ namespace SaturnGame.LED
         public override void Draw(ref Color32[,] data)
         {
             for (int i = 0; i < touchButton.Size; i++)
-            for (int j = 0; j < touchButton.Thickness; i++)
+            for (int j = 0; j < touchButton.Thickness; j++)
             {
                 int x = SaturnMath.Modulo(i + touchButton.Position, 60);
                 int y = Mathf.Min(j + touchButton.Depth, 7);
