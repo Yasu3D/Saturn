@@ -105,12 +105,12 @@ public class ReplayManager : MonoBehaviour, IInputProvider
     {
         if (!PlayingFromReplay || replayFrameIndex < 0) return;
 
-        while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.VisualTimeMs)
+        while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.GameplayTimeMs)
         {
             TouchStateHandler?.Invoke(Replay[replayFrameIndex].TouchState, Replay[replayFrameIndex].TimeMs);
             replayFrameIndex++;
         }
-        TouchStateHandler?.Invoke(null, timeManager.VisualTimeMs);
+        TouchStateHandler?.Invoke(null, timeManager.GameplayTimeMs);
     }
 }
 }

@@ -103,15 +103,15 @@ public class HitsoundManager : MonoBehaviour
 
         foreach (Note note in chart.Notes)
         {
-            if (timeManager.LastFrameVisualTimeMs < note.TimeMs && note.TimeMs <= timeManager.VisualTimeMs)
+            if (timeManager.LastFrameGameplayTimeMs < note.TimeMs && note.TimeMs <= timeManager.GameplayTimeMs)
                 return true;
         }
 
         foreach (HoldNote note in chart.HoldNotes)
         {
-            if (timeManager.LastFrameVisualTimeMs < note.TimeMs && note.TimeMs <= timeManager.VisualTimeMs)
+            if (timeManager.LastFrameGameplayTimeMs < note.TimeMs && note.TimeMs <= timeManager.GameplayTimeMs)
                 return true;
-            if (timeManager.LastFrameVisualTimeMs < note.End.TimeMs && note.End.TimeMs <= timeManager.VisualTimeMs)
+            if (timeManager.LastFrameGameplayTimeMs < note.End.TimeMs && note.End.TimeMs <= timeManager.GameplayTimeMs)
                 return true;
         }
 
