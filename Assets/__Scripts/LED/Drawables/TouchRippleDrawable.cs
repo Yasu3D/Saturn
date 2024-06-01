@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using SaturnGame.LED;
 using UnityEngine;
 
@@ -9,65 +6,11 @@ namespace SaturnGame
     public class TouchRippleDrawable : LedDrawable
     {
         public int TouchPosition;
-        
-        [SerializeField] private string scaPath;
-        [SerializeField] private List<ScaFrame> frames;
+        public TouchRipplePool Pool;
         
         public bool Playing;
         private const int Framerate = 60;
         [SerializeField] private int frame;
-        
-        /*private void Awake()
-        {
-            frames = readFile(Path.Combine(Application.streamingAssetsPath, scaPath));
-            return;
-
-            static List<ScaFrame> readFile(string path)
-            {
-                List<ScaFrame> colors = new();
-                List<string> lines = new();
-            
-                if (string.IsNullOrEmpty(path)) return colors;
-            
-                Stream stream = File.OpenRead(path);
-                using StreamReader streamReader = new(stream);
-                while (!streamReader.EndOfStream) lines.Add(streamReader.ReadLine() ?? "");
-
-                ScaFrame frame = new() { Colors = new Color32[126]};
-
-                int lineIndex = 0;
-                int colorIndex = 0;
-
-                while (lineIndex < lines.Count)
-                {
-                    string[] parsed = lines[lineIndex].Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-                    if (parsed.Length is 1)
-                    {
-                        if (parsed[0] != "#") throw new ArgumentOutOfRangeException($"Line {lineIndex} contains an invalid character.");
-
-                        colors.Add(frame);
-
-                        frame = new();
-                        for (int i = 0; i < 126; i++) frame.Colors[i] = Color.black;
-
-                        colorIndex = 0;
-                        lineIndex++;
-                        continue;
-                    }
-
-                    for (int i = 0; i < 14; i++)
-                    {
-                        frame.Colors[colorIndex + i] = SaturnMath.HexToColor32($"#{parsed[i]}");
-                    }
-
-                    colorIndex += 14;
-                    lineIndex++;
-                }
-
-                return colors;
-            }
-        }*/
         
         private async void Animate()
         {
@@ -76,7 +19,7 @@ namespace SaturnGame
             while (Playing)
             {
                 frame++;
-                if (frame == frames.Count) Stop();
+                if (frame >= Pool.Frames.Count) Stop();
 
                 await Awaitable.WaitForSecondsAsync(interval);
             }
@@ -84,24 +27,28 @@ namespace SaturnGame
         
         public override void Draw(ref Color32[,] data)
         {
-            int clampedFrame = Mathf.Clamp(frame, 0, Mathf.Max(frames.Count - 1, 0));
-
-            const int height = 14;
-            const int width = 9;
+            if (!Playing) return;
             
-            for (int x = 0; x < 9; x++)
-            for (int y = 0; y < 8; y++)
+            const int offsetX = -4;
+            const int offsetY = -6;
+            
+            int clampedFrame = Mathf.Clamp(frame, 0, Mathf.Max(Pool.Frames.Count - 1, 0));
+            
+            for (int i = 0; i < 14; i++)
+            for (int j = 0; j < 9; j++)
             {
-                int angle = SaturnMath.Modulo(x + 0, 60); // +pos
-                int depth = Mathf.Min(y + 0, 7); // +depth
+                int y = i + offsetY + TouchPosition * 2 % 8;
+                int x = SaturnMath.Modulo(j + offsetX + TouchPosition / 4, 60);
+
+                if (y is > 7 or < 0) continue;
                 
-                //data[angle * 8 + depth] = frames[clampedFrame].Colors[];
+                data[y, x] += Pool.Frames[clampedFrame].Colors[i, j];
             }
         }
 
-        public void Play(bool restart = true)
+        public void Play()
         {
-            if (restart) frame = 0;
+            frame = 0;
             
             if (!Playing)
             {
@@ -111,16 +58,13 @@ namespace SaturnGame
             
             Enabled = true;
         }
-
-        public void Pause()
-        {
-            Playing = false;
-        }
         
         public void Stop()
         {
             Playing = false;
             Enabled = false;
+
+            Pool.ReleaseObject(this);
         }
 
         private void Update()

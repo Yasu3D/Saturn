@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SaturnGame.LED;
 using SaturnGame.RhythmGame;
 using UnityEngine;
@@ -21,21 +22,24 @@ namespace SaturnGame
         [SerializeField] private Color colorB = new(0.7f, 0.7f, 0.7f, 1.0f);
         private Color GetColor() => Color.Lerp(colorA, colorB, SaturnMath.PositiveSine(Time.time * blinkSpeed));
 
-        //private void Update()
-        //{
-        //    for (int i = 0; i < 240; i++)
-        //    {
-        //        if (input[i] && !prevInput[i])
-        //        {
-        //            TouchRippleDrawable drawable = touchRipplePool.GetObject();
-        //            drawable.gameObject.SetActive(true);
-        //            drawable.Layer = Layer;
-        //            drawable.TouchPosition = i;
-        //        }
-        //        
-        //        prevInput[i] = input[i];
-        //    }
-        //}
+        private void Update()
+        {
+            for (int i = 0; i < 240; i++)
+            {
+                if (input[i] && !prevInput[i])
+                {
+                    TouchRippleDrawable drawable = touchRipplePool.GetObject();
+                    drawable.Pool = touchRipplePool;
+                    drawable.Layer = Layer;
+                    drawable.TouchPosition = i;
+                    drawable.gameObject.SetActive(true);
+                    
+                    drawable.Play();
+                }
+                
+                prevInput[i] = input[i];
+            }
+        }
         
         public override void Draw(ref Color32[,] data)
         {

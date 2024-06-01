@@ -82,7 +82,7 @@ namespace SaturnGame.LED
             while (Playing)
             {
                 Frame++;
-                if (Frame == frames.Count)
+                if (Frame >= frames.Count)
                 {
                     if (Loop) Frame = 0;
                     else Stop();
@@ -94,6 +94,8 @@ namespace SaturnGame.LED
         
         public override void Draw(ref Color32[,] data)
         {
+            if (!Playing) return;
+            
             int clampedFrame = Mathf.Clamp(Frame, 0, Mathf.Max(frames.Count - 1, 0));
             
             for (int i = 0; i < 8; i++)
@@ -136,6 +138,6 @@ namespace SaturnGame.LED
     [Serializable]
     public class ScaFrame
     {
-        public Color32[,] Colors = new Color32[8,60];
+        public Color[,] Colors = new Color[8,60];
     }
 }
