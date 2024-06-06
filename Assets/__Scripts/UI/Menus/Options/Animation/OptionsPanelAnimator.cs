@@ -3,7 +3,9 @@ using SaturnGame.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace SaturnGame.UI
@@ -29,7 +31,23 @@ public class OptionsPanelAnimator : MonoBehaviour
     [SerializeField] private GameObject radialCoverRing;
     [SerializeField] private GameObject radialCoverBackground;
 
-    private Sequence currentSequence;
+    [SerializeField] private GameObject subTypeChartPreview;
+    [SerializeField] private GameObject subTypeSprite;
+    [SerializeField] private GameObject subTypeText;
+    [SerializeField] private GameObject subTypeOffset;
+
+    [SerializeField] private TextMeshProUGUI radialMenuTitle;
+    [SerializeField] private TextMeshProUGUI radialMenuDescription;
+
+    [SerializeField] private TextMeshProUGUI radialOptionTitle;
+    [SerializeField] private TextMeshProUGUI radialOptionDescription;
+    
+    [SerializeField] private Image radialOptionImage;
+    
+    [SerializeField] private RectTransform radialOffsetNote;
+    [SerializeField] private TextMeshProUGUI radialOffsetValue;
+
+private Sequence currentSequence;
 
     private int LinearCenterIndex { get; set; }
     private int LinearWrapIndex { get; set; }
@@ -289,8 +307,6 @@ public class OptionsPanelAnimator : MonoBehaviour
 
     private void Anim_ShowPanelsRadial()
     {
-        // Scale Glass 8 frames OutQuad
-        // Fade Glass 8 frames OutQuad
         // Fade radial center 4 frames InQuad
 
         // wait 4 frames
@@ -308,13 +324,9 @@ public class OptionsPanelAnimator : MonoBehaviour
         panelGroupRect.anchoredPosition = new Vector2(0, 0);
         panelGroupRect.eulerAngles = new Vector3(0, 0, 120);
         panelGroup.alpha = 0;
-        //glassImage.rectTransform.localScale = Vector3.zero;
-        //glassImage.DOFade(0, 0);
         radialCenterGroup.DOFade(0, 0);
 
         currentSequence = DOTween.Sequence();
-        //currentSequence.Join(glassImage.rectTransform.DOScale(1, frame * 8).SetEase(Ease.OutQuad));
-        //currentSequence.Join(glassImage.DOFade(1, frame * 8).SetEase(Ease.OutQuad));
         currentSequence.Join(radialCenterGroup.DOFade(1, frame * 4).SetEase(Ease.InQuad));
 
         currentSequence.Insert(frame * 4,
@@ -326,8 +338,6 @@ public class OptionsPanelAnimator : MonoBehaviour
     {
         // Spin panels 3 frames Linear
         // Fade panels 3 frames OutQuad
-        // Scale glass 6 frames Linear
-        // Fade glass 6 frames Linear
 
         // wait 6 frames
         // Scale preview 4 frames InBounce
@@ -342,15 +352,19 @@ public class OptionsPanelAnimator : MonoBehaviour
 
         panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
         panelGroup.alpha = 1;
-        //glassImage.rectTransform.localScale = Vector3.one;
-        //glassImage.DOFade(1, 0);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroup.DOFade(0, frame * 3).SetEase(Ease.OutQuad));
-        //currentSequence.Join(glassImage.rectTransform.DOScale(0, frame * 6).SetEase(Ease.Linear));
-        //currentSequence.Join(glassImage.DOFade(0, frame * 6).SetEase(Ease.Linear));
     }
 
+    public void Anim_UpdateRadialOffsetOption(int index)
+    {
+        const float increments = 0.89f;
+        
+        int offsetIndex = index - 100;
+        radialOffsetNote.anchoredPosition = new(0, increments * offsetIndex);
+        radialOffsetValue.text = (offsetIndex >= 0 ? "+" : "") + (offsetIndex * 0.1f).ToString("N1");;
+    }
 
     public void SetPrimaryPanel([NotNull] UIListItem item)
     {
@@ -359,7 +373,13 @@ public class OptionsPanelAnimator : MonoBehaviour
 
         primaryPanel.Title = item.Title;
         primaryPanel.Subtitle = dynamic ? GetSelectedString(item) : item.Subtitle;
+
+        radialOptionTitle.text = item.Title;
+        radialOptionDescription.text = dynamic ? GetSelectedString(item) : item.Subtitle;
+        
         primaryPanel.SetRadialPanelColor(item);
+
+        radialOptionImage.sprite = item.Sprite;
     }
 
     public void GetPanels([NotNull] UIScreen screen, int currentIndex = 0)
@@ -433,6 +453,42 @@ public class OptionsPanelAnimator : MonoBehaviour
 
                 panel.Rect.eulerAngles = angle;
                 panel.gameObject.SetActive(true);
+            }
+
+            radialMenuTitle.text = screen.ScreenTitle;
+            radialMenuDescription.text = screen.ScreenSubtitle;
+            
+            subTypeChartPreview.SetActive(false);
+            subTypeText.SetActive(false);
+            subTypeSprite.SetActive(false);
+            subTypeOffset.SetActive(false);
+
+            switch (screen.RadialSubType)
+            {
+                case UIScreen.RadialScreenSubType.ChartPreview: 
+                {
+                    subTypeChartPreview.SetActive(true);
+                    break;
+                }
+                
+                case UIScreen.RadialScreenSubType.Sprites: 
+                {
+                    subTypeSprite.SetActive(true);
+                    break;
+                }
+                
+                case UIScreen.RadialScreenSubType.Text: 
+                {
+                    subTypeText.SetActive(true);
+                    break;
+                }
+
+                case UIScreen.RadialScreenSubType.Offset:
+                {
+                    subTypeOffset.SetActive(true);
+                    Anim_UpdateRadialOffsetOption(currentIndex);
+                    break;
+                }
             }
         }
     }

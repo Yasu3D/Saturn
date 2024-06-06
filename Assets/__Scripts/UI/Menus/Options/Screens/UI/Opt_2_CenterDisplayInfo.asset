@@ -12,87 +12,98 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_CenterDisplayInfo
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenName: CenterDisplayInfo
+  ScreenTitle: CENTER DISPLAY INFO
+  ScreenSubtitle: Choose which informatrion is displayed in the screen center.
   ScreenType: 2
+  RadialSubType: 0
   DefaultItemIndex: 0
   ListItems:
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Off
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: OFF
+    Subtitle: Display nothing.
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 0
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Combo
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: COMBO
+    Subtitle: Display current combo.
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 1
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Score
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SCORE (PLUS METHOD)
+    Subtitle: Display current score (plus method).
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 2
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Score Minus Method
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SCORE (MINUS METHOD)
+    Subtitle: Display current score (minus method).
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 3
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Score Average Method
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SCORE (AVERAGE METHOD)
+    Subtitle: Display current score (average method).
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 4
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: S Border
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: S BORDER
+    Subtitle: Display remaining points to an S rank.
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 5
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: SS Border
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SS BORDER
+    Subtitle: Display remaining points to a SS rank.
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 6
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: SSS Border
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SSS BORDER
+    Subtitle: Display remaining points to a SSS rank.
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
     SettingsValue: 7
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: PB Border
-    Subtitle: 
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: PB BORDER
+    Subtitle: Display remaining points to your personal best.
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: CenterDisplayInfo

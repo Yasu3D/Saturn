@@ -13,6 +13,7 @@ public class OptionsLogic : MonoBehaviour
     {
         Idle,
         MenuSwitch,
+        Reverting,
     }
 
     [SerializeField] private OptionsPanelAnimator panelAnimator;
@@ -45,7 +46,7 @@ public class OptionsLogic : MonoBehaviour
 
     public async void OnConfirm()
     {
-        if (state is MenuState.MenuSwitch) return;
+        if (state is MenuState.MenuSwitch or MenuState.Reverting) return;
 
         UIListItem selectedItem = CurrentScreen.ListItems[CurrentIndex];
         UIScreen prevScreen = CurrentScreen;
@@ -101,7 +102,7 @@ public class OptionsLogic : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
             }
         }
-
+        
         await Awaitable.WaitForSecondsAsync(0.25f);
         panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
         panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
@@ -112,7 +113,7 @@ public class OptionsLogic : MonoBehaviour
 
     public async void OnBack()
     {
-        if (state is MenuState.MenuSwitch) return;
+        if (state is MenuState.MenuSwitch or MenuState.Reverting) return;
 
         UIAudio.PlaySound(UIAudioController.UISound.Back);
 
@@ -152,6 +153,8 @@ public class OptionsLogic : MonoBehaviour
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
         panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, CurrentIndex, CurrentScreen);
         panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
+        
+        panelAnimator.Anim_UpdateRadialOffsetOption(CurrentIndex);
     }
 
     public void OnNavigateRight()
@@ -166,6 +169,8 @@ public class OptionsLogic : MonoBehaviour
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
         panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Down, CurrentIndex, CurrentScreen);
         panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
+        
+        panelAnimator.Anim_UpdateRadialOffsetOption(CurrentIndex);
     }
 
     public async void OnRevert()
@@ -179,6 +184,8 @@ public class OptionsLogic : MonoBehaviour
         bool sameIndex = defaultIndex == CurrentIndex;
         if (outOfBounds || sameIndex) return;
 
+        state = MenuState.Reverting;
+        
         // scary while loop D:
         while (CurrentIndex != defaultIndex)
         {
@@ -190,6 +197,8 @@ public class OptionsLogic : MonoBehaviour
 
             await Awaitable.WaitForSecondsAsync(0.02f);
         }
+
+        state = MenuState.Idle;
     }
 
     private void ToggleRevertButton([NotNull] UIScreen screen)

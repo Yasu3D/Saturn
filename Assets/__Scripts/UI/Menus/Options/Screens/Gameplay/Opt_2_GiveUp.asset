@@ -12,70 +12,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_GiveUp
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  screenName: GiveUp
-  screenType: 2
-  defaultItemIndex: 1
-  listItems:
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.85098046, a: 1}
-    title: OFF
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 0
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    title: NO TOUCH
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 1
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    title: S RANK BORDER
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 2
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    title: SS RANK BORDER
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 3
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    title: SSS RANK BORDER
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 4
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    title: MASTER RANK BORDER
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 5
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.627451, g: 0.7490196, b: 0.8509804, a: 1}
-    title: PERSONAL BEST
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: GiveUpSetting
-    settingsValue: 6
+  ScreenTitle: GIVE UP
+  ScreenSubtitle: Choose if the game should end after a certain condition is met.
+  ScreenType: 2
+  RadialSubType: 0
+  DefaultItemIndex: 1
+  ListItems:
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: OFF
+    Subtitle: The game will not end early.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: NO TOUCH
+    Subtitle: The game will end after a certain amount of time with no inputs.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 1
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: S RANK BORDER
+    Subtitle: Give up once an S Rank is no longer possible.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 2
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SS RANK BORDER
+    Subtitle: Give up once an SS Rank is no longer possible.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 3
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SSS RANK BORDER
+    Subtitle: Give up once an SSS Rank is no longer possible.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 4
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: MASTER RANK BORDER
+    Subtitle: Give up once a MASTER Rank is no longer possible.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 5
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: PERSONAL BEST BORDER
+    Subtitle: Give up once beating your personal best is no longer possible.
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: GiveUpSetting
+    SettingsValue: 6

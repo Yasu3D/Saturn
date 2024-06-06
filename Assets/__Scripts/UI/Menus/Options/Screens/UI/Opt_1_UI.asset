@@ -12,78 +12,88 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_1_UI
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenName: UI
+  ScreenTitle: 
+  ScreenSubtitle: 
   ScreenType: 1
+  RadialSubType: 0
   DefaultItemIndex: 0
   ListItems:
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: JUDGEMENT POSITION
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: JudgementDisplayPosition
     NextScreen: {fileID: 11400000, guid: a620b7f73aea7a4488e1787f1a89b757, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SHOW JUDGEMENT DETAILS
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: ShowJudgementDetails
     NextScreen: {fileID: 11400000, guid: e97b87ddaa8a83b4f80d6c10cecdfc38, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: GUIDE LANE TYPE
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: GuideLaneType
     NextScreen: {fileID: 11400000, guid: 7400ad982f55473419e28570b53fe376, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: GUIDE LANE OPACITY
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: GuideLaneOpacity
     NextScreen: {fileID: 11400000, guid: 122704aafd629d94b8fb4ac4177274f7, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: DISPLAY OPACITY
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: DisplayOpacity
     NextScreen: {fileID: 11400000, guid: fd7c5d041c12a364ba58ecd7b3112de6, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SHOW BAR LINES
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: ShowBarLines
     NextScreen: {fileID: 11400000, guid: d12e896036a6830498a419df58bd9c47, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: CENTER DISPLAY INFO
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: CenterDisplayInfo
     NextScreen: {fileID: 11400000, guid: fc1125861a2153f4688bbc3337981439, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SCORE DISPLAY METHOD
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: ScoreDisplayMethod
     NextScreen: {fileID: 11400000, guid: bb8a5f3d05c742c48a94f31f82dbd323, type: 2}
     SettingsParameter: 

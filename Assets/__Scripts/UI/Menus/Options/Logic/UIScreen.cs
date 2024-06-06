@@ -15,8 +15,24 @@ public class UIScreen : ScriptableObject
         Radial,
     }
 
-    [FormerlySerializedAs("screenName")] public string ScreenName;
+    public enum RadialScreenSubType
+    {
+        Text,
+        Sprites,
+        ChartPreview,
+        Offset,
+        ConsoleColor,
+        NoteColor,
+        Volume,
+    }
+    
+    public string ScreenTitle;
+    
+    [TextArea(1, 5)]
+    public string ScreenSubtitle;
+    
     [FormerlySerializedAs("screenType")] public UIScreenType ScreenType;
+    public RadialScreenSubType RadialSubType;
 
     [FormerlySerializedAs("defaultItemIndex")]
     public int DefaultItemIndex;
@@ -45,6 +61,7 @@ public class UIListItem
     [FormerlySerializedAs("color")] public Color Color;
     [FormerlySerializedAs("title")] public string Title;
     [FormerlySerializedAs("subtitle")] public string Subtitle;
+    public Sprite Sprite;
 
     [FormerlySerializedAs("settingsBinding")]
     public string SettingsBinding;

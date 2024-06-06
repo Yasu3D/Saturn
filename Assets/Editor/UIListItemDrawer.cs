@@ -38,22 +38,26 @@ public class UIListItemDrawer : PropertyDrawer
             }
         }
 
-        EditorGUILayout.Space();
-
-
         switch (itemType.enumValueIndex)
         {
             case (int)UIListItem.ItemTypes.SubMenu:
             {
+                EditorGUILayout.Space();
+                
                 SerializedProperty nextScreen = property.FindPropertyRelative("NextScreen");
                 EditorGUILayout.PropertyField(nextScreen);
                 break;
             }
             case (int)UIListItem.ItemTypes.ValueSetter:
             {
+                SerializedProperty sprite = property.FindPropertyRelative("Sprite");
                 SerializedProperty settingsParameter = property.FindPropertyRelative("SettingsParameter");
                 SerializedProperty settingsValue = property.FindPropertyRelative("SettingsValue");
 
+                EditorGUILayout.PropertyField(sprite);
+                
+                EditorGUILayout.Space();
+                
                 EditorGUILayout.PropertyField(settingsParameter);
                 EditorGUILayout.PropertyField(settingsValue);
                 break;

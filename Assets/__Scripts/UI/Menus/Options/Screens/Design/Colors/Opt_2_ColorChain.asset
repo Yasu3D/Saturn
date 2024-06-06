@@ -12,124 +12,139 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_ColorChain
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  screenName: ColorTouch
-  screenType: 2
-  defaultItemIndex: 5
-  listItems:
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 0.21960786, b: 0.9294118, a: 1}
-    title: LIGHT MAGENTA
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 0
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.86666673, g: 0.08627451, b: 0.08627451, a: 1}
-    title: RED
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 4
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 0.29803923, b: 0, a: 1}
-    title: LIGHT RED
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 7
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 0.6, b: 0, a: 1}
-    title: ORANGE
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 2
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 0.93725497, b: 0, a: 1}
-    title: YELLOW
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 8
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 0.909804, b: 0.41960788, a: 1}
-    title: LIGHT YELLOW
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 1
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.6, g: 0.5372549, b: 0, a: 1}
-    title: DARK YELLOW
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 6
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.13725491, g: 0.8196079, b: 0.10980393, a: 1}
-    title: LIME
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 3
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.21960786, g: 0.61960787, b: 0.41960788, a: 1}
-    title: PURE GREEN
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 9
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.40000004, g: 0.8000001, b: 1, a: 1}
-    title: LIGHT BLUE
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 11
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.11764707, g: 0.6666667, b: 1, a: 1}
-    title: SKY BLUE
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 5
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0, g: 0.25882354, b: 1, a: 1}
-    title: BRIGHT BLUE
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 10
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 0.77647066, g: 0.77647066, b: 0.77647066, a: 1}
-    title: LIGHT GRAY
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteColorID_Chain
-    settingsValue: 12
+  ScreenTitle: CHAIN NOTE COLOR
+  ScreenSubtitle: 
+  ScreenType: 2
+  RadialSubType: 5
+  DefaultItemIndex: 5
+  ListItems:
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 1, g: 0.21960786, b: 0.9294118, a: 1}
+    Title: LIGHT MAGENTA
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.86666673, g: 0.08627451, b: 0.08627451, a: 1}
+    Title: RED
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 4
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 1, g: 0.29803923, b: 0, a: 1}
+    Title: LIGHT RED
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 7
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 1, g: 0.6, b: 0, a: 1}
+    Title: ORANGE
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 2
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 1, g: 0.93725497, b: 0, a: 1}
+    Title: YELLOW
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 8
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 1, g: 0.909804, b: 0.41960788, a: 1}
+    Title: LIGHT YELLOW
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 1
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.6, g: 0.5372549, b: 0, a: 1}
+    Title: DARK YELLOW
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 6
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.13725491, g: 0.8196079, b: 0.10980393, a: 1}
+    Title: LIME
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 3
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.21960786, g: 0.61960787, b: 0.41960788, a: 1}
+    Title: PURE GREEN
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 9
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.40000004, g: 0.8000001, b: 1, a: 1}
+    Title: LIGHT BLUE
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 11
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.11764707, g: 0.6666667, b: 1, a: 1}
+    Title: SKY BLUE
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 5
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.25882354, b: 1, a: 1}
+    Title: BRIGHT BLUE
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 10
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.77647066, g: 0.77647066, b: 0.77647066, a: 1}
+    Title: LIGHT GRAY
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteColorID_Chain
+    SettingsValue: 12

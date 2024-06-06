@@ -12,15 +12,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_DisplayOpacity
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  screenName: DisplayOpacity
-  screenType: 2
-  listItems:
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: '[WIP]'
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: 
-    settingsValue: 0
+  ScreenTitle: DISPLAY OPACITY
+  ScreenSubtitle: Adjust the opacity of the display.
+  ScreenType: 2
+  RadialSubType: 1
+  DefaultItemIndex: 5
+  ListItems:
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 0
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 6cfa4eda4c85a5a4a86df5887db209da, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: DisplayOpacity
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 1
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 32a75b5aa57d6cb4b83749235afbad80, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: DisplayOpacity
+    SettingsValue: 1
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 2
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 5fa1296c050ecf34e883ca5967939aca, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: DisplayOpacity
+    SettingsValue: 2
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 3
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 636866bc8b499b342818566ead53b21f, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: DisplayOpacity
+    SettingsValue: 3
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 4
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 2e25e1d07aa938a448958379360040b7, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: DisplayOpacity
+    SettingsValue: 4
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 5
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: c085bcf05413e3d47b00e6bcb3778e5f, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: DisplayOpacity
+    SettingsValue: 5

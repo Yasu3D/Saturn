@@ -466,11 +466,11 @@ MonoBehaviour:
       MirrorNotes: 0
       GiveUpSetting: 0
     UISettings:
-      JudgementDisplayPosition: 0
+      JudgementDisplayPosition: 2
       ShowJudgementDetails: 1
       GuideLaneType: 1
       GuideLaneOpacity: 5
-      DisplayOpacity: 0
+      DisplayOpacity: 5
       ShowBarLines: 1
       CenterDisplayInfo: 1
       ScoreDisplayMethod: 0
@@ -486,7 +486,7 @@ MonoBehaviour:
       NoteColorIDSnapBackward: 5
       NoteColorIDHold: 6
       InvertSlideColor: 0
-      TouchEffect: 0
+      TouchEffect: 1
       ShowShootEffect: 1
       ShowKeyBeams: 1
       ShowRNoteEffect: 1

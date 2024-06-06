@@ -12,105 +12,118 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_HitsoundOverallVolume
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenName: HitsoundOverallVolume
+  ScreenTitle: HITSOUND VOLUME
+  ScreenSubtitle: Adjust the volume of all Hitsounds at once.
   ScreenType: 2
+  RadialSubType: 0
   DefaultItemIndex: 7
   ListItems:
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 0
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 0
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 10
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 10
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 20
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 20
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 30
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 30
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 40
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 40
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 50
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 50
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 60
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 60
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 70
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 70
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 80
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 80
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 90
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume
     SettingsValue: 90
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: 100
     Subtitle: 
+    Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: HitsoundOverallVolume

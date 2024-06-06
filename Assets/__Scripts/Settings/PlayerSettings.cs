@@ -328,10 +328,10 @@ public class UISettings
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > Top<br/>
-    /// 2 > Middle<br/>
+    /// 2 > Center<br/>
     /// 3 > Bottom<br/>
     /// </summary>
-    public int JudgementDisplayPosition = 0;
+    public int JudgementDisplayPosition = 2;
     
     /// <summary>
     /// 0 > Off<br/>
@@ -369,7 +369,7 @@ public class UISettings
     /// 4 >  80%<br/>
     /// 5 > 100%<br/>
     /// </summary>
-    public int DisplayOpacity = 3;
+    public int DisplayOpacity = 5;
     
     /// <summary>
     /// 0 > Off<br/>
@@ -413,7 +413,16 @@ public class DesignSettings
     /// </summary>
     public int JudgeLineColor = 2;
     
+    /// <summary>
+    /// 1 > 1
+    /// 2 > 2
+    /// 3 > 3
+    /// 4 > 4
+    /// 5 > 5
+    /// </summary>
     public int NoteWidth = 3;
+    
+    
     public int NoteColorIDTouch = 0;
     public int NoteColorIDChain = 1;
     public int NoteColorIDSwipeClockwise = 2;
@@ -421,10 +430,34 @@ public class DesignSettings
     public int NoteColorIDSnapForward = 4;
     public int NoteColorIDSnapBackward = 5;
     public int NoteColorIDHold = 6;
+    
+    /// <summary>
+    /// 0 > OFF
+    /// 1 > ON
+    /// </summary>
     public int InvertSlideColor = 0;
+    
+    /// <summary>
+    /// WIP
+    /// </summary>
     public int TouchEffect = 1;
+    
+    /// <summary>
+    /// 0 > OFF
+    /// 1 > ON
+    /// </summary>
     public int ShowShootEffect = 1;
+    
+    /// <summary>
+    /// 0 > OFF
+    /// 1 > ON
+    /// </summary>
     public int ShowKeyBeams = 1;
+    
+    /// <summary>
+    /// 0 > OFF
+    /// 1 > ON
+    /// </summary>
     public int ShowRNoteEffect = 1;
 }
 

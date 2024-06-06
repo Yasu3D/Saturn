@@ -12,141 +12,159 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_1_Design
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  screenName: Design
-  screenType: 1
-  listItems:
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: RING COLOR
-    subtitle: 
-    settingsBinding: RingColor
-    nextScreen: {fileID: 11400000, guid: 3d8c889190f18c04cadd37c19f4636fb, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: JUDGEMENT LINE COLOR
-    subtitle: 
-    settingsBinding: JudgeLineColor
-    nextScreen: {fileID: 11400000, guid: a53514378bde7ec4eb3df6ac221889db, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: NOTE WIDTH
-    subtitle: 
-    settingsBinding: NoteWidth
-    nextScreen: {fileID: 11400000, guid: c67df0c7f254e734c8c371a819504630, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: TOUCH COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_Touch
-    nextScreen: {fileID: 11400000, guid: bc583dc066cd77343b8a8f8381efc995, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: CHAIN COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_Chain
-    nextScreen: {fileID: 11400000, guid: 7324aeddb20dab44497e235acc9ed7b4, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: HOLD COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_Hold
-    nextScreen: {fileID: 11400000, guid: 52d956458944b04438e0e522ed09dbad, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SWIPE CLOCKWISE COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_SwipeClockwise
-    nextScreen: {fileID: 11400000, guid: 4d6b68d055b4e2c4b84bdedcff1ba27e, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SWIPE COUNTERCLOCKWISE COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_SwipeCounterclockwise
-    nextScreen: {fileID: 11400000, guid: d66374503715f9b45b6ef440019e9309, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SNAP FORWARDS COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_SnapForward
-    nextScreen: {fileID: 11400000, guid: 40274ca6077b1884085138720cea0c00, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SNAP BACKWARDS COLOR
-    subtitle: 
-    settingsBinding: NoteColorID_SnapBackward
-    nextScreen: {fileID: 11400000, guid: a17b2aa1ec27d014f8d75d91970f07c2, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: INVERT SLIDE COLOR
-    subtitle: 
-    settingsBinding: InvertSlideColor
-    nextScreen: {fileID: 11400000, guid: 96957b242f91ff342b121f7bdbe9f48f, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: TOUCH EFFECT
-    subtitle: 
-    settingsBinding: TouchEffect
-    nextScreen: {fileID: 11400000, guid: 96957b242f91ff342b121f7bdbe9f48f, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SHOW SHOOT EFFECT
-    subtitle: 
-    settingsBinding: ShootEffect
-    nextScreen: {fileID: 11400000, guid: 96957b242f91ff342b121f7bdbe9f48f, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SHOW KEY BEAMS
-    subtitle: 
-    settingsBinding: ShowKeyBeams
-    nextScreen: {fileID: 11400000, guid: 96957b242f91ff342b121f7bdbe9f48f, type: 2}
-    settingsParameter: 
-    settingsValue: 0
-  - subtitleType: 1
-    itemType: 1
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: SHOW R-NOTE EFFECT
-    subtitle: 
-    settingsBinding: ShowRNoteEffect
-    nextScreen: {fileID: 11400000, guid: a9cedc59b78f78e469bbfabf55f42bd6, type: 2}
-    settingsParameter: 
-    settingsValue: 0
+  ScreenTitle: 
+  ScreenSubtitle: 
+  ScreenType: 1
+  RadialSubType: 0
+  DefaultItemIndex: 0
+  ListItems:
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: RING COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: RingColor
+    NextScreen: {fileID: 11400000, guid: 3d8c889190f18c04cadd37c19f4636fb, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: JUDGEMENT LINE COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: JudgeLineColor
+    NextScreen: {fileID: 11400000, guid: a53514378bde7ec4eb3df6ac221889db, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: NOTE WIDTH
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteWidth
+    NextScreen: {fileID: 11400000, guid: c67df0c7f254e734c8c371a819504630, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: TOUCH COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_Touch
+    NextScreen: {fileID: 11400000, guid: bc583dc066cd77343b8a8f8381efc995, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: CHAIN COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_Chain
+    NextScreen: {fileID: 11400000, guid: 7324aeddb20dab44497e235acc9ed7b4, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: HOLD COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_Hold
+    NextScreen: {fileID: 11400000, guid: 52d956458944b04438e0e522ed09dbad, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SWIPE CLOCKWISE COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_SwipeClockwise
+    NextScreen: {fileID: 11400000, guid: 4d6b68d055b4e2c4b84bdedcff1ba27e, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SWIPE COUNTERCLOCKWISE COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_SwipeCounterclockwise
+    NextScreen: {fileID: 11400000, guid: d66374503715f9b45b6ef440019e9309, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SNAP FORWARDS COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_SnapForward
+    NextScreen: {fileID: 11400000, guid: 40274ca6077b1884085138720cea0c00, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SNAP BACKWARDS COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: NoteColorID_SnapBackward
+    NextScreen: {fileID: 11400000, guid: a17b2aa1ec27d014f8d75d91970f07c2, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: INVERT SLIDE COLOR
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: InvertSlideColor
+    NextScreen: {fileID: 11400000, guid: 96957b242f91ff342b121f7bdbe9f48f, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: TOUCH EFFECT
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: TouchEffect
+    NextScreen: {fileID: 11400000, guid: 8297775f7a487504c869096bd36fe7c8, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SHOW SHOOT EFFECT
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: ShootEffect
+    NextScreen: {fileID: 11400000, guid: 837887f074ce0934b86e6e6c88b929d7, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SHOW KEY BEAMS
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: ShowKeyBeams
+    NextScreen: {fileID: 11400000, guid: 19f0f17abe3a9734d8c2256e3c3691f6, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: SHOW R-NOTE EFFECT
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: ShowRNoteEffect
+    NextScreen: {fileID: 11400000, guid: a9cedc59b78f78e469bbfabf55f42bd6, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0

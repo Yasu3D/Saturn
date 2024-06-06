@@ -12,24 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_ShowJudgementDetails
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenName: ShowJudgementDetails
+  ScreenTitle: JUDGEMENT DETAILS
+  ScreenSubtitle: Toggle if details about Judgement Timing should be displayed.
   ScreenType: 2
+  RadialSubType: 1
   DefaultItemIndex: 0
   ListItems:
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Hide
+    Color: {r: 0.745, g: 0.745, b: 0.745, a: 1}
+    Title: HIDE
     Subtitle: 
+    Sprite: {fileID: 21300000, guid: bf9bc0cb894eae041a94d61e7398e9aa, type: 3}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: ShowJudgementDetails
     SettingsValue: 0
   - SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: Show
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: SHOW
     Subtitle: 
+    Sprite: {fileID: 21300000, guid: db58908fa48c74f479148ea88886bcaa, type: 3}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: ShowJudgementDetails

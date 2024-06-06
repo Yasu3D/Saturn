@@ -12,52 +12,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_2_NoteWidth
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  screenName: NoteWidth
-  screenType: 2
-  defaultItemIndex: 2
-  listItems:
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: 1
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteWidth
-    settingsValue: 1
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: 2
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteWidth
-    settingsValue: 2
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: 3
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteWidth
-    settingsValue: 3
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: 4
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteWidth
-    settingsValue: 4
-  - subtitleType: 0
-    itemType: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
-    title: 5
-    subtitle: 
-    settingsBinding: 
-    nextScreen: {fileID: 0}
-    settingsParameter: NoteWidth
-    settingsValue: 5
+  ScreenTitle: NOTE WIDTH
+  ScreenSubtitle: 'Adjust the width of Notes.
+
+    (Does not affect judgement.)'
+  ScreenType: 2
+  RadialSubType: 1
+  DefaultItemIndex: 2
+  ListItems:
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 1
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: c0ce0203255edf34ba95391f172c780d, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteWidth
+    SettingsValue: 1
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 2
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 9f0d957456661b94e9ddcd59ff142ef7, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteWidth
+    SettingsValue: 2
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 3
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 58c27677452258b419c4ab907bdef997, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteWidth
+    SettingsValue: 3
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 4
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: ca49b1eb5ac248d449695cd980377df9, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteWidth
+    SettingsValue: 4
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: 5
+    Subtitle: 
+    Sprite: {fileID: 21300000, guid: 88dcbcee2bd639045acf5139d7aa6002, type: 3}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: NoteWidth
+    SettingsValue: 5
