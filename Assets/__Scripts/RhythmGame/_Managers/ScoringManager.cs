@@ -49,7 +49,7 @@ public class ScoringManager : MonoBehaviour
         if (debugText is null)
             return;
 
-        debugText.text = $"{timeManager.VisualTimeMs}\n" + text;
+        debugText.text = $"{timeManager.GameplayTimeMs}\n" + text;
     }
 
     // TODO: rework this to avoid a bajillion allocations
@@ -482,7 +482,7 @@ public class ScoringManager : MonoBehaviour
         // Warning: will not work if end of chart is after the end of the audio clip, OR if it is within one frame
         // of the end of the audio clip.
         // TODO: move this logic somewhere else lol
-        if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.VisualTimeMs &&
+        if (Chart?.EndOfChart is not null && Chart.EndOfChart.TimeMs < timeManager.GameplayTimeMs &&
             !WritingReplayAndExiting)
         {
             // chart is done

@@ -35,7 +35,9 @@ public class TimeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns Song Position in ms.
+    /// Returns Song Position in ms, accounting for the "audio offset" defined in the chart.
+    /// Warning: this is based on <see cref="AudioSource.time"/>, which does not update continuously. It's possible for
+    /// this value to stay the same over multiple frames. See docs for <see cref="AudioSource.time"/>.
     /// </summary>
     /// <returns></returns>
     private float BgmTime()
@@ -47,30 +49,49 @@ public class TimeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// <b>Use VisualTime! This does NOT include any offsets!</b><br />
-    /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
+    /// Time synchronized with BgmTime, but smoothed to handle multiple frames between BgmTime updates.
     /// </summary>
-    public float RawVisualTimeMs { get; private set; }
+    private float AudioTimeMs { get; set; }
 
-    private float LastFrameRawVisualTimeMs { get; set; }
+    private float LastFrameAudioTimeMs { get; set; }
 
-    private float TotalOffsetMs =>
+    /// <summary>
+    /// Total audio offset in ms. This affects the sync between the gameplay timer (used for judgements) and the audio
+    /// timer which is synced to the audio track. It does not affect the sync between the gameplay and visuals.
+    /// Positive means that the audio plays later, negative means that the audio plays earlier (compared to the gameplay
+    /// timer).
+    /// </summary>
+    private float AudioOffsetMs =>
         StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */;
 
     /// <summary>
-    /// <b>Includes sync calibration and user offsets!</b> <br />
-    /// Time synchronized with BgmTime, but properly updated every frame for smooth visuals beyond 60fps.
+    /// Core gameplay time in ms, used for judgements. Do not use this for audio or visuals, use
+    /// <see cref="AudioTimeMs"/> or <see cref="VisualTimeMs"/> instead, which are correctly offset.
+    /// Currently, this is derived from <see cref="AudioOffsetMs"/> with the audio offset applied.
     /// </summary>
-    public float VisualTimeMs => RawVisualTimeMs + TotalOffsetMs;
+    public float GameplayTimeMs => AudioTimeMs + AudioOffsetMs;
 
-    public float LastFrameVisualTimeMs => LastFrameRawVisualTimeMs + TotalOffsetMs;
+    public float LastFrameGameplayTimeMs => LastFrameAudioTimeMs + AudioOffsetMs;
 
-    private void UpdateVisualTime()
+    /// <summary>
+    /// Total visual offset in ms. This affects the sync between the gameplay timer (used for judgements) and the visual
+    /// time used by the rendering engine. It does not affect the sync between the gameplay and audio.
+    /// Positive means that the visuals show later, negative means that the visuals show earlier (compared to the
+    /// gameplay timer).
+    /// </summary>
+    private float VisualOffsetMs = 0; // todo: tweak this value
+
+    /// <summary>
+    /// Visual time in ms. This must be used for all visuals instead of GameplayTimeMs.
+    /// </summary>
+    public float VisualTimeMs => GameplayTimeMs - VisualOffsetMs;
+
+    private void UpdateTime()
     {
         if (State != SongState.Playing) return;
 
-        LastFrameRawVisualTimeMs = RawVisualTimeMs;
-        RawVisualTimeMs += Time.deltaTime * visualTimeScale * 1000;
+        LastFrameAudioTimeMs = AudioTimeMs;
+        AudioTimeMs += Time.deltaTime * visualTimeScale * 1000;
     }
 
     /// <summary>
@@ -87,14 +108,14 @@ public class TimeManager : MonoBehaviour
             return;
         }
 
-        float discrepancy = RawVisualTimeMs - BgmTime();
+        float discrepancy = AudioTimeMs - BgmTime();
         float absDiscrepancy = Mathf.Abs(discrepancy);
 
         if (absDiscrepancy >= forceSyncDiscrepancy || PlaybackSpeed == 0)
         {
             // Snap directly to BgmTime if discrepancy gets too high.
             Debug.Log($"Force correcting by {discrepancy}");
-            RawVisualTimeMs = BgmTime();
+            AudioTimeMs = BgmTime();
         }
 
         // Warp VisualTime to re-align with audio
@@ -114,7 +135,7 @@ public class TimeManager : MonoBehaviour
             }
             case SongState.Playing:
             {
-                if (VisualTimeMs > chartManager.Chart.EndOfChart.TimeMs)
+                if (GameplayTimeMs > chartManager.Chart.EndOfChart.TimeMs)
                     State = SongState.Finished;
                 break;
             }
@@ -139,7 +160,7 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateVisualTime();
+        UpdateTime();
         ReSync();
         UpdateState();
 

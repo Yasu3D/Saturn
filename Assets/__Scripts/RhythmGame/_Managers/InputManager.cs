@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
     private void MaybeHandleNewTouchState(InputSource inputSource, TouchState? touchState, float? timeMs)
     {
         if (CurrentInputSource == inputSource)
-            NewTouchState(touchState, timeMs ?? timeManager.VisualTimeMs);
+            NewTouchState(touchState, timeMs ?? timeManager.GameplayTimeMs);
     }
 
     private void NewTouchState(TouchState? touchState, float timeMs)
