@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Background
+  m_Name: BackgroundPlane
   m_Shader: {fileID: -6465566751694194690, guid: 3cb08eeade721eb4daa94fa7e1868d8c,
     type: 3}
   m_Parent: {fileID: 0}
@@ -69,7 +69,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RenderTexture:
-        m_Texture: {fileID: 2800000, guid: f68077713f2d3a74eb6e4cbebf988f48, type: 3}
+        m_Texture: {fileID: 8400000, guid: f145797d9e7d90044898c72554d9cf71, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -107,7 +107,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _MaskAdd: 4
+    - _MaskAdd: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
