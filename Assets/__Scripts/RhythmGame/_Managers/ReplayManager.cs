@@ -12,7 +12,7 @@ using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace SaturnGame.RhythmGame
 {
-public class ReplayManager : MonoBehaviour, IInputProvider
+public class ReplayManager : MonoBehaviour
 {
     [SerializeField] private string replayFile = "replay.json.gz";
     [SerializeField] private TimeManager timeManager;
@@ -21,8 +21,6 @@ public class ReplayManager : MonoBehaviour, IInputProvider
     // If false, gameplay is normal and inputs are stored into Replay as they happen.
     public bool PlayingFromReplay;
     private int replayFrameIndex = -1;
-
-    public TouchStateHandler TouchStateHandler { private get; set; }
 
     private class ReplayFrame
     {
@@ -101,16 +99,15 @@ public class ReplayManager : MonoBehaviour, IInputProvider
         replayFrameIndex = 0;
     }
 
-    private void Update()
+    public IEnumerable<TimedTouchState> GetTimedTouchStatesUntil(float timeMs)
     {
-        if (!PlayingFromReplay || replayFrameIndex < 0) return;
+        if (!PlayingFromReplay || replayFrameIndex < 0) yield break;
 
-        while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeManager.GameplayTimeMs)
+        while (replayFrameIndex < Replay.Count && Replay[replayFrameIndex].TimeMs <= timeMs)
         {
-            TouchStateHandler?.Invoke(Replay[replayFrameIndex].TouchState, Replay[replayFrameIndex].TimeMs);
+            yield return new(Replay[replayFrameIndex].TouchState, Replay[replayFrameIndex].TimeMs);
             replayFrameIndex++;
         }
-        TouchStateHandler?.Invoke(null, timeManager.GameplayTimeMs);
     }
 }
 }

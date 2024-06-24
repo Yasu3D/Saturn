@@ -12,14 +12,16 @@ namespace SaturnGame
 /// </summary>
 public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputProvider
 {
-    public TouchStateHandler TouchStateHandler { private get; set; }
     public TouchState CurrentTouchState = TouchState.CreateNew();
+
 
     // Warning: Please only use BaseStream to read/write. The .NET SerialPort implementation has several issues,
     // especially regarding its internal buffer/cache. This can all be avoided if you use BaseStream directly and
     // never use any of the Read/Write methods on SerialPort itself. I think the mono implementation is actually
     // basically okay, but let's be cautious and consistent.
     // See https://sparxeng.com/blog/software/must-use-net-system-io-ports-serialport
+    // Also, the mono implementation does not implement events, so you cannot use .DataReceived, even if it were safe.
+    // https://www.mono-project.com/archived/howtosystemioports/#limitations
     private SerialPort leftRingPort;
     private SerialPort rightRingPort;
 
@@ -246,10 +248,13 @@ public class TouchRingManager : PersistentSingleton<TouchRingManager>, IInputPro
     private void Update()
     {
         TouchState.StealAndUpdateSegments(ref CurrentTouchState, UpdateSegments);
+    }
 
-        // TODO: once we have sub-frame updates, use a TimedTouchState here.
-        // Since timeMs is null, InputManager will use VisualTimeMs from the TimeManager.
-        TouchStateHandler?.Invoke(CurrentTouchState, null);
+    // Note: TouchRingManager's script execution order should be before anything calling GetCurrentTouchState(), to
+    // make sure the latest touch state has been read. Currently, (2024-06-24) the only consumer is InputManager.
+    public TouchState GetCurrentTouchState()
+    {
+        return CurrentTouchState;
     }
 }
 }

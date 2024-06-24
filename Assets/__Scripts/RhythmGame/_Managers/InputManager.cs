@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace SaturnGame.RhythmGame
 {
+/// <summary>
+/// InputManager handles **gameplay** inputs - reading from an <see cref="IInputProvider"/> such as <see
+/// cref="TouchRingManager"/> or <see cref="keyboardInput"/>, or from a replay (via <see cref="ReplayManager"/>).
+/// It pulls current input from these providers, associates it with the current gameplay time, and then processes the
+/// input by calling into <see cref="scoringManager"/>.
+/// </summary>
 public class InputManager : MonoBehaviour
 {
     public enum InputSource
@@ -14,8 +20,16 @@ public class InputManager : MonoBehaviour
 
     public InputSource CurrentInputSource;
 
-    [Header("MANAGERS")]
-    [SerializeField] private ScoringManager scoringManager;
+    [CanBeNull]
+    private IInputProvider CurrentInputProvider => CurrentInputSource switch
+    {
+        InputSource.Keyboard => keyboardInput,
+        InputSource.TouchRing => TouchRingManager.Instance,
+        InputSource.Replay => null, // ReplayManager is not an IInputProvider.
+        _ => throw new System.NotImplementedException(),
+    };
+
+    [Header("MANAGERS")] [SerializeField] private ScoringManager scoringManager;
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private ReplayManager replayManager;
 
@@ -23,15 +37,11 @@ public class InputManager : MonoBehaviour
 
     public TouchState CurrentTouchState = TouchState.CreateNew();
 
-    // Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of this function's
-    // invocation. A persisted copy of TouchState may not behave as expected. See docs on TouchState.
-    private void MaybeHandleNewTouchState(InputSource inputSource, TouchState? touchState, float? timeMs)
-    {
-        if (CurrentInputSource == inputSource)
-            NewTouchState(touchState, timeMs ?? timeManager.GameplayTimeMs);
-    }
 
-    private void NewTouchState(TouchState? touchState, float timeMs)
+    // Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of this function's
+    // invocation. A persisted reference to the TouchState may not behave as expected. Use TouchState.Copy or .CopyTo.
+    // See docs on TouchState.
+    private void HandleNewTouchState(TouchState? touchState, float timeMs)
     {
         if (touchState is null || touchState.Value.EqualsSegments(CurrentTouchState))
         {
@@ -39,33 +49,16 @@ public class InputManager : MonoBehaviour
             // Don't write to replay.
             return;
         }
+
         if (replayManager != null && !replayManager.PlayingFromReplay)
             replayManager.RecordFrame(touchState.Value, timeMs);
         touchState.Value.CopyTo(ref CurrentTouchState);
         scoringManager.HandleInput(touchState.Value, timeMs);
     }
 
-    private void Start()
-    {
-        keyboardInput.TouchStateHandler = (touchState, timeMs) =>
-            MaybeHandleNewTouchState(InputSource.Keyboard, touchState, timeMs);
-
-        if (TouchRingManager.Instance is TouchRingManager touchRingManager)
-        {
-            touchRingManager.TouchStateHandler = (touchState, timeMs) =>
-                MaybeHandleNewTouchState(InputSource.TouchRing, touchState, timeMs);
-        }
-
-        if (replayManager != null)
-        {
-            replayManager.TouchStateHandler = (touchState, timeMs) =>
-                MaybeHandleNewTouchState(InputSource.Replay, touchState, timeMs);
-        }
-    }
-
     private async void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad0))
+        if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Backslash))
         {
             Debug.Log("Switched to keyboard input.");
             CurrentInputSource = InputSource.Keyboard;
@@ -80,23 +73,52 @@ public class InputManager : MonoBehaviour
             return;
         }
 
-        if (CurrentInputSource is InputSource.Keyboard)
-            keyboardInput.UpdateKeyboardInput();
+        if (timeManager.State != TimeManager.SongState.Playing) return;
+
+        switch (CurrentInputProvider, CurrentInputSource)
+        {
+            case (not null, _):
+            {
+                HandleNewTouchState(CurrentInputProvider.GetCurrentTouchState(), timeManager.GameplayTimeMs);
+                break;
+            }
+            case (null, InputSource.Replay):
+            {
+                foreach (TimedTouchState timedTouchState in replayManager.GetTimedTouchStatesUntil(timeManager.GameplayTimeMs))
+                    HandleNewTouchState(timedTouchState.TouchState, timedTouchState.TimeMs);
+                break;
+            }
+            default:
+            {
+                throw new System.NotImplementedException();
+            }
+        }
     }
 }
 
-// Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of the handler invocation.
-public delegate void TouchStateHandler(TouchState? touchState, float? timeMs);
+public struct TimedTouchState
+{
+    public TimedTouchState(TouchState touchState, float timeMs)
+    {
+        TouchState = touchState;
+        TimeMs = timeMs;
+    }
 
+    public TouchState TouchState;
+    public readonly float TimeMs;
+}
+
+// Abstract class for frame-synchronized input sources. (Not replays.) If/when we move to a multi-threaded model, this
+// will need to be reworked.
 public interface IInputProvider
 {
-    // TouchStateHandler may be called any number of times per frame.
-    [CanBeNull] public TouchStateHandler TouchStateHandler { set; }
+    // Get the TouchState as of this frame. The TouchState is only guaranteed to live until the end of the frame, or
+    // possibly until the next time GetCurrentTouchState() is called.
+    public TouchState GetCurrentTouchState();
 }
 
 public class KeyboardInput : IInputProvider
 {
-    public TouchStateHandler TouchStateHandler { private get; set; }
     private TouchState currentTouchState = TouchState.CreateNew();
 
     private static void ReadFromKeyboard(bool[,] segments)
@@ -199,10 +221,10 @@ public class KeyboardInput : IInputProvider
         if (Input.GetKey("n")) segments[47, 0] = true;
     }
 
-    public void UpdateKeyboardInput()
+    public TouchState GetCurrentTouchState()
     {
         TouchState.StealAndUpdateSegments(ref currentTouchState, ReadFromKeyboard);
-        TouchStateHandler?.Invoke(currentTouchState, null);
+        return currentTouchState;
     }
 }
 }
