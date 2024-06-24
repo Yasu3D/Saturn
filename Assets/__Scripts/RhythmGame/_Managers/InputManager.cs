@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -6,8 +7,8 @@ namespace SaturnGame.RhythmGame
 /// <summary>
 /// InputManager handles **gameplay** inputs - reading from an <see cref="IInputProvider"/> such as <see
 /// cref="TouchRingManager"/> or <see cref="keyboardInput"/>, or from a replay (via <see cref="ReplayManager"/>).
-/// It pulls current input from these providers, associates it with the current gameplay time, and then processes the
-/// input by calling into <see cref="scoringManager"/>.
+/// It pulls current input from these providers, associates it with the current gameplay time, buffers the input if
+/// artificial latency is active, and then processes the input by calling into <see cref="scoringManager"/>.
 /// </summary>
 public class InputManager : MonoBehaviour
 {
@@ -28,6 +29,11 @@ public class InputManager : MonoBehaviour
         InputSource.Replay => null, // ReplayManager is not an IInputProvider.
         _ => throw new System.NotImplementedException(),
     };
+
+    // Magic number based on 30ms artificial latency in classic mode.
+    private readonly TimedTouchStateQueue queue = new(30);
+    // TODO: make this adjustable in the settings
+    private readonly float latencyMs = 0f;
 
     [Header("MANAGERS")] [SerializeField] private ScoringManager scoringManager;
     [SerializeField] private TimeManager timeManager;
@@ -56,6 +62,25 @@ public class InputManager : MonoBehaviour
         scoringManager.HandleInput(touchState.Value, timeMs);
     }
 
+
+    /// <summary>
+    /// Get touch states up to a given timeMs, INCLUSIVE.
+    /// (n.b. float equality is usually not exact, but it's possible that the TimeMs in the queue exactly matches the
+    /// current timeMs seen by the InputManager, e.g. if they are both happening on the same frame.)
+    /// It can be assumed that the consumer will iterate through the IEnumerable to completion.
+    /// </summary>
+    /// <param name="timeMs"></param>
+    /// <returns></returns>
+    private IEnumerable<TimedTouchState> GetTimedTouchStatesUntil(float timeMs)
+    {
+        return CurrentInputSource switch
+        {
+            InputSource.Replay => replayManager.GetTimedTouchStatesUntil(timeMs),
+            InputSource.TouchRing or InputSource.Keyboard => queue.GetTimedTouchStatesUntil(timeMs),
+            _ => throw new System.NotImplementedException(),
+        };
+    }
+
     private async void Update()
     {
         if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.Backslash))
@@ -75,24 +100,24 @@ public class InputManager : MonoBehaviour
 
         if (timeManager.State != TimeManager.SongState.Playing) return;
 
-        switch (CurrentInputProvider, CurrentInputSource)
+        // Get the current input and queue it.
+        switch (CurrentInputProvider?.GetCurrentTouchState())
         {
-            case (not null, _):
+            case TouchState touchState:
             {
-                HandleNewTouchState(CurrentInputProvider.GetCurrentTouchState(), timeManager.GameplayTimeMs);
+                queue.Enqueue(touchState, timeManager.GameplayTimeMs + latencyMs);
                 break;
             }
-            case (null, InputSource.Replay):
+            case null:
             {
-                foreach (TimedTouchState timedTouchState in replayManager.GetTimedTouchStatesUntil(timeManager.GameplayTimeMs))
-                    HandleNewTouchState(timedTouchState.TouchState, timedTouchState.TimeMs);
+                // Current input method doesn't use an IInputProvider, e.g. Replay.
                 break;
-            }
-            default:
-            {
-                throw new System.NotImplementedException();
             }
         }
+
+        // Actually handle inputs.
+        foreach (TimedTouchState timedTouchState in GetTimedTouchStatesUntil(timeManager.GameplayTimeMs))
+            HandleNewTouchState(timedTouchState.TouchState, timedTouchState.TimeMs);
     }
 }
 
