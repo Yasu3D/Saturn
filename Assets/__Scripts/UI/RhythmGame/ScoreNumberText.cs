@@ -1,8 +1,8 @@
-using System;
 using SaturnGame.RhythmGame;
 using SaturnGame.Settings;
 using UnityEngine;
 using TMPro;
+using static SaturnGame.Settings.UISettings.ScoreDisplayMethods;
 
 public class ScoreNumberText : MonoBehaviour
 {
@@ -12,9 +12,9 @@ public class ScoreNumberText : MonoBehaviour
     {
         ScoreValue.text = SettingsManager.Instance.PlayerSettings.UISettings.ScoreDisplayMethod switch
         {
-            0 => "<mspace=0.7em>0000000</mspace>", // Plus Method
-            1 => "<mspace=0.7em>1000000</mspace>", // Minus Method
-            2 => "<mspace=0.7em>0000000</mspace>", // Average Method
+            PlusMethod => "<mspace=0.7em>0000000</mspace>", // Plus Method
+            MinusMethod => "<mspace=0.7em>1000000</mspace>", // Minus Method
+            AverageMethod => "<mspace=0.7em>0000000</mspace>", // Average Method
             _ => "<mspace=0.7em>0000000</mspace>",
         };
     }
@@ -23,9 +23,9 @@ public class ScoreNumberText : MonoBehaviour
     {
         int score = SettingsManager.Instance.PlayerSettings.UISettings.ScoreDisplayMethod switch
         {
-            0 => scoreData.Score, // Plus Method
-            1 => 1_000_000 - (scoreData.MaxScore - scoreData.Score), // Minus Method
-            2 => (int)(1_000_000 * ((float)scoreData.Score / scoreData.MaxScore)), // Average Method
+            PlusMethod => scoreData.Score, // Plus Method
+            MinusMethod => 1_000_000 - (scoreData.MaxScore - scoreData.Score), // Minus Method
+            AverageMethod => (int)(1_000_000 * ((float)scoreData.Score / scoreData.MaxScore)), // Average Method
             _ => 0,
         };
         

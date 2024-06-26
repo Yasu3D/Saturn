@@ -1,8 +1,8 @@
-using System;
 using DG.Tweening;
 using SaturnGame.RhythmGame;
 using SaturnGame.Settings;
 using UnityEngine;
+using static SaturnGame.Settings.UISettings.ShowJudgementDetailsOptions;
 
 public class JudgementDisplay : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class JudgementDisplay : MonoBehaviour
     [SerializeField] private GameObject TextLate;
     private Sequence currentSequence;
 
-    private readonly Vector2 topPosition    = new(0,  230);
+    private readonly Vector2 topPosition = new(0, 230);
     private readonly Vector2 middlePosition = new(0, -100);
     private readonly Vector2 bottomPosition = new(0, -320);
 
@@ -30,11 +30,11 @@ public class JudgementDisplay : MonoBehaviour
             _ => GroupRect.anchoredPosition,
         };
     }
-    
+
     public void ShowJudgement(Judgement judgement, float timeErrorMs)
     {
         currentSequence.Kill(true);
-        
+
         TextMarvelous.SetActive(false);
         TextGreat.SetActive(false);
         TextGood.SetActive(false);
@@ -43,29 +43,29 @@ public class JudgementDisplay : MonoBehaviour
         TextLate.SetActive(false);
 
         Group.transform.localScale = Vector3.one;
-        
+
         switch (judgement)
         {
             case Judgement.None: break;
-            
+
             case Judgement.Miss:
             {
                 TextMiss.SetActive(true);
                 break;
             }
-            
+
             case Judgement.Good:
             {
                 TextGood.SetActive(true);
                 break;
             }
-            
+
             case Judgement.Great:
             {
                 TextGreat.SetActive(true);
                 break;
             }
-            
+
             case Judgement.Marvelous:
             {
                 TextMarvelous.SetActive(true);
@@ -73,7 +73,8 @@ public class JudgementDisplay : MonoBehaviour
             }
         }
 
-        if (SettingsManager.Instance.PlayerSettings.UISettings.ShowJudgementDetails == 1 && judgement is not (Judgement.Marvelous or Judgement.None))
+        if (SettingsManager.Instance.PlayerSettings.UISettings.ShowJudgementDetails ==
+            On && judgement is not (Judgement.Marvelous or Judgement.None))
         {
             if (timeErrorMs < 0) TextFast.SetActive(true);
             if (timeErrorMs > 0) TextLate.SetActive(true);
@@ -81,7 +82,7 @@ public class JudgementDisplay : MonoBehaviour
 
         currentSequence = DOTween.Sequence();
         Group.transform.DOScale(0.95f, 0);
-        
+
         // Miss animation is slightly different. Fades in longer.
         if (judgement is Judgement.Miss)
         {
@@ -95,7 +96,7 @@ public class JudgementDisplay : MonoBehaviour
             currentSequence.Join(Group.DOFade(1, 0.05f).SetEase(Ease.OutQuad));
             currentSequence.Join(Group.transform.DOScale(1, 0.05f).SetEase(Ease.OutQuad));
         }
-        
+
         currentSequence.Insert(0.15f, Group.DOFade(0, 0.12f).SetEase(Ease.OutQuad));
         currentSequence.Insert(0.15f, Group.transform.DOScale(0.95f, 0.12f).SetEase(Ease.OutQuad));
         currentSequence.OnComplete(() =>

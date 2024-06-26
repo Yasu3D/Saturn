@@ -18,36 +18,42 @@ MonoBehaviour:
   RadialSubType: 0
   DefaultItemIndex: 0
   ListItems:
-  - SubtitleType: 0
-    ItemType: 0
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: PLUS METHOD
+    SubtitleType: 0
     Subtitle: The score begins at 0 and counts up to a maximum of 1,000,000 with
       each successful hit.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: ScoreDisplayMethod
-    SettingsValue: 0
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 0
+    SettingsValueEnum: PlusMethod
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: MINUS METHOD
+    SubtitleType: 0
     Subtitle: The score begins at 1,000,000 and counts down to a minimum of 0 with
       each mistake.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: ScoreDisplayMethod
-    SettingsValue: 1
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 1
+    SettingsValueEnum: MinusMethod
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: AVERAGE METHOD
+    SubtitleType: 0
     Subtitle: The score begins at 1,000,000 and displays the average score of all
       hit notes. Comparable to Beat Saber's percentage accuracy.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: ScoreDisplayMethod
-    SettingsValue: 2
+    SettingsType: 1
+    SettingsValueInt: 2
+    SettingsValueEnum: AverageMethod
+    NextScreen: {fileID: 0}

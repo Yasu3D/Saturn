@@ -129,64 +129,79 @@ public class GameSettings
     /// </summary>
     public int MaskDensity = 2;
 
-    /// <summary>
-    /// 0 > Ask<br/>
-    /// 1 > Off<br/>
-    /// 2 > On<br/>
-    /// </summary>
-    public int BackgroundVideoSetting = 0;
+    public enum BackgroundVideoOptions
+    {
+        Ask,
+        Off,
+        On,
+    }
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > On<br/>
-    /// </summary>
-    public int BonusEffectSetting = 1;
+    public BackgroundVideoOptions BackgroundVideoSetting = BackgroundVideoOptions.Ask;
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > On<br/>
-    /// </summary>
-    public int MirrorNotes = 0;
+    public enum BonusEffectOptions
+    {
+        Off,
+        On,
+    }
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > No Touch<br/>
-    /// 2 > S Border<br/>
-    /// 3 > SS Border<br/>
-    /// 4 > SSS Border<br/>
-    /// 5 > Personal Best Border<br/>
-    /// </summary>
-    public int GiveUpSetting = 0;
+    public BonusEffectOptions BonusEffectSetting = BonusEffectOptions.Off;
+
+    public enum MirrorNotesOptions
+    {
+        Off,
+        On,
+    }
+
+    public MirrorNotesOptions MirrorNotes = MirrorNotesOptions.Off;
+
+    public enum GiveUpOptions
+    {
+        Off,
+        NoTouch,
+        SBorder,
+        SSBorder,
+        SSSBorder,
+        MasterBorder,
+        PersonalBestBorder,
+    }
+
+    public GiveUpOptions GiveUpSetting = GiveUpOptions.Off;
 }
 
 [Serializable]
 public class UISettings
 {
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > Top<br/>
-    /// 2 > Center<br/>
-    /// 3 > Bottom<br/>
-    /// </summary>
-    public int JudgementDisplayPosition = 2;
+    public enum JudgementDisplayPositions
+    {
+        Off,
+        Top,
+        Center,
+        Bottom,
+    }
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > On<br/>
-    /// </summary>
-    public int ShowJudgementDetails = 1;
+    public JudgementDisplayPositions JudgementDisplayPosition = JudgementDisplayPositions.Center;
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > A<br/>
-    /// 2 > B<br/>
-    /// 3 > C<br/>
-    /// 4 > D<br/>
-    /// 5 > E<br/>
-    /// 6 > F<br/>
-    /// 7 > G<br/>
-    /// </summary>
-    public int GuideLaneType = 1;
+    public enum ShowJudgementDetailsOptions
+    {
+        Off,
+        On,
+    }
+
+    public ShowJudgementDetailsOptions ShowJudgementDetails = ShowJudgementDetailsOptions.On;
+
+    public enum GuideLaneTypes
+    {
+        Off,
+        A,
+        B,
+        C,
+        D,
+        E,
+        F,
+        G,
+    }
+
+    public GuideLaneTypes GuideLaneType = GuideLaneTypes.A;
 
     /// <summary>
     /// 0 >   0%<br/>
@@ -208,31 +223,37 @@ public class UISettings
     /// </summary>
     public int DisplayOpacity = 5;
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > On<br/>
-    /// </summary>
-    public int ShowBarLines = 1;
+    public enum ShowBarLinesOptions
+    {
+        Off,
+        On,
+    }
 
-    /// <summary>
-    /// 0 > Off<br/>
-    /// 1 > Combo<br/>
-    /// 2 > Plus Method<br/>
-    /// 3 > Minus Method<br/>
-    /// 4 > Average Method<br/>
-    /// 5 > S Border<br/>
-    /// 6 > SS Border<br/>
-    /// 7 > SSS Border<br/>
-    /// 8 > Personal Best Border<br/>
-    /// </summary>
-    public int CenterDisplayInfo = 1;
+    public ShowBarLinesOptions ShowBarLines = ShowBarLinesOptions.On;
 
-    /// <summary>
-    /// 0 > Plus Method<br/>
-    /// 1 > Minus Method<br/>
-    /// 2 > Average Method<br/>
-    /// </summary>
-    public int ScoreDisplayMethod = 0;
+    public enum CenterDisplayInfoOptions
+    {
+        Off,
+        Combo,
+        PlusMethod,
+        MinusMethod,
+        AverageMethod,
+        SBorder,
+        SSBorder,
+        SSSBorder,
+        PersonalBestBorder,
+    }
+
+    public CenterDisplayInfoOptions CenterDisplayInfo = CenterDisplayInfoOptions.Combo;
+
+    public enum ScoreDisplayMethods
+    {
+        PlusMethod,
+        MinusMethod,
+        AverageMethod,
+    }
+
+    public ScoreDisplayMethods ScoreDisplayMethod = ScoreDisplayMethods.PlusMethod;
 }
 
 [Serializable]
@@ -243,12 +264,14 @@ public class DesignSettings
     /// </summary>
     public int RingColor = 0;
 
-    /// <summary>
-    /// 0 > Original<br/>
-    /// 1 > Lily<br/>
-    /// 2 > Reverse<br/>
-    /// </summary>
-    public int JudgeLineColor = 2;
+    public enum JudgeLineColors
+    {
+        Original,
+        Lily,
+        Reverse,
+    }
+
+    public JudgeLineColors JudgeLineColor = JudgeLineColors.Reverse;
 
     /// <summary>
     /// 1 > 1
@@ -259,7 +282,7 @@ public class DesignSettings
     /// </summary>
     public int NoteWidth = 3;
 
-
+    // TODO: Color enums
     public int NoteColorIDTouch = 0;
     public int NoteColorIDChain = 1;
     public int NoteColorIDSwipeClockwise = 2;
@@ -268,34 +291,37 @@ public class DesignSettings
     public int NoteColorIDSnapBackward = 5;
     public int NoteColorIDHold = 6;
 
-    /// <summary>
-    /// 0 > OFF
-    /// 1 > ON
-    /// </summary>
-    public int InvertSlideColor = 0;
+    public enum InvertSlideColorOptions
+    {
+        Off,
+        On,
+    }
 
-    /// <summary>
-    /// WIP
-    /// </summary>
-    public int TouchEffect = 1;
+    public InvertSlideColorOptions InvertSlideColor = InvertSlideColorOptions.Off;
 
-    /// <summary>
-    /// 0 > OFF
-    /// 1 > ON
-    /// </summary>
-    public int ShowShootEffect = 1;
+    public enum ShowShootEffectOptions
+    {
+        Off,
+        On,
+    }
 
-    /// <summary>
-    /// 0 > OFF
-    /// 1 > ON
-    /// </summary>
-    public int ShowKeyBeams = 1;
+    public ShowShootEffectOptions ShowShootEffect = ShowShootEffectOptions.On;
 
-    /// <summary>
-    /// 0 > OFF
-    /// 1 > ON
-    /// </summary>
-    public int ShowRNoteEffect = 1;
+    public enum ShowKeyBeamsOptions
+    {
+        Off,
+        On,
+    }
+
+    public ShowKeyBeamsOptions ShowKeyBeams = ShowKeyBeamsOptions.On;
+
+    public enum ShowRNoteEffectOptions
+    {
+        Off,
+        On,
+    }
+
+    public ShowRNoteEffectOptions ShowRNoteEffect = ShowRNoteEffectOptions.On;
 }
 
 [Serializable]
