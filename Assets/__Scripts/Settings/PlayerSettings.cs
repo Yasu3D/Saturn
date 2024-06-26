@@ -1,6 +1,11 @@
+using System;
+using System.Reflection;
+using SaturnGame.JetBrains.Annotations;
+using UnityEngine;
+
 namespace SaturnGame.Settings
 {
-[System.Serializable]
+[Serializable]
 public class PlayerSettings
 {
     public GameSettings GameSettings = new();
@@ -8,291 +13,83 @@ public class PlayerSettings
     public DesignSettings DesignSettings = new();
     public SoundSettings SoundSettings = new();
 
-    public void SetParameter(string parameter, int value)
+    // Given a parameter string, searches the children settings objects for the parameter.
+    // Returns a tuple of (corresponding child settings object, FieldInfo of the parameter)
+    private (object, FieldInfo) GetParameterField(string parameter)
     {
-        switch (parameter)
+        object[] objectsToSearch = { GameSettings, UISettings, DesignSettings, SoundSettings };
+
+        foreach (object settingsObject in objectsToSearch)
         {
-            case "NoteSpeed":
-            {
-                GameSettings.NoteSpeed = value;
-                break;
-            }
-            case "OffsetMode":
-            {
-                GameSettings.OffsetMode = value;
-                break;
-            }
-            case "AudioOffset":
-            {
-                GameSettings.AudioOffset = value;
-                break;
-            }
-            case "VisualOffset":
-            {
-                GameSettings.VisualOffset = value;
-                break;
-            }
-            case "InputLatency":
-            {
-                GameSettings.InputLatency = value;
-                break;
-            }
-            case "MaskDensity":
-            {
-                GameSettings.MaskDensity = value;
-                break;
-            }
-            case "BackgroundVideoSetting":
-            {
-                GameSettings.BackgroundVideoSetting = value;
-                break;
-            }
-            case "BonusEffectSetting":
-            {
-                GameSettings.BonusEffectSetting = value;
-                break;
-            }
-            case "MirrorNotes":
-            {
-                GameSettings.MirrorNotes = value;
-                break;
-            }
-            case "GiveUpSetting":
-            {
-                GameSettings.GiveUpSetting = value;
-                break;
-            }
-
-            case "JudgementDisplayPosition":
-            {
-                UISettings.JudgementDisplayPosition = value;
-                break;
-            }
-            case "ShowJudgementDetails":
-            {
-                UISettings.ShowJudgementDetails = value;
-                break;
-            }
-            case "GuideLaneType":
-            {
-                UISettings.GuideLaneType = value;
-                break;
-            }
-            case "GuideLaneOpacity":
-            {
-                UISettings.GuideLaneOpacity = value;
-                break;
-            }
-            case "DisplayOpacity":
-            {
-                UISettings.DisplayOpacity = value;
-                break;
-            }
-            case "ShowBarLines":
-            {
-                UISettings.ShowBarLines = value;
-                break;
-            }
-            case "CenterDisplayInfo":
-            {
-                UISettings.CenterDisplayInfo = value;
-                break;
-            }
-            case "ScoreDisplayMethod":
-            {
-                UISettings.ScoreDisplayMethod = value;
-                break;
-            }
-
-            case "RingColor":
-            {
-                DesignSettings.RingColor = value;
-                break;
-            }
-            case "JudgeLineColor":
-            {
-                DesignSettings.JudgeLineColor = value;
-                break;
-            }
-            case "NoteWidth":
-            {
-                DesignSettings.NoteWidth = value;
-                break;
-            }
-            case "NoteColorID_Touch":
-            {
-                DesignSettings.NoteColorIDTouch = value;
-                break;
-            }
-            case "NoteColorID_Chain":
-            {
-                DesignSettings.NoteColorIDChain = value;
-                break;
-            }
-            case "NoteColorID_SwipeClockwise":
-            {
-                DesignSettings.NoteColorIDSwipeClockwise = value;
-                break;
-            }
-            case "NoteColorID_SwipeCounterclockwise":
-            {
-                DesignSettings.NoteColorIDSwipeCounterclockwise = value;
-                break;
-            }
-            case "NoteColorID_SnapForward":
-            {
-                DesignSettings.NoteColorIDSnapForward = value;
-                break;
-            }
-            case "NoteColorID_SnapBackward":
-            {
-                DesignSettings.NoteColorIDSnapBackward = value;
-                break;
-            }
-            case "NoteColorID_Hold":
-            {
-                DesignSettings.NoteColorIDHold = value;
-                break;
-            }
-            case "InvertSlideColor":
-            {
-                DesignSettings.InvertSlideColor = value;
-                break;
-            }
-            case "TouchEffect":
-            {
-                DesignSettings.TouchEffect = value;
-                break;
-            }
-            case "ShowShootEffect":
-            {
-                DesignSettings.ShowShootEffect = value;
-                break;
-            }
-            case "ShowKeyBeams":
-            {
-                DesignSettings.ShowKeyBeams = value;
-                break;
-            }
-            case "ShowRNoteEffect":
-            {
-                DesignSettings.ShowRNoteEffect = value;
-                break;
-            }
-
-            case "TouchSE":
-            {
-                SoundSettings.TouchSE = value;
-                break;
-            }
-            case "BGMVolume":
-            {
-                SoundSettings.BGMVolume = value;
-                break;
-            }
-            case "HitsoundOverallVolume":
-            {
-                SoundSettings.HitsoundOverallVolume = value;
-                break;
-            }
-            case "GuideVolume":
-            {
-                SoundSettings.GuideVolume = value;
-                break;
-            }
-            case "TouchNoteVolume":
-            {
-                SoundSettings.TouchNoteVolume = value;
-                break;
-            }
-            case "HoldNoteVolume":
-            {
-                SoundSettings.HoldNoteVolume = value;
-                break;
-            }
-            case "SlideNoteVolume":
-            {
-                SoundSettings.SlideNoteVolume = value;
-                break;
-            }
-            case "SnapNoteVolume":
-            {
-                SoundSettings.SnapNoteVolume = value;
-                break;
-            }
-            case "ChainNoteVolume":
-            {
-                SoundSettings.ChainNoteVolume = value;
-                break;
-            }
-            case "BonusEffectVolume":
-            {
-                SoundSettings.BonusEffectVolume = value;
-                break;
-            }
-            case "RNoteEffectVolume":
-            {
-                SoundSettings.RNoteEffectVolume = value;
-                break;
-            }
+            FieldInfo possibleField = settingsObject.GetType().GetField(parameter);
+            if (possibleField != null) return (settingsObject, possibleField);
         }
+
+        return (null, null);
     }
 
-    public int GetParameter(string parameter)
+    /// <summary>
+    /// Set a given settings parameter to the given value.
+    /// If the parameter is an enum, the value should be a string.
+    /// </summary>
+    /// <param name="parameter">The field name of the enum. Should not include the settings object name
+    /// (e.g. "NoteSpeed", NOT "GameSettings.NoteSpeed").</param>
+    /// <param name="value">The value of the setting. The type should match the parameter type, except for enum
+    /// parameters, which should be represented as a string.</param>
+    /// <exception cref="ArgumentException">thrown if the parameter doesn't exist, or the value type is wrong</exception>
+    public void SetParameter(string parameter, [NotNull] object value)
     {
-        return parameter switch
+        (object settingsObject, FieldInfo possibleField) = GetParameterField(parameter);
+
+        if (possibleField == null)
+            throw new ArgumentException($"Parameter {parameter} not found in any settings object");
+
+        if (possibleField.FieldType.IsEnum)
         {
-            "NoteSpeed" => GameSettings.NoteSpeed,
-            "OffsetMode" => GameSettings.OffsetMode,
-            "AudioOffset" => GameSettings.AudioOffset,
-            "VisualOffset" => GameSettings.VisualOffset,
-            "InputLatency" => GameSettings.InputLatency,
-            "MaskDensity" => GameSettings.MaskDensity,
-            "BackgroundVideoSetting" => GameSettings.BackgroundVideoSetting,
-            "BonusEffectSetting" => GameSettings.BonusEffectSetting,
-            "MirrorNotes" => GameSettings.MirrorNotes,
-            "GiveUpSetting" => GameSettings.GiveUpSetting,
-            "JudgementDisplayPosition" => UISettings.JudgementDisplayPosition,
-            "ShowJudgementDetails" => UISettings.ShowJudgementDetails,
-            "GuideLaneType" => UISettings.GuideLaneType,
-            "GuideLaneOpacity" => UISettings.GuideLaneOpacity,
-            "DisplayOpacity" => UISettings.DisplayOpacity,
-            "ShowBarLines" => UISettings.ShowBarLines,
-            "CenterDisplayInfo" => UISettings.CenterDisplayInfo,
-            "ScoreDisplayMethod" => UISettings.ScoreDisplayMethod,
-            "RingColor" => DesignSettings.RingColor,
-            "JudgeLineColor" => DesignSettings.JudgeLineColor,
-            "NoteWidth" => DesignSettings.NoteWidth,
-            "NoteColorID_Touch" => DesignSettings.NoteColorIDTouch,
-            "NoteColorID_Chain" => DesignSettings.NoteColorIDChain,
-            "NoteColorID_SwipeClockwise" => DesignSettings.NoteColorIDSwipeClockwise,
-            "NoteColorID_SwipeCounterclockwise" => DesignSettings.NoteColorIDSwipeCounterclockwise,
-            "NoteColorID_SnapForward" => DesignSettings.NoteColorIDSnapForward,
-            "NoteColorID_SnapBackward" => DesignSettings.NoteColorIDSnapBackward,
-            "NoteColorID_Hold" => DesignSettings.NoteColorIDHold,
-            "InvertSlideColor" => DesignSettings.InvertSlideColor,
-            "TouchEffect" => DesignSettings.TouchEffect,
-            "ShowShootEffect" => DesignSettings.ShowShootEffect,
-            "ShowKeyBeams" => DesignSettings.ShowKeyBeams,
-            "ShowRNoteEffect" => DesignSettings.ShowRNoteEffect,
-            "TouchSE" => SoundSettings.TouchSE,
-            "BGMVolume" => SoundSettings.BGMVolume,
-            "HitsoundOverallVolume" => SoundSettings.HitsoundOverallVolume,
-            "GuideVolume" => SoundSettings.GuideVolume,
-            "TouchNoteVolume" => SoundSettings.TouchNoteVolume,
-            "HoldNoteVolume" => SoundSettings.HoldNoteVolume,
-            "SlideNoteVolume" => SoundSettings.SlideNoteVolume,
-            "SnapNoteVolume" => SoundSettings.SnapNoteVolume,
-            "ChainNoteVolume" => SoundSettings.ChainNoteVolume,
-            "BonusEffectVolume" => SoundSettings.BonusEffectVolume,
-            "RNoteEffectVolume" => SoundSettings.RNoteEffectVolume,
-            _ => 0,
-        };
+            switch (value)
+            {
+                case string valueString:
+                {
+                    object enumValue = Enum.Parse(possibleField.FieldType, valueString);
+                    possibleField.SetValue(settingsObject, enumValue);
+                    return;
+                }
+                default:
+                {
+                    throw new ArgumentException($"Incorrect type for setting {parameter} - parameter is an enum, " +
+                                                $"so expected a string, but got a {value.GetType()}");
+                }
+            }
+        }
+
+        if (value.GetType() != possibleField.FieldType)
+        {
+            throw new ArgumentException($"Incorrect type for setting {parameter} - " +
+                                        $"expected {possibleField.FieldType}, but got {value.GetType()}");
+        }
+
+        possibleField.SetValue(settingsObject, value);
+    }
+
+    // Get the type and value of a parameter.
+    // Enum types will accurately return the underlying type, but the value will be converted to a string.
+    public (Type, object) GetParameter(string parameter)
+    {
+        (object settingsObject, FieldInfo possibleField) = GetParameterField(parameter);
+
+        if (possibleField == null)
+            throw new ArgumentException($"Parameter {parameter} not found in any settings object");
+
+        object value = possibleField.GetValue(settingsObject);
+
+        if (possibleField.FieldType.IsEnum) value = ((Enum)value).ToString();
+
+        return (possibleField.FieldType, value);
     }
 }
 
 // ReSharper disable RedundantDefaultMemberInitializer
-[System.Serializable]
+[Serializable]
 public class GameSettings
 {
     /// <summary>
@@ -300,19 +97,21 @@ public class GameSettings
     /// </summary>
     public int NoteSpeed = 25;
 
-    /// <summary>
-    /// 0 > Standard / Low Latency
-    /// 1 > Classic / Original Latency
-    /// 2 > Advanced
-    /// </summary>
-    public int OffsetMode = 0;
-    
+    public enum OffsetModeOptions
+    {
+        Standard, // Low Latency
+        Classic, // Original Latency
+        Advanced,
+    }
+
+    public OffsetModeOptions OffsetMode = OffsetModeOptions.Standard;
+
     /// <summary>
     /// Audio Offset from +100 [10] to -100 [-10]
     /// TODO: Expand to +200 -200
     /// </summary>
     public int AudioOffset = 0;
-    
+
     /// <summary>
     /// Visual Offset from +100 [10] to -100 [-10]
     /// TODO: Expand to +200 -200
@@ -324,31 +123,31 @@ public class GameSettings
     /// TODO: @cg505 define range for this.
     /// </summary>
     public int InputLatency = 0;
-    
+
     /// <summary>
     /// Mask Density from 0 to +4
     /// </summary>
     public int MaskDensity = 2;
-    
+
     /// <summary>
     /// 0 > Ask<br/>
     /// 1 > Off<br/>
     /// 2 > On<br/>
     /// </summary>
     public int BackgroundVideoSetting = 0;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > On<br/>
     /// </summary>
     public int BonusEffectSetting = 1;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > On<br/>
     /// </summary>
     public int MirrorNotes = 0;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > No Touch<br/>
@@ -360,7 +159,7 @@ public class GameSettings
     public int GiveUpSetting = 0;
 }
 
-[System.Serializable]
+[Serializable]
 public class UISettings
 {
     /// <summary>
@@ -370,13 +169,13 @@ public class UISettings
     /// 3 > Bottom<br/>
     /// </summary>
     public int JudgementDisplayPosition = 2;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > On<br/>
     /// </summary>
     public int ShowJudgementDetails = 1;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > A<br/>
@@ -388,7 +187,7 @@ public class UISettings
     /// 7 > G<br/>
     /// </summary>
     public int GuideLaneType = 1;
-    
+
     /// <summary>
     /// 0 >   0%<br/>
     /// 1 >  20%<br/>
@@ -398,7 +197,7 @@ public class UISettings
     /// 5 > 100%<br/>
     /// </summary>
     public int GuideLaneOpacity = 5;
-    
+
     /// <summary>
     /// 0 >   0%<br/>
     /// 1 >  20%<br/>
@@ -408,13 +207,13 @@ public class UISettings
     /// 5 > 100%<br/>
     /// </summary>
     public int DisplayOpacity = 5;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > On<br/>
     /// </summary>
     public int ShowBarLines = 1;
-    
+
     /// <summary>
     /// 0 > Off<br/>
     /// 1 > Combo<br/>
@@ -427,7 +226,7 @@ public class UISettings
     /// 8 > Personal Best Border<br/>
     /// </summary>
     public int CenterDisplayInfo = 1;
-    
+
     /// <summary>
     /// 0 > Plus Method<br/>
     /// 1 > Minus Method<br/>
@@ -436,21 +235,21 @@ public class UISettings
     public int ScoreDisplayMethod = 0;
 }
 
-[System.Serializable]
+[Serializable]
 public class DesignSettings
 {
     /// <summary>
     /// WIP
     /// </summary>
     public int RingColor = 0;
-    
+
     /// <summary>
     /// 0 > Original<br/>
     /// 1 > Lily<br/>
     /// 2 > Reverse<br/>
     /// </summary>
     public int JudgeLineColor = 2;
-    
+
     /// <summary>
     /// 1 > 1
     /// 2 > 2
@@ -459,8 +258,8 @@ public class DesignSettings
     /// 5 > 5
     /// </summary>
     public int NoteWidth = 3;
-    
-    
+
+
     public int NoteColorIDTouch = 0;
     public int NoteColorIDChain = 1;
     public int NoteColorIDSwipeClockwise = 2;
@@ -468,30 +267,30 @@ public class DesignSettings
     public int NoteColorIDSnapForward = 4;
     public int NoteColorIDSnapBackward = 5;
     public int NoteColorIDHold = 6;
-    
+
     /// <summary>
     /// 0 > OFF
     /// 1 > ON
     /// </summary>
     public int InvertSlideColor = 0;
-    
+
     /// <summary>
     /// WIP
     /// </summary>
     public int TouchEffect = 1;
-    
+
     /// <summary>
     /// 0 > OFF
     /// 1 > ON
     /// </summary>
     public int ShowShootEffect = 1;
-    
+
     /// <summary>
     /// 0 > OFF
     /// 1 > ON
     /// </summary>
     public int ShowKeyBeams = 1;
-    
+
     /// <summary>
     /// 0 > OFF
     /// 1 > ON
@@ -499,7 +298,7 @@ public class DesignSettings
     public int ShowRNoteEffect = 1;
 }
 
-[System.Serializable]
+[Serializable]
 public class SoundSettings
 {
     public int TouchSE = 0;

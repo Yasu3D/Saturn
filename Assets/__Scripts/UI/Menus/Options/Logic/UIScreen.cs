@@ -28,12 +28,11 @@ public class UIScreen : ScriptableObject
         NoteColor,
         Volume,
     }
-    
+
     public string ScreenTitle;
-    
-    [TextArea(1, 5)]
-    public string ScreenSubtitle;
-    
+
+    [TextArea(1, 5)] public string ScreenSubtitle;
+
     [FormerlySerializedAs("screenType")] public UIScreenType ScreenType;
     public RadialScreenSubType RadialSubType;
 
@@ -53,49 +52,93 @@ public class UIListItem
         Always,
         Equals,
     }
-        
+
+    public VisibilityTypes VisibilityType;
+    public string ConditionParameter;
+    public string ConditionValue; // Note: must be enum
+
     public enum ItemTypes
     {
         ValueSetter,
         SubMenu,
     }
 
-    public enum SubtitleTypes
-    {
-        Static,
-        Dynamic,
-    }
-
-    public VisibilityTypes VisibilityType;
-    public string ConditionParameter;
-    public int ConditionValue;
-    
-    [FormerlySerializedAs("subtitleType")] public SubtitleTypes SubtitleType;
     [FormerlySerializedAs("itemType")] public ItemTypes ItemType;
 
     [FormerlySerializedAs("color")] public Color Color;
     [FormerlySerializedAs("title")] public string Title;
-    [FormerlySerializedAs("subtitle")] public string Subtitle;
-    public Sprite Sprite;
 
+    public enum SubtitleTypes
+    {
+        Static,
+        Dynamic, // Only valid for SubMenu
+    }
+
+    [FormerlySerializedAs("subtitleType")] public SubtitleTypes SubtitleType;
+
+    // Subtitle is only valid for SubtitleType Static
+    [FormerlySerializedAs("subtitle")] public string Subtitle;
+
+    // SettingsBinding is only valid for SubtitleType Dynamic
     [FormerlySerializedAs("settingsBinding")]
     public string SettingsBinding;
 
-    [FormerlySerializedAs("nextScreen")] public UIScreen NextScreen;
+    // Sprite, SettingsParameter, and SettingsValue are only valid for ValueSetter
+    public Sprite Sprite;
 
     [FormerlySerializedAs("settingsParameter")]
     public string SettingsParameter;
 
-    [FormerlySerializedAs("settingsValue")]
-    public int SettingsValue;
-    
+    public enum ValueType
+    {
+        Int,
+        Enum,
+    }
+
+    // Default to int since that was the default before multiple types were available.
+    // Ideally, this is automatically set by checking the corresponding underlying setting, but that sounds complicated.
+    public ValueType SettingsType = ValueType.Int;
+
+    [FormerlySerializedAs("SettingsValue")] [FormerlySerializedAs("settingsValue")]
+    public int SettingsValueInt;
+
+    public string SettingsValueEnum;
+
+    // NextScreen is only valid for SubMenu
+    [FormerlySerializedAs("nextScreen")] public UIScreen NextScreen;
+
     public bool IsVisible()
     {
-        return VisibilityType switch
+        switch (VisibilityType)
         {
-            VisibilityTypes.Always => true,
-            VisibilityTypes.Equals => SettingsManager.Instance.PlayerSettings.GetParameter(ConditionParameter) == ConditionValue,
-            _ => false,
+            case VisibilityTypes.Always:
+            {
+                return true;
+            }
+            case VisibilityTypes.Equals:
+            {
+                (Type type, object value) = SettingsManager.Instance.PlayerSettings.GetParameter(ConditionParameter);
+                if (type.IsEnum) return value.ToString() == ConditionValue;
+                Debug.LogError($"Expected an enum parameter for ConditionParameter, " +
+                               $"but got a {type} for {ConditionParameter}");
+                return false;
+            }
+            default:
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
+    public bool MatchesParameterValue(Type type, object value)
+    {
+        if (ItemType != ItemTypes.ValueSetter)
+            return false;
+        return SettingsType switch
+        {
+            ValueType.Int => type == typeof(int) && (int)value == SettingsValueInt,
+            ValueType.Enum => type.IsEnum && (string)value == SettingsValueEnum,
+            _ => throw new ArgumentOutOfRangeException(),
         };
     }
 }

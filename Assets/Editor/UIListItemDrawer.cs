@@ -35,13 +35,29 @@ public class UIListItemDrawer : PropertyDrawer
         SerializedProperty title = property.FindPropertyRelative("Title");
         SerializedProperty color = property.FindPropertyRelative("Color");
 
-        EditorGUILayout.PropertyField(subtitleType);
         EditorGUILayout.PropertyField(itemType);
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(color);
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(title);
 
+        // Subtitle type
+        switch (itemType.enumValueIndex)
+        {
+            case (int)UIListItem.ItemTypes.SubMenu:
+            {
+                EditorGUILayout.PropertyField(subtitleType);
+                break;
+            }
+            case (int)UIListItem.ItemTypes.ValueSetter:
+            {
+                // For ValueSetter items, the subtitle type is always static
+                subtitleType.enumValueIndex = (int)UIListItem.SubtitleTypes.Static;
+                break;
+            }
+        }
+
+        // Subtitle
         switch (subtitleType.enumValueIndex)
         {
             case (int)UIListItem.SubtitleTypes.Static:
@@ -58,12 +74,13 @@ public class UIListItemDrawer : PropertyDrawer
             }
         }
 
+        // List action (next screen or setting params)
         switch (itemType.enumValueIndex)
         {
             case (int)UIListItem.ItemTypes.SubMenu:
             {
                 EditorGUILayout.Space();
-                
+
                 SerializedProperty nextScreen = property.FindPropertyRelative("NextScreen");
                 EditorGUILayout.PropertyField(nextScreen);
                 break;
@@ -72,14 +89,29 @@ public class UIListItemDrawer : PropertyDrawer
             {
                 SerializedProperty sprite = property.FindPropertyRelative("Sprite");
                 SerializedProperty settingsParameter = property.FindPropertyRelative("SettingsParameter");
-                SerializedProperty settingsValue = property.FindPropertyRelative("SettingsValue");
+                SerializedProperty settingsType = property.FindPropertyRelative("SettingsType");
 
                 EditorGUILayout.PropertyField(sprite);
-                
+
                 EditorGUILayout.Space();
-                
+
                 EditorGUILayout.PropertyField(settingsParameter);
-                EditorGUILayout.PropertyField(settingsValue);
+                // In an ideal world, this can be automatically read from the actual setting...
+                EditorGUILayout.PropertyField(settingsType);
+                switch (settingsType.enumValueIndex)
+                {
+                    case (int)UIListItem.ValueType.Int:
+                    {
+                        EditorGUILayout.PropertyField(property.FindPropertyRelative("SettingsValueInt"));
+                        break;
+                    }
+                    case (int)UIListItem.ValueType.Enum:
+                    {
+                        EditorGUILayout.PropertyField(property.FindPropertyRelative("SettingsValueEnum"));
+                        break;
+                    }
+                }
+
                 break;
             }
         }

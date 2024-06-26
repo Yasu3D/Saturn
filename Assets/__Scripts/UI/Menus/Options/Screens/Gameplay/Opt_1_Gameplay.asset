@@ -59,30 +59,34 @@ MonoBehaviour:
     SettingsValue: 0
   - VisibilityType: 1
     ConditionParameter: OffsetMode
-    ConditionValue: 2
-    SubtitleType: 1
+    ConditionValue: Advanced
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: VISUAL OFFSET
+    SubtitleType: 1
     Subtitle: 
-    Sprite: {fileID: 0}
     SettingsBinding: VisualOffset
-    NextScreen: {fileID: 11400000, guid: 5b8a8d378ec118c42a05efc8b1536680, type: 2}
+    Sprite: {fileID: 0}
     SettingsParameter: 
-    SettingsValue: 0
+    SettingsType: 0
+    SettingsValueInt: 0
+    SettingsValueEnum: 
+    NextScreen: {fileID: 11400000, guid: 5b8a8d378ec118c42a05efc8b1536680, type: 2}
   - VisibilityType: 1
     ConditionParameter: OffsetMode
-    ConditionValue: 2
-    SubtitleType: 1
+    ConditionValue: Advanced
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: INPUT LATENCY
+    SubtitleType: 1
     Subtitle: 
-    Sprite: {fileID: 0}
     SettingsBinding: InputLatency
-    NextScreen: {fileID: 11400000, guid: b73671f0c45c96f41b1e6c94d72536d4, type: 2}
+    Sprite: {fileID: 0}
     SettingsParameter: 
-    SettingsValue: 0
+    SettingsType: 0
+    SettingsValueInt: 0
+    SettingsValueEnum: 
+    NextScreen: {fileID: 11400000, guid: b73671f0c45c96f41b1e6c94d72536d4, type: 2}
   - VisibilityType: 0
     ConditionParameter: 
     ConditionValue: 0
