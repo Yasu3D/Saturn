@@ -28,6 +28,7 @@ public class HoldSurfaceRenderer : MonoBehaviour
 
     private int colorID;
     public HoldNote HoldNote;
+    private static readonly int ColorPropertyId = Shader.PropertyToID("_ColorIndex");
 
     public bool Reverse;
 
@@ -43,8 +44,8 @@ public class HoldSurfaceRenderer : MonoBehaviour
         colorID = NoteColors.GetColorID(hold);
         HoldNote = hold;
 
-        if (materialInstance.HasFloat(ColorPropertyId))
-            materialInstance.SetFloat(ColorPropertyId, colorID);
+        if (materialInstance.HasInteger(ColorPropertyId))
+            materialInstance.SetInteger(ColorPropertyId, colorID);
 
         meshRenderer.material = materialInstance;
         meshFilter.mesh = holdMesh;
@@ -181,7 +182,6 @@ public class HoldSurfaceRenderer : MonoBehaviour
 
 
     [SerializeField] private int debugGizmos;
-    private static readonly int ColorPropertyId = Shader.PropertyToID("_ColorID");
 
     private void OnDrawGizmos()
     {
