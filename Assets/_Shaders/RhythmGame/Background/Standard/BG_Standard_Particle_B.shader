@@ -55,7 +55,7 @@ Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Particle_B"
                 const float ring = tex2D(_DotMap, scaledUV).y;
 
                 clip(dot + ring - 0.5);
-                return i.color;
+                return float4(0.4392, 0.6431, 1, 1);
             }
             ENDCG
         }
