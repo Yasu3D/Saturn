@@ -1,4 +1,4 @@
-Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Background"
+Shader "SaturnGame/RhythmGame/Backgrounds/Standard"
 {
     Properties
     {

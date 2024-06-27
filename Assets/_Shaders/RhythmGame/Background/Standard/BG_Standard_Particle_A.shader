@@ -3,6 +3,7 @@ Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Particle_A"
     Properties
     {
         _DotMap ("Dot Map", 2D) = "white" {}
+        _Color ("Color", Color) = (0.4392, 0.6431, 1, 1)
     }
     SubShader
     {
@@ -35,6 +36,7 @@ Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Particle_A"
 
             sampler2D _DotMap;
             float4 _DotMap_ST;
+            float4 _Color;
 
             v2f vert (appdata v)
             {
@@ -53,7 +55,6 @@ Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Particle_A"
                 // w = age
                 
                 const float2 uvScale = float2(1, 23.5);
-                const float4 color = float4(0.4392, 0.6431, 1, 1);
 
                 float dotMap = tex2D(_DotMap, i.uv0 * uvScale).x;
 
@@ -61,7 +62,7 @@ Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Particle_A"
                 float alpha = step(dotMap, size * i.color.x);
 
                 clip(alpha - 0.5);
-                return color;
+                return _Color;
             }
             ENDCG
         }
