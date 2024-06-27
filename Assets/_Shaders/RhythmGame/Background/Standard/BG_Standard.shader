@@ -1,4 +1,4 @@
-Shader "SaturnGame/RhythmGame/Backgrounds/StandardA"
+Shader "SaturnGame/RhythmGame/Backgrounds/Standard_Background"
 {
     Properties
     {
@@ -62,7 +62,7 @@ Shader "SaturnGame/RhythmGame/Backgrounds/StandardA"
 
             float flashTriangles(float4 triangleMap)
             {
-                float t = saturate(sin(UNITY_TWO_PI * _Time.y) + 0.5);
+                float t = saturate(sin(UNITY_PI * _Time.y) + 0.5);
                 float mask = triangleMap.y - triangleMap.x;
                 mask = t * mask + triangleMap.x;
                 mask = saturate(mask + 0.35);
