@@ -157,7 +157,7 @@ public class HoldNote : Note
 
     // Dropped should be true if hold leniency is exceeded at any point in the hold.
     public bool Dropped;
-    public static float LeniencyMs = 200f;
+    public const float LeniencyMs = 215f;
 
     // TODO: No clue if this is actually accurate.
     public Judgement Judge()
