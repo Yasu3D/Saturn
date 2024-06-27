@@ -141,6 +141,15 @@ public class HoldNote : Note
     public override bool IsHit => StartJudgement is not null;
     public bool CurrentlyHeld;
 
+    /// <summary>
+    /// LastHeldTimeMs describes the timestamp when a Hold Note was last held.
+    /// This value should always be somewhere between the TimeMs of the Hold Start and Hold End.
+    /// </summary>
+    /// <remarks>
+    /// - It may be null if the note has not been hit yet.<br/><br/>
+    /// - If the hold start is missed (e.g. StartJudgment == Miss), it should be set to the TimeMs of the Hold Start until the note is touched.<br/><br/>
+    /// - Hold Leniency is judged with this value by checking how much time has elapsed since the last time it was held.<br/><br/>
+    /// </remarks>
     public float? LastHeldTimeMs;
 
     // Held should be true if the note was ever touched/held.

@@ -16,9 +16,11 @@ public class NoteManager : MonoBehaviour
     [SerializeField] private ChartManager chartManager;
     private Chart Chart => chartManager.Chart;
 
-    [Header("MANAGERS")] [SerializeField] private TimeManager timeManager;
+    [Header("MANAGERS")]
+    [SerializeField] private TimeManager timeManager;
 
-    [Header("POOLS")] [SerializeField] private Transform activeObjectsContainer;
+    [Header("POOLS")]
+    [SerializeField] private Transform activeObjectsContainer;
     [SerializeField] private BarLineObjectPool barLinePool;
     [SerializeField] private HoldEndObjectPool holdEndPool;
     [SerializeField] private HoldSurfaceObjectPool holdSurfacePool;
@@ -31,7 +33,8 @@ public class NoteManager : MonoBehaviour
     [SerializeField] private SwipeObjectPool swipePool;
     [SerializeField] private SyncObjectPool syncPool;
 
-    [Header("RENDERERS")] [SerializeField] private GuideLaneRenderer guideLaneRenderer;
+    [Header("RENDERERS")]
+    [SerializeField] private GuideLaneRenderer guideLaneRenderer;
 
     private readonly List<NoteContainer> noteGarbage = new();
     private readonly List<SnapContainer> snapGarbage = new();
@@ -142,16 +145,6 @@ public class NoteManager : MonoBehaviour
             GetSync(Chart.Syncs[syncIndex]);
             syncIndex++;
         }
-    }
-
-    private int bgmDataIndex;
-
-    private void ProcessBgmData()
-    {
-        if (bgmDataIndex > Chart.Notes.Count - 1) return;
-
-        while (bgmDataIndex < Chart.BGMDataGimmicks.Count &&
-               Chart.BGMDataGimmicks[bgmDataIndex].TimeMs <= timeManager.VisualTimeMs) bgmDataIndex++;
     }
 
     private Gimmick lastHiSpeedChange = new(0, 0, Gimmick.GimmickType.HiSpeed, 1);
@@ -495,6 +488,8 @@ public class NoteManager : MonoBehaviour
     {
         HoldSurfaceRenderer holdSurfaceRenderer = holdSurfacePool.GetObject();
 
+        holdSurfaceRenderer.TimeManager = timeManager;
+        
         holdSurfaceRenderer.SetRenderer(input);
         holdSurfaceRenderer.GenerateMesh(ScrollDuration());
         holdSurfaceRenderer.Reverse = reverse;
@@ -556,8 +551,6 @@ public class NoteManager : MonoBehaviour
     private void Update()
     {
         if (timeManager.State != TimeManager.SongState.Playing) return;
-
-        ProcessBgmData();
 
         ProcessHiSpeed();
         ProcessReverseGimmicks();

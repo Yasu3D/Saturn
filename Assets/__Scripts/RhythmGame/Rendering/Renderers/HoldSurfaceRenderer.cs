@@ -29,8 +29,19 @@ public class HoldSurfaceRenderer : MonoBehaviour
     private int colorID;
     public HoldNote HoldNote;
     private static readonly int ColorPropertyId = Shader.PropertyToID("_ColorIndex");
+    private static readonly int StatePropertyId = Shader.PropertyToID("_State");
 
     public bool Reverse;
+
+    public TimeManager TimeManager;
+    
+    private enum HoldState
+    {
+        Neutral = 0,
+        Held = 1,
+        Dropped = 2,
+    }
+    private HoldState state;
 
     private void Awake()
     {
@@ -39,6 +50,24 @@ public class HoldSurfaceRenderer : MonoBehaviour
         meshFilter.mesh = holdMesh;
     }
 
+    private void Update()
+    {
+        HoldState newState;
+
+        bool dropped = !HoldNote.CurrentlyHeld && HoldNote.LastHeldTimeMs.HasValue && HoldNote.LastHeldTimeMs < TimeManager.GameplayTimeMs - HoldNote.LeniencyMs;
+        bool missed = !HoldNote.Held && HoldNote.TimeMs < TimeManager.GameplayTimeMs - 100; // Missed holds turn dark after 6 frames at 60fps, or 100ms.
+
+        if (dropped || missed) newState = HoldState.Dropped;
+        else if (HoldNote.Held) newState = HoldState.Held;
+        else newState = HoldState.Neutral;
+        
+        if (state != newState)
+        {
+            state = newState;
+            SetState((int)newState);
+        }
+    }
+    
     public void SetRenderer(HoldNote hold)
     {
         colorID = NoteColors.GetColorID(hold);
@@ -47,8 +76,16 @@ public class HoldSurfaceRenderer : MonoBehaviour
         if (materialInstance.HasInteger(ColorPropertyId))
             materialInstance.SetInteger(ColorPropertyId, colorID);
 
+        SetState(0);
+
         meshRenderer.material = materialInstance;
         meshFilter.mesh = holdMesh;
+    }
+
+    public void SetState(int index)
+    {
+        if (!materialInstance.HasInteger(StatePropertyId)) return;
+        materialInstance.SetInteger(StatePropertyId, index);
     }
 
     /// <summary>
