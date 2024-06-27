@@ -398,6 +398,31 @@ public class NoteManager : MonoBehaviour
             objectTransform.localScale = new Vector3(clampedScroll, clampedScroll, clampedScroll);
         }
 
+        // I love type systems.
+        GameObject noteGameObject = obj switch
+        {
+            NoteContainer { Note : { IsHit: true } } container => container.gameObject,
+            SnapContainer { Note : { IsHit: true } } container => container.gameObject,
+            SwipeContainer { Note : { IsHit: true } } container => container.gameObject,
+            // in GenericContainer, Note is only required to be a PositionedChartElement. The typecheck here
+            // (Note: Note) will only match for GenericContainers containing Notes, that is, for R effects.
+            // Syncs will not be matched as SyncIndicator is not a Note.
+            GenericContainer { Note: Note { IsHit: true } } container => container.gameObject,
+            // This should not match:
+            // - BarLineContainer
+            // - HoldEndContainer
+            // - GenericContainer for syncs (since SyncIndicator is not a Note)
+            //   TODO: syncs should probably disappear if either note is hit.
+            _ => null,
+        };
+        if (noteGameObject is not null)
+        {
+            // Immediately hide a hit note and mark as garbage.
+            noteGameObject.SetActive(false);
+            garbage.Add(obj);
+            return;
+        }
+
         // Collect all objects after passing the judgement line to return them to their pool.
         if (ScaledVisualTime() - ScrollDuration() * despawnTimeMultiplier >= despawnTime) garbage.Add(obj);
     }
