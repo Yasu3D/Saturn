@@ -1139,6 +1139,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4731965384695073018}
   m_PrefabAsset: {fileID: 0}
+--- !u!199 &929449771 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 6934330667256773606, guid: 87c0605ea89ce244d9c48d2c98ae03c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 319115772928811420}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &934029766
 GameObject:
   m_ObjectHideFlags: 0
@@ -2820,8 +2826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chartManager: {fileID: 1472638035}
   timeManager: {fileID: 1783936258}
-  backgroundOrbParticleMaterial: {fileID: 2100000, guid: 7d7b6464042239a40b0dfb1234179de5,
-    type: 2}
+  backgroundOrbParticleSystem: {fileID: 929449771}
 --- !u!1 &1564455298
 GameObject:
   m_ObjectHideFlags: 0
