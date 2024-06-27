@@ -95,6 +95,8 @@ public readonly struct TouchState
     // A local record of the ID of the SegmentData, to ensure that the data has not been modified.
     private readonly int dataId;
 
+    // Note: not guaranteed to throw on an invalid TouchState in a multithreaded environment, since dataId and
+    // segmentData.ID are not volatile.
     private void CheckDataId()
     {
         if (segmentData is null)
