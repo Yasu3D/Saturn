@@ -280,7 +280,7 @@ public class NoteManager : MonoBehaviour
 
         if (!container.Reverse)
         {
-            AnimateObject(container, garbage, container.Note.ScaledVisualTime,
+            AnimateObject(container, garbage, container.Note.TimeMs, container.Note.ScaledVisualTime,
                 container.Note.ScaledVisualTime, 0.25f, container.transform, true);
         }
         else
@@ -321,7 +321,7 @@ public class NoteManager : MonoBehaviour
 
             if (!holdSurfaceRenderer.Reverse)
             {
-                AnimateObject(holdSurfaceRenderer, holdSurfaceGarbage,
+                AnimateObject(holdSurfaceRenderer, holdSurfaceGarbage, holdSurfaceRenderer.HoldNote.End.TimeMs, 
                     holdSurfaceRenderer.HoldNote.Start.ScaledVisualTime,
                     holdSurfaceRenderer.HoldNote.End.ScaledVisualTime, 0.25f, holdSurfaceRenderer.transform, false);
             }
@@ -342,7 +342,7 @@ public class NoteManager : MonoBehaviour
         foreach (BarLineContainer container in barLinePool.ActiveObjects)
         {
             container.gameObject.SetActive(!reverseActive);
-            AnimateObject(container, barLineGarbage, container.Time, container.Time, 0, container.transform, true);
+            AnimateObject(container, barLineGarbage, container.Time, container.Time, container.Time, 0, container.transform, true);
         }
     }
 
@@ -377,10 +377,10 @@ public class NoteManager : MonoBehaviour
     }
 
 
-    private void AnimateObject<T>(T obj, ICollection<T> garbage, float time, float despawnTime,
+    private void AnimateObject<T>(T obj, ICollection<T> garbage, float unscaledTime, float scaledTime, float despawnTime,
         float despawnTimeMultiplier, [NotNull] Transform objectTransform, bool scale)
     {
-        float distance = time - ScaledVisualTime();
+        float distance = scaledTime - ScaledVisualTime();
         float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
 
         objectTransform.position = new Vector3(0, 0, Mathf.LerpUnclamped(-6, 0, scroll));
@@ -417,7 +417,9 @@ public class NoteManager : MonoBehaviour
         }
 
         // Collect all objects after passing the judgement line to return them to their pool.
-        if (ScaledVisualTime() - ScrollDuration() * despawnTimeMultiplier >= despawnTime) garbage.Add(obj);
+        //bool pastDespawnTime = ScaledVisualTime() - ScrollDuration() * despawnTimeMultiplier >= despawnTime;
+        bool pastTimestamp = unscaledTime + 500 < timeManager.VisualTimeMs;
+        if (pastTimestamp) garbage.Add(obj);
     }
 
     private void ReverseAnimateObject<T>(T obj, ICollection<T> garbage, float time, float despawnTime,
