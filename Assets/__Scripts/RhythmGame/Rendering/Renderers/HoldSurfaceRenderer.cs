@@ -146,8 +146,8 @@ public class HoldSurfaceRenderer : MonoBehaviour
                 // Shrink hold sizes to fit note mesh
                 if (noteSize < 60)
                 {
-                    noteSize -= 1.6f;
-                    notePos += 0.8f;
+                    noteSize -= 1.4f;
+                    notePos += 0.7f;
                 }
 
                 float angleInterval = GetAngleInterval(noteSize, holdWidth);
