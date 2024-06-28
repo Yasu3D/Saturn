@@ -133,6 +133,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4731965384695073018}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &83836060 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2204667674765660927, guid: 61922fba32dbdcf43945476c8cdecd56,
+    type: 3}
+  m_PrefabInstance: {fileID: 1143191155237999405}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &88126065
 GameObject:
   m_ObjectHideFlags: 0
@@ -2828,6 +2834,7 @@ MonoBehaviour:
   chartManager: {fileID: 1472638035}
   timeManager: {fileID: 1783936258}
   backgroundOrbParticleSystem: {fileID: 929449771}
+  bossSquares: {fileID: 83836060}
 --- !u!1 &1564455298
 GameObject:
   m_ObjectHideFlags: 0
@@ -4595,7 +4602,7 @@ PrefabInstance:
     - target: {fileID: 3258594766447001811, guid: 87c0605ea89ce244d9c48d2c98ae03c4,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6934330667256773606, guid: 87c0605ea89ce244d9c48d2c98ae03c4,
         type: 3}
@@ -4756,11 +4763,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BackgroundBoss
       objectReference: {fileID: 0}
-    - target: {fileID: 5224392563375780197, guid: 61922fba32dbdcf43945476c8cdecd56,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6917273122818157224, guid: 61922fba32dbdcf43945476c8cdecd56,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4878,6 +4880,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MainCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4245266458852385033, guid: 1742c725c74b0ff4bb6edec37a668f80,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5100,7 +5107,7 @@ PrefabInstance:
     - target: {fileID: 136692794968233585, guid: c3c6fd824d041cd43b5404710c243819,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 255489588697711814, guid: c3c6fd824d041cd43b5404710c243819,
         type: 3}
