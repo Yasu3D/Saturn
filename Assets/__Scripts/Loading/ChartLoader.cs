@@ -425,7 +425,8 @@ public class ChartLoader
     private void CheckSync(Note current, [CanBeNull] Note last)
     {
         if (last == null) return;
-        if (last is ChainNote || current is ChainNote) return;
+        if ((last is ChainNote && last.BonusType != Note.NoteBonusType.RNote) || (current is ChainNote && current.BonusType != Note.NoteBonusType.RNote)) return;
+        if (((last is HoldNote && current is TouchNote) || (last is TouchNote && current is HoldNote)) && last.Position == current.Position && last.Size == current.Size) return;
 
         if (current.Measure == last.Measure && current.Tick == last.Tick)
         {
