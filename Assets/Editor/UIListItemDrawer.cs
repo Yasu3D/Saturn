@@ -10,6 +10,26 @@ public class UIListItemDrawer : PropertyDrawer
         EditorGUI.BeginProperty(position, label, property);
         EditorGUI.indentLevel++;
 
+        SerializedProperty visibilityType = property.FindPropertyRelative("VisibilityType");
+        EditorGUILayout.PropertyField(visibilityType);
+        EditorGUILayout.Space();
+        
+        switch (visibilityType.enumValueIndex)
+        {
+            case (int)UIListItem.VisibilityTypes.Always: break;
+            case (int)UIListItem.VisibilityTypes.Equals:
+            {
+                SerializedProperty conditionParameter = property.FindPropertyRelative("ConditionParameter");
+                SerializedProperty conditionValue = property.FindPropertyRelative("ConditionValue");
+
+                EditorGUILayout.LabelField("Only display this Item when Parameter = Value");
+                EditorGUILayout.PropertyField(conditionParameter);
+                EditorGUILayout.PropertyField(conditionValue);
+                EditorGUILayout.Space();
+                break;
+            }
+        }
+
         SerializedProperty subtitleType = property.FindPropertyRelative("SubtitleType");
         SerializedProperty itemType = property.FindPropertyRelative("ItemType");
         SerializedProperty title = property.FindPropertyRelative("Title");

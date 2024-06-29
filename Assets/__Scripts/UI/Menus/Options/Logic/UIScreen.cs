@@ -43,6 +43,12 @@ public class UIScreen : ScriptableObject
 [Serializable]
 public class UIListItem
 {
+    public enum VisibilityTypes
+    {
+        Always,
+        Equals,
+    }
+        
     public enum ItemTypes
     {
         ValueSetter,
@@ -55,6 +61,10 @@ public class UIListItem
         Dynamic,
     }
 
+    public VisibilityTypes VisibilityType;
+    public string ConditionParameter;
+    public int ConditionValue;
+    
     [FormerlySerializedAs("subtitleType")] public SubtitleTypes SubtitleType;
     [FormerlySerializedAs("itemType")] public ItemTypes ItemType;
 
