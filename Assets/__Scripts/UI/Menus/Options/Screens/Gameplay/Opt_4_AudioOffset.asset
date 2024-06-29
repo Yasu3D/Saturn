@@ -33,7 +33,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -100
   - SubtitleType: 0
     ItemType: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -99
   - SubtitleType: 0
     ItemType: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -98
   - SubtitleType: 0
     ItemType: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -97
   - SubtitleType: 0
     ItemType: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -96
   - SubtitleType: 0
     ItemType: 0
@@ -83,7 +83,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -95
   - SubtitleType: 0
     ItemType: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -94
   - SubtitleType: 0
     ItemType: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -93
   - SubtitleType: 0
     ItemType: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -92
   - SubtitleType: 0
     ItemType: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -91
   - SubtitleType: 0
     ItemType: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -90
   - SubtitleType: 0
     ItemType: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -89
   - SubtitleType: 0
     ItemType: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -88
   - SubtitleType: 0
     ItemType: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -87
   - SubtitleType: 0
     ItemType: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -86
   - SubtitleType: 0
     ItemType: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -85
   - SubtitleType: 0
     ItemType: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -84
   - SubtitleType: 0
     ItemType: 0
@@ -203,7 +203,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -83
   - SubtitleType: 0
     ItemType: 0
@@ -213,7 +213,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -82
   - SubtitleType: 0
     ItemType: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -81
   - SubtitleType: 0
     ItemType: 0
@@ -233,7 +233,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -80
   - SubtitleType: 0
     ItemType: 0
@@ -243,7 +243,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -79
   - SubtitleType: 0
     ItemType: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -78
   - SubtitleType: 0
     ItemType: 0
@@ -263,7 +263,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -77
   - SubtitleType: 0
     ItemType: 0
@@ -273,7 +273,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -76
   - SubtitleType: 0
     ItemType: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -75
   - SubtitleType: 0
     ItemType: 0
@@ -293,7 +293,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -74
   - SubtitleType: 0
     ItemType: 0
@@ -303,7 +303,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -73
   - SubtitleType: 0
     ItemType: 0
@@ -313,7 +313,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -72
   - SubtitleType: 0
     ItemType: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -71
   - SubtitleType: 0
     ItemType: 0
@@ -333,7 +333,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -70
   - SubtitleType: 0
     ItemType: 0
@@ -343,7 +343,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -69
   - SubtitleType: 0
     ItemType: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -68
   - SubtitleType: 0
     ItemType: 0
@@ -363,7 +363,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -67
   - SubtitleType: 0
     ItemType: 0
@@ -373,7 +373,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -66
   - SubtitleType: 0
     ItemType: 0
@@ -383,7 +383,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -65
   - SubtitleType: 0
     ItemType: 0
@@ -393,7 +393,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -64
   - SubtitleType: 0
     ItemType: 0
@@ -403,7 +403,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -63
   - SubtitleType: 0
     ItemType: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -62
   - SubtitleType: 0
     ItemType: 0
@@ -423,7 +423,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -61
   - SubtitleType: 0
     ItemType: 0
@@ -433,7 +433,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -60
   - SubtitleType: 0
     ItemType: 0
@@ -443,7 +443,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -59
   - SubtitleType: 0
     ItemType: 0
@@ -453,7 +453,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -58
   - SubtitleType: 0
     ItemType: 0
@@ -463,7 +463,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -57
   - SubtitleType: 0
     ItemType: 0
@@ -473,7 +473,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -56
   - SubtitleType: 0
     ItemType: 0
@@ -483,7 +483,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -55
   - SubtitleType: 0
     ItemType: 0
@@ -493,7 +493,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -54
   - SubtitleType: 0
     ItemType: 0
@@ -503,7 +503,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -53
   - SubtitleType: 0
     ItemType: 0
@@ -513,7 +513,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -52
   - SubtitleType: 0
     ItemType: 0
@@ -523,7 +523,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -51
   - SubtitleType: 0
     ItemType: 0
@@ -533,7 +533,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -50
   - SubtitleType: 0
     ItemType: 0
@@ -543,7 +543,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -49
   - SubtitleType: 0
     ItemType: 0
@@ -553,7 +553,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -48
   - SubtitleType: 0
     ItemType: 0
@@ -563,7 +563,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -47
   - SubtitleType: 0
     ItemType: 0
@@ -573,7 +573,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -46
   - SubtitleType: 0
     ItemType: 0
@@ -583,7 +583,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -45
   - SubtitleType: 0
     ItemType: 0
@@ -593,7 +593,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -44
   - SubtitleType: 0
     ItemType: 0
@@ -603,7 +603,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -43
   - SubtitleType: 0
     ItemType: 0
@@ -613,7 +613,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -42
   - SubtitleType: 0
     ItemType: 0
@@ -623,7 +623,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -41
   - SubtitleType: 0
     ItemType: 0
@@ -633,7 +633,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -40
   - SubtitleType: 0
     ItemType: 0
@@ -643,7 +643,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -39
   - SubtitleType: 0
     ItemType: 0
@@ -653,7 +653,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -38
   - SubtitleType: 0
     ItemType: 0
@@ -663,7 +663,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -37
   - SubtitleType: 0
     ItemType: 0
@@ -673,7 +673,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -36
   - SubtitleType: 0
     ItemType: 0
@@ -683,7 +683,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -35
   - SubtitleType: 0
     ItemType: 0
@@ -693,7 +693,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -34
   - SubtitleType: 0
     ItemType: 0
@@ -703,7 +703,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -33
   - SubtitleType: 0
     ItemType: 0
@@ -713,7 +713,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -32
   - SubtitleType: 0
     ItemType: 0
@@ -723,7 +723,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -31
   - SubtitleType: 0
     ItemType: 0
@@ -733,7 +733,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -30
   - SubtitleType: 0
     ItemType: 0
@@ -743,7 +743,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -29
   - SubtitleType: 0
     ItemType: 0
@@ -753,7 +753,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -28
   - SubtitleType: 0
     ItemType: 0
@@ -763,7 +763,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -27
   - SubtitleType: 0
     ItemType: 0
@@ -773,7 +773,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -26
   - SubtitleType: 0
     ItemType: 0
@@ -783,7 +783,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -25
   - SubtitleType: 0
     ItemType: 0
@@ -793,7 +793,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -24
   - SubtitleType: 0
     ItemType: 0
@@ -803,7 +803,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -23
   - SubtitleType: 0
     ItemType: 0
@@ -813,7 +813,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -22
   - SubtitleType: 0
     ItemType: 0
@@ -823,7 +823,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -21
   - SubtitleType: 0
     ItemType: 0
@@ -833,7 +833,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -20
   - SubtitleType: 0
     ItemType: 0
@@ -843,7 +843,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -19
   - SubtitleType: 0
     ItemType: 0
@@ -853,7 +853,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -18
   - SubtitleType: 0
     ItemType: 0
@@ -863,7 +863,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -17
   - SubtitleType: 0
     ItemType: 0
@@ -873,7 +873,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -16
   - SubtitleType: 0
     ItemType: 0
@@ -883,7 +883,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -15
   - SubtitleType: 0
     ItemType: 0
@@ -893,7 +893,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -14
   - SubtitleType: 0
     ItemType: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -13
   - SubtitleType: 0
     ItemType: 0
@@ -913,7 +913,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -12
   - SubtitleType: 0
     ItemType: 0
@@ -923,7 +923,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -11
   - SubtitleType: 0
     ItemType: 0
@@ -933,7 +933,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -10
   - SubtitleType: 0
     ItemType: 0
@@ -943,7 +943,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -9
   - SubtitleType: 0
     ItemType: 0
@@ -953,7 +953,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -8
   - SubtitleType: 0
     ItemType: 0
@@ -963,7 +963,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -7
   - SubtitleType: 0
     ItemType: 0
@@ -973,7 +973,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -6
   - SubtitleType: 0
     ItemType: 0
@@ -983,7 +983,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -5
   - SubtitleType: 0
     ItemType: 0
@@ -993,7 +993,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -4
   - SubtitleType: 0
     ItemType: 0
@@ -1003,7 +1003,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -3
   - SubtitleType: 0
     ItemType: 0
@@ -1013,7 +1013,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -2
   - SubtitleType: 0
     ItemType: 0
@@ -1023,7 +1023,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: -1
   - SubtitleType: 0
     ItemType: 0
@@ -1033,7 +1033,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 0
   - SubtitleType: 0
     ItemType: 0
@@ -1043,7 +1043,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 1
   - SubtitleType: 0
     ItemType: 0
@@ -1053,7 +1053,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 2
   - SubtitleType: 0
     ItemType: 0
@@ -1063,7 +1063,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 3
   - SubtitleType: 0
     ItemType: 0
@@ -1073,7 +1073,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 4
   - SubtitleType: 0
     ItemType: 0
@@ -1083,7 +1083,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 5
   - SubtitleType: 0
     ItemType: 0
@@ -1093,7 +1093,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 6
   - SubtitleType: 0
     ItemType: 0
@@ -1103,7 +1103,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 7
   - SubtitleType: 0
     ItemType: 0
@@ -1113,7 +1113,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 8
   - SubtitleType: 0
     ItemType: 0
@@ -1123,7 +1123,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 9
   - SubtitleType: 0
     ItemType: 0
@@ -1133,7 +1133,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 10
   - SubtitleType: 0
     ItemType: 0
@@ -1143,7 +1143,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 11
   - SubtitleType: 0
     ItemType: 0
@@ -1153,7 +1153,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 12
   - SubtitleType: 0
     ItemType: 0
@@ -1163,7 +1163,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 13
   - SubtitleType: 0
     ItemType: 0
@@ -1173,7 +1173,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 14
   - SubtitleType: 0
     ItemType: 0
@@ -1183,7 +1183,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 15
   - SubtitleType: 0
     ItemType: 0
@@ -1193,7 +1193,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 16
   - SubtitleType: 0
     ItemType: 0
@@ -1203,7 +1203,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 17
   - SubtitleType: 0
     ItemType: 0
@@ -1213,7 +1213,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 18
   - SubtitleType: 0
     ItemType: 0
@@ -1223,7 +1223,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 19
   - SubtitleType: 0
     ItemType: 0
@@ -1233,7 +1233,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 20
   - SubtitleType: 0
     ItemType: 0
@@ -1243,7 +1243,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 21
   - SubtitleType: 0
     ItemType: 0
@@ -1253,7 +1253,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 22
   - SubtitleType: 0
     ItemType: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 23
   - SubtitleType: 0
     ItemType: 0
@@ -1273,7 +1273,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 24
   - SubtitleType: 0
     ItemType: 0
@@ -1283,7 +1283,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 25
   - SubtitleType: 0
     ItemType: 0
@@ -1293,7 +1293,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 26
   - SubtitleType: 0
     ItemType: 0
@@ -1303,7 +1303,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 27
   - SubtitleType: 0
     ItemType: 0
@@ -1313,7 +1313,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 28
   - SubtitleType: 0
     ItemType: 0
@@ -1323,7 +1323,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 29
   - SubtitleType: 0
     ItemType: 0
@@ -1333,7 +1333,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 30
   - SubtitleType: 0
     ItemType: 0
@@ -1343,7 +1343,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 31
   - SubtitleType: 0
     ItemType: 0
@@ -1353,7 +1353,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 32
   - SubtitleType: 0
     ItemType: 0
@@ -1363,7 +1363,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 33
   - SubtitleType: 0
     ItemType: 0
@@ -1373,7 +1373,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 34
   - SubtitleType: 0
     ItemType: 0
@@ -1383,7 +1383,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 35
   - SubtitleType: 0
     ItemType: 0
@@ -1393,7 +1393,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 36
   - SubtitleType: 0
     ItemType: 0
@@ -1403,7 +1403,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 37
   - SubtitleType: 0
     ItemType: 0
@@ -1413,7 +1413,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 38
   - SubtitleType: 0
     ItemType: 0
@@ -1423,7 +1423,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 39
   - SubtitleType: 0
     ItemType: 0
@@ -1433,7 +1433,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 40
   - SubtitleType: 0
     ItemType: 0
@@ -1443,7 +1443,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 41
   - SubtitleType: 0
     ItemType: 0
@@ -1453,7 +1453,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 42
   - SubtitleType: 0
     ItemType: 0
@@ -1463,7 +1463,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 43
   - SubtitleType: 0
     ItemType: 0
@@ -1473,7 +1473,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 44
   - SubtitleType: 0
     ItemType: 0
@@ -1483,7 +1483,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 45
   - SubtitleType: 0
     ItemType: 0
@@ -1493,7 +1493,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 46
   - SubtitleType: 0
     ItemType: 0
@@ -1503,7 +1503,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 47
   - SubtitleType: 0
     ItemType: 0
@@ -1513,7 +1513,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 48
   - SubtitleType: 0
     ItemType: 0
@@ -1523,7 +1523,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 49
   - SubtitleType: 0
     ItemType: 0
@@ -1533,7 +1533,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 50
   - SubtitleType: 0
     ItemType: 0
@@ -1543,7 +1543,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 51
   - SubtitleType: 0
     ItemType: 0
@@ -1553,7 +1553,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 52
   - SubtitleType: 0
     ItemType: 0
@@ -1563,7 +1563,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 53
   - SubtitleType: 0
     ItemType: 0
@@ -1573,7 +1573,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 54
   - SubtitleType: 0
     ItemType: 0
@@ -1583,7 +1583,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 55
   - SubtitleType: 0
     ItemType: 0
@@ -1593,7 +1593,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 56
   - SubtitleType: 0
     ItemType: 0
@@ -1603,7 +1603,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 57
   - SubtitleType: 0
     ItemType: 0
@@ -1613,7 +1613,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 58
   - SubtitleType: 0
     ItemType: 0
@@ -1623,7 +1623,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 59
   - SubtitleType: 0
     ItemType: 0
@@ -1633,7 +1633,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 60
   - SubtitleType: 0
     ItemType: 0
@@ -1643,7 +1643,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 61
   - SubtitleType: 0
     ItemType: 0
@@ -1653,7 +1653,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 62
   - SubtitleType: 0
     ItemType: 0
@@ -1663,7 +1663,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 63
   - SubtitleType: 0
     ItemType: 0
@@ -1673,7 +1673,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 64
   - SubtitleType: 0
     ItemType: 0
@@ -1683,7 +1683,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 65
   - SubtitleType: 0
     ItemType: 0
@@ -1693,7 +1693,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 66
   - SubtitleType: 0
     ItemType: 0
@@ -1703,7 +1703,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 67
   - SubtitleType: 0
     ItemType: 0
@@ -1713,7 +1713,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 68
   - SubtitleType: 0
     ItemType: 0
@@ -1723,7 +1723,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 69
   - SubtitleType: 0
     ItemType: 0
@@ -1733,7 +1733,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 70
   - SubtitleType: 0
     ItemType: 0
@@ -1743,7 +1743,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 71
   - SubtitleType: 0
     ItemType: 0
@@ -1753,7 +1753,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 72
   - SubtitleType: 0
     ItemType: 0
@@ -1763,7 +1763,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 73
   - SubtitleType: 0
     ItemType: 0
@@ -1773,7 +1773,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 74
   - SubtitleType: 0
     ItemType: 0
@@ -1783,7 +1783,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 75
   - SubtitleType: 0
     ItemType: 0
@@ -1793,7 +1793,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 76
   - SubtitleType: 0
     ItemType: 0
@@ -1803,7 +1803,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 77
   - SubtitleType: 0
     ItemType: 0
@@ -1813,7 +1813,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 78
   - SubtitleType: 0
     ItemType: 0
@@ -1823,7 +1823,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 79
   - SubtitleType: 0
     ItemType: 0
@@ -1833,7 +1833,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 80
   - SubtitleType: 0
     ItemType: 0
@@ -1843,7 +1843,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 81
   - SubtitleType: 0
     ItemType: 0
@@ -1853,7 +1853,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 82
   - SubtitleType: 0
     ItemType: 0
@@ -1863,7 +1863,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 83
   - SubtitleType: 0
     ItemType: 0
@@ -1873,7 +1873,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 84
   - SubtitleType: 0
     ItemType: 0
@@ -1883,7 +1883,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 85
   - SubtitleType: 0
     ItemType: 0
@@ -1893,7 +1893,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 86
   - SubtitleType: 0
     ItemType: 0
@@ -1903,7 +1903,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 87
   - SubtitleType: 0
     ItemType: 0
@@ -1913,7 +1913,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 88
   - SubtitleType: 0
     ItemType: 0
@@ -1923,7 +1923,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 89
   - SubtitleType: 0
     ItemType: 0
@@ -1933,7 +1933,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 90
   - SubtitleType: 0
     ItemType: 0
@@ -1943,7 +1943,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 91
   - SubtitleType: 0
     ItemType: 0
@@ -1953,7 +1953,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 92
   - SubtitleType: 0
     ItemType: 0
@@ -1963,7 +1963,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 93
   - SubtitleType: 0
     ItemType: 0
@@ -1973,7 +1973,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 94
   - SubtitleType: 0
     ItemType: 0
@@ -1983,7 +1983,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 95
   - SubtitleType: 0
     ItemType: 0
@@ -1993,7 +1993,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 96
   - SubtitleType: 0
     ItemType: 0
@@ -2003,7 +2003,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 97
   - SubtitleType: 0
     ItemType: 0
@@ -2013,7 +2013,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 98
   - SubtitleType: 0
     ItemType: 0
@@ -2023,7 +2023,7 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 99
   - SubtitleType: 0
     ItemType: 0
@@ -2033,5 +2033,5 @@ MonoBehaviour:
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
-    SettingsParameter: JudgementOffset
+    SettingsParameter: AudioOffset
     SettingsValue: 100

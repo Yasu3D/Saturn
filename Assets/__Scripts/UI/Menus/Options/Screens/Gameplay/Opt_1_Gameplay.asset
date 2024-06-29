@@ -18,7 +18,10 @@ MonoBehaviour:
   RadialSubType: 0
   DefaultItemIndex: 2
   ListItems:
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: NOTE SPEED
@@ -28,17 +31,23 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 0
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: OFFSET MODE
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding: OffsetMode
     NextScreen: {fileID: 11400000, guid: 2046595d0881cc6488b72717fae7cb65, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: AUDIO OFFSET
@@ -48,7 +57,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: bf4fd6011eadc204f9538ff6a7af6d08, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 1
+    ConditionParameter: OffsetMode
+    ConditionValue: 2
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: VISUAL OFFSET
@@ -58,7 +70,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: 5b8a8d378ec118c42a05efc8b1536680, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 1
+    ConditionParameter: OffsetMode
+    ConditionValue: 2
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: INPUT LATENCY
@@ -68,7 +83,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: b73671f0c45c96f41b1e6c94d72536d4, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: MASK DENSITY
@@ -78,7 +96,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: c8a5c6b310ca8684bb1acdf34588d860, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: BACKGROUND VIDEO
@@ -88,7 +109,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: d7c02dc1a1de25945aec56b5cf513a2f, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: BONUS EFFECT
@@ -98,7 +122,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: 8ba28b2923395bc46824002659c87217, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: MIRROR NOTES
@@ -108,7 +135,10 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: dc48818573d3bf04a9d1048f0bdde4a0, type: 2}
     SettingsParameter: 
     SettingsValue: 0
-  - SubtitleType: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
     Title: GIVE UP

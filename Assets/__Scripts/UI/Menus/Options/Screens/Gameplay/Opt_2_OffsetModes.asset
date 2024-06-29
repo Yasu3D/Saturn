@@ -13,38 +13,48 @@ MonoBehaviour:
   m_Name: Opt_2_OffsetModes
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
   ScreenTitle: OFFSET MODES
-  ScreenSubtitle: Choose an Offset Mode to show/hide different Offset options.
+  ScreenSubtitle: Choose an Offset Mode to show/hide different Offset options in
+    Gameplay Settings.
   ScreenType: 2
   RadialSubType: 0
   DefaultItemIndex: 2
   ListItems:
-  - SubtitleType: 0
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: STANDARD
-    Subtitle: AUDIO OFFSET ONLY
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
+    Title: LOW LATENCY
+    Subtitle: Adjustable Audio Offset. No artificial latency.
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: OffsetMode
     SettingsValue: 0
-  - SubtitleType: 0
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: CLASSIC
-    Subtitle: AUDIO OFFSET ONLY + ORIGINAL GAME LATENCY
+    Subtitle: Adjustalble Audio Offset. Artificial latency similar to original game.
     Sprite: {fileID: 0}
     SettingsBinding: 
     NextScreen: {fileID: 0}
     SettingsParameter: OffsetMode
-    SettingsValue: 0
-  - SubtitleType: 0
+    SettingsValue: 1
+  - VisibilityType: 0
+    ConditionParameter: 
+    ConditionValue: 0
+    SubtitleType: 0
     ItemType: 0
-    Color: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: ADVANCED
-    Subtitle: FULLY ADJUST AUDIO, VISUALS, AND LATENCY
+    Subtitle: Fully adjust Audio, Visuals, and Artificial Latency.
     Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 11400000, guid: 1080e6bbc0323da4991850e92effab55, type: 2}
+    NextScreen: {fileID: 0}
     SettingsParameter: OffsetMode
-    SettingsValue: 0
+    SettingsValue: 2
