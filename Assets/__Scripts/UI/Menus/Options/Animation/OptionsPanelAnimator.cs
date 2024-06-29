@@ -93,9 +93,9 @@ private Sequence currentSequence;
                 if (!wrap) continue;
 
                 int itemIndex = currentIndex + LinearHalfCount * (int)direction;
-                bool active = itemIndex >= 0 && itemIndex < screen.ListItems.Count;
+                bool active = itemIndex >= 0 && itemIndex < screen.VisibleListItems.Count;
                 panel.gameObject.SetActive(active);
-                if (active) SetPanelLinear(screen, screen.ListItems[itemIndex], panel);
+                if (active) SetPanelLinear(screen, screen.VisibleListItems[itemIndex], panel);
             }
         }
 
@@ -119,9 +119,9 @@ private Sequence currentSequence;
                 if (!wrap) continue;
 
                 int itemIndex = currentIndex + RadialHalfCount * (int)direction;
-                bool active = itemIndex >= 0 && itemIndex < screen.ListItems.Count;
+                bool active = itemIndex >= 0 && itemIndex < screen.VisibleListItems.Count;
                 panel.gameObject.SetActive(active);
-                if (active) SetPanelRadial(screen.ListItems[itemIndex], panel);
+                if (active) SetPanelRadial(screen.VisibleListItems[itemIndex], panel);
             }
         }
     }
@@ -384,12 +384,10 @@ private Sequence currentSequence;
 
     public void GetPanels([NotNull] UIScreen screen, int currentIndex = 0)
     {
-        currentIndex = Mathf.Clamp(currentIndex, 0, screen.ListItems.Count);
+        currentIndex = Mathf.Clamp(currentIndex, 0, screen.VisibleListItems.Count);
 
-        if (screen.ListItems.Count == 0) return;
-
-        List<UIListItem> visibleItems = screen.ListItems.Where(isVisible).ToList();
-
+        if (screen.VisibleListItems.Count == 0) return;
+        
         if (screen.ScreenType is UIScreen.UIScreenType.Radial) getRadial();
         else getLinear();
         return;
@@ -399,7 +397,7 @@ private Sequence currentSequence;
             linearPanelGroup.SetActive(true);
             radialPanelGroup.SetActive(false);
 
-            SetPrimaryPanel(visibleItems[currentIndex]);
+            SetPrimaryPanel(screen.VisibleListItems[currentIndex]);
             primaryPanel.SetType(screen.ScreenType);
 
             LinearCenterIndex = LinearHalfCount;
@@ -409,13 +407,13 @@ private Sequence currentSequence;
                 OptionPanelLinear panel = linearPanels[i];
                 int itemIndex = currentIndex - LinearCenterIndex + i;
 
-                if (itemIndex >= visibleItems.Count || itemIndex < 0)
+                if (itemIndex >= screen.VisibleListItems.Count || itemIndex < 0)
                 {
                     panel.gameObject.SetActive(false);
                     continue;
                 }
 
-                UIListItem item = visibleItems[itemIndex];
+                UIListItem item = screen.VisibleListItems[itemIndex];
                 SetPanelLinear(screen, item, panel);
 
                 Vector2 position = GetLinearPosition(i);
@@ -432,7 +430,7 @@ private Sequence currentSequence;
             linearPanelGroup.SetActive(false);
             radialPanelGroup.SetActive(true);
 
-            SetPrimaryPanel(visibleItems[currentIndex]);
+            SetPrimaryPanel(screen.VisibleListItems[currentIndex]);
             primaryPanel.SetType(screen.ScreenType);
 
             RadialCenterIndex = RadialHalfCount;
@@ -442,13 +440,13 @@ private Sequence currentSequence;
                 OptionPanelRadial panel = radialPanels[i];
                 int itemIndex = currentIndex - RadialCenterIndex + i;
 
-                if (itemIndex >= visibleItems.Count || itemIndex < 0)
+                if (itemIndex >= screen.VisibleListItems.Count || itemIndex < 0)
                 {
                     panel.gameObject.SetActive(false);
                     continue;
                 }
 
-                UIListItem item = visibleItems[itemIndex];
+                UIListItem item = screen.VisibleListItems[itemIndex];
                 SetPanelRadial(item, panel);
 
                 Vector3 angle = GetRadialAngle(i);
@@ -493,16 +491,6 @@ private Sequence currentSequence;
                 }
             }
         }
-
-        bool isVisible([NotNull] UIListItem item)
-        {
-            return item.VisibilityType switch
-            {
-                UIListItem.VisibilityTypes.Always => true,
-                UIListItem.VisibilityTypes.Equals => SettingsManager.Instance.PlayerSettings.GetParameter(item.ConditionParameter) == item.ConditionValue,
-                _ => false,
-            };
-        }
     }
 
     private static string GetSelectedString([NotNull] UIListItem item)
@@ -521,13 +509,13 @@ private Sequence currentSequence;
             return "???";
         }
 
-        if (item.NextScreen.ListItems.Count == 0)
+        if (item.NextScreen.VisibleListItems.Count == 0)
         {
             Debug.LogWarning($"NextScreen of [{item.Title}] has no List Items!");
             return "???";
         }
 
-        UIListItem selectedItem = item.NextScreen.ListItems.FirstOrDefault(x => x.SettingsValue == settingsIndex);
+        UIListItem selectedItem = item.NextScreen.VisibleListItems.FirstOrDefault(x => x.SettingsValue == settingsIndex);
 
         if (selectedItem != null) return selectedItem.Title;
 

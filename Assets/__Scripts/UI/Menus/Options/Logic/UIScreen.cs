@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
+using SaturnGame.Settings;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -38,6 +41,8 @@ public class UIScreen : ScriptableObject
     public int DefaultItemIndex;
 
     [FormerlySerializedAs("listItems")] public List<UIListItem> ListItems;
+
+    public List<UIListItem> VisibleListItems => ListItems.Where(x => x.IsVisible()).ToList();
 }
 
 [Serializable]
@@ -83,5 +88,15 @@ public class UIListItem
 
     [FormerlySerializedAs("settingsValue")]
     public int SettingsValue;
+    
+    public bool IsVisible()
+    {
+        return VisibilityType switch
+        {
+            VisibilityTypes.Always => true,
+            VisibilityTypes.Equals => SettingsManager.Instance.PlayerSettings.GetParameter(ConditionParameter) == ConditionValue,
+            _ => false,
+        };
+    }
 }
 }

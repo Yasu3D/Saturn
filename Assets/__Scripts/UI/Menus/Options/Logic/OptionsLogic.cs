@@ -48,7 +48,7 @@ public class OptionsLogic : MonoBehaviour
     {
         if (state is MenuState.MenuSwitch or MenuState.Reverting) return;
 
-        UIListItem selectedItem = CurrentScreen.ListItems[CurrentIndex];
+        UIListItem selectedItem = CurrentScreen.VisibleListItems[CurrentIndex];
         UIScreen prevScreen = CurrentScreen;
 
         switch (selectedItem.ItemType)
@@ -105,7 +105,7 @@ public class OptionsLogic : MonoBehaviour
         
         await Awaitable.WaitForSecondsAsync(0.25f);
         panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
-        panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
+        panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
         panelAnimator.Anim_ShowPanels(prevScreen, CurrentScreen);
         ToggleRevertButton(CurrentScreen);
         state = MenuState.Idle;
@@ -136,7 +136,7 @@ public class OptionsLogic : MonoBehaviour
 
         await Awaitable.WaitForSecondsAsync(0.25f);
         panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
-        panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
+        panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
         panelAnimator.Anim_ShowPanels(prevScreen, nextScreen);
         state = MenuState.Idle;
     }
@@ -152,7 +152,7 @@ public class OptionsLogic : MonoBehaviour
         CurrentIndex = newIndex;
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
         panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, CurrentIndex, CurrentScreen);
-        panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
+        panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
         
         panelAnimator.Anim_UpdateRadialOffsetOption(CurrentIndex);
     }
@@ -162,25 +162,25 @@ public class OptionsLogic : MonoBehaviour
         if (state is MenuState.MenuSwitch) return;
         if (screenStack.Count == 0 || indexStack.Count == 0) return;
 
-        int newIndex = Mathf.Min(CurrentIndex + 1, CurrentScreen.ListItems.Count - 1);
+        int newIndex = Mathf.Min(CurrentIndex + 1, CurrentScreen.VisibleListItems.Count - 1);
         if (CurrentIndex == newIndex) return;
 
         CurrentIndex = newIndex;
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
         panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Down, CurrentIndex, CurrentScreen);
-        panelAnimator.SetPrimaryPanel(CurrentScreen.ListItems[CurrentIndex]);
+        panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
         
         panelAnimator.Anim_UpdateRadialOffsetOption(CurrentIndex);
     }
 
     public async void OnRevert()
     {
-        UIListItem selectedItem = CurrentScreen.ListItems[CurrentIndex];
+        UIListItem selectedItem = CurrentScreen.VisibleListItems[CurrentIndex];
         if (selectedItem.SettingsParameter == "") return;
 
         int defaultIndex = CurrentScreen.DefaultItemIndex;
 
-        bool outOfBounds = defaultIndex >= CurrentScreen.ListItems.Count || defaultIndex < 0;
+        bool outOfBounds = defaultIndex >= CurrentScreen.VisibleListItems.Count || defaultIndex < 0;
         bool sameIndex = defaultIndex == CurrentIndex;
         if (outOfBounds || sameIndex) return;
 
