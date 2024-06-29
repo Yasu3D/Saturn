@@ -17,9 +17,24 @@ public class PlayerSettings
                 GameSettings.NoteSpeed = value;
                 break;
             }
-            case "JudgementOffset":
+            case "OffsetMode":
             {
-                GameSettings.JudgementOffset = value;
+                GameSettings.OffsetMode = value;
+                break;
+            }
+            case "AudioOffset":
+            {
+                GameSettings.AudioOffset = value;
+                break;
+            }
+            case "VisualOffset":
+            {
+                GameSettings.VisualOffset = value;
+                break;
+            }
+            case "InputLatency":
+            {
+                GameSettings.InputLatency = value;
                 break;
             }
             case "MaskDensity":
@@ -228,7 +243,10 @@ public class PlayerSettings
         return parameter switch
         {
             "NoteSpeed" => GameSettings.NoteSpeed,
-            "JudgementOffset" => GameSettings.JudgementOffset,
+            "OffsetMode" => GameSettings.OffsetMode,
+            "AudioOffset" => GameSettings.AudioOffset,
+            "VisualOffset" => GameSettings.VisualOffset,
+            "InputLatency" => GameSettings.InputLatency,
             "MaskDensity" => GameSettings.MaskDensity,
             "BackgroundVideoSetting" => GameSettings.BackgroundVideoSetting,
             "BonusEffectSetting" => GameSettings.BonusEffectSetting,
@@ -281,11 +299,31 @@ public class GameSettings
     /// Note Speed from 10 [1.0] to 60 [6.0]
     /// </summary>
     public int NoteSpeed = 25;
+
+    /// <summary>
+    /// 0 > Standard / Low Latency
+    /// 1 > Classic / Original Latency
+    /// 2 > Advanced
+    /// </summary>
+    public int OffsetMode = 0;
     
     /// <summary>
-    /// Judgement Offset from +100 [10] to -100 [-10]
+    /// Audio Offset from +100 [10] to -100 [-10]
+    /// TODO: Expand to +200 -200
     /// </summary>
-    public int JudgementOffset = 0;
+    public int AudioOffset = 0;
+    
+    /// <summary>
+    /// Visual Offset from +100 [10] to -100 [-10]
+    /// TODO: Expand to +200 -200
+    /// </summary>
+    public int VisualOffset = 0;
+
+    /// <summary>
+    /// Input latency. No clue about range yet.
+    /// TODO: @cg505 define range for this.
+    /// </summary>
+    public int InputLatency = 0;
     
     /// <summary>
     /// Mask Density from 0 to +4

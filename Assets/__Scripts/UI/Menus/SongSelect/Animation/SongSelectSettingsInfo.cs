@@ -25,7 +25,7 @@ public class SongSelectSettingsInfo : MonoBehaviour
     {
         maskText.text = Settings.MaskDensity == 0 ? "NO MASK" : $"MASK +{Settings.MaskDensity}";
         speedText.text = (Settings.NoteSpeed * 0.1f).ToString("0.0");
-        offsetText.text = (Settings.JudgementOffset * 0.1f).ToString("0.0");
+        offsetText.text = (Settings.AudioOffset * 0.1f).ToString("0.0");
         // clamp just in case
         giveUpText.text = giveUpSettings[Mathf.Clamp(Settings.GiveUpSetting, 0, giveUpSettings.Length - 1)];
     }

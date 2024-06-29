@@ -62,7 +62,7 @@ public class TimeManager : MonoBehaviour
     /// timer).
     /// </summary>
     private float AudioOffsetMs =>
-        StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset * 10 /* temp */;
+        StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.AudioOffset * 10 /* temp */;
 
     /// <summary>
     /// Core gameplay time in ms, used for judgements. Do not use this for audio or visuals, use
@@ -168,7 +168,7 @@ public class TimeManager : MonoBehaviour
         {
             if (State == SongState.NotYetStarted)
             {
-                Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.JudgementOffset}");
+                Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.AudioOffset}");
                 StartSong();
             }
             else
