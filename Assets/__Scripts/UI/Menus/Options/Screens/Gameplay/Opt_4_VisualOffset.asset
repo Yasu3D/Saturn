@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
-  m_Name: Opt_2_Offset
+  m_Name: Opt_4_VisualOffset
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenTitle: +OFFSET
-  ScreenSubtitle: 'Adjust the audio timing.
+  ScreenTitle: VISUAL OFFSET
+  ScreenSubtitle: 'Adjust the visual timing.
 
     You should adjust as follows:
 

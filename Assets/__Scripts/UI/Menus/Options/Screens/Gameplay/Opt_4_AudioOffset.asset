@@ -1,0 +1,2037 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
+  m_Name: Opt_4_AudioOffset
+  m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
+  ScreenTitle: AUDIO OFFSET
+  ScreenSubtitle: 'Adjust the audio timing.
+
+    You should adjust as follows:
+
+    Getting
+    "FAST" hits? Set "+"
+
+    Getting "SLOW" hits? Set "-"'
+  ScreenType: 2
+  RadialSubType: 3
+  DefaultItemIndex: 100
+  ListItems:
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -10.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -100
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -99
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -98
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -97
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -96
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -95
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -94
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -93
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -92
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -91
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -9.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -90
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -89
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -88
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -87
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -86
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -85
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -84
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -83
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -82
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -81
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -8.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -80
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -79
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -78
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -77
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -76
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -75
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -74
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -73
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -72
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -71
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -7.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -70
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -69
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -68
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -67
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -66
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -65
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -64
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -63
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -62
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -61
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -6.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -60
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -59
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -58
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -57
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -56
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -55
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -54
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -53
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -52
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -51
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -5.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -50
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -49
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -48
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -47
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -46
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -45
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -44
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -43
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -42
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -41
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -4.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -40
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -39
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -38
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -37
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -36
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -35
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -34
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -33
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -32
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -31
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -3.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -30
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -29
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -28
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -27
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -26
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -25
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -24
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -23
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -22
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -21
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -2.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -20
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -19
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -18
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -17
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -16
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -15
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -14
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -13
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -12
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -11
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -1.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -10
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -9
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -8
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -7
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -6
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -5
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -4
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -3
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -2
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: -0.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: -1
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: 0.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 1
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 2
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 3
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 4
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 5
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 6
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 7
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 8
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +0.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 9
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 10
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 11
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 12
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 13
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 14
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 15
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 16
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 17
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 18
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +1.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 19
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 20
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 21
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 22
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 23
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 24
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 25
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 26
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 27
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 28
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +2.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 29
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 30
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 31
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 32
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 33
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 34
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 35
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 36
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 37
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 38
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +3.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 39
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 40
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 41
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 42
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 43
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 44
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 45
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 46
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 47
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 48
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +4.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 49
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 50
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 51
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 52
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 53
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 54
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 55
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 56
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 57
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 58
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +5.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 59
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 60
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 61
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 62
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 63
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 64
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 65
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 66
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 67
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 68
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +6.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 69
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 70
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 71
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 72
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 73
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 74
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 75
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 76
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 77
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 78
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +7.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 79
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 80
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 81
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 82
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 83
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 84
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 85
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 86
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 87
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 88
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +8.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 89
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 90
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.1
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 91
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.2
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 92
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.3
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 93
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.4
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 94
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.5
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 95
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.6
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 96
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.7
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 97
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.8
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 98
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +9.9
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 99
+  - SubtitleType: 0
+    ItemType: 0
+    Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
+    Title: +10.0
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 0}
+    SettingsParameter: JudgementOffset
+    SettingsValue: 100

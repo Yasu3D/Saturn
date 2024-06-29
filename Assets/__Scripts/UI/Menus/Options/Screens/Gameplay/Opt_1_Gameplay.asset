@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
   m_Name: Opt_1_Gameplay
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenName: Gameplay
   ScreenTitle: 
   ScreenSubtitle: 
   ScreenType: 1
@@ -29,14 +28,44 @@ MonoBehaviour:
     NextScreen: {fileID: 11400000, guid: 9b127b2d0061afe4b9bb4f69e1031085, type: 2}
     SettingsParameter: 
     SettingsValue: 0
+  - SubtitleType: 0
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: OFFSET MODE
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: 
+    NextScreen: {fileID: 11400000, guid: 2046595d0881cc6488b72717fae7cb65, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
   - SubtitleType: 1
     ItemType: 1
     Color: {r: 1, g: 1, b: 1, a: 1}
-    Title: OFFSET
+    Title: AUDIO OFFSET
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: JudgementOffset
+    SettingsBinding: AudioOffset
     NextScreen: {fileID: 11400000, guid: bf4fd6011eadc204f9538ff6a7af6d08, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: VISUAL OFFSET
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: VisualOffset
+    NextScreen: {fileID: 11400000, guid: 5b8a8d378ec118c42a05efc8b1536680, type: 2}
+    SettingsParameter: 
+    SettingsValue: 0
+  - SubtitleType: 1
+    ItemType: 1
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Title: INPUT LATENCY
+    Subtitle: 
+    Sprite: {fileID: 0}
+    SettingsBinding: InputLatency
+    NextScreen: {fileID: 11400000, guid: b73671f0c45c96f41b1e6c94d72536d4, type: 2}
     SettingsParameter: 
     SettingsValue: 0
   - SubtitleType: 1
