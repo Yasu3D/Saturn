@@ -73,8 +73,10 @@ Shader "SaturnGame/RhythmGame/NoteRendering/HoldSurface"
                     }
                 case 1:
                     {
-                        float3 oneMinus = float3(1, 1, 1) - gradient;
-                        result = float4(-oneMinus * oneMinus + float3(1, 1, 1), 0.6 * i.world.z < _ConeBounds.x);
+                        float3 activeGradient = float3(1, 1, 1) - gradient;
+                        activeGradient = -activeGradient * activeGradient + float3(1, 1, 1);
+                        
+                        result = float4(activeGradient, 0.6 * (i.world.z < _ConeBounds.x));
                         break;
                     }
                 case 2:
