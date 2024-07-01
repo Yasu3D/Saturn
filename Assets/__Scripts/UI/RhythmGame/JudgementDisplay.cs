@@ -2,7 +2,7 @@ using DG.Tweening;
 using SaturnGame.RhythmGame;
 using SaturnGame.Settings;
 using UnityEngine;
-using static SaturnGame.Settings.UISettings.ShowJudgementDetailsOptions;
+using static SaturnGame.Settings.UiSettings.ShowJudgementDetailsOptions;
 
 public class JudgementDisplay : MonoBehaviour
 {
@@ -73,7 +73,7 @@ public class JudgementDisplay : MonoBehaviour
             }
         }
 
-        if (SettingsManager.Instance.PlayerSettings.UISettings.ShowJudgementDetails ==
+        if (SettingsManager.Instance.PlayerSettings.UiSettings.ShowJudgementDetails ==
             On && judgement is not (Judgement.Marvelous or Judgement.None))
         {
             if (timeErrorMs < 0) TextFast.SetActive(true);

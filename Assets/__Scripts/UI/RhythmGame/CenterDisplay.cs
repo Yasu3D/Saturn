@@ -5,7 +5,7 @@ using DG.Tweening;
 using SaturnGame.RhythmGame;
 using SaturnGame.Settings;
 using TMPro;
-using static SaturnGame.Settings.UISettings.CenterDisplayInfoOptions;
+using static SaturnGame.Settings.UiSettings.CenterDisplayInfoOptions;
 
 public class CenterDisplay : MonoBehaviour
 {
@@ -23,10 +23,10 @@ public class CenterDisplay : MonoBehaviour
 
     private void Start()
     {
-        ComboGroup.SetActive(Settings.UISettings.CenterDisplayInfo is Combo);
-        ScoreGroup.SetActive(Settings.UISettings.CenterDisplayInfo is not (Off or Combo));
+        ComboGroup.SetActive(Settings.UiSettings.CenterDisplayInfo is Combo);
+        ScoreGroup.SetActive(Settings.UiSettings.CenterDisplayInfo is not (Off or Combo));
 
-        currentScore = Settings.UISettings.CenterDisplayInfo switch
+        currentScore = Settings.UiSettings.CenterDisplayInfo switch
         {
             Off => 0,
             Combo => 0,
@@ -34,8 +34,8 @@ public class CenterDisplay : MonoBehaviour
             MinusMethod => 1000000,
             AverageMethod => 0,
             SBorder => 100000,
-            SSBorder => 0, // WIP
-            SSSBorder => 0, // WIP
+            SsBorder => 0, // WIP
+            SssBorder => 0, // WIP
             PersonalBestBorder => 0, // WIP
             _ => 0,
         };
@@ -45,7 +45,7 @@ public class CenterDisplay : MonoBehaviour
 
     public void UpdateCombo(int combo)
     {
-        if (combo <= 0 || Settings.UISettings.CenterDisplayInfo != Combo)
+        if (combo <= 0 || Settings.UiSettings.CenterDisplayInfo != Combo)
         {
             currentSequence.Kill(true);
             ComboGroup.SetActive(false);
@@ -72,7 +72,7 @@ public class CenterDisplay : MonoBehaviour
     {
         //Debug.Log($"{scoreData.MaxScore}");
 
-        int score = SettingsManager.Instance.PlayerSettings.UISettings.CenterDisplayInfo switch
+        int score = SettingsManager.Instance.PlayerSettings.UiSettings.CenterDisplayInfo switch
         {
             Off => 0,
             Combo => 0,
@@ -80,8 +80,8 @@ public class CenterDisplay : MonoBehaviour
             MinusMethod => 1_000_000 - (scoreData.MaxScore - scoreData.Score),
             AverageMethod => (int)(1_000_000 * ((float)scoreData.Score / scoreData.MaxScore)),
             SBorder => Math.Max(0, 100_000 - (scoreData.MaxScore - scoreData.Score)), // WIP
-            SSBorder => Math.Max(0,  50_000 - (scoreData.MaxScore - scoreData.Score)), // WIP
-            SSSBorder => Math.Max(0,  20_000 - (scoreData.MaxScore - scoreData.Score)), // WIP
+            SsBorder => Math.Max(0,  50_000 - (scoreData.MaxScore - scoreData.Score)), // WIP
+            SssBorder => Math.Max(0,  20_000 - (scoreData.MaxScore - scoreData.Score)), // WIP
             PersonalBestBorder => scoreData.Score, // WIP until scores are saved
             _ => 0,
         };

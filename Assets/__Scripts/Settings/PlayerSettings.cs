@@ -1,23 +1,87 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using SaturnGame.JetBrains.Annotations;
+using Tomlyn;
+using Tomlyn.Model;
+using Tomlyn.Syntax;
 using UnityEngine;
 
 namespace SaturnGame.Settings
 {
 [Serializable]
-public class PlayerSettings
+public class PlayerSettings : SettingsWithTomlMetadata
 {
     public GameSettings GameSettings { get; set; } = new();
-    public UISettings UISettings { get; set; } = new();
+    public UiSettings UiSettings { get; set; } = new();
     public DesignSettings DesignSettings { get; set; } = new();
     public SoundSettings SoundSettings { get; set; } = new();
+
+    private static readonly string SettingsPath = Path.Join(Application.persistentDataPath, "settings.toml");
+
+    [NotNull]
+    public static PlayerSettings Load()
+    {
+        PlayerSettings loadedSettings = null;
+
+        if (File.Exists(SettingsPath))
+        {
+            try
+            {
+                FileInfo info = new(SettingsPath);
+                if (info.Length > 1_000_000)
+                    // A normal settings file should be around 1KB, not 1MB.
+                    // Something is seriously wrong, don't try to parse this.
+                    throw new($"Not trying to load {SettingsPath} - size is too large ({info.Length} bytes)");
+
+                string tomlString = File.ReadAllText(SettingsPath);
+                loadedSettings = Toml.ToModel<PlayerSettings>(tomlString, SettingsPath);
+            } catch (Exception e)
+            {
+                Debug.LogError($"Failed to load settings from {SettingsPath}: {e}");
+
+                // Move current settings file to a backup if possible, otherwise we will overwrite it.
+                long unixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                File.Move(SettingsPath, SettingsPath + $"-{unixTime}.bak");
+            }
+        }
+
+        if (loadedSettings == null)
+        {
+            loadedSettings = new();
+
+            // When creating new settings, add a comment and some newlines to the TOML so it looks nicer.
+            loadedSettings.GameSettings.SetLeadingTrivia("game_settings", new()
+            {
+                new(TokenKind.Comment,
+                    "# Please don't edit this file while the game is running, your changes may be lost."),
+                new(TokenKind.NewLine, "\n"),
+                new(TokenKind.NewLine, "\n"),
+            });
+            loadedSettings.UiSettings.SetLeadingTrivia("ui_settings", new() { new(TokenKind.NewLine, "\n") });
+            loadedSettings.DesignSettings.SetLeadingTrivia("design_settings", new() { new(TokenKind.NewLine, "\n") });
+            loadedSettings.SoundSettings.SetLeadingTrivia("sound_settings", new() { new(TokenKind.NewLine, "\n") });
+
+            loadedSettings.SaveToFile();
+        }
+
+        return loadedSettings;
+    }
+
+    public void SaveToFile()
+    {
+        string tomlString = Toml.FromModel(this);
+        File.WriteAllText(SettingsPath, tomlString);
+    }
 
     // Given a parameter string, searches the children settings objects for the parameter.
     // Returns a tuple of (corresponding child settings object, propertyInfo of the parameter)
     private (object, PropertyInfo) GetParameterProperty(string parameter)
     {
-        object[] objectsToSearch = { GameSettings, UISettings, DesignSettings, SoundSettings };
+        object[] objectsToSearch = { GameSettings, UiSettings, DesignSettings, SoundSettings };
 
         foreach (object settingsObject in objectsToSearch)
         {
@@ -51,8 +115,8 @@ public class PlayerSettings
                 case string valueString:
                 {
                     object enumValue = Enum.Parse(possibleProperty.PropertyType, valueString);
-                    possibleProperty.SetValue(settingsObject, enumValue);
-                    return;
+                    value = enumValue;
+                    break;
                 }
                 default:
                 {
@@ -61,14 +125,18 @@ public class PlayerSettings
                 }
             }
         }
-
-        if (value.GetType() != possibleProperty.PropertyType)
+        else if (value.GetType() != possibleProperty.PropertyType)
         {
             throw new ArgumentException($"Incorrect type for setting {parameter} - " +
                                         $"expected {possibleProperty.PropertyType}, but got {value.GetType()}");
         }
 
         possibleProperty.SetValue(settingsObject, value);
+
+        // Any time we change a property, immediately save the TOML file.
+        // Warning: no guarantee that the change is saved if someone changes a setting value directly
+        // (which shouldn't happen).
+        SaveToFile();
     }
 
     // Get the type and value of a parameter.
@@ -90,7 +158,7 @@ public class PlayerSettings
 
 // ReSharper disable RedundantDefaultMemberInitializer
 [Serializable]
-public class GameSettings
+public class GameSettings : SettingsWithTomlMetadata
 {
     /// <summary>
     /// Note Speed from 10 [1.0] to 60 [6.0]
@@ -159,8 +227,8 @@ public class GameSettings
         Off,
         NoTouch,
         SBorder,
-        SSBorder,
-        SSSBorder,
+        SsBorder,
+        SssBorder,
         MasterBorder,
         PersonalBestBorder,
     }
@@ -169,7 +237,7 @@ public class GameSettings
 }
 
 [Serializable]
-public class UISettings
+public class UiSettings : SettingsWithTomlMetadata
 {
     public enum JudgementDisplayPositions
     {
@@ -239,8 +307,8 @@ public class UISettings
         MinusMethod,
         AverageMethod,
         SBorder,
-        SSBorder,
-        SSSBorder,
+        SsBorder,
+        SssBorder,
         PersonalBestBorder,
     }
 
@@ -257,7 +325,7 @@ public class UISettings
 }
 
 [Serializable]
-public class DesignSettings
+public class DesignSettings : SettingsWithTomlMetadata
 {
     /// <summary>
     /// WIP
@@ -283,13 +351,13 @@ public class DesignSettings
     public int NoteWidth { get; set; } = 3;
 
     // TODO: Color enums
-    public int NoteColorIDTouch { get; set; } = 0;
-    public int NoteColorIDChain { get; set; } = 1;
-    public int NoteColorIDSwipeClockwise { get; set; } = 2;
-    public int NoteColorIDSwipeCounterclockwise { get; set; } = 3;
-    public int NoteColorIDSnapForward { get; set; } = 4;
-    public int NoteColorIDSnapBackward { get; set; } = 5;
-    public int NoteColorIDHold { get; set; } = 6;
+    [DataMember(Name="note_color_id_touch")] public int NoteColorIDTouch { get; set; } = 0;
+    [DataMember(Name="note_color_id_chain")] public int NoteColorIDChain { get; set; } = 1;
+    [DataMember(Name="note_color_id_swipe_clockwise")] public int NoteColorIDSwipeClockwise { get; set; } = 2;
+    [DataMember(Name="note_color_id_swipe_counterclockwise")] public int NoteColorIDSwipeCounterclockwise { get; set; } = 3;
+    [DataMember(Name="note_color_id_snap_forward")] public int NoteColorIDSnapForward { get; set; } = 4;
+    [DataMember(Name="note_color_id_snap_backward")] public int NoteColorIDSnapBackward { get; set; } = 5;
+    [DataMember(Name="note_color_id_hold")] public int NoteColorIDHold { get; set; } = 6;
 
     public enum InvertSlideColorOptions
     {
@@ -325,10 +393,10 @@ public class DesignSettings
 }
 
 [Serializable]
-public class SoundSettings
+public class SoundSettings : SettingsWithTomlMetadata
 {
-    public int TouchSE { get; set; } = 0;
-    public int BGMVolume { get; set; } = 100;
+    [DataMember(Name="touch_se")] public int TouchSE { get; set; } = 0;
+    public int BgmVolume { get; set; } = 100;
     public int HitsoundOverallVolume { get; set; } = 70;
     public int GuideVolume { get; set; } = 30;
     public int TouchNoteVolume { get; set; } = 80;
@@ -337,7 +405,56 @@ public class SoundSettings
     public int SnapNoteVolume { get; set; } = 80;
     public int ChainNoteVolume { get; set; } = 80;
     public int BonusEffectVolume { get; set; } = 80;
-    public int RNoteEffectVolume { get; set; } = 80;
+    [DataMember(Name="r_note_effect_volume")] public int RNoteEffectVolume { get; set; } = 80;
 }
 // ReSharper restore RedundantDefaultMemberInitializer
+
+public abstract class SettingsWithTomlMetadata : ITomlMetadataProvider {
+    // TOML metadata information (comments, etc.) needed for ITomlMetadataProvider
+    //TomlPropertiesMetadata ITomlMetadataProvider.PropertiesMetadata { get; set; }
+    TomlPropertiesMetadata ITomlMetadataProvider.PropertiesMetadata { get; set; }
+
+    public void SetLeadingTrivia(string propertyName, List<TomlSyntaxTriviaMetadata> trivia)
+    {
+        ITomlMetadataProvider metadataProvider = this;
+        metadataProvider.PropertiesMetadata ??= new();
+
+        metadataProvider.PropertiesMetadata.TryGetProperty(propertyName, out TomlPropertyMetadata metadata);
+        metadata ??= new();
+
+        if (metadata.LeadingTrivia != null)
+            metadata.LeadingTrivia.AddRange(trivia);
+        else
+            metadata.LeadingTrivia = trivia;
+
+        metadataProvider.PropertiesMetadata.SetProperty(propertyName, metadata);
+    }
+
+    public void DebugTrivia([NotNull] string propertyName)
+    {
+        TomlPropertiesMetadata propertiesMetadata = ((ITomlMetadataProvider)this).PropertiesMetadata;
+        if (propertiesMetadata == null)
+        {
+            Debug.Log($"{propertyName}: No properties metadata");
+            return;
+        }
+
+        propertiesMetadata.TryGetProperty(propertyName, out TomlPropertyMetadata metadata);
+
+        if (metadata == null)
+        {
+            Debug.Log($"{propertyName}: No metadata");
+            return;
+        }
+
+        Debug.Log($"{propertyName}: {metadata.LeadingTrivia?.Count} leading trivia");
+        foreach (TomlSyntaxTriviaMetadata trivia in metadata.LeadingTrivia ?? new List<TomlSyntaxTriviaMetadata>())
+            Debug.Log(trivia);
+
+        Debug.Log($"{propertyName}: {metadata.TrailingTriviaAfterEndOfLine?.Count} trailing trivia");
+        foreach (TomlSyntaxTriviaMetadata trivia in metadata.TrailingTriviaAfterEndOfLine ?? new List<TomlSyntaxTriviaMetadata>())
+            Debug.Log(trivia);
+
+    }
+}
 }

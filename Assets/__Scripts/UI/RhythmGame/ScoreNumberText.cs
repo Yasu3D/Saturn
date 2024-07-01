@@ -2,7 +2,7 @@ using SaturnGame.RhythmGame;
 using SaturnGame.Settings;
 using UnityEngine;
 using TMPro;
-using static SaturnGame.Settings.UISettings.ScoreDisplayMethods;
+using static SaturnGame.Settings.UiSettings.ScoreDisplayMethods;
 
 public class ScoreNumberText : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class ScoreNumberText : MonoBehaviour
 
     private void Start()
     {
-        ScoreValue.text = SettingsManager.Instance.PlayerSettings.UISettings.ScoreDisplayMethod switch
+        ScoreValue.text = SettingsManager.Instance.PlayerSettings.UiSettings.ScoreDisplayMethod switch
         {
             PlusMethod => "<mspace=0.7em>0000000</mspace>", // Plus Method
             MinusMethod => "<mspace=0.7em>1000000</mspace>", // Minus Method
@@ -21,7 +21,7 @@ public class ScoreNumberText : MonoBehaviour
     
     public void UpdateScore(ScoreData scoreData)
     {
-        int score = SettingsManager.Instance.PlayerSettings.UISettings.ScoreDisplayMethod switch
+        int score = SettingsManager.Instance.PlayerSettings.UiSettings.ScoreDisplayMethod switch
         {
             PlusMethod => scoreData.Score, // Plus Method
             MinusMethod => 1_000_000 - (scoreData.MaxScore - scoreData.Score), // Minus Method
