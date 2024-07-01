@@ -8,21 +8,21 @@ namespace SaturnGame.Settings
 [Serializable]
 public class PlayerSettings
 {
-    public GameSettings GameSettings = new();
-    public UISettings UISettings = new();
-    public DesignSettings DesignSettings = new();
-    public SoundSettings SoundSettings = new();
+    public GameSettings GameSettings { get; set; } = new();
+    public UISettings UISettings { get; set; } = new();
+    public DesignSettings DesignSettings { get; set; } = new();
+    public SoundSettings SoundSettings { get; set; } = new();
 
     // Given a parameter string, searches the children settings objects for the parameter.
-    // Returns a tuple of (corresponding child settings object, FieldInfo of the parameter)
-    private (object, FieldInfo) GetParameterField(string parameter)
+    // Returns a tuple of (corresponding child settings object, propertyInfo of the parameter)
+    private (object, PropertyInfo) GetParameterProperty(string parameter)
     {
         object[] objectsToSearch = { GameSettings, UISettings, DesignSettings, SoundSettings };
 
         foreach (object settingsObject in objectsToSearch)
         {
-            FieldInfo possibleField = settingsObject.GetType().GetField(parameter);
-            if (possibleField != null) return (settingsObject, possibleField);
+            PropertyInfo possibleProperty = settingsObject.GetType().GetProperty(parameter);
+            if (possibleProperty != null) return (settingsObject, possibleProperty);
         }
 
         return (null, null);
@@ -32,26 +32,26 @@ public class PlayerSettings
     /// Set a given settings parameter to the given value.
     /// If the parameter is an enum, the value should be a string.
     /// </summary>
-    /// <param name="parameter">The field name of the enum. Should not include the settings object name
+    /// <param name="parameter">The property name of the enum. Should not include the settings object name
     /// (e.g. "NoteSpeed", NOT "GameSettings.NoteSpeed").</param>
     /// <param name="value">The value of the setting. The type should match the parameter type, except for enum
     /// parameters, which should be represented as a string.</param>
     /// <exception cref="ArgumentException">thrown if the parameter doesn't exist, or the value type is wrong</exception>
     public void SetParameter(string parameter, [NotNull] object value)
     {
-        (object settingsObject, FieldInfo possibleField) = GetParameterField(parameter);
+        (object settingsObject, PropertyInfo possibleProperty) = GetParameterProperty(parameter);
 
-        if (possibleField == null)
+        if (possibleProperty == null)
             throw new ArgumentException($"Parameter {parameter} not found in any settings object");
 
-        if (possibleField.FieldType.IsEnum)
+        if (possibleProperty.PropertyType.IsEnum)
         {
             switch (value)
             {
                 case string valueString:
                 {
-                    object enumValue = Enum.Parse(possibleField.FieldType, valueString);
-                    possibleField.SetValue(settingsObject, enumValue);
+                    object enumValue = Enum.Parse(possibleProperty.PropertyType, valueString);
+                    possibleProperty.SetValue(settingsObject, enumValue);
                     return;
                 }
                 default:
@@ -62,29 +62,29 @@ public class PlayerSettings
             }
         }
 
-        if (value.GetType() != possibleField.FieldType)
+        if (value.GetType() != possibleProperty.PropertyType)
         {
             throw new ArgumentException($"Incorrect type for setting {parameter} - " +
-                                        $"expected {possibleField.FieldType}, but got {value.GetType()}");
+                                        $"expected {possibleProperty.PropertyType}, but got {value.GetType()}");
         }
 
-        possibleField.SetValue(settingsObject, value);
+        possibleProperty.SetValue(settingsObject, value);
     }
 
     // Get the type and value of a parameter.
     // Enum types will accurately return the underlying type, but the value will be converted to a string.
     public (Type, object) GetParameter(string parameter)
     {
-        (object settingsObject, FieldInfo possibleField) = GetParameterField(parameter);
+        (object settingsObject, PropertyInfo possibleProperty) = GetParameterProperty(parameter);
 
-        if (possibleField == null)
+        if (possibleProperty == null)
             throw new ArgumentException($"Parameter {parameter} not found in any settings object");
 
-        object value = possibleField.GetValue(settingsObject);
+        object value = possibleProperty.GetValue(settingsObject);
 
-        if (possibleField.FieldType.IsEnum) value = ((Enum)value).ToString();
+        if (possibleProperty.PropertyType.IsEnum) value = ((Enum)value).ToString();
 
-        return (possibleField.FieldType, value);
+        return (possibleProperty.PropertyType, value);
     }
 }
 
@@ -95,7 +95,7 @@ public class GameSettings
     /// <summary>
     /// Note Speed from 10 [1.0] to 60 [6.0]
     /// </summary>
-    public int NoteSpeed = 25;
+    public int NoteSpeed { get; set; } = 25;
 
     public enum OffsetModeOptions
     {
@@ -104,30 +104,30 @@ public class GameSettings
         Advanced,
     }
 
-    public OffsetModeOptions OffsetMode = OffsetModeOptions.Standard;
+    public OffsetModeOptions OffsetMode { get; set; } = OffsetModeOptions.Standard;
 
     /// <summary>
     /// Audio Offset from +100 [10] to -100 [-10]
     /// TODO: Expand to +200 -200
     /// </summary>
-    public int AudioOffset = 0;
+    public int AudioOffset { get; set; } = 0;
 
     /// <summary>
     /// Visual Offset from +100 [10] to -100 [-10]
     /// TODO: Expand to +200 -200
     /// </summary>
-    public int VisualOffset = 0;
+    public int VisualOffset { get; set; } = 0;
 
     /// <summary>
     /// Input latency. No clue about range yet.
     /// TODO: @cg505 define range for this.
     /// </summary>
-    public int InputLatency = 0;
+    public int InputLatency { get; set; } = 0;
 
     /// <summary>
     /// Mask Density from 0 to +4
     /// </summary>
-    public int MaskDensity = 2;
+    public int MaskDensity { get; set; } = 2;
 
     public enum BackgroundVideoOptions
     {
@@ -136,7 +136,7 @@ public class GameSettings
         On,
     }
 
-    public BackgroundVideoOptions BackgroundVideoSetting = BackgroundVideoOptions.Ask;
+    public BackgroundVideoOptions BackgroundVideoSetting { get; set; } = BackgroundVideoOptions.Ask;
 
     public enum BonusEffectOptions
     {
@@ -144,7 +144,7 @@ public class GameSettings
         On,
     }
 
-    public BonusEffectOptions BonusEffectSetting = BonusEffectOptions.Off;
+    public BonusEffectOptions BonusEffectSetting { get; set; } = BonusEffectOptions.Off;
 
     public enum MirrorNotesOptions
     {
@@ -152,7 +152,7 @@ public class GameSettings
         On,
     }
 
-    public MirrorNotesOptions MirrorNotes = MirrorNotesOptions.Off;
+    public MirrorNotesOptions MirrorNotes { get; set; } = MirrorNotesOptions.Off;
 
     public enum GiveUpOptions
     {
@@ -165,7 +165,7 @@ public class GameSettings
         PersonalBestBorder,
     }
 
-    public GiveUpOptions GiveUpSetting = GiveUpOptions.Off;
+    public GiveUpOptions GiveUpSetting { get; set; } = GiveUpOptions.Off;
 }
 
 [Serializable]
@@ -179,7 +179,7 @@ public class UISettings
         Bottom,
     }
 
-    public JudgementDisplayPositions JudgementDisplayPosition = JudgementDisplayPositions.Center;
+    public JudgementDisplayPositions JudgementDisplayPosition { get; set; } = JudgementDisplayPositions.Center;
 
     public enum ShowJudgementDetailsOptions
     {
@@ -187,7 +187,7 @@ public class UISettings
         On,
     }
 
-    public ShowJudgementDetailsOptions ShowJudgementDetails = ShowJudgementDetailsOptions.On;
+    public ShowJudgementDetailsOptions ShowJudgementDetails { get; set; } = ShowJudgementDetailsOptions.On;
 
     public enum GuideLaneTypes
     {
@@ -201,7 +201,7 @@ public class UISettings
         G,
     }
 
-    public GuideLaneTypes GuideLaneType = GuideLaneTypes.A;
+    public GuideLaneTypes GuideLaneType { get; set; } = GuideLaneTypes.A;
 
     /// <summary>
     /// 0 >   0%<br/>
@@ -211,7 +211,7 @@ public class UISettings
     /// 4 >  80%<br/>
     /// 5 > 100%<br/>
     /// </summary>
-    public int GuideLaneOpacity = 5;
+    public int GuideLaneOpacity { get; set; } = 5;
 
     /// <summary>
     /// 0 >   0%<br/>
@@ -221,7 +221,7 @@ public class UISettings
     /// 4 >  80%<br/>
     /// 5 > 100%<br/>
     /// </summary>
-    public int DisplayOpacity = 5;
+    public int DisplayOpacity { get; set; } = 5;
 
     public enum ShowBarLinesOptions
     {
@@ -229,7 +229,7 @@ public class UISettings
         On,
     }
 
-    public ShowBarLinesOptions ShowBarLines = ShowBarLinesOptions.On;
+    public ShowBarLinesOptions ShowBarLines { get; set; } = ShowBarLinesOptions.On;
 
     public enum CenterDisplayInfoOptions
     {
@@ -244,7 +244,7 @@ public class UISettings
         PersonalBestBorder,
     }
 
-    public CenterDisplayInfoOptions CenterDisplayInfo = CenterDisplayInfoOptions.Combo;
+    public CenterDisplayInfoOptions CenterDisplayInfo { get; set; } = CenterDisplayInfoOptions.Combo;
 
     public enum ScoreDisplayMethods
     {
@@ -253,7 +253,7 @@ public class UISettings
         AverageMethod,
     }
 
-    public ScoreDisplayMethods ScoreDisplayMethod = ScoreDisplayMethods.PlusMethod;
+    public ScoreDisplayMethods ScoreDisplayMethod { get; set; } = ScoreDisplayMethods.PlusMethod;
 }
 
 [Serializable]
@@ -262,7 +262,7 @@ public class DesignSettings
     /// <summary>
     /// WIP
     /// </summary>
-    public int RingColor = 0;
+    public int RingColor { get; set; } = 0;
 
     public enum JudgeLineColors
     {
@@ -271,7 +271,7 @@ public class DesignSettings
         Reverse,
     }
 
-    public JudgeLineColors JudgeLineColor = JudgeLineColors.Reverse;
+    public JudgeLineColors JudgeLineColor { get; set; } = JudgeLineColors.Reverse;
 
     /// <summary>
     /// 1 > 1
@@ -280,16 +280,16 @@ public class DesignSettings
     /// 4 > 4
     /// 5 > 5
     /// </summary>
-    public int NoteWidth = 3;
+    public int NoteWidth { get; set; } = 3;
 
     // TODO: Color enums
-    public int NoteColorIDTouch = 0;
-    public int NoteColorIDChain = 1;
-    public int NoteColorIDSwipeClockwise = 2;
-    public int NoteColorIDSwipeCounterclockwise = 3;
-    public int NoteColorIDSnapForward = 4;
-    public int NoteColorIDSnapBackward = 5;
-    public int NoteColorIDHold = 6;
+    public int NoteColorIDTouch { get; set; } = 0;
+    public int NoteColorIDChain { get; set; } = 1;
+    public int NoteColorIDSwipeClockwise { get; set; } = 2;
+    public int NoteColorIDSwipeCounterclockwise { get; set; } = 3;
+    public int NoteColorIDSnapForward { get; set; } = 4;
+    public int NoteColorIDSnapBackward { get; set; } = 5;
+    public int NoteColorIDHold { get; set; } = 6;
 
     public enum InvertSlideColorOptions
     {
@@ -297,7 +297,7 @@ public class DesignSettings
         On,
     }
 
-    public InvertSlideColorOptions InvertSlideColor = InvertSlideColorOptions.Off;
+    public InvertSlideColorOptions InvertSlideColor { get; set; } = InvertSlideColorOptions.Off;
 
     public enum ShowShootEffectOptions
     {
@@ -305,7 +305,7 @@ public class DesignSettings
         On,
     }
 
-    public ShowShootEffectOptions ShowShootEffect = ShowShootEffectOptions.On;
+    public ShowShootEffectOptions ShowShootEffect { get; set; } = ShowShootEffectOptions.On;
 
     public enum ShowKeyBeamsOptions
     {
@@ -313,7 +313,7 @@ public class DesignSettings
         On,
     }
 
-    public ShowKeyBeamsOptions ShowKeyBeams = ShowKeyBeamsOptions.On;
+    public ShowKeyBeamsOptions ShowKeyBeams { get; set; } = ShowKeyBeamsOptions.On;
 
     public enum ShowRNoteEffectOptions
     {
@@ -321,23 +321,23 @@ public class DesignSettings
         On,
     }
 
-    public ShowRNoteEffectOptions ShowRNoteEffect = ShowRNoteEffectOptions.On;
+    public ShowRNoteEffectOptions ShowRNoteEffect { get; set; } = ShowRNoteEffectOptions.On;
 }
 
 [Serializable]
 public class SoundSettings
 {
-    public int TouchSE = 0;
-    public int BGMVolume = 100;
-    public int HitsoundOverallVolume = 70;
-    public int GuideVolume = 30;
-    public int TouchNoteVolume = 80;
-    public int HoldNoteVolume = 80;
-    public int SlideNoteVolume = 80;
-    public int SnapNoteVolume = 80;
-    public int ChainNoteVolume = 80;
-    public int BonusEffectVolume = 80;
-    public int RNoteEffectVolume = 80;
+    public int TouchSE { get; set; } = 0;
+    public int BGMVolume { get; set; } = 100;
+    public int HitsoundOverallVolume { get; set; } = 70;
+    public int GuideVolume { get; set; } = 30;
+    public int TouchNoteVolume { get; set; } = 80;
+    public int HoldNoteVolume { get; set; } = 80;
+    public int SlideNoteVolume { get; set; } = 80;
+    public int SnapNoteVolume { get; set; } = 80;
+    public int ChainNoteVolume { get; set; } = 80;
+    public int BonusEffectVolume { get; set; } = 80;
+    public int RNoteEffectVolume { get; set; } = 80;
 }
 // ReSharper restore RedundantDefaultMemberInitializer
 }
