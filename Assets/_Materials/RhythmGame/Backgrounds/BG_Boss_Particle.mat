@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BG_Standard_Particle_A
+  m_Name: BG_Boss_Particle
   m_Shader: {fileID: 4800000, guid: f2668f3d1af0b3846a635b916a5f73d1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
