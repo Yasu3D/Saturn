@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using SaturnGame.Settings;
 using System.Collections.Generic;
@@ -495,11 +496,16 @@ private Sequence currentSequence;
 
     private static string GetSelectedString([NotNull] UIListItem item)
     {
-        int settingsIndex = SettingsManager.Instance.PlayerSettings.GetParameter(item.SettingsBinding);
-
-        if (settingsIndex == -1)
+        Type parameterType;
+        object parameterValue;
+        try
         {
-            Debug.LogWarning($"Setting \"{item.SettingsBinding}\" was not found!");
+            (parameterType, parameterValue) =
+                SettingsManager.Instance.PlayerSettings.GetParameter(item.SettingsBinding);
+        }
+        catch (ArgumentException e)
+        {
+            Debug.LogWarning(e);
             return "???";
         }
 
@@ -515,11 +521,12 @@ private Sequence currentSequence;
             return "???";
         }
 
-        UIListItem selectedItem = item.NextScreen.VisibleListItems.FirstOrDefault(x => x.SettingsValue == settingsIndex);
+        UIListItem selectedItem = item.NextScreen.VisibleListItems.FirstOrDefault(x =>
+            x.MatchesParameterValue(parameterType, parameterValue));
 
         if (selectedItem != null) return selectedItem.Title;
 
-        Debug.LogWarning($"No item with matching index [{settingsIndex}] was found!");
+        Debug.LogWarning($"No item with matching value {parameterValue} was found!");
         return "???";
     }
 

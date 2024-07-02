@@ -18,93 +18,111 @@ MonoBehaviour:
   RadialSubType: 0
   DefaultItemIndex: 0
   ListItems:
-  - SubtitleType: 0
-    ItemType: 0
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: OFF
+    SubtitleType: 0
     Subtitle: Display nothing.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 0
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 0
+    SettingsValueEnum: Off
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: COMBO
+    SubtitleType: 0
     Subtitle: Display current combo.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 1
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 1
+    SettingsValueEnum: Combo
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SCORE (PLUS METHOD)
+    SubtitleType: 0
     Subtitle: Display current score (plus method).
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 2
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 2
+    SettingsValueEnum: PlusMethod
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SCORE (MINUS METHOD)
+    SubtitleType: 0
     Subtitle: Display current score (minus method).
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 3
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 3
+    SettingsValueEnum: MinusMethod
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SCORE (AVERAGE METHOD)
+    SubtitleType: 0
     Subtitle: Display current score (average method).
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 4
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 4
+    SettingsValueEnum: AverageMethod
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: S BORDER
+    SubtitleType: 0
     Subtitle: Display remaining points to an S rank.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 5
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 5
+    SettingsValueEnum: SBorder
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SS BORDER
+    SubtitleType: 0
     Subtitle: Display remaining points to a SS rank.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 6
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 6
+    SettingsValueEnum: SSBorder
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: SSS BORDER
+    SubtitleType: 0
     Subtitle: Display remaining points to a SSS rank.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 7
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 7
+    SettingsValueEnum: SSSBorder
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: PB BORDER
+    SubtitleType: 0
     Subtitle: Display remaining points to your personal best.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: CenterDisplayInfo
-    SettingsValue: 8
+    SettingsType: 1
+    SettingsValueInt: 8
+    SettingsValueEnum: PersonalBestBorder
+    NextScreen: {fileID: 0}

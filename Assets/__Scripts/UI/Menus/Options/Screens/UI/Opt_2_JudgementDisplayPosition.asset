@@ -18,43 +18,51 @@ MonoBehaviour:
   RadialSubType: 1
   DefaultItemIndex: 2
   ListItems:
-  - SubtitleType: 0
-    ItemType: 0
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: OFF
+    SubtitleType: 0
     Subtitle: 
-    Sprite: {fileID: 21300000, guid: 0c2163ddc0550c94c826b332cbe1c15a, type: 3}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 0c2163ddc0550c94c826b332cbe1c15a, type: 3}
     SettingsParameter: JudgementDisplayPosition
-    SettingsValue: 0
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 0
+    SettingsValueEnum: Off
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: TOP
+    SubtitleType: 0
     Subtitle: 
-    Sprite: {fileID: 21300000, guid: 2cc443e6a4c1dbb4682186810f11ea94, type: 3}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 2cc443e6a4c1dbb4682186810f11ea94, type: 3}
     SettingsParameter: JudgementDisplayPosition
-    SettingsValue: 1
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 1
+    SettingsValueEnum: Top
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: CENTER
+    SubtitleType: 0
     Subtitle: 
-    Sprite: {fileID: 21300000, guid: 21e765420e57da84098f750bc09f25d5, type: 3}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 21e765420e57da84098f750bc09f25d5, type: 3}
     SettingsParameter: JudgementDisplayPosition
-    SettingsValue: 2
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 2
+    SettingsValueEnum: Center
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: BOTTOM
+    SubtitleType: 0
     Subtitle: 
-    Sprite: {fileID: 21300000, guid: 77b35dcdc85a01d43b730239ec5bb759, type: 3}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 77b35dcdc85a01d43b730239ec5bb759, type: 3}
     SettingsParameter: JudgementDisplayPosition
-    SettingsValue: 3
+    SettingsType: 1
+    SettingsValueInt: 3
+    SettingsValueEnum: Bottom
+    NextScreen: {fileID: 0}

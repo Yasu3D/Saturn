@@ -1,0 +1,3 @@
+# To populate this dir, do NuGet -> Restore Packages in the Unity Editor.
+*
+!.gitignore

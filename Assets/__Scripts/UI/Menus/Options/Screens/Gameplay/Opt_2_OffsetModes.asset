@@ -22,39 +22,45 @@ MonoBehaviour:
   - VisibilityType: 0
     ConditionParameter: 
     ConditionValue: 0
-    SubtitleType: 0
     ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: LOW LATENCY
+    SubtitleType: 0
     Subtitle: Adjustable Audio Offset. No artificial latency.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: OffsetMode
-    SettingsValue: 0
+    SettingsType: 1
+    SettingsValueInt: 0
+    SettingsValueEnum: Standard
+    NextScreen: {fileID: 0}
   - VisibilityType: 0
     ConditionParameter: 
     ConditionValue: 0
-    SubtitleType: 0
     ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: CLASSIC
+    SubtitleType: 0
     Subtitle: Adjustalble Audio Offset. Artificial latency similar to original game.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: OffsetMode
-    SettingsValue: 1
+    SettingsType: 1
+    SettingsValueInt: 0
+    SettingsValueEnum: Classic
+    NextScreen: {fileID: 0}
   - VisibilityType: 0
     ConditionParameter: 
     ConditionValue: 0
-    SubtitleType: 0
     ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: ADVANCED
+    SubtitleType: 0
     Subtitle: Fully adjust Audio, Visuals, and Artificial Latency.
-    Sprite: {fileID: 0}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 0}
     SettingsParameter: OffsetMode
-    SettingsValue: 2
+    SettingsType: 1
+    SettingsValueInt: 2
+    SettingsValueEnum: Advanced
+    NextScreen: {fileID: 0}

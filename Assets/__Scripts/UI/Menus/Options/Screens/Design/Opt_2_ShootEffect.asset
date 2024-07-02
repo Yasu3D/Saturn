@@ -18,23 +18,27 @@ MonoBehaviour:
   RadialSubType: 1
   DefaultItemIndex: 1
   ListItems:
-  - SubtitleType: 0
-    ItemType: 0
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: OFF
+    SubtitleType: 0
     Subtitle: 
-    Sprite: {fileID: 21300000, guid: 183f34b743aeb9645a477da00ac7e93f, type: 3}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 183f34b743aeb9645a477da00ac7e93f, type: 3}
     SettingsParameter: ShowShootEffect
-    SettingsValue: 0
-  - SubtitleType: 0
-    ItemType: 0
+    SettingsType: 1
+    SettingsValueInt: 0
+    SettingsValueEnum: Off
+    NextScreen: {fileID: 0}
+  - ItemType: 0
     Color: {r: 0.74509805, g: 0.74509805, b: 0.74509805, a: 1}
     Title: ON
+    SubtitleType: 0
     Subtitle: 
-    Sprite: {fileID: 21300000, guid: 183f34b743aeb9645a477da00ac7e93f, type: 3}
     SettingsBinding: 
-    NextScreen: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 183f34b743aeb9645a477da00ac7e93f, type: 3}
     SettingsParameter: ShowShootEffect
-    SettingsValue: 1
+    SettingsType: 1
+    SettingsValueInt: 1
+    SettingsValueEnum: On
+    NextScreen: {fileID: 0}

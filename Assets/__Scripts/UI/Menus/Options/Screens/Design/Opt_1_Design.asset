@@ -54,7 +54,7 @@ MonoBehaviour:
     Title: TOUCH COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_Touch
+    SettingsBinding: NoteColorIDTouch
     NextScreen: {fileID: 11400000, guid: bc583dc066cd77343b8a8f8381efc995, type: 2}
     SettingsParameter: 
     SettingsValue: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
     Title: CHAIN COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_Chain
+    SettingsBinding: NoteColorIDChain
     NextScreen: {fileID: 11400000, guid: 7324aeddb20dab44497e235acc9ed7b4, type: 2}
     SettingsParameter: 
     SettingsValue: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
     Title: HOLD COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_Hold
+    SettingsBinding: NoteColorIDHold
     NextScreen: {fileID: 11400000, guid: 52d956458944b04438e0e522ed09dbad, type: 2}
     SettingsParameter: 
     SettingsValue: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
     Title: SWIPE CLOCKWISE COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_SwipeClockwise
+    SettingsBinding: NoteColorIDSwipeClockwise
     NextScreen: {fileID: 11400000, guid: 4d6b68d055b4e2c4b84bdedcff1ba27e, type: 2}
     SettingsParameter: 
     SettingsValue: 0
@@ -94,7 +94,7 @@ MonoBehaviour:
     Title: SWIPE COUNTERCLOCKWISE COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_SwipeCounterclockwise
+    SettingsBinding: NoteColorIDSwipeCounterclockwise
     NextScreen: {fileID: 11400000, guid: d66374503715f9b45b6ef440019e9309, type: 2}
     SettingsParameter: 
     SettingsValue: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
     Title: SNAP FORWARDS COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_SnapForward
+    SettingsBinding: NoteColorIDSnapForward
     NextScreen: {fileID: 11400000, guid: 40274ca6077b1884085138720cea0c00, type: 2}
     SettingsParameter: 
     SettingsValue: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
     Title: SNAP BACKWARDS COLOR
     Subtitle: 
     Sprite: {fileID: 0}
-    SettingsBinding: NoteColorID_SnapBackward
+    SettingsBinding: NoteColorIDSnapBackward
     NextScreen: {fileID: 11400000, guid: a17b2aa1ec27d014f8d75d91970f07c2, type: 2}
     SettingsParameter: 
     SettingsValue: 0

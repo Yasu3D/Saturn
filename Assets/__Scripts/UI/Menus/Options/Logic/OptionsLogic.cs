@@ -70,9 +70,11 @@ public class OptionsLogic : MonoBehaviour
                 if (nextScreen.ScreenType is UIScreen.UIScreenType.Radial)
                 {
                     string parameter = nextScreen.ListItems[0].SettingsParameter;
-                    int value = SettingsManager.Instance.PlayerSettings.GetParameter(parameter);
+                    (Type parameterType, object value) =
+                        SettingsManager.Instance.PlayerSettings.GetParameter(parameter);
 
-                    UIListItem item = nextScreen.ListItems.FirstOrDefault(x => x.SettingsValue == value);
+                    UIListItem item = nextScreen.ListItems.FirstOrDefault(x =>
+                        x.MatchesParameterValue(parameterType, value));
                     if (item != null) CurrentIndex = nextScreen.ListItems.IndexOf(item);
                 }
 
@@ -84,8 +86,14 @@ public class OptionsLogic : MonoBehaviour
                 if (selectedItem.SettingsParameter == "") return;
 
                 UIAudio.PlaySound(UIAudioController.UISound.Confirm);
+                object settingsValue = selectedItem.SettingsType switch
+                {
+                    UIListItem.ValueType.Int => selectedItem.SettingsValueInt,
+                    UIListItem.ValueType.Enum => selectedItem.SettingsValueEnum,
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
                 SettingsManager.Instance.PlayerSettings.SetParameter(selectedItem.SettingsParameter,
-                    selectedItem.SettingsValue);
+                    settingsValue);
 
                 if (screenStack.Count <= 1 || indexStack.Count <= 1) return;
 
@@ -102,7 +110,7 @@ public class OptionsLogic : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
             }
         }
-        
+
         await Awaitable.WaitForSecondsAsync(0.25f);
         panelAnimator.GetPanels(CurrentScreen, CurrentIndex);
         panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
@@ -153,7 +161,7 @@ public class OptionsLogic : MonoBehaviour
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
         panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Up, CurrentIndex, CurrentScreen);
         panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
-        
+
         panelAnimator.Anim_UpdateRadialOffsetOption(CurrentIndex);
     }
 
@@ -169,7 +177,7 @@ public class OptionsLogic : MonoBehaviour
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
         panelAnimator.Anim_ShiftPanels(OptionsPanelAnimator.MoveDirection.Down, CurrentIndex, CurrentScreen);
         panelAnimator.SetPrimaryPanel(CurrentScreen.VisibleListItems[CurrentIndex]);
-        
+
         panelAnimator.Anim_UpdateRadialOffsetOption(CurrentIndex);
     }
 
@@ -185,7 +193,7 @@ public class OptionsLogic : MonoBehaviour
         if (outOfBounds || sameIndex) return;
 
         state = MenuState.Reverting;
-        
+
         // scary while loop D:
         while (CurrentIndex != defaultIndex)
         {
