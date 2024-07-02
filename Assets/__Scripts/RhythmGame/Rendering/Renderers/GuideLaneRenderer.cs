@@ -12,10 +12,22 @@ public class GuideLaneRenderer : MonoBehaviour
     [SerializeField] private List<MeshRenderer> laneSegments;
     [SerializeField] private float animationSpeed = 0.008f;
     [SerializeField] private Material material;
+    private Material materialInstance;
+    
     private static readonly int NoteWidthPropertyID = Shader.PropertyToID("_NoteWidth");
     private static readonly int OpacityPropertyID = Shader.PropertyToID("_TunnelOpacity");
     private static readonly int ComboShinePropertyID = Shader.PropertyToID("_ComboShine");
     private static readonly int LaneTypePropertyID = Shader.PropertyToID("_LaneType");
+
+    private void Awake()
+    {
+        materialInstance = new(material);
+        
+        foreach (MeshRenderer meshRenderer in laneSegments)
+        {
+            meshRenderer.material = materialInstance;
+        }
+    }
     
     /// <summary>
     /// Applies Material settings for different appearances. <br />
