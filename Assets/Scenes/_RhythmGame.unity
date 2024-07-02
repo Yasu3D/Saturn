@@ -5476,6 +5476,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 08c0cfc05af98de4b9e2c6d3b200fb93, type: 2}
     - target: {fileID: 5547442556324184978, guid: c3c6fd824d041cd43b5404710c243819,
         type: 3}
+      propertyPath: material
+      value: 
+      objectReference: {fileID: 2100000, guid: 08c0cfc05af98de4b9e2c6d3b200fb93, type: 2}
+    - target: {fileID: 5547442556324184978, guid: c3c6fd824d041cd43b5404710c243819,
+        type: 3}
       propertyPath: test.Size
       value: 5
       objectReference: {fileID: 0}
