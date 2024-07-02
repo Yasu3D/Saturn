@@ -9,41 +9,26 @@ namespace SaturnGame.Rendering
 [AddComponentMenu("SaturnGame/Rendering/Guide Lane Renderer")]
 public class GuideLaneRenderer : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> laneSegments;
+    [SerializeField] private List<MeshRenderer> laneSegments;
     [SerializeField] private float animationSpeed = 0.008f;
     [SerializeField] private Material material;
     private static readonly int NoteWidthPropertyID = Shader.PropertyToID("_NoteWidth");
-    private static readonly int OpacityPropertyID = Shader.PropertyToID("_Opacity");
+    private static readonly int OpacityPropertyID = Shader.PropertyToID("_TunnelOpacity");
     private static readonly int ComboShinePropertyID = Shader.PropertyToID("_ComboShine");
-
+    private static readonly int LaneTypePropertyID = Shader.PropertyToID("_LaneType");
+    
     /// <summary>
     /// Applies Material settings for different appearances. <br />
     /// Parameters should be from user preferences by default.
     /// </summary>
     /// <param name="noteWidth">Note width from 1 - 5</param>
     /// <param name="opacity">Opacity of Guide Lane</param>
-    /// <param name="laneType">Number of visible lanes from 0 - 6</param>
+    /// <param name="laneType">Number of visible lanes from 0 to 6</param>
     public void SetRenderer(int noteWidth, int opacity, int laneType)
     {
         material.SetFloat(NoteWidthPropertyID, noteWidth);
-        material.SetFloat(OpacityPropertyID, opacity * 0.2f); // remap from 0-5 to 0-1
-
-        string keyword = laneType switch
-        {
-            0 => "_NONE",
-            1 => "_A",
-            2 => "_B",
-            3 => "_C",
-            4 => "_D",
-            5 => "_E",
-            6 => "_F",
-            _ => "",
-        };
-
-        // ReSharper disable StringLiteralTypo
-        material.DisableKeyword("_LANETYPE_A");
-        material.EnableKeyword("_LANETYPE" + keyword);
-        // ReSharper restore StringLiteralTypo
+        material.SetFloat(OpacityPropertyID, opacity);
+        material.SetFloat(LaneTypePropertyID, laneType);
     }
 
 
@@ -105,7 +90,7 @@ public class GuideLaneRenderer : MonoBehaviour
     {
         for (int i = 0; i < size; i++)
         {
-            laneSegments[(position + size - i + 59) % 60].SetActive(state);
+            laneSegments[(position + size - i + 59) % 60].gameObject.SetActive(state);
             await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
         }
     }
@@ -114,7 +99,7 @@ public class GuideLaneRenderer : MonoBehaviour
     {
         for (int i = 0; i < size; i++)
         {
-            laneSegments[(i + position + 60) % 60].SetActive(state);
+            laneSegments[(i + position + 60) % 60].gameObject.SetActive(state);
             await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
         }
     }
@@ -130,8 +115,8 @@ public class GuideLaneRenderer : MonoBehaviour
 
         for (int i = 0; i < steps; i++)
         {
-            laneSegments[(centerClockwise - i + offset) % 60].SetActive(state);
-            laneSegments[(centerCounterclockwise + i + offset) % 60].SetActive(state);
+            laneSegments[(centerClockwise - i + offset) % 60].gameObject.SetActive(state);
+            laneSegments[(centerCounterclockwise + i + offset) % 60].gameObject.SetActive(state);
             await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
         }
     }

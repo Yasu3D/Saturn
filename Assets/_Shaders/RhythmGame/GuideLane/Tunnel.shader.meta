@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: aac94192b2cabfe4c87a0c25dd19e239
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _TileMap: {instanceID: 0}
+  - _TriangleMap: {instanceID: 0}
+  - _GlowMap: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
