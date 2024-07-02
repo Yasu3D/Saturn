@@ -34,14 +34,16 @@ namespace SaturnGame.UI
     [ExecuteInEditMode]
     public class ArcTextMeshPro : MonoBehaviour
     {
+        [SerializeField] private RectTransform parent;
+        [SerializeField] private float margin;
+        
         [SerializeField] private TMP_Text textComponent;
         [SerializeField] private float letterSpacing;
-        [SerializeField] private float radius;
         [SerializeField] private float angleOffset;
         [SerializeField] private bool flipText;
 
         private float prevLetterSpacing;
-        private float prevRadius;
+        private float prevMargin;
         private float prevAngleOffset;
         private bool prevFlipText;
         private bool hasResized;
@@ -51,19 +53,21 @@ namespace SaturnGame.UI
             // ReSharper disable CompareOfFloatsByEqualityOperator
             bool value = hasResized ||
                          prevLetterSpacing != letterSpacing ||
-                         prevRadius != radius ||
+                         prevMargin != margin ||
                          prevAngleOffset != angleOffset ||
                          prevFlipText != flipText;
             // ReSharper restore CompareOfFloatsByEqualityOperator
 
             prevLetterSpacing = letterSpacing;
-            prevRadius = radius;
+            prevMargin = margin;
             prevAngleOffset = angleOffset;
             prevFlipText = flipText;
             hasResized = false;
             return value;
         }
 
+        private void Update() => UpdateText();
+        
         private void Awake()
         {
             if (textComponent == null)
@@ -148,13 +152,18 @@ namespace SaturnGame.UI
             float x0 = Mathf.Cos(angle);
             float y0 = Mathf.Sin(angle);
 
-            float lineRadius =
-                radius - textInfo.lineInfo[0].lineExtents.max.y * textInfo.characterInfo[charIndex].lineNumber;
+            float lineRadius = GetRadius() - textInfo.lineInfo[0].lineExtents.max.y * textInfo.characterInfo[charIndex].lineNumber;
 
             Vector2 newMidBaselinePos = new(x0 * lineRadius, -y0 * lineRadius);
 
             return Matrix4x4.TRS(newMidBaselinePos,
                 Quaternion.AngleAxis(-Mathf.Atan2(y0, x0) * Mathf.Rad2Deg - 90, Vector3.forward), Vector3.one);
+        }
+
+        private float GetRadius()
+        {
+            if (parent == null) return 0;
+            return 0.5f * parent.rect.width - margin;
         }
     }
 }
