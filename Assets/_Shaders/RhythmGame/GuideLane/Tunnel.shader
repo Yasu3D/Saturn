@@ -185,9 +185,6 @@ Shader "SaturnGame/RhythmGame/Tunnel"
                 result = AddJudgeLine(result, judgeLineColor, judgeLineGradient, judgeLine);
 
                 float alpha = GetAlpha(i.clip, judgeLineGradient, judgeLine);
-                
-                //return float4(alpha, alpha, alpha, 1);
-                
                 return float4(result, alpha);
             }
             ENDCG
