@@ -281,7 +281,7 @@ public class NoteManager : MonoBehaviour
         if (!container.Reverse)
         {
             AnimateObject(container, garbage, container.Note.TimeMs, container.Note.ScaledVisualTime,
-                container.Note.ScaledVisualTime, 0.25f, container.transform, true);
+                container.transform, true);
         }
         else
         {
@@ -321,9 +321,8 @@ public class NoteManager : MonoBehaviour
 
             if (!holdSurfaceRenderer.Reverse)
             {
-                AnimateObject(holdSurfaceRenderer, holdSurfaceGarbage, holdSurfaceRenderer.HoldNote.End.TimeMs, 
-                    holdSurfaceRenderer.HoldNote.Start.ScaledVisualTime,
-                    holdSurfaceRenderer.HoldNote.End.ScaledVisualTime, 0.25f, holdSurfaceRenderer.transform, false);
+                AnimateObject(holdSurfaceRenderer, holdSurfaceGarbage, holdSurfaceRenderer.HoldNote.End.TimeMs,
+                    holdSurfaceRenderer.HoldNote.Start.ScaledVisualTime, holdSurfaceRenderer.transform, false);
             }
             else
             {
@@ -342,7 +341,7 @@ public class NoteManager : MonoBehaviour
         foreach (BarLineContainer container in barLinePool.ActiveObjects)
         {
             container.gameObject.SetActive(!reverseActive);
-            AnimateObject(container, barLineGarbage, container.Time, container.Time, container.Time, 0, container.transform, true);
+            AnimateObject(container, barLineGarbage, container.Time, container.Time, container.transform, true);
         }
     }
 
@@ -377,8 +376,8 @@ public class NoteManager : MonoBehaviour
     }
 
 
-    private void AnimateObject<T>(T obj, ICollection<T> garbage, float unscaledTime, float scaledTime, float despawnTime,
-        float despawnTimeMultiplier, [NotNull] Transform objectTransform, bool scale)
+    private void AnimateObject<T>(T obj, ICollection<T> garbage, float unscaledTime, float scaledTime,
+        [NotNull] Transform objectTransform, bool scale)
     {
         float distance = scaledTime - ScaledVisualTime();
         float scroll = SaturnMath.InverseLerp(ScrollDuration(), 0, distance);
@@ -392,15 +391,15 @@ public class NoteManager : MonoBehaviour
         }
 
         // I love type systems.
-        GameObject noteGameObject = obj switch
+        GameObject hitNoteGameObject = obj switch
         {
-            NoteContainer { Note : { IsHit: true } } container => container.gameObject,
-            SnapContainer { Note : { IsHit: true } } container => container.gameObject,
-            SwipeContainer { Note : { IsHit: true } } container => container.gameObject,
+            NoteContainer { Note : { HasBeenHit: true } } container => container.gameObject,
+            SnapContainer { Note : { HasBeenHit: true } } container => container.gameObject,
+            SwipeContainer { Note : { HasBeenHit: true } } container => container.gameObject,
             // in GenericContainer, Note is only required to be a PositionedChartElement. The typecheck here
             // (Note: Note) will only match for GenericContainers containing Notes, that is, for R effects.
             // Syncs will not be matched as SyncIndicator is not a Note.
-            GenericContainer { Note: Note { IsHit: true } } container => container.gameObject,
+            GenericContainer { Note: Note { HasBeenHit: true } } container => container.gameObject,
             // This should not match:
             // - BarLineContainer
             // - HoldEndContainer
@@ -408,10 +407,10 @@ public class NoteManager : MonoBehaviour
             //   TODO: syncs should probably disappear if either note is hit.
             _ => null,
         };
-        if (noteGameObject is not null)
+        if (hitNoteGameObject is not null)
         {
             // Immediately hide a hit note and mark as garbage.
-            noteGameObject.SetActive(false);
+            hitNoteGameObject.SetActive(false);
             garbage.Add(obj);
             return;
         }
@@ -491,7 +490,7 @@ public class NoteManager : MonoBehaviour
         HoldSurfaceRenderer holdSurfaceRenderer = holdSurfacePool.GetObject();
 
         holdSurfaceRenderer.TimeManager = timeManager;
-        
+
         holdSurfaceRenderer.SetRenderer(input);
         holdSurfaceRenderer.GenerateMesh(ScrollDuration());
         holdSurfaceRenderer.Reverse = reverse;
