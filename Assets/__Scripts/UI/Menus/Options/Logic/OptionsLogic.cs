@@ -90,6 +90,7 @@ public class OptionsLogic : MonoBehaviour
                 {
                     UIListItem.ValueType.Int => selectedItem.SettingsValueInt,
                     UIListItem.ValueType.Enum => selectedItem.SettingsValueEnum,
+                    UIListItem.ValueType.Float => selectedItem.SettingsValueFloat,
                     _ => throw new ArgumentOutOfRangeException(),
                 };
                 SettingsManager.Instance.PlayerSettings.SetParameter(selectedItem.SettingsParameter,

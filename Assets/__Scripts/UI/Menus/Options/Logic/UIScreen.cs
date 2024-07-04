@@ -93,6 +93,7 @@ public class UIListItem
     {
         Int,
         Enum,
+        Float,
     }
 
     // Default to int since that was the default before multiple types were available.
@@ -103,6 +104,9 @@ public class UIListItem
     public int SettingsValueInt;
 
     public string SettingsValueEnum;
+
+    public float SettingsValueFloat;
+    private const float FloatValueEpsilon = 0.0001f; // In practice, all float settings only use .1 increments.
 
     // NextScreen is only valid for SubMenu
     [FormerlySerializedAs("nextScreen")] public UIScreen NextScreen;
@@ -138,6 +142,7 @@ public class UIListItem
         {
             ValueType.Int => type == typeof(int) && (int)value == SettingsValueInt,
             ValueType.Enum => type.IsEnum && (string)value == SettingsValueEnum,
+            ValueType.Float => type == typeof(float) && Mathf.Abs((float)value - SettingsValueFloat) < FloatValueEpsilon,
             _ => throw new ArgumentOutOfRangeException(),
         };
     }

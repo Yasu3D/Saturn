@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 338d33c47d144154fa475b9f1d8e0e92, type: 3}
-  m_Name: Opt_4_AudioOffset
+  m_Name: Opt_2_VisualOffsetMs
   m_EditorClassIdentifier: Assembly-CSharp:SaturnGame.UI:UIScreen
-  ScreenTitle: AUDIO OFFSET
-  ScreenSubtitle: 'Adjust the audio timing.
+  ScreenTitle: VISUAL OFFSET
+  ScreenSubtitle: 'Adjust the visual timing.
 
     You should adjust as follows:
 
@@ -28,2010 +28,2010 @@ MonoBehaviour:
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -10.0
-    Subtitle: 
+    Title: -100 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -100
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.9
-    Subtitle: 
+    Title: -99 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -99
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.8
-    Subtitle: 
+    Title: -98 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -98
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.7
-    Subtitle: 
+    Title: -97 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -97
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.6
-    Subtitle: 
+    Title: -96 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -96
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.5
-    Subtitle: 
+    Title: -95 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -95
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.4
-    Subtitle: 
+    Title: -94 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -94
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.3
-    Subtitle: 
+    Title: -93 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -93
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.2
-    Subtitle: 
+    Title: -92 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -92
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.1
-    Subtitle: 
+    Title: -91 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -91
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -9.0
-    Subtitle: 
+    Title: -90 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -90
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.9
-    Subtitle: 
+    Title: -89 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -89
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.8
-    Subtitle: 
+    Title: -88 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -88
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.7
-    Subtitle: 
+    Title: -87 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -87
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.6
-    Subtitle: 
+    Title: -86 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -86
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.5
-    Subtitle: 
+    Title: -85 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -85
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.4
-    Subtitle: 
+    Title: -84 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -84
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.3
-    Subtitle: 
+    Title: -83 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -83
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.2
-    Subtitle: 
+    Title: -82 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -82
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.1
-    Subtitle: 
+    Title: -81 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -81
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -8.0
-    Subtitle: 
+    Title: -80 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -80
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.9
-    Subtitle: 
+    Title: -79 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -79
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.8
-    Subtitle: 
+    Title: -78 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -78
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.7
-    Subtitle: 
+    Title: -77 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -77
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.6
-    Subtitle: 
+    Title: -76 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -76
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.5
-    Subtitle: 
+    Title: -75 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -75
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.4
-    Subtitle: 
+    Title: -74 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -74
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.3
-    Subtitle: 
+    Title: -73 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -73
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.2
-    Subtitle: 
+    Title: -72 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -72
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.1
-    Subtitle: 
+    Title: -71 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -71
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -7.0
-    Subtitle: 
+    Title: -70 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -70
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.9
-    Subtitle: 
+    Title: -69 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -69
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.8
-    Subtitle: 
+    Title: -68 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -68
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.7
-    Subtitle: 
+    Title: -67 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -67
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.6
-    Subtitle: 
+    Title: -66 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -66
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.5
-    Subtitle: 
+    Title: -65 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -65
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.4
-    Subtitle: 
+    Title: -64 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -64
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.3
-    Subtitle: 
+    Title: -63 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -63
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.2
-    Subtitle: 
+    Title: -62 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -62
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.1
-    Subtitle: 
+    Title: -61 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -61
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -6.0
-    Subtitle: 
+    Title: -60 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -60
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.9
-    Subtitle: 
+    Title: -59 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -59
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.8
-    Subtitle: 
+    Title: -58 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -58
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.7
-    Subtitle: 
+    Title: -57 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -57
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.6
-    Subtitle: 
+    Title: -56 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -56
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.5
-    Subtitle: 
+    Title: -55 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -55
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.4
-    Subtitle: 
+    Title: -54 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -54
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.3
-    Subtitle: 
+    Title: -53 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -53
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.2
-    Subtitle: 
+    Title: -52 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -52
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.1
-    Subtitle: 
+    Title: -51 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -51
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -5.0
-    Subtitle: 
+    Title: -50 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -50
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.9
-    Subtitle: 
+    Title: -49 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -49
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.8
-    Subtitle: 
+    Title: -48 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -48
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.7
-    Subtitle: 
+    Title: -47 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -47
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.6
-    Subtitle: 
+    Title: -46 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -46
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.5
-    Subtitle: 
+    Title: -45 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -45
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.4
-    Subtitle: 
+    Title: -44 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -44
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.3
-    Subtitle: 
+    Title: -43 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -43
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.2
-    Subtitle: 
+    Title: -42 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -42
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.1
-    Subtitle: 
+    Title: -41 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -41
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -4.0
-    Subtitle: 
+    Title: -40 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -40
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.9
-    Subtitle: 
+    Title: -39 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -39
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.8
-    Subtitle: 
+    Title: -38 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -38
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.7
-    Subtitle: 
+    Title: -37 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -37
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.6
-    Subtitle: 
+    Title: -36 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -36
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.5
-    Subtitle: 
+    Title: -35 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -35
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.4
-    Subtitle: 
+    Title: -34 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -34
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.3
-    Subtitle: 
+    Title: -33 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -33
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.2
-    Subtitle: 
+    Title: -32 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -32
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.1
-    Subtitle: 
+    Title: -31 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -31
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -3.0
-    Subtitle: 
+    Title: -30 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -30
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.9
-    Subtitle: 
+    Title: -29 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -29
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.8
-    Subtitle: 
+    Title: -28 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -28
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.7
-    Subtitle: 
+    Title: -27 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -27
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.6
-    Subtitle: 
+    Title: -26 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -26
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.5
-    Subtitle: 
+    Title: -25 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -25
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.4
-    Subtitle: 
+    Title: -24 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -24
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.3
-    Subtitle: 
+    Title: -23 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -23
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.2
-    Subtitle: 
+    Title: -22 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -22
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.1
-    Subtitle: 
+    Title: -21 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -21
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -2.0
-    Subtitle: 
+    Title: -20 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -20
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.9
-    Subtitle: 
+    Title: -19 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -19
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.8
-    Subtitle: 
+    Title: -18 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -18
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.7
-    Subtitle: 
+    Title: -17 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -17
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.6
-    Subtitle: 
+    Title: -16 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -16
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.5
-    Subtitle: 
+    Title: -15 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -15
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.4
-    Subtitle: 
+    Title: -14 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -14
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.3
-    Subtitle: 
+    Title: -13 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -13
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.2
-    Subtitle: 
+    Title: -12 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -12
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.1
-    Subtitle: 
+    Title: -11 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -11
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -1.0
-    Subtitle: 
+    Title: -10 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -10
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.9
-    Subtitle: 
+    Title: -9 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -9
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.8
-    Subtitle: 
+    Title: -8 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -8
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.7
-    Subtitle: 
+    Title: -7 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -7
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.6
-    Subtitle: 
+    Title: -6 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -6
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.5
-    Subtitle: 
+    Title: -5 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -5
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.4
-    Subtitle: 
+    Title: -4 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -4
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.3
-    Subtitle: 
+    Title: -3 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -3
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.2
-    Subtitle: 
+    Title: -2 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -2
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: -0.1
-    Subtitle: 
+    Title: -1 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: -1
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: 0.0
-    Subtitle: 
+    Title: 0 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 0
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.1
-    Subtitle: 
+    Title: +1 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 1
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.2
-    Subtitle: 
+    Title: +2 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 2
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.3
-    Subtitle: 
+    Title: +3 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 3
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.4
-    Subtitle: 
+    Title: +4 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 4
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.5
-    Subtitle: 
+    Title: +5 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 5
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.6
-    Subtitle: 
+    Title: +6 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 6
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.7
-    Subtitle: 
+    Title: +7 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 7
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.8
-    Subtitle: 
+    Title: +8 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 8
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +0.9
-    Subtitle: 
+    Title: +9 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 9
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.0
-    Subtitle: 
+    Title: +10 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 10
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.1
-    Subtitle: 
+    Title: +11 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 11
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.2
-    Subtitle: 
+    Title: +12 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 12
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.3
-    Subtitle: 
+    Title: +13 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 13
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.4
-    Subtitle: 
+    Title: +14 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 14
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.5
-    Subtitle: 
+    Title: +15 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 15
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.6
-    Subtitle: 
+    Title: +16 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 16
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.7
-    Subtitle: 
+    Title: +17 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 17
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.8
-    Subtitle: 
+    Title: +18 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 18
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +1.9
-    Subtitle: 
+    Title: +19 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 19
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.0
-    Subtitle: 
+    Title: +20 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 20
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.1
-    Subtitle: 
+    Title: +21 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 21
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.2
-    Subtitle: 
+    Title: +22 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 22
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.3
-    Subtitle: 
+    Title: +23 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 23
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.4
-    Subtitle: 
+    Title: +24 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 24
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.5
-    Subtitle: 
+    Title: +25 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 25
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.6
-    Subtitle: 
+    Title: +26 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 26
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.7
-    Subtitle: 
+    Title: +27 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 27
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.8
-    Subtitle: 
+    Title: +28 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 28
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +2.9
-    Subtitle: 
+    Title: +29 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 29
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.0
-    Subtitle: 
+    Title: +30 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 30
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.1
-    Subtitle: 
+    Title: +31 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 31
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.2
-    Subtitle: 
+    Title: +32 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 32
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.3
-    Subtitle: 
+    Title: +33 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 33
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.4
-    Subtitle: 
+    Title: +34 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 34
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.5
-    Subtitle: 
+    Title: +35 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 35
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.6
-    Subtitle: 
+    Title: +36 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 36
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.7
-    Subtitle: 
+    Title: +37 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 37
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.8
-    Subtitle: 
+    Title: +38 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 38
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +3.9
-    Subtitle: 
+    Title: +39 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 39
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.0
-    Subtitle: 
+    Title: +40 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 40
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.1
-    Subtitle: 
+    Title: +41 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 41
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.2
-    Subtitle: 
+    Title: +42 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 42
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.3
-    Subtitle: 
+    Title: +43 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 43
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.4
-    Subtitle: 
+    Title: +44 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 44
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.5
-    Subtitle: 
+    Title: +45 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 45
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.6
-    Subtitle: 
+    Title: +46 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 46
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.7
-    Subtitle: 
+    Title: +47 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 47
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.8
-    Subtitle: 
+    Title: +48 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 48
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +4.9
-    Subtitle: 
+    Title: +49 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 49
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.0
-    Subtitle: 
+    Title: +50 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 50
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.1
-    Subtitle: 
+    Title: +51 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 51
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.2
-    Subtitle: 
+    Title: +52 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 52
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.3
-    Subtitle: 
+    Title: +53 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 53
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.4
-    Subtitle: 
+    Title: +54 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 54
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.5
-    Subtitle: 
+    Title: +55 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 55
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.6
-    Subtitle: 
+    Title: +56 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 56
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.7
-    Subtitle: 
+    Title: +57 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 57
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.8
-    Subtitle: 
+    Title: +58 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 58
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +5.9
-    Subtitle: 
+    Title: +59 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 59
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.0
-    Subtitle: 
+    Title: +60 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 60
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.1
-    Subtitle: 
+    Title: +61 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 61
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.2
-    Subtitle: 
+    Title: +62 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 62
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.3
-    Subtitle: 
+    Title: +63 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 63
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.4
-    Subtitle: 
+    Title: +64 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 64
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.5
-    Subtitle: 
+    Title: +65 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 65
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.6
-    Subtitle: 
+    Title: +66 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 66
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.7
-    Subtitle: 
+    Title: +67 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 67
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.8
-    Subtitle: 
+    Title: +68 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 68
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +6.9
-    Subtitle: 
+    Title: +69 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 69
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.0
-    Subtitle: 
+    Title: +70 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 70
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.1
-    Subtitle: 
+    Title: +71 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 71
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.2
-    Subtitle: 
+    Title: +72 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 72
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.3
-    Subtitle: 
+    Title: +73 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 73
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.4
-    Subtitle: 
+    Title: +74 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 74
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.5
-    Subtitle: 
+    Title: +75 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 75
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.6
-    Subtitle: 
+    Title: +76 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 76
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.7
-    Subtitle: 
+    Title: +77 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 77
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.8
-    Subtitle: 
+    Title: +78 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 78
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +7.9
-    Subtitle: 
+    Title: +79 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 79
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.0
-    Subtitle: 
+    Title: +80 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 80
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.1
-    Subtitle: 
+    Title: +81 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 81
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.2
-    Subtitle: 
+    Title: +82 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 82
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.3
-    Subtitle: 
+    Title: +83 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 83
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.4
-    Subtitle: 
+    Title: +84 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 84
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.5
-    Subtitle: 
+    Title: +85 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 85
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.6
-    Subtitle: 
+    Title: +86 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 86
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.7
-    Subtitle: 
+    Title: +87 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 87
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.8
-    Subtitle: 
+    Title: +88 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 88
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +8.9
-    Subtitle: 
+    Title: +89 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 89
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.0
-    Subtitle: 
+    Title: +90 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 90
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.1
-    Subtitle: 
+    Title: +91 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 91
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.2
-    Subtitle: 
+    Title: +92 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 92
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.3
-    Subtitle: 
+    Title: +93 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 93
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.4
-    Subtitle: 
+    Title: +94 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 94
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.5
-    Subtitle: 
+    Title: +95 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 95
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.6
-    Subtitle: 
+    Title: +96 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 96
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.7
-    Subtitle: 
+    Title: +97 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 97
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.8
-    Subtitle: 
+    Title: +98 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 98
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +9.9
-    Subtitle: 
+    Title: +99 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 99
   - SubtitleType: 0
     ItemType: 0
     Color: {r: 0, g: 0.70980394, b: 0.8745098, a: 1}
-    Title: +10.0
-    Subtitle: 
+    Title: +100 MS
+    Subtitle:
     Sprite: {fileID: 0}
-    SettingsBinding: 
+    SettingsBinding:
     NextScreen: {fileID: 0}
-    SettingsParameter: AudioOffset
+    SettingsParameter: VisualOffsetMs
     SettingsValue: 100
