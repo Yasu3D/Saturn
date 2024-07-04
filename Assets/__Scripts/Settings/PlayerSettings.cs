@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -20,7 +19,7 @@ public class PlayerSettings : SettingsWithTomlMetadata
     public DesignSettings DesignSettings { get; set; } = new();
     public SoundSettings SoundSettings { get; set; } = new();
 
-    private static readonly string SettingsPath = Path.Join(Application.persistentDataPath, "settings.toml");
+    private static string SettingsPath => Path.Join(Application.persistentDataPath, "settings.toml");
 
     [NotNull]
     public static PlayerSettings Load()
@@ -71,8 +70,15 @@ public class PlayerSettings : SettingsWithTomlMetadata
         return loadedSettings;
     }
 
-    public void SaveToFile()
+    private void SaveToFile()
     {
+        // Note: Investigated rounding floats when writing:
+        // - There is no way to change the internal serialization to string.
+        // - TomlModelOptions.ConvertToToml can do arbitrary conversions during serialization, but at the end of the day
+        //   the value still needs to be one of the supported primitives. Float and double will both have some
+        //   imprecision you will see. String will be quoted. Decimal is not supported.
+        // Concluded that there is no nice way to do this in TOML without using e.g. a string value.
+        // Not worth the hassle.
         string tomlString = Toml.FromModel(this);
         File.WriteAllText(SettingsPath, tomlString);
     }
@@ -150,7 +156,8 @@ public class PlayerSettings : SettingsWithTomlMetadata
 
         object value = possibleProperty.GetValue(settingsObject);
 
-        if (possibleProperty.PropertyType.IsEnum) value = ((Enum)value).ToString();
+        if (possibleProperty.PropertyType.IsEnum)
+            value = ((Enum)value).ToString();
 
         return (possibleProperty.PropertyType, value);
     }
@@ -175,22 +182,50 @@ public class GameSettings : SettingsWithTomlMetadata
     public OffsetModeOptions OffsetMode { get; set; } = OffsetModeOptions.Standard;
 
     /// <summary>
-    /// Audio Offset from +100 [10] to -100 [-10]
-    /// TODO: Expand to +200 -200
+    /// Audio offset in classic mode, from -10 to +10. 8.333~ms per unit (0.833~ms per 0.1 unit).
     /// </summary>
-    public int AudioOffset { get; set; } = 0;
+    public float ClassicOffset { get; set; } = 0;
+
+    private const float ClassicOffsetUnitMs = 1000f / 12f; // (half a frame)
 
     /// <summary>
-    /// Visual Offset from +100 [10] to -100 [-10]
-    /// TODO: Expand to +200 -200
+    /// Audio offset in ms. Ignored in Classic mode.
     /// </summary>
-    public int VisualOffset { get; set; } = 0;
+    public int AudioOffsetMs { get; set; } = 0;
+
+    public float CalculatedAudioOffsetMs => OffsetMode switch
+    {
+        OffsetModeOptions.Standard => AudioOffsetMs,
+        OffsetModeOptions.Classic => ClassicOffset * ClassicOffsetUnitMs,
+        OffsetModeOptions.Advanced => AudioOffsetMs,
+        _ => throw new ArgumentOutOfRangeException(),
+    };
 
     /// <summary>
-    /// Input latency. No clue about range yet.
-    /// TODO: @cg505 define range for this.
+    /// Visual offset in ms. Only used in Advanced mode.
     /// </summary>
-    public int InputLatency { get; set; } = 0;
+    public int VisualOffsetMs { get; set; } = 0;
+
+    public float CalculatedVisualOffsetMs => OffsetMode switch
+    {
+        OffsetModeOptions.Standard => 0,
+        OffsetModeOptions.Classic => 0,
+        OffsetModeOptions.Advanced => VisualOffsetMs,
+        _ => throw new ArgumentOutOfRangeException(),
+    };
+
+    /// <summary>
+    /// Input latency in ms. Only used in Advanced mode.
+    /// </summary>
+    public int InputLatencyMs { get; set; } = 0;
+
+    public float CalculatedInputLatencyMs => OffsetMode switch
+    {
+        OffsetModeOptions.Standard => 0,
+        OffsetModeOptions.Classic => 30f, // Chosen by testing.
+        OffsetModeOptions.Advanced => InputLatencyMs,
+        _ => throw new ArgumentOutOfRangeException(),
+    };
 
     /// <summary>
     /// Mask Density from 0 to +4
