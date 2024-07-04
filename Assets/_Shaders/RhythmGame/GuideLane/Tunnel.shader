@@ -167,9 +167,7 @@ Shader "SaturnGame/RhythmGame/Tunnel"
                 
                 alpha2 *= judgeLineGradient2;
                 
-                alpha2 = saturate(alpha2 * (5 - judgeLine)) + alpha;
-                
-                return alpha2;
+                return saturate(saturate(alpha2 * (5 - judgeLine)) + alpha);
             }
             
             float4 frag(v2f i) : SV_Target

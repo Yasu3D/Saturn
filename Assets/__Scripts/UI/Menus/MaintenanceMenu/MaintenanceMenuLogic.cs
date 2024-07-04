@@ -222,7 +222,7 @@ public class MaintenanceMenuLogic : MonoBehaviour
                 if (newPosition > 100)
                     newPosition -= 101;
                 display.ViewRectPosition = newPosition;
-                EventManager.InvokeEvent("UpdateViewRect");
+                EventManager.InvokeEvent("OnResolutionChange");
                 break;
             }
 
@@ -232,7 +232,7 @@ public class MaintenanceMenuLogic : MonoBehaviour
                 if (newScale > 100)
                     newScale -= 51;
                 display.ViewRectScale = newScale;
-                EventManager.InvokeEvent("UpdateViewRect");
+                EventManager.InvokeEvent("OnResolutionChange");
                 break;
             }
 
@@ -260,7 +260,7 @@ public class MaintenanceMenuLogic : MonoBehaviour
                 if (newPosition < 0)
                     newPosition += 101;
                 display.ViewRectPosition = newPosition;
-                EventManager.InvokeEvent("UpdateViewRect");
+                EventManager.InvokeEvent("OnResolutionChange");
                 break;
             }
 
@@ -270,7 +270,7 @@ public class MaintenanceMenuLogic : MonoBehaviour
                 if (newScale < 50)
                     newScale += 51;
                 display.ViewRectScale = newScale;
-                EventManager.InvokeEvent("UpdateViewRect");
+                EventManager.InvokeEvent("OnResolutionChange");
                 break;
             }
 

@@ -26,6 +26,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _GLOSSYREFLECTIONS_OFF
   - _LANETYPE_A
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -142,8 +143,10 @@ Material:
     - _GuideLaneComboShineEnable: 0
     - _GuideLaneShineScrollSpeed: -2
     - _LANETYPE: 5
-    - _LaneType: 5
+    - _LaneType: 1
+    - _MaskDensity: 0
     - _Metallic: 0
+    - _Mode: 0
     - _NoteThickness: 3
     - _NoteWidth: 3
     - _OcclusionStrength: 1
@@ -160,6 +163,7 @@ Material:
     - _Surface: 0
     - _TunnelOpacity: 5
     - _TunnelScrollSpeed: 4
+    - _UVSec: 0
     - _VisualTime: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
