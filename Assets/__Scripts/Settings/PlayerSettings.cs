@@ -19,7 +19,7 @@ public class PlayerSettings : SettingsWithTomlMetadata
     public DesignSettings DesignSettings { get; set; } = new();
     public SoundSettings SoundSettings { get; set; } = new();
 
-    private static readonly string SettingsPath = Path.Join(Application.persistentDataPath, "settings.toml");
+    private static string SettingsPath => Path.Join(Application.persistentDataPath, "settings.toml");
 
     [NotNull]
     public static PlayerSettings Load()
