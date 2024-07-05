@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using SaturnGame.Data;
 using SaturnGame.Loading;
@@ -16,8 +17,14 @@ public class SongSelectLogic : MonoBehaviour
     [SerializeField] private ButtonPageManager buttonManager;
     [SerializeField] private BgmPreviewController bgmPreview;
 
-    private int SelectedSongIndex { get; set; }
-    private int SelectedDifficulty { get; set; }
+    [SerializeField] private GroupType selectedGroupType;
+    [SerializeField] private SortType selectedSortType;
+    private SortedSongList songList;
+    [SerializeField] private int selectedGroupIndex;
+    [SerializeField] private int selectedEntryIndex;
+    private SongListEntry SelectedEntry => songList.Groups[selectedGroupIndex].Entries[selectedEntryIndex];
+    [SerializeField] private Difficulty selectedDifficulty;
+    private SongDifficulty SelectedDifficultInfo => SelectedEntry.Song.SongDiffs[selectedDifficulty];
 
     private enum MenuPage
     {
@@ -34,7 +41,7 @@ public class SongSelectLogic : MonoBehaviour
     [SerializeField] private GameObject diffMinusButton1;
     private static UIAudioController UIAudio => UIAudioController.Instance;
 
-    private void Start()
+    private async void Start()
     {
         Debug.Log($"Coming from {SceneSwitcher.Instance.LastScene}");
         page = SceneSwitcher.Instance.LastScene == "_Options" ? MenuPage.ChartPreview : MenuPage.SongSelect;
@@ -43,76 +50,120 @@ public class SongSelectLogic : MonoBehaviour
 
         SetSongAndDiffFromPersistentState();
 
-        displayAnimator.SetSongData(songDatabase.Songs[SelectedSongIndex], SelectedDifficulty);
-
-        // TODO: async
-        LoadAllCards();
-        SetBgmValues();
-
         if (page is MenuPage.ChartPreview)
         {
             buttonManager.SetActiveButtons(1);
             pageAnimator.ToChartPreviewInstant();
         }
+
+        await LoadAllCards();
     }
 
     private void SetSongAndDiffFromPersistentState()
     {
-        int songIndex = 0;
-        int difficultyIndex = 0;
+        SetSortType(PersistentStateManager.Instance.SelectedGroupType,
+            PersistentStateManager.Instance.SelectedSortType);
+        int groupIndex = 0;
+        int entryIndex = 0;
+        Difficulty difficulty = 0;
 
         if (PersistentStateManager.Instance.SelectedSong.FolderPath is string path)
         {
-            int foundIndex = songDatabase.Songs.FindIndex(song => song.FolderPath == path);
-            // -1 indicates not found
-            if (foundIndex != -1)
+            (int, int)? foundIndexes =
+                songList.FindSongFolder(path, PersistentStateManager.Instance.SelectedDifficulty.Difficulty);
+
+            if (foundIndexes != null)
             {
-                songIndex = foundIndex;
+                (groupIndex, entryIndex) = foundIndexes.Value;
                 // We aren't guaranteed that this difficulty still exists on this song, but SetSongAndDifficulty will
                 // find the nearest difficulty in case this one no longer exists, so it should be fine.
-                difficultyIndex = (int)PersistentStateManager.Instance.SelectedDifficulty.Difficulty;
+                // WARNING: This assumes that the difficulty index is the same as the enum value.
+                difficulty = PersistentStateManager.Instance.SelectedDifficulty.Difficulty;
             }
         }
 
-        SetSongAndDifficulty(songIndex, difficultyIndex);
+        SetSongAndDifficulty(groupIndex, entryIndex, difficulty);
     }
 
-    private void SetSongAndDifficulty(int songIndex, int difficultyIndex)
+    private void SetSortType(GroupType groupType, SortType sortType)
     {
-        SelectedSongIndex = songIndex;
-        PersistentStateManager.Instance.SelectedSong = songDatabase.Songs[SelectedSongIndex];
-        // Always set difficulty after setting the song to avoid leaving difficultyIndex set to a value that is not
+        selectedGroupType = groupType;
+        selectedSortType = sortType;
+        PersistentStateManager.Instance.SelectedGroupType = selectedGroupType;
+        PersistentStateManager.Instance.SelectedSortType = selectedSortType;
+
+        songList = songDatabase.SortSongList(selectedGroupType, selectedSortType);
+    }
+
+    private async Awaitable ChangeSortType(GroupType groupType, SortType sortType)
+    {
+        Song currentSong = SelectedEntry.Song;
+        Difficulty currentDifficulty = selectedDifficulty;
+
+        SetSortType(groupType, sortType);
+
+        (int newGroupIndex, int newEntryIndex) =
+            songList.FindSongFolder(currentSong.FolderPath, currentDifficulty) ?? (0, 0);
+
+        SetSongAndDifficulty(newGroupIndex, newEntryIndex, currentDifficulty);
+
+        await LoadAllCards();
+    }
+
+    private void SetSongAndDifficulty(int groupIndex, int entryIndex, Difficulty difficulty)
+    {
+        selectedGroupIndex = groupIndex;
+        selectedEntryIndex = entryIndex;
+        PersistentStateManager.Instance.SelectedSong = SelectedEntry.Song;
+        // Always set difficulty after setting the song to avoid leaving difficulty set to a value that is not
         // valid for the current song.
-        SetDifficulty(difficultyIndex);
+        SetDifficulty(difficulty);
     }
 
-    private void SetDifficulty(int difficultyIndex)
+    private void SetDifficulty(Difficulty difficulty)
     {
-        SongDifficulty[] diffs = songDatabase.Songs[SelectedSongIndex].SongDiffs;
-        SongDifficulty nearestDiff = FindNearestDifficulty(diffs, difficultyIndex);
-        SelectedDifficulty = (int)nearestDiff.Difficulty;
-        PersistentStateManager.Instance.SelectedDifficulty = nearestDiff;
+        Dictionary<Difficulty, SongDifficulty> diffInfos = SelectedEntry.Song.SongDiffs;
+        selectedDifficulty = FindNearestDifficulty(diffInfos.Keys, difficulty);
+        PersistentStateManager.Instance.SelectedDifficulty = SelectedEntry.Song.SongDiffs[selectedDifficulty];
 
-        diffPlusButton0.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-        diffPlusButton1.SetActive(HigherDiffExists(diffs, SelectedDifficulty));
-        diffMinusButton0.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
-        diffMinusButton1.SetActive(LowerDiffExists(diffs, SelectedDifficulty));
+        diffPlusButton0.SetActive(HigherDiffExists(diffInfos, selectedDifficulty));
+        diffPlusButton1.SetActive(HigherDiffExists(diffInfos, selectedDifficulty));
+        diffMinusButton0.SetActive(LowerDiffExists(diffInfos, selectedDifficulty));
+        diffMinusButton1.SetActive(LowerDiffExists(diffInfos, selectedDifficulty));
 
-        displayAnimator.SetSongData(songDatabase.Songs[SelectedSongIndex], SelectedDifficulty);
+        displayAnimator.SetSongData(SelectedEntry.Song, selectedDifficulty);
 
         SetBgmValues();
     }
 
 
-    public void OnDifficultyChange(int changeBy)
+    public async void OnDifficultyChange(int changeBy)
     {
         if (page == MenuPage.ExitingMenu) return;
-        if (SelectedDifficulty + changeBy is < 0 or > 4) return;
+        if (selectedDifficulty + changeBy is < 0 or > Difficulty.Beyond) return;
 
-        int prevDifficulty = SelectedDifficulty;
-        SetDifficulty(SelectedDifficulty + changeBy);
+        Difficulty prevDifficulty = selectedDifficulty;
+        SetDifficulty(selectedDifficulty + changeBy);
 
-        if (prevDifficulty == SelectedDifficulty) return;
+        if (prevDifficulty == selectedDifficulty) return;
+
+        Awaitable awaitable = null;
+
+        if (!SelectedEntry.Difficulties.Contains(selectedDifficulty))
+        {
+            // Switch to the new entry for this diff.
+            (int, int)? indexes = songList.FindSongFolder(SelectedEntry.Song.FolderPath, selectedDifficulty);
+
+            // If indexes is null, the pattern will not match.
+            if (indexes is var (groupIndex, entryIndex))
+            {
+                SetSongAndDifficulty(groupIndex, entryIndex, selectedDifficulty);
+
+                awaitable = LoadAllCards();
+            }
+            else
+                Debug.LogWarning($"Couldn't find entry for {selectedDifficulty}");
+        }
 
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
@@ -120,6 +171,8 @@ public class SongSelectLogic : MonoBehaviour
 
         bgmPreview.FadeoutBgmPreview();
         bgmPreview.ResetLingerTimer();
+
+        if (awaitable != null) await awaitable;
     }
 
     public void OnBack()
@@ -205,8 +258,12 @@ public class SongSelectLogic : MonoBehaviour
 
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
 
-        SetSongAndDifficulty(SaturnMath.Modulo(SelectedSongIndex + (int)direction, songDatabase.Songs.Count),
-            SelectedDifficulty);
+        (int newGroupIndex, int newEntryIndex) = songList
+            .RelativeSongIndexes(selectedGroupIndex, selectedEntryIndex, (int)direction);
+        Difficulty newDifficulty =
+            FindNearestDifficulty(songList.Groups[newGroupIndex].Entries[newEntryIndex].Difficulties,
+                selectedDifficulty);
+        SetSongAndDifficulty(newGroupIndex, newEntryIndex, newDifficulty);
 
         // Update Cards
         SongSelectCardAnimator.ShiftDirection shiftDirection = direction switch
@@ -217,12 +274,12 @@ public class SongSelectLogic : MonoBehaviour
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null),
         };
         cardAnimator.Anim_ShiftCards(shiftDirection);
-        int newSongIndex = SaturnMath.Modulo(SelectedSongIndex + cardAnimator.CardHalfCount * (int)direction,
-            songDatabase.Songs.Count);
-        Song newSong = songDatabase.Songs[newSongIndex];
-        Awaitable loadNewJacket = LoadCardJacket(cardAnimator.WrapCardIndex, newSong.JacketPath);
+        SongListEntry newSongEntry = songList.RelativeSongEntry(selectedGroupIndex, selectedEntryIndex,
+            cardAnimator.CardHalfCount * (int)direction);
+        Awaitable loadNewJacket = LoadCardJacket(cardAnimator.WrapCardIndex, newSongEntry.Song.JacketPath);
 
-        cardAnimator.SetSongData(cardAnimator.WrapCardIndex, SelectedDifficulty, newSong);
+        cardAnimator.SetSongData(cardAnimator.WrapCardIndex,
+            FindNearestDifficulty(newSongEntry.Difficulties, selectedDifficulty), newSongEntry.Song);
 
         cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
 
@@ -245,8 +302,111 @@ public class SongSelectLogic : MonoBehaviour
         await OnNavigateLeftRight(NavigateDirection.Right);
     }
 
-    public void OnSort()
+    private async Awaitable OnGroupLeftRight(NavigateDirection direction)
     {
+        if (page == MenuPage.ExitingMenu) return;
+        if (page is not MenuPage.SongSelect) return;
+
+        UIAudio.PlaySound(UIAudioController.UISound.Navigate);
+
+        int newGroupIndex = SaturnMath.Modulo(selectedGroupIndex + (int)direction, songList.Groups.Count);
+        int newEntryIndex = direction switch
+        {
+            NavigateDirection.Left => songList.Groups[newGroupIndex].Entries.Count - 1,
+            NavigateDirection.Right => 0,
+            _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null),
+        };
+        SongListEntry newEntry = songList.Groups[newGroupIndex].Entries[newEntryIndex];
+        Difficulty newDifficulty = FindNearestDifficulty(newEntry.Difficulties, selectedDifficulty);
+        SetSongAndDifficulty(newGroupIndex, newEntryIndex, newDifficulty);
+        Debug.Log($"Jumped to {songList.Groups[selectedGroupIndex].Name}");
+
+        // We have to update all the card jackets since we might be shifting by a lot, but make the cards shift anyway
+        // so that the movement looks slightly more natural.
+        SongSelectCardAnimator.ShiftDirection shiftDirection = direction switch
+        {
+            // If you move left, the cards shift right, and vice versa.
+            NavigateDirection.Left => SongSelectCardAnimator.ShiftDirection.Right,
+            NavigateDirection.Right => SongSelectCardAnimator.ShiftDirection.Left,
+            _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null),
+        };
+        cardAnimator.Anim_ShiftCards(shiftDirection);
+
+        Awaitable loadCards = LoadAllCards();
+
+        // Audio Preview
+        bgmPreview.FadeoutBgmPreview();
+        bgmPreview.ResetLingerTimer();
+
+        await loadCards;
+        cardAnimator.SetSelectedJacket(cardAnimator.GetCenterCardJacket());
+    }
+
+    public async void OnGroupLeft()
+    {
+        await OnGroupLeftRight(NavigateDirection.Left);
+    }
+
+    public async void OnGroupRight()
+    {
+        await OnGroupLeftRight(NavigateDirection.Right);
+    }
+
+    public async void OnSort()
+    {
+        // Since we are missing a more sophisticated UI, for now just link the group and sort options together.
+        // Pressing the sort button will cycle through the options.
+        switch (selectedSortType)
+        {
+            case SortType.Title:
+            {
+                await ChangeSortType(GroupType.Artist, SortType.Artist);
+                break;
+            }
+            case SortType.Artist:
+            {
+                await ChangeSortType(GroupType.Charter, SortType.Charter);
+                break;
+            }
+            case SortType.Charter:
+            {
+                await ChangeSortType(GroupType.All, SortType.Bpm);
+                break;
+            }
+            case SortType.Bpm:
+            {
+                await ChangeSortType(GroupType.Level, SortType.Level);
+                break;
+            }
+            case SortType.Level:
+            {
+                /* DateUpdated and Genre are not implemented yet
+                await ChangeSortType(GroupType.All, SortType.DateUpdated);
+                break;
+            }
+            case SortType.DateUpdated:
+            {
+                await ChangeSortType(GroupType.Genre, SortType.Genre);
+                break;
+            }
+            case SortType.Genre:
+            {
+                */
+                await ChangeSortType(GroupType.Folder, SortType.Folder);
+                break;
+            }
+            case SortType.Folder:
+            {
+                await ChangeSortType(GroupType.Title, SortType.Title);
+                break;
+            }
+            default:
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        Debug.Log($"group by {selectedGroupType}, sort by {selectedSortType}");
     }
 
     public void OnFavorite()
@@ -271,23 +431,31 @@ public class SongSelectLogic : MonoBehaviour
         SceneSwitcher.Instance.LoadScene("_Options");
     }
 
-    private async void LoadAllCards()
+    private async Awaitable LoadAllCards()
     {
-        // The loop is async, so SelectedSongIndex can change. However, since all the cards are relative to the initial
-        // values, we want to make sure we capture the initial value for the duration of the loop.
-        int selectedIndex = SelectedSongIndex;
+        // The loop is async, so SelectedGroupIndex and SelectedEntryIndex can change.
+        // However, since all the cards are relative to the initial values, we want to make sure we capture the initial
+        // value for the duration of the loop.
+        int currentGroupIndex = selectedGroupIndex;
+        int currentEntryIndex = selectedEntryIndex;
         List<Awaitable> awaitables = new();
+
+        // When the scene is first loaded, cardOffset should be 0. But if we call LoadAllCards() later, we might have
+        // moved around a bit.
+        int cardOffset = cardAnimator.CenterCardIndex - cardAnimator.CardHalfCount;
 
         // Load song data and start loading all the jackets
         for (int i = 0; i < cardAnimator.SongCards.Count; i++)
         {
-            int index = SaturnMath.Modulo(selectedIndex + i - cardAnimator.CardHalfCount,
-                songDatabase.Songs.Count);
-            Song data = songDatabase.Songs[index];
-            string path = data.JacketPath;
+            SongListEntry entry = songList.RelativeSongEntry(currentGroupIndex, currentEntryIndex,
+                i - cardAnimator.CardHalfCount);
+            string path = entry.Song.JacketPath;
 
-            awaitables.Add(LoadCardJacket(i, path));
-            cardAnimator.SetSongData(i, SelectedDifficulty, data);
+            int cardIndex = SaturnMath.Modulo(cardOffset + i, cardAnimator.SongCards.Count);
+
+            awaitables.Add(LoadCardJacket(cardIndex, path));
+            cardAnimator.SetSongData(cardIndex, FindNearestDifficulty(entry.Difficulties, selectedDifficulty),
+                entry.Song);
         }
 
         // Make sure to await all the jacket loads
@@ -314,45 +482,43 @@ public class SongSelectLogic : MonoBehaviour
             cardAnimator.SetSelectedJacket(jacket);
     }
 
-    // Important note: it is CALLER'S RESPONSIBILITY to ensure the provided diffs param has a SongDifficulty of
-    // [Normal, Hard, Expert, Inferno, Beyond]. This method assumes that the index of the SongDifficulty in the list
-    // matches the Difficulty enum value.
-    private static SongDifficulty FindNearestDifficulty([NotNull] IList<SongDifficulty> diffs, int selectedIndex)
+    private static Difficulty FindNearestDifficulty([NotNull] ICollection<Difficulty> diffs, Difficulty selectedDiff)
     {
-        if (diffs[selectedIndex].Exists) return diffs[selectedIndex];
+        if (diffs.Contains(selectedDiff)) return selectedDiff;
 
-        int leftIndex = selectedIndex - 1;
-        int rightIndex = selectedIndex + 1;
+        Difficulty lowerDiff = selectedDiff - 1;
+        Difficulty higherDiff = selectedDiff + 1;
 
-        while (leftIndex >= 0 || rightIndex < diffs.Count)
+        while (lowerDiff >= 0 || higherDiff <= Difficulty.Beyond)
         {
-            if (leftIndex >= 0 && diffs[leftIndex].Exists) return diffs[leftIndex];
-            if (rightIndex < diffs.Count && diffs[rightIndex].Exists) return diffs[rightIndex];
+            if (diffs.Contains(lowerDiff)) return lowerDiff;
+            if (diffs.Contains(higherDiff)) return higherDiff;
 
-            leftIndex--;
-            rightIndex++;
+            lowerDiff--;
+            higherDiff++;
         }
 
-        // yikes, consider throwing
         return default;
     }
 
-    private static bool HigherDiffExists([NotNull] IList<SongDifficulty> diffs, int selectedIndex)
+    private static bool HigherDiffExists([NotNull] Dictionary<Difficulty, SongDifficulty> diffs,
+        Difficulty selectedDifficulty)
     {
-        for (int i = selectedIndex + 1; i < diffs.Count; i++)
+        for (Difficulty i = selectedDifficulty + 1; i <= Difficulty.Beyond; i++)
         {
-            if (diffs[i].Exists)
+            if (diffs.ContainsKey(i))
                 return true;
         }
 
         return false;
     }
 
-    private static bool LowerDiffExists([NotNull] IList<SongDifficulty> diffs, int selectedIndex)
+    private static bool LowerDiffExists([NotNull] Dictionary<Difficulty, SongDifficulty> diffs,
+        Difficulty selectedDifficulty)
     {
-        for (int i = selectedIndex - 1; i >= 0; i--)
+        for (Difficulty i = selectedDifficulty + 1; i >= 0; i--)
         {
-            if (diffs[i].Exists)
+            if (diffs.ContainsKey(i))
                 return true;
         }
 
@@ -362,9 +528,9 @@ public class SongSelectLogic : MonoBehaviour
 
     private void SetBgmValues()
     {
-        string path = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].AudioFilepath;
-        float start = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].PreviewStart;
-        float duration = songDatabase.Songs[SelectedSongIndex].SongDiffs[SelectedDifficulty].PreviewDuration;
+        string path = SelectedDifficultInfo.AudioFilepath;
+        float start = SelectedDifficultInfo.PreviewStart;
+        float duration = SelectedDifficultInfo.PreviewDuration;
         bgmPreview.SetBgmValues(path, start, duration);
     }
 
@@ -372,6 +538,9 @@ public class SongSelectLogic : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A)) OnNavigateLeft();
         if (Input.GetKeyDown(KeyCode.D)) OnNavigateRight();
+        if (Input.GetKeyDown(KeyCode.Q)) OnGroupLeft();
+        if (Input.GetKeyDown(KeyCode.E)) OnGroupRight();
+        if (Input.GetKeyDown(KeyCode.S)) OnSort();
         if (Input.GetKeyDown(KeyCode.Space)) OnConfirm();
         if (Input.GetKeyDown(KeyCode.Escape)) OnBack();
         if (Input.GetKeyDown(KeyCode.UpArrow)) OnDifficultyChange(+1);

@@ -13,7 +13,6 @@ public enum Difficulty
 [Serializable]
 public struct SongDifficulty
 {
-    public bool Exists;
     public Difficulty Difficulty;
     public decimal Level;
     public string AudioFilepath;

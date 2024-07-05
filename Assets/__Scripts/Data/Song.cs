@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using JetBrains.Annotations;
 
 namespace SaturnGame.Data
 {
@@ -6,7 +9,7 @@ namespace SaturnGame.Data
 public class Song
 {
     public Song(string title, string rubi, string artist, string bpm, string folderPath, string jacketPath,
-        SongDifficulty[] songDiffs)
+        [NotNull] SongDifficulty[] songDiffs)
     {
         Title = title;
         Rubi = rubi;
@@ -14,7 +17,8 @@ public class Song
         Bpm = bpm;
         FolderPath = folderPath;
         JacketPath = jacketPath;
-        SongDiffs = songDiffs;
+        SongDiffs = new();
+        foreach (SongDifficulty songDiff in songDiffs) SongDiffs[songDiff.Difficulty] = songDiff;
     }
 
     public string Title;
@@ -23,8 +27,20 @@ public class Song
     public string Bpm;
     public string FolderPath;
     public string JacketPath;
-    // SongDiffs[0] should ALWAYS have Difficulty = Normal, [1] = Hard, ...and so on
-    // SongDiffs should ALWAYS have 5 elements
-    public SongDifficulty[] SongDiffs;
+    public Dictionary<Difficulty, SongDifficulty> SongDiffs;
+
+    // From the SongPacksPath to the dir containing the song folder
+    // E.g. SongPacks/PackName/subdir/mysong/meta.mer -> "PackName/subdir"
+    [NotNull]
+    public string ContainingFolder
+    {
+        get
+        {
+            // +1 for trailing dir separator
+            int trimLength = SongDatabase.SongPacksPath.Length + 1;
+            string relativePath = FolderPath[trimLength..];
+            return Path.GetDirectoryName(relativePath) ?? "";
+        }
+    }
 }
 }

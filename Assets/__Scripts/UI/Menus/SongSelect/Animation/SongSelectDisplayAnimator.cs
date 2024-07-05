@@ -62,25 +62,19 @@ public class SongSelectDisplayAnimator : MonoBehaviour
     [SerializeField] private TextMeshProUGUI difficultyNameText;
     [SerializeField] private TextMeshProUGUI difficultyLevelText;
 
-    public void SetSongData([NotNull] Song data, int difficultyIndex)
+    public void SetSongData([NotNull] Song data, Difficulty difficulty)
     {
-        SongDifficulty diff = data.SongDiffs[difficultyIndex];
+        SongDifficulty songDiff = data.SongDiffs[difficulty];
         titleText.text = data.Title;
         artistText.text = data.Artist;
         bpmText.text = data.Bpm;
 
-        if (!diff.Exists)
-        {
-            charterText.text = "";
-            SetDifficulty(difficultyIndex, null);
-        }
-        else
-        {
-            charterText.text = diff.Charter;
-            SetDifficulty(difficultyIndex, diff.Level);
-        }
+
+        charterText.text = songDiff.Charter;
+        SetDifficulty((int)difficulty, songDiff.Level);
     }
 
+    // TODO: change index to Difficulty enum
     private void SetDifficulty(int index, decimal? level)
     {
         int clampedIndex = Mathf.Clamp(index, 0, 4);
