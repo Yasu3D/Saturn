@@ -1330,14 +1330,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f5f60379e90ac46d8f80c62eeacff0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GroupRect: {fileID: 1319033233}
-  Group: {fileID: 1319033234}
-  TextMarvelous: {fileID: 2103265515}
-  TextGreat: {fileID: 956286212}
-  TextGood: {fileID: 88126065}
-  TextMiss: {fileID: 681796116}
-  TextFast: {fileID: 2061358860}
-  TextLate: {fileID: 1905652135}
+  groupRect: {fileID: 1319033233}
+  group: {fileID: 1319033234}
+  textMarvelous: {fileID: 2103265515}
+  textGreat: {fileID: 956286212}
+  textGood: {fileID: 88126065}
+  textMiss: {fileID: 681796116}
+  textFast: {fileID: 2061358860}
+  textLate: {fileID: 1905652135}
 --- !u!23 &936803519 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6486632167354275620, guid: c3c6fd824d041cd43b5404710c243819,
