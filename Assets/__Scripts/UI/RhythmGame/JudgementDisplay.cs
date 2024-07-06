@@ -16,9 +16,9 @@ public class JudgementDisplay : MonoBehaviour
     [SerializeField] private GameObject TextLate;
     private Sequence currentSequence;
 
-    private readonly Vector2 topPosition = new(0, 230);
-    private readonly Vector2 middlePosition = new(0, -100);
-    private readonly Vector2 bottomPosition = new(0, -320);
+    private readonly Vector2 topPosition = new(0, 215);
+    private readonly Vector2 middlePosition = new(0, -114);
+    private readonly Vector2 bottomPosition = new(0, -333);
 
     public void SetDisplayPosition(int position)
     {
