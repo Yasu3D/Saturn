@@ -10,7 +10,7 @@ public class HoldEndRenderer : AbstractPositionedChartElementRenderer<HoldSegmen
     [SerializeField] private Material materialTemplate;
     private Material materialInstance;
 
-    private static readonly int ColorPropertyID = Shader.PropertyToID("_ColorID");
+    private static readonly int ColorPropertyID = Shader.PropertyToID("_ColorIndex");
 
     // ==== NOTE INFO ====
 

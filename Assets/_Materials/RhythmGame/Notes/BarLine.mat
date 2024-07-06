@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BarLine
-  m_Shader: {fileID: -6465566751694194690, guid: 50e49757e0a28734b8fd806dbdd6556e,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 03f8463ed7cf72d438873144076a6837, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
