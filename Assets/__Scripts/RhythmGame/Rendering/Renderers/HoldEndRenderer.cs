@@ -18,7 +18,7 @@ public class HoldEndRenderer : AbstractPositionedChartElementRenderer<HoldSegmen
 
     private void Awake()
     {
-        materialInstance = new Material(materialTemplate);
+        materialInstance = new(materialTemplate);
     }
 
     public override void SetRenderer(HoldSegment note)
@@ -28,8 +28,8 @@ public class HoldEndRenderer : AbstractPositionedChartElementRenderer<HoldSegmen
 
         ColorID = NoteColors.GetColorID(note);
 
-        if (materialInstance.HasFloat(ColorPropertyID))
-            materialInstance.SetFloat(ColorPropertyID, ColorID);
+        if (materialInstance.HasInteger(ColorPropertyID))
+            materialInstance.SetInteger(ColorPropertyID, ColorID);
 
         MeshFilter.mesh = Meshes[Size - 1];
         MeshRenderer.material = materialInstance;

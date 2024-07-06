@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: HoldEnd
-  m_Shader: {fileID: -6465566751694194690, guid: 975d7511e22a2ab4c96c26bbb4453cdf,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: d2dc668dcae37274abd90d401bd09105, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -109,7 +108,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
+    m_Ints:
+    - _ColorIndex: 1
     m_Floats:
     - _AddStrength: 0.6
     - _AlphaClip: 0

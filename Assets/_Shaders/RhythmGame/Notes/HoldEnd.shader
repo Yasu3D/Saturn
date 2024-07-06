@@ -44,7 +44,7 @@ Shader "SaturnGame/RhythmGame/Notes/HoldEnd"
                 v2f output;
                 
                 output.uv = v.uv;
-                output.clip = UnityWorldToClipPos(v.vertex);
+                output.clip = UnityObjectToClipPos(v.vertex);
                 
                 return output;
             }
