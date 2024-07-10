@@ -13,7 +13,6 @@ public enum Difficulty
 [Serializable]
 public struct SongDifficulty
 {
-    public bool Exists;
     public Difficulty Difficulty;
     public decimal Level;
     public string AudioFilepath;
@@ -28,4 +27,7 @@ public struct SongDifficulty
     public string Charter;
     public float PreviewStart;
     public float PreviewDuration;
+
+    // Chart file mtime
+    public DateTime LastUpdatedTime;
 }
