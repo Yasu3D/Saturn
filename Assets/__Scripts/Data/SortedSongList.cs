@@ -101,7 +101,7 @@ public enum SortType
     Charter,
     Bpm,
     Level,
-    //DateUpdated,
+    DateUpdated,
     //Genre,
     Folder,
     //ClearType,

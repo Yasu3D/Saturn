@@ -74,6 +74,7 @@ public class SongDatabase : MonoBehaviour
             SongDifficulty diff = new()
             {
                 Difficulty = i,
+                LastUpdatedTime = File.GetLastWriteTime(chartFilepath),
             };
 
             FileStream merStream = new(chartFilepath, FileMode.Open, FileAccess.Read);
@@ -130,8 +131,8 @@ public class SongDatabase : MonoBehaviour
     }
 
     [NotNull]
-    private static IEnumerable<SongListEntry> SplitEntriesBy([NotNull] IEnumerable<SongListEntry> entries,
-        Func<SongDifficulty, string> keySelector)
+    private static IEnumerable<SongListEntry> SplitEntriesBy<T>([NotNull] IEnumerable<SongListEntry> entries,
+        Func<SongDifficulty, T> keySelector)
     {
         // We use SelectMany since each entry may be split into multiple.
         return entries.SelectMany(entry =>
@@ -140,7 +141,8 @@ public class SongDatabase : MonoBehaviour
                 // Get the corresponding SongDifficulties so that we can evaluate the keySelector.
                 .Select(diff => entry.Song.SongDiffs[diff])
                 // Group by the key
-                .GroupBy(keySelector)
+                .GroupBy(keySelector,
+                    typeof(T) == typeof(string) ? (IEqualityComparer<T>)StringComparer.InvariantCulture : null)
                 // Convert all song difficulties in the group (that is, with the same key) into a single entry.
                 // If all difficulties have the same key, they will all be in this one group.
                 .Select(group => new SongListEntry
@@ -399,7 +401,60 @@ public class SongDatabase : MonoBehaviour
                 break;
             }
 
-            // case SortType.DateUpdated:
+            case SortType.DateUpdated:
+            {
+                foreach (SortedSongListGroup group in sortedList.Groups)
+                {
+                    // Imported charts will have a similar mtime for charts in the same song, but it might not be
+                    // exactly the same. We should avoid splitting these.
+                    group.Entries = group.Entries
+                        .SelectMany(entry =>
+                        {
+                            // Order the charts by the update time, so we can go through them sequentially.
+                            IOrderedEnumerable<SongDifficulty> charts = entry.Difficulties
+                                .Select(diff => entry.Song.SongDiffs[diff]).OrderBy(chart => chart.LastUpdatedTime);
+
+                            List<SongListEntry> entries = new();
+                            List<Difficulty> currentDiffs = new();
+                            DateTime? lastDateTime = null;
+                            foreach (SongDifficulty chart in charts)
+                            {
+                                // If this chart is more than 1 minute newer than the last chart, split them.
+                                if (lastDateTime != null &&
+                                    chart.LastUpdatedTime - lastDateTime > TimeSpan.FromMinutes(1))
+                                {
+                                    currentDiffs.Sort();
+                                    entries.Add(new()
+                                    {
+                                        Song = entry.Song,
+                                        Difficulties = currentDiffs.ToArray(),
+                                    });
+
+                                    currentDiffs = new();
+                                }
+
+                                currentDiffs.Add(chart.Difficulty);
+                                lastDateTime = chart.LastUpdatedTime;
+                            }
+
+                            if (currentDiffs.Count == 0) return entries;
+
+                            currentDiffs.Sort();
+                            entries.Add(new()
+                            {
+                                Song = entry.Song,
+                                Difficulties = currentDiffs.ToArray(),
+                            });
+
+                            return entries;
+                        })
+                        .OrderByDescending(entry => entry.Song.SongDiffs[entry.Difficulties[0]].LastUpdatedTime)
+                        .ToList();
+                }
+
+                break;
+            }
+
             // case SortType.Genre:
             // {
             //     throw new NotImplementedException();

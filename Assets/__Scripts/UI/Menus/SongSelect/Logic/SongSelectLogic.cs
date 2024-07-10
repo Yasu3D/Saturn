@@ -380,12 +380,12 @@ public class SongSelectLogic : MonoBehaviour
             }
             case SortType.Level:
             {
-                /* DateUpdated and Genre are not implemented yet
                 await ChangeSortType(GroupType.All, SortType.DateUpdated);
                 break;
             }
             case SortType.DateUpdated:
             {
+                /* Genre is not implemented yet
                 await ChangeSortType(GroupType.Genre, SortType.Genre);
                 break;
             }

@@ -27,4 +27,7 @@ public struct SongDifficulty
     public string Charter;
     public float PreviewStart;
     public float PreviewDuration;
+
+    // Chart file mtime
+    public DateTime LastUpdatedTime;
 }
