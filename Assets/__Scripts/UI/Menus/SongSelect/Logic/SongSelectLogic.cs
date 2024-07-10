@@ -126,10 +126,13 @@ public class SongSelectLogic : MonoBehaviour
         selectedDifficulty = FindNearestDifficulty(diffInfos.Keys, difficulty);
         PersistentStateManager.Instance.SelectedDifficulty = SelectedEntry.Song.SongDiffs[selectedDifficulty];
 
-        diffPlusButton0.SetActive(HigherDiffExists(diffInfos, selectedDifficulty));
-        diffPlusButton1.SetActive(HigherDiffExists(diffInfos, selectedDifficulty));
-        diffMinusButton0.SetActive(LowerDiffExists(diffInfos, selectedDifficulty));
-        diffMinusButton1.SetActive(LowerDiffExists(diffInfos, selectedDifficulty));
+        bool higherDiffExists = HigherDiff(diffInfos, selectedDifficulty) != null;
+        bool lowerDiffExists = LowerDiff(diffInfos, selectedDifficulty) != null;
+
+        diffPlusButton0.SetActive(higherDiffExists);
+        diffPlusButton1.SetActive(higherDiffExists);
+        diffMinusButton0.SetActive(lowerDiffExists);
+        diffMinusButton1.SetActive(lowerDiffExists);
 
         displayAnimator.SetSongData(SelectedEntry.Song, selectedDifficulty);
 
@@ -142,27 +145,33 @@ public class SongSelectLogic : MonoBehaviour
         if (page == MenuPage.ExitingMenu) return;
         if (selectedDifficulty + changeBy is < 0 or > Difficulty.Beyond) return;
 
-        Difficulty prevDifficulty = selectedDifficulty;
-        SetDifficulty(selectedDifficulty + changeBy);
+        Difficulty? newDifficulty = changeBy switch
+        {
+            -1 => LowerDiff(SelectedEntry.Song.SongDiffs, selectedDifficulty),
+            +1 => HigherDiff(SelectedEntry.Song.SongDiffs, selectedDifficulty),
+            _ => throw new ArgumentOutOfRangeException(nameof(changeBy), changeBy, null),
+        };
 
-        if (prevDifficulty == selectedDifficulty) return;
+        if (newDifficulty is null || newDifficulty == selectedDifficulty) return;
 
         Awaitable awaitable = null;
 
-        if (!SelectedEntry.Difficulties.Contains(selectedDifficulty))
+        if (SelectedEntry.Difficulties.Contains(newDifficulty.Value))
+            SetDifficulty(newDifficulty.Value);
+        else
         {
             // Switch to the new entry for this diff.
-            (int, int)? indexes = songList.FindSongFolder(SelectedEntry.Song.FolderPath, selectedDifficulty);
+            (int, int)? indexes = songList.FindSongFolder(SelectedEntry.Song.FolderPath, newDifficulty.Value);
 
             // If indexes is null, the pattern will not match.
             if (indexes is var (groupIndex, entryIndex))
             {
-                SetSongAndDifficulty(groupIndex, entryIndex, selectedDifficulty);
+                SetSongAndDifficulty(groupIndex, entryIndex, newDifficulty.Value);
 
                 awaitable = LoadAllCards();
             }
             else
-                Debug.LogWarning($"Couldn't find entry for {selectedDifficulty}");
+                Debug.LogWarning($"Couldn't find entry for {newDifficulty}");
         }
 
         UIAudio.PlaySound(UIAudioController.UISound.Navigate);
@@ -501,28 +510,28 @@ public class SongSelectLogic : MonoBehaviour
         return default;
     }
 
-    private static bool HigherDiffExists([NotNull] Dictionary<Difficulty, SongDifficulty> diffs,
+    private static Difficulty? HigherDiff([NotNull] Dictionary<Difficulty, SongDifficulty> diffs,
         Difficulty selectedDifficulty)
     {
         for (Difficulty i = selectedDifficulty + 1; i <= Difficulty.Beyond; i++)
         {
             if (diffs.ContainsKey(i))
-                return true;
+                return i;
         }
 
-        return false;
+        return null;
     }
 
-    private static bool LowerDiffExists([NotNull] Dictionary<Difficulty, SongDifficulty> diffs,
+    private static Difficulty? LowerDiff([NotNull] Dictionary<Difficulty, SongDifficulty> diffs,
         Difficulty selectedDifficulty)
     {
-        for (Difficulty i = selectedDifficulty + 1; i >= 0; i--)
+        for (Difficulty i = selectedDifficulty - 1; i >= 0; i--)
         {
             if (diffs.ContainsKey(i))
-                return true;
+                return i;
         }
 
-        return false;
+        return null;
     }
 
 
