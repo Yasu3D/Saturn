@@ -69,7 +69,7 @@ Shader "SaturnGame/RhythmGame/Notes/HoldSurface"
                 default:
                     {
                         result = float4(gradient, 0.6);
-                        break;
+                        break;  
                     }
                 case 1:
                     {
@@ -88,6 +88,8 @@ Shader "SaturnGame/RhythmGame/Notes/HoldSurface"
                     }
                 }
 
+                result.w = pow(result.w, 1 / 2.2);
+                
                 return result;
             }
             ENDCG

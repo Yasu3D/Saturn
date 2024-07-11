@@ -9,6 +9,8 @@ Shader "SaturnGame/RhythmGame/Notes/R-Effect"
         Tags
         { "RenderType"="Transparent" "Queue"="Transparent" }
         Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite Off
+        ZTest LEqual
         LOD 100
 
         Pass

@@ -610,6 +610,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b0f17cfb538b67ca0267a33ff5d5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectedGroupType: 0
+  SelectedSortType: 0
   SelectedSong:
     Title: 
     Rubi: 
@@ -617,9 +619,7 @@ MonoBehaviour:
     Bpm: 
     FolderPath: 
     JacketPath: 
-    SongDiffs: []
   SelectedDifficulty:
-    Exists: 0
     Difficulty: 0
     AudioFilepath: 
     AudioOffset: 0
@@ -1022,6 +1022,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2936741469122568836, guid: 1742c725c74b0ff4bb6edec37a668f80,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 9de503e71ef6c8045971d77be989a354, type: 2}
     - target: {fileID: 4245266458852385033, guid: 1742c725c74b0ff4bb6edec37a668f80,
         type: 3}
       propertyPath: m_Name
