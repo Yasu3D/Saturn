@@ -16,7 +16,7 @@ public class SwipeRenderer : AbstractPositionedChartElementRenderer<SwipeNote>
 
     private void Awake()
     {
-        materialInstance = new Material(materialTemplate);
+        materialInstance = new(materialTemplate);
     }
 
     public override void SetRenderer(SwipeNote note)
@@ -25,7 +25,7 @@ public class SwipeRenderer : AbstractPositionedChartElementRenderer<SwipeNote>
         Position = note.Position;
 
         int colorID = NoteColors.GetColorID(note);
-        Color = NoteColors.GetSwipeColor(colorID);
+        Color = NoteColors.GetColor(colorID);
 
         Direction = note.Direction is SwipeNote.SwipeDirection.Counterclockwise ? "_COUNTERCLOCKWISE" : "_CLOCKWISE";
 
@@ -38,7 +38,7 @@ public class SwipeRenderer : AbstractPositionedChartElementRenderer<SwipeNote>
         MeshFilter.mesh = Meshes[Size - 1];
         MeshRenderer.material = materialInstance;
 
-        transform.eulerAngles = new Vector3(0, 0, Position * -6);
+        transform.eulerAngles = new(0, 0, Position * -6);
     }
 }
 }
