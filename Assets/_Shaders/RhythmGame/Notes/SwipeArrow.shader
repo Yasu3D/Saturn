@@ -1,4 +1,4 @@
-Shader "SaturnGame/RhythmGame/Notes/SlideArrow"
+Shader "SaturnGame/RhythmGame/Notes/SwipeArrow"
 {
     Properties
     {

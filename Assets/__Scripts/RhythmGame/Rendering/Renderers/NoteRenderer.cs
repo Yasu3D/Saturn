@@ -16,7 +16,6 @@ public class NoteRenderer : AbstractPositionedChartElementRenderer<Note>
     private static readonly int SyncPropertyID = Shader.PropertyToID("_Sync");
     private static readonly int BonusPropertyID = Shader.PropertyToID("_Bonus");
     private static readonly int ChainPropertyID = Shader.PropertyToID("_Chain");
-    private static readonly int StrengthPropertyID = Shader.PropertyToID("_SubStrength");
     private static readonly int ZOffsetPropertyID = Shader.PropertyToID("_Z_Offset");
 
     // ==== NOTE INFO ====

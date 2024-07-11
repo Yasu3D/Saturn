@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Note
-  m_Shader: {fileID: -6465566751694194690, guid: 33604ebf0b46e9c409956dcbbde4165a,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 7828bfb1ca2a1bb4a93112f78bade680, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -30,7 +29,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -77,6 +76,14 @@ Material:
         m_Texture: {fileID: 2800000, guid: c52dffc0ad4b7414990b56633861df96, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoteMap1:
+        m_Texture: {fileID: 2800000, guid: ec057f5fd958f2c4d9e7ba1fe2cb56ea, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoteMap2:
+        m_Texture: {fileID: 2800000, guid: c52dffc0ad4b7414990b56633861df96, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -101,7 +108,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
+    m_Ints:
+    - _IsBonus: 0
+    - _IsChain: 0
+    - _IsSync: 0
+    - _NoteSize: 3
+    - _ZOffset: 0
     m_Floats:
     - _AddStrength: 0.6
     - _AlphaClip: 0
