@@ -110,6 +110,11 @@ public class UIListItemDrawer : PropertyDrawer
                         EditorGUILayout.PropertyField(property.FindPropertyRelative("SettingsValueEnum"));
                         break;
                     }
+                    case (int)UIListItem.ValueType.Float:
+                    {
+                        EditorGUILayout.PropertyField(property.FindPropertyRelative("SettingsValueFloat"));
+                        break;
+                    }
                 }
 
                 break;

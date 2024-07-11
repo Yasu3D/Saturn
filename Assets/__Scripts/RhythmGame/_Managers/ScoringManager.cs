@@ -184,7 +184,7 @@ public class ScoringManager : MonoBehaviour
 
     private void MaybeCalculateHitForNote(float timeMs, TouchState touchState, [NotNull] Note note)
     {
-        if (note.IsHit) return;
+        if (note.HitWindowsEvaluated) return;
 
         if (timeMs < note.EarliestHitTimeMs)
         {

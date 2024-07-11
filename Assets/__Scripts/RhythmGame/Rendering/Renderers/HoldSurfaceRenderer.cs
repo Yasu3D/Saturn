@@ -54,10 +54,16 @@ public class HoldSurfaceRenderer : MonoBehaviour
     {
         HoldState newState;
 
+        // Take care to preserve the final state of the hold, as it might still be on screen for a while.
+        bool endedHeld = HoldNote.IsJudged && HoldNote.LastHeldTimeMs > HoldNote.End.TimeMs - HoldNote.LeniencyMs;
+        bool endedDropped = HoldNote.IsJudged && HoldNote.LastHeldTimeMs < HoldNote.End.TimeMs - HoldNote.LeniencyMs;
+
         bool dropped = !HoldNote.CurrentlyHeld && HoldNote.LastHeldTimeMs.HasValue && HoldNote.LastHeldTimeMs < TimeManager.GameplayTimeMs - HoldNote.LeniencyMs;
         bool missed = !HoldNote.Held && HoldNote.TimeMs < TimeManager.GameplayTimeMs - 100; // Missed holds turn dark after 6 frames at 60fps, or 100ms.
 
-        if (dropped || missed) newState = HoldState.Dropped;
+        if (endedHeld) newState = HoldState.Held;
+        else if (endedDropped) newState = HoldState.Dropped;
+        else if (dropped || missed) newState = HoldState.Dropped;
         else if (HoldNote.Held) newState = HoldState.Held;
         else newState = HoldState.Neutral;
         
@@ -76,6 +82,7 @@ public class HoldSurfaceRenderer : MonoBehaviour
         if (materialInstance.HasInteger(ColorPropertyId))
             materialInstance.SetInteger(ColorPropertyId, colorID);
 
+        state = 0;
         SetState(0);
 
         meshRenderer.material = materialInstance;

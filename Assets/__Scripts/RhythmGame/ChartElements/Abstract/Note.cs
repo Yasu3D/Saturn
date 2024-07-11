@@ -23,11 +23,12 @@ public abstract class Note : PositionedChartElement
 
     // A note can be in one of the following states:
     // - Not yet hit (Hit and Judged are both false)
-    // - Hit (the HitWindows have been evaluated - IsHit is true, but IsJudged is false)
-    // - Judged (a judgement has been assigned - IsHit and IsJudged are both true)
-    // For most note types, a note is Judged as soon as it is Hit, so IsHit == IsJudged at all times.
-    // However, hold notes will be Hit at the beginning of the hold, but not Judged until the end of the hold.
-    // Please make sure to use the right one.
+    // - Hit (the HitWindows have been evaluated - HitWindowsEvaluated is true, but IsJudged is false)
+    // - Judged (a judgement has been assigned - HitWindowsEvaluated and IsJudged are both true)
+    // For most note types, a note is Judged as soon as its hit windows are evaluated,
+    // so HitWindowsEvaluated == IsJudged at all times. However, for hold notes, the hit windows are evaluated at the
+    // beginning of the hold, but the note is not Judged until the end of the hold.
+    /// Please make sure to use the right one.
 
     // If the note has not been judged, this must be null (not None).
     public Judgement? Judgement;
@@ -35,10 +36,15 @@ public abstract class Note : PositionedChartElement
     // IsJudged refers to whether the note has been assigned a judgement.
     public bool IsJudged => Judgement is not null;
 
-    // IsHit refers to whether the HitWindows of a note have been evaluated.
-    // IsHit will be true for Misses.
+    // Refers to whether the HitWindows of a note have been evaluated.
+    // This will be true for Misses.
     // Generally this just checks if Judgement is present, but it's overriden for HoldNotes.
-    public virtual bool IsHit => Judgement is not null;
+    public virtual bool HitWindowsEvaluated => Judgement is not null;
+
+    // HasBeenHit refers to whether the hit windows of the note have been hit.
+    // This will never be true for misses.
+    // For hold notes, it's possible that a note HasBeenHit but hasn't yet been Judged.
+    public virtual bool HasBeenHit => Judgement is not null && Judgement != RhythmGame.Judgement.Miss;
 
     // For a HoldNote, hit time of start, otherwise the hit time of the note.
     // A null HitTimeMs is possible if the HitWindows were judged as a Miss, or if the note hasn't been hit yet.

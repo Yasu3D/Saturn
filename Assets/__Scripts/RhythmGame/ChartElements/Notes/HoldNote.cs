@@ -138,7 +138,8 @@ public class HoldNote : Note
     }
 
     public Judgement? StartJudgement;
-    public override bool IsHit => StartJudgement is not null;
+    public override bool HitWindowsEvaluated => StartJudgement is not null;
+    public override bool HasBeenHit => StartJudgement is not null && StartJudgement != RhythmGame.Judgement.Miss;
     public bool CurrentlyHeld;
 
     /// <summary>

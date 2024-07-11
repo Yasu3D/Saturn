@@ -62,7 +62,7 @@ public class TimeManager : MonoBehaviour
     /// timer).
     /// </summary>
     private float AudioOffsetMs =>
-        StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.AudioOffset * 10 /* temp */;
+        StaticAudioOffset + SettingsManager.Instance.PlayerSettings.GameSettings.CalculatedAudioOffsetMs;
 
     /// <summary>
     /// Core gameplay time in ms, used for judgements. Do not use this for audio or visuals, use
@@ -79,7 +79,7 @@ public class TimeManager : MonoBehaviour
     /// Positive means that the visuals show later, negative means that the visuals show earlier (compared to the
     /// gameplay timer).
     /// </summary>
-    private float VisualOffsetMs = 0; // todo: tweak this value
+    private float VisualOffsetMs => SettingsManager.Instance.PlayerSettings.GameSettings.CalculatedVisualOffsetMs;
 
     /// <summary>
     /// Visual time in ms. This must be used for all visuals instead of GameplayTimeMs.
@@ -168,7 +168,6 @@ public class TimeManager : MonoBehaviour
         {
             if (State == SongState.NotYetStarted)
             {
-                Debug.Log($"offset {SettingsManager.Instance.PlayerSettings.GameSettings.AudioOffset}");
                 StartSong();
             }
             else

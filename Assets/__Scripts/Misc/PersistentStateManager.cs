@@ -8,6 +8,8 @@ using SaturnGame.RhythmGame;
 /// </summary>
 public class PersistentStateManager : PersistentSingleton<PersistentStateManager>
 {
+    public GroupType SelectedGroupType = GroupType.Title;
+    public SortType SelectedSortType = SortType.Title;
     public Song SelectedSong;
     public SongDifficulty SelectedDifficulty;
     public ScoreData LastScoreData;

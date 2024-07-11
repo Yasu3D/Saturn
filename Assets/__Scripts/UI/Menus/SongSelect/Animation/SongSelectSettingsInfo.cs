@@ -15,7 +15,7 @@ public class SongSelectSettingsInfo : MonoBehaviour
     private static GameSettings Settings => SettingsManager.Instance.PlayerSettings.GameSettings;
 
     [NotNull]
-    private string GiveUpText(GameSettings.GiveUpOptions giveUpSetting) => giveUpSetting switch
+    private static string GiveUpText(GameSettings.GiveUpOptions giveUpSetting) => giveUpSetting switch
     {
         Off => "OFF",
         NoTouch => "NO TOUCH",
@@ -27,6 +27,15 @@ public class SongSelectSettingsInfo : MonoBehaviour
         _ => throw new ArgumentOutOfRangeException(nameof(giveUpSetting), giveUpSetting, "Unknown GiveUpOptions"),
     };
 
+    [NotNull]
+    private static string OffsetText() => Settings.OffsetMode switch
+    {
+        GameSettings.OffsetModeOptions.Standard => $"{Settings.AudioOffsetMs} MS",
+        GameSettings.OffsetModeOptions.Classic => Settings.ClassicOffset.ToString("0.0"),
+        GameSettings.OffsetModeOptions.Advanced => $"{Settings.AudioOffsetMs} MS / {Settings.VisualOffsetMs} MS",
+        _ => throw new ArgumentOutOfRangeException(),
+    };
+
     private void Start()
     {
         SetInfo();
@@ -36,7 +45,7 @@ public class SongSelectSettingsInfo : MonoBehaviour
     {
         maskText.text = Settings.MaskDensity == 0 ? "NO MASK" : $"MASK +{Settings.MaskDensity}";
         speedText.text = (Settings.NoteSpeed * 0.1f).ToString("0.0");
-        offsetText.text = (Settings.AudioOffset * 0.1f).ToString("0.0");
+        offsetText.text = OffsetText();
         giveUpText.text = GiveUpText(Settings.GiveUpSetting);
     }
 }

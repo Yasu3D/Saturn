@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame
@@ -30,10 +32,9 @@ public class InputManager : MonoBehaviour
         _ => throw new System.NotImplementedException(),
     };
 
-    // Magic number based on 30ms artificial latency in classic mode.
-    private readonly TimedTouchStateQueue queue = new(30);
-    // TODO: make this adjustable in the settings
-    private readonly float latencyMs = 0f;
+    private static float LatencyMs => SettingsManager.Instance.PlayerSettings.GameSettings.CalculatedInputLatencyMs;
+
+    private TimedTouchStateQueue queue;
 
     [Header("MANAGERS")] [SerializeField] private ScoringManager scoringManager;
     [SerializeField] private TimeManager timeManager;
@@ -42,6 +43,16 @@ public class InputManager : MonoBehaviour
     private readonly KeyboardInput keyboardInput = new();
 
     public TouchState CurrentTouchState = TouchState.CreateNew();
+
+    private void Start()
+    {
+        int queueSize = (int)LatencyMs switch
+        {
+            0 => 1,
+            var n => n, // Queue size should be sufficient up to 1000fps (1ms per frame).
+        };
+        queue = new(queueSize);
+    }
 
 
     // Warning: the provided TouchState's underlying data is not guaranteed to be valid past the end of this function's
@@ -105,7 +116,7 @@ public class InputManager : MonoBehaviour
         {
             case TouchState touchState:
             {
-                queue.Enqueue(touchState, timeManager.GameplayTimeMs + latencyMs);
+                queue.Enqueue(touchState, timeManager.GameplayTimeMs + LatencyMs);
                 break;
             }
             case null:
