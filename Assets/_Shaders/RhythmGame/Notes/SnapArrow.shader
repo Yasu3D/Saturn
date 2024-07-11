@@ -58,8 +58,8 @@ Shader "SaturnGame/RhythmGame/Notes/SnapArrow"
                 
                 const float3 color = pow(_NoteColor.xyz, 1 / 2.2) * 0.5;
                 const float3 colorSquared = color * color;
-                const float3 colorInverted3 = 1 - color * 3;
                 const float3 colorInverted2 = 1 - color * 2;
+                const float3 colorInverted3 = 1 - color * 3;
                 
                 float3 colorGradient = lerp(color, colorSquared, uvGradient);
                 colorGradient *= snapArrow.y;

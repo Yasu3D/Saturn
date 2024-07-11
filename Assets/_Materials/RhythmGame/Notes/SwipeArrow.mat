@@ -76,10 +76,11 @@ Material:
     - _Color_Multiply: 8
     - _DIRECTION: 0
     - _Gradient_Power: 1.5
+    - _NoteSize: 30
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Rotation_Speed: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _NoteColor: {r: 0.06666667, g: 0.5647059, b: 0.05490196, a: 1}
+    - _NoteColor: {r: 0.013701999, g: 0.65140593, b: 0.008568, a: 1}
   m_BuildTextureStacks: []

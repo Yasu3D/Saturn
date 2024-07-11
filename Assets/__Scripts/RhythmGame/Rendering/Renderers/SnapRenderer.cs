@@ -33,10 +33,14 @@ public class SnapRenderer : AbstractPositionedChartElementRenderer<SnapNote>
         FlipArrow = note.Direction is SnapNote.SnapDirection.Forward ? 0 : 1;
 
         if (materialInstance.HasColor(NoteColorPropertyID))
+        {
             materialInstance.SetColor(NoteColorPropertyID, Color);
-        
+        }
+
         if (materialInstance.HasInteger(FlipArrowPropertyID))
+        {
             materialInstance.SetInteger(FlipArrowPropertyID, FlipArrow);
+        }
 
         MeshFilter.mesh = Meshes[Size - 1];
         MeshRenderer.material = materialInstance;
