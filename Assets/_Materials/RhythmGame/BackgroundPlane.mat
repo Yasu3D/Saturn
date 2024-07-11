@@ -8,8 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BackgroundPlane
-  m_Shader: {fileID: -6465566751694194690, guid: 3cb08eeade721eb4daa94fa7e1868d8c,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: a8109557de47bd04fa9e8a0e72c3eb35, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -49,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 8400000, guid: f145797d9e7d90044898c72554d9cf71, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTexture:
@@ -66,6 +65,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RenderMap:
+        m_Texture: {fileID: 8400000, guid: f145797d9e7d90044898c72554d9cf71, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _RenderTexture:
@@ -108,6 +111,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _MaskAdd: 0
+    - _MaskDensity: 5
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005

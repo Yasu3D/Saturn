@@ -11,14 +11,15 @@ public class SnapRenderer : AbstractPositionedChartElementRenderer<SnapNote>
     [SerializeField] private Material materialTemplate;
     private Material materialInstance;
     private static readonly int NoteColorPropertyID = Shader.PropertyToID("_NoteColor");
+    private static readonly int FlipArrowPropertyID = Shader.PropertyToID("_FlipArrow");
 
     // ==== NOTE INFO ====
     private Color Color { get; set; }
-    private string Direction { get; set; } = "_FORWARD";
+    private int FlipArrow { get; set; }
 
     private void Awake()
     {
-        materialInstance = new Material(materialTemplate);
+        materialInstance = new(materialTemplate);
     }
 
     public override void SetRenderer(SnapNote note)
@@ -26,21 +27,25 @@ public class SnapRenderer : AbstractPositionedChartElementRenderer<SnapNote>
         Size = note.Size;
         Position = note.Position;
 
-        Color = NoteColors.GetColor(note).color;
+        Color = NoteColors.GetColor(note);
         NoteColors.GetColorID(note);
 
-        Direction = note.Direction is SnapNote.SnapDirection.Forward ? "_FORWARD" : "_BACKWARD";
+        FlipArrow = note.Direction is SnapNote.SnapDirection.Forward ? 0 : 1;
 
         if (materialInstance.HasColor(NoteColorPropertyID))
+        {
             materialInstance.SetColor(NoteColorPropertyID, Color);
+        }
 
-        materialInstance.DisableKeyword("_DIRECTION_FORWARD");
-        materialInstance.EnableKeyword("_DIRECTION" + Direction);
+        if (materialInstance.HasInteger(FlipArrowPropertyID))
+        {
+            materialInstance.SetInteger(FlipArrowPropertyID, FlipArrow);
+        }
 
         MeshFilter.mesh = Meshes[Size - 1];
         MeshRenderer.material = materialInstance;
 
-        transform.eulerAngles = new Vector3(0, 0, Position * -6);
+        transform.eulerAngles = new(0, 0, Position * -6);
     }
 }
 }

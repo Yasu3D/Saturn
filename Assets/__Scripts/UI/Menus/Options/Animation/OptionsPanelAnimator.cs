@@ -183,8 +183,8 @@ private Sequence currentSequence;
         radialCoverBackground.SetActive(false);
 
         panelGroup.alpha = 0;
-        panelGroupRect.anchoredPosition = new Vector2(-250, 0);
-        panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
+        panelGroupRect.anchoredPosition = new(-250, 0);
+        panelGroupRect.eulerAngles = new(0, 0, 0);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroup.DOFade(1, frame * 6).SetEase(Ease.OutQuad));
@@ -207,8 +207,8 @@ private Sequence currentSequence;
         radialCoverRing.SetActive(false);
         radialCoverBackground.SetActive(false);
 
-        panelGroupRect.anchoredPosition = new Vector2(0, 0);
-        panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
+        panelGroupRect.anchoredPosition = new(0, 0);
+        panelGroupRect.eulerAngles = new(0, 0, 0);
         panelGroup.alpha = 1;
 
         currentSequence = DOTween.Sequence();
@@ -225,9 +225,6 @@ private Sequence currentSequence;
         // Move Navigator 6 frames OutQuad
 
         // wait 2 frames
-        // Scale SpinnyThing 4 frames OutQuad
-        // Scale glass 4 frames OutQuad
-        // Fade Glass 4 frames OutQuad
         // Move Gradient 4 frames OutQuad
 
         const float frame = 0.032f;
@@ -239,25 +236,19 @@ private Sequence currentSequence;
         radialCoverBackground.SetActive(false);
 
         panelGroup.alpha = 0;
-        panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
-        panelGroupRect.anchoredPosition = new Vector2(-250, 0);
-        navigatorRect.anchoredPosition = new Vector2(1250, -400);
-
-        //spinnyThingRect.localScale = Vector3.one * 2;
-        //glassImage.rectTransform.localScale = Vector3.zero;
-        //glassImage.DOFade(0, 0);
-        gradientRect.anchoredPosition = new Vector2(0, 400);
-        headerRect.anchoredPosition = new Vector2(0, 250);
+        panelGroupRect.eulerAngles = new(0, 0, 0);
+        panelGroupRect.anchoredPosition = new(-250, 0);
+        navigatorRect.anchoredPosition = new(1250, -400);
+        
+        gradientRect.anchoredPosition = new(0, -235);
+        headerRect.anchoredPosition = new(0, 250);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroup.DOFade(1, frame * 3).SetEase(Ease.Linear));
         currentSequence.Join(panelGroupRect.DOAnchorPosX(0, frame * 6).SetEase(Ease.OutQuad));
         currentSequence.Join(navigatorRect.DOAnchorPosX(270, frame * 6).SetEase(Ease.OutQuad));
-
-        //currentSequence.Insert(frame * 2, spinnyThingRect.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
-        //currentSequence.Insert(frame * 2, glassImage.rectTransform.DOScale(1, frame * 4).SetEase(Ease.OutQuad));
-        //currentSequence.Insert(frame * 2, glassImage.DOFade(1, frame * 4).SetEase(Ease.OutQuad));
-        currentSequence.Insert(frame * 2, gradientRect.DOAnchorPosY(652.5f, frame * 4));
+        
+        currentSequence.Insert(frame * 2, gradientRect.DOAnchorPosY(0, frame * 4));
         currentSequence.Insert(frame * 2, headerRect.DOAnchorPosX(-420, frame * 4));
     }
 
@@ -265,9 +256,6 @@ private Sequence currentSequence;
     {
         // 1 frame = 32ms
         // Move panels 4 frames InQuad
-        // Scale SpinnyThing 4 frames InQuad
-        // Scale Glass 4 frames InQuad
-        // Fade Glass 4 frames InQuad
         // Move Gradient 4 frames InQuad
 
         // wait 2 frames
@@ -283,22 +271,17 @@ private Sequence currentSequence;
         radialCoverRing.SetActive(false);
         radialCoverBackground.SetActive(false);
 
-        panelGroupRect.anchoredPosition = new Vector2(0, 0);
-        panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
-        //glassImage.rectTransform.localScale = Vector3.one;
-        //glassImage.DOFade(1, 0);
-        gradientRect.anchoredPosition = new Vector2(0, 652.5f);
-        headerRect.anchoredPosition = new Vector2(-420, 250);
+        panelGroupRect.anchoredPosition = new(0, 0);
+        panelGroupRect.eulerAngles = new(0, 0, 0);
+        gradientRect.anchoredPosition = new(0, 0);
+        headerRect.anchoredPosition = new(-420, 250);
 
         panelGroup.alpha = 1;
-        navigatorRect.anchoredPosition = new Vector2(270, -400);
+        navigatorRect.anchoredPosition = new(270, -400);
 
         currentSequence = DOTween.Sequence();
         currentSequence.Join(panelGroupRect.DOAnchorPosX(-250, frame * 4).SetEase(Ease.InQuad));
-        //currentSequence.Join(spinnyThingRect.DOScale(2, frame * 4).SetEase(Ease.InQuad));
-        //currentSequence.Join(glassImage.rectTransform.DOScale(0.5f, frame * 4).SetEase(Ease.InQuad));
-        //currentSequence.Join(glassImage.DOFade(0, frame * 4).SetEase(Ease.InQuad));
-        currentSequence.Join(gradientRect.DOAnchorPosY(400, frame * 4).SetEase(Ease.InQuad));
+        currentSequence.Join(gradientRect.DOAnchorPosY(-235, frame * 4).SetEase(Ease.InQuad));
         currentSequence.Join(headerRect.DOAnchorPosX(0, frame * 4).SetEase(Ease.InQuad));
 
         currentSequence.Insert(frame * 2, panelGroup.DOFade(0, frame * 2).SetEase(Ease.Linear));
@@ -322,8 +305,8 @@ private Sequence currentSequence;
         radialCoverRing.SetActive(true);
         radialCoverBackground.SetActive(true);
 
-        panelGroupRect.anchoredPosition = new Vector2(0, 0);
-        panelGroupRect.eulerAngles = new Vector3(0, 0, 120);
+        panelGroupRect.anchoredPosition = new(0, 0);
+        panelGroupRect.eulerAngles = new(0, 0, 120);
         panelGroup.alpha = 0;
         radialCenterGroup.DOFade(0, 0);
 
@@ -331,7 +314,7 @@ private Sequence currentSequence;
         currentSequence.Join(radialCenterGroup.DOFade(1, frame * 4).SetEase(Ease.InQuad));
 
         currentSequence.Insert(frame * 4,
-            panelGroupRect.DORotate(new Vector3(0, 0, 0), frame * 6).SetEase(Ease.OutQuad));
+            panelGroupRect.DORotate(new(0, 0, 0), frame * 6).SetEase(Ease.OutQuad));
         currentSequence.Insert(frame * 4, panelGroup.DOFade(1, frame * 6).SetEase(Ease.OutQuad));
     }
 
@@ -351,7 +334,7 @@ private Sequence currentSequence;
         radialCoverRing.SetActive(true);
         radialCoverBackground.SetActive(true);
 
-        panelGroupRect.eulerAngles = new Vector3(0, 0, 0);
+        panelGroupRect.eulerAngles = new(0, 0, 0);
         panelGroup.alpha = 1;
 
         currentSequence = DOTween.Sequence();
@@ -534,7 +517,7 @@ private Sequence currentSequence;
     {
         float[] posX = { 120, 55, 20, 20, 20, 55, 120 };
         float[] posY = { 350, 250, 150, 0, -150, -250, -350 };
-        return new Vector2(posX[index], posY[index]);
+        return new(posX[index], posY[index]);
     }
 
     private static float GetLinearScale(int index)
@@ -551,7 +534,7 @@ private Sequence currentSequence;
             -99, -99, -99, -99, -99, -99, -99, -99, -81, -63, -45, -27, 0, 27, 45, 63, 81, 99, 117, 135, 153, 171,
             189, 207, 225,
         };
-        return new Vector3(0, 0, angles[index]);
+        return new(0, 0, angles[index]);
     }
 
     private static void SetPanelLinear([NotNull] UIScreen screen, [NotNull] UIListItem item,

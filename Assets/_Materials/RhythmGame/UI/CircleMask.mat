@@ -61,7 +61,7 @@ Material:
     - _OuterRadius: 0.978
     - _Outer_Radius: 0.969
     - _Progress: 0
-    - _Radius: 0.3237
+    - _Radius: 1
     - _StartAngle: -90
     - _Stencil: 0
     - _StencilComp: 8

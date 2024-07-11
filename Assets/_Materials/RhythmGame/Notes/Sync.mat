@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sync
-  m_Shader: {fileID: -6465566751694194690, guid: 9024cd5865c64454a9e3a3ed20e8d6b3,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 04cf5291005e4604bab31d089da3b5ba, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

@@ -220,9 +220,8 @@ public class MaintenanceMenuLogic : MonoBehaviour
             {
                 int newPosition = display.ViewRectPosition + 1;
                 if (newPosition > 100)
-                    newPosition -= 101;
+                    newPosition -= 201;
                 display.ViewRectPosition = newPosition;
-                EventManager.InvokeEvent("UpdateViewRect");
                 break;
             }
 
@@ -232,7 +231,6 @@ public class MaintenanceMenuLogic : MonoBehaviour
                 if (newScale > 100)
                     newScale -= 51;
                 display.ViewRectScale = newScale;
-                EventManager.InvokeEvent("UpdateViewRect");
                 break;
             }
 
@@ -257,10 +255,9 @@ public class MaintenanceMenuLogic : MonoBehaviour
             case 0:
             {
                 int newPosition = display.ViewRectPosition - 1;
-                if (newPosition < 0)
-                    newPosition += 101;
+                if (newPosition < -100)
+                    newPosition += 201;
                 display.ViewRectPosition = newPosition;
-                EventManager.InvokeEvent("UpdateViewRect");
                 break;
             }
 
@@ -270,7 +267,6 @@ public class MaintenanceMenuLogic : MonoBehaviour
                 if (newScale < 50)
                     newScale += 51;
                 display.ViewRectScale = newScale;
-                EventManager.InvokeEvent("UpdateViewRect");
                 break;
             }
 

@@ -1,4 +1,4 @@
-Shader "SaturnGame/RhythmGame/NoteRendering/HoldSurface"
+Shader "SaturnGame/RhythmGame/Notes/HoldSurface"
 {
     Properties
     {
