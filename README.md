@@ -3,6 +3,10 @@ Saturn is an open-source game for arcade hardware, built from scratch by [Yasu](
 
 ![song select screenshot](docs/screenshot1.png) ![gameplay screenshot](docs/screenshot2.png)
 
+**Saturn is in alpha development.** Things will be constantly broken and changing.
+
+**The Saturn developers are not responsible for any damage to your hardware or anything else.** We believe Saturn is safe, and run it on our own cabs, but we cannot guarantee anything.
+
 ## Features
 - Easy installation of new charts.
 - Fully-functional gameplay.
@@ -13,8 +17,8 @@ Saturn is an open-source game for arcade hardware, built from scratch by [Yasu](
 
 Things that aren't supported yet:
 - Keeping track of your scores or PBs.
-- Chart favorites.
 - Profiles or online support.
+- Multiplayer
 - And many other little things...
 
 ## Installing Saturn
@@ -47,9 +51,11 @@ Saturn reads songs from the `SaturnGame_Data/Assets/StreamingAssets/SongPacks` f
 ### Folder layout
 Each song and its charts must be within its own folder. You can name the song folders whatever you want to help keep them organized.
 
-You can also nest folders to organize things more. In Saturn, you can group songs by the folder they are in, so you may find it helpful to group related songs/charts into the same folder.
+You can also nest folders to organize things more. In Saturn, you can group songs by the parent folder they are in, so you may find it helpful to group related songs into the same parent folder.
 
 ### Song folder contents
+> _We will move to a new format, that is better suited for Saturn, in the future. As such, instructions below are temporary._
+
 Song folders must use the [wack format](https://github.com/muskit/wack-format), with some additional chart filename restrictions:
 - Numbered chart files must only use the names `0.mer` through `4.mer`. Any other chart name will be ignored (e.g. `9p.mer`). The meta file should still be called `meta.mer`.
 	- `0.mer` will be the NORMAL difficulty.
@@ -62,6 +68,7 @@ Song folders must use the [wack format](https://github.com/muskit/wack-format), 
 - It's possible to have 5 charts on the same song if you have all difficulties.
 
 If you are using [MercuryMapper](https://github.com/Yasu3D/MercuryMapper), there is an option to export for Saturn.
+
 ### Converting charts to wack format
 If you have a chart that you'd like to use in Saturn that isn't in this format, here's the general gist of how you should convert it.
 
@@ -104,7 +111,7 @@ Any time you play a chart, a replay is saved in your Saturn settings directory:
 - on Windows: `AppData\LocalLow\Yasu3D\SaturnGame`
 - on Linux: `.config/unity3d/Yasu3D/SaturnGame`
 
-To watch the replay, first make a copy of the replay file name `replay.json.gz` (in the same folder). Then, in Saturn, start the corresponding chart and press F11 as soon as gameplay loads.
+To watch the replay, first make a copy of the replay file named `replay.json.gz` (in the same folder). Then, in Saturn, start the corresponding chart and press F11 as soon as gameplay loads.
 
 There's no check to make sure this replay corresponds to this chart, so if it looks like the replay is randomly flailing, make sure you have loaded the right chart.
 
@@ -161,3 +168,4 @@ Saturn is a community-run game and lives on community contributions. If you want
 	- Set the song folder and difficulty on the component and enable it.
 	- Hit Play in Unity, then hit L to load and begin the selected chart.
 	- This is also useful for checking replays - hit F11 to load the replay before loading the chart.
+    - When the Debug Chart Player is enabled, you can use the up/down arrow keys to change the scroll speed.
