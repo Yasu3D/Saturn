@@ -26,6 +26,7 @@ public class GuideLaneRenderer : MonoBehaviour
         foreach (MeshRenderer meshRenderer in laneSegments)
         {
             meshRenderer.material = materialInstance;
+            meshRenderer.gameObject.SetActive(false);
         }
     }
     

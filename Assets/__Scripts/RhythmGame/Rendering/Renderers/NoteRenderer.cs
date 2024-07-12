@@ -12,11 +12,11 @@ public class NoteRenderer : AbstractPositionedChartElementRenderer<Note>
     [SerializeField] private Material materialTemplate;
     private Material materialInstance;
     private static readonly int NoteColorPropertyId = Shader.PropertyToID("_NoteColor");
-    private static readonly int NoteWidthPropertyID = Shader.PropertyToID("_NoteWidth");
-    private static readonly int SyncPropertyID = Shader.PropertyToID("_Sync");
-    private static readonly int BonusPropertyID = Shader.PropertyToID("_Bonus");
-    private static readonly int ChainPropertyID = Shader.PropertyToID("_Chain");
-    private static readonly int ZOffsetPropertyID = Shader.PropertyToID("_Z_Offset");
+    private static readonly int NoteWidthPropertyID = Shader.PropertyToID("_NoteSize");
+    private static readonly int SyncPropertyID = Shader.PropertyToID("_IsSync");
+    private static readonly int BonusPropertyID = Shader.PropertyToID("_IsBonus");
+    private static readonly int ChainPropertyID = Shader.PropertyToID("_IsChain");
+    private static readonly int ZOffsetPropertyID = Shader.PropertyToID("_ZOffset");
 
     // ==== NOTE INFO ====
     private Color Color { get; set; }
@@ -47,19 +47,19 @@ public class NoteRenderer : AbstractPositionedChartElementRenderer<Note>
         if (materialInstance.HasFloat(NoteWidthPropertyID))
             materialInstance.SetFloat(NoteWidthPropertyID, Width);
 
-        if (materialInstance.HasFloat(SyncPropertyID))
-            materialInstance.SetFloat(SyncPropertyID, Convert.ToInt32(IsSync));
+        if (materialInstance.HasInteger(SyncPropertyID))
+            materialInstance.SetInteger(SyncPropertyID, Convert.ToInt32(IsSync));
 
-        if (materialInstance.HasFloat(BonusPropertyID))
-            materialInstance.SetFloat(BonusPropertyID, Convert.ToInt32(IsBonus));
+        if (materialInstance.HasInteger(BonusPropertyID))
+            materialInstance.SetInteger(BonusPropertyID, Convert.ToInt32(IsBonus));
 
-        if (materialInstance.HasFloat(ChainPropertyID))
-            materialInstance.SetFloat(ChainPropertyID, Convert.ToInt32(IsChain));
+        if (materialInstance.HasInteger(ChainPropertyID))
+            materialInstance.SetInteger(ChainPropertyID, Convert.ToInt32(IsChain));
 
-        if (materialInstance.HasFloat(ZOffsetPropertyID))
+        if (materialInstance.HasInteger(ZOffsetPropertyID))
         {
             int state = note is HoldNote ? 1 : 0;
-            materialInstance.SetFloat(ZOffsetPropertyID, state);
+            materialInstance.SetInteger(ZOffsetPropertyID, state);
         }
 
         MeshFilter.mesh = Meshes[Size - 1];
