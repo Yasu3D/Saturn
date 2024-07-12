@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using SaturnGame.RhythmGame;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.Rendering
@@ -19,9 +20,12 @@ public class GuideLaneRenderer : MonoBehaviour
     private static readonly int ComboShinePropertyID = Shader.PropertyToID("_ComboShine");
     private static readonly int LaneTypePropertyID = Shader.PropertyToID("_LaneType");
 
+    private PlayerSettings PlayerSettings => SettingsManager.Instance.PlayerSettings;
+
     private void Awake()
     {
         materialInstance = new(material);
+        SetRenderer(PlayerSettings.DesignSettings.NoteWidth, PlayerSettings.UiSettings.GuideLaneOpacity, (int)PlayerSettings.UiSettings.GuideLaneType);
         
         foreach (MeshRenderer meshRenderer in laneSegments)
         {
@@ -39,9 +43,11 @@ public class GuideLaneRenderer : MonoBehaviour
     /// <param name="laneType">Number of visible lanes from 0 to 6</param>
     public void SetRenderer(int noteWidth, int opacity, int laneType)
     {
-        material.SetFloat(NoteWidthPropertyID, noteWidth);
-        material.SetFloat(OpacityPropertyID, opacity);
-        material.SetFloat(LaneTypePropertyID, laneType);
+        if (materialInstance == null) return;
+        
+        materialInstance.SetFloat(NoteWidthPropertyID, noteWidth);
+        materialInstance.SetFloat(OpacityPropertyID, opacity);
+        materialInstance.SetFloat(LaneTypePropertyID, laneType);
     }
 
 
