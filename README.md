@@ -102,7 +102,7 @@ If you have a chart that you'd like to use in Saturn that isn't in this format, 
    ```
    Again, update these fields to reflect the song you're adding. `RUBI_TITLE` isn't needed for non-Japanese names. It's used to provide Kanji readings for Japanese song titles.
 
-5. If Saturn is running, restart it to reload the song database.
+5. If Saturn is running press the red button on the top right of the circle, or hit L on a keyboard, to reload the song database.
 
 ## Replays
 > _Note: replay handling will be revamped in the future. The current system is temporary to keep things simple in the mean time._
@@ -157,6 +157,8 @@ Saturn is a community-run game and lives on community contributions. If you want
 		- Q/E to navigate sort groups
 		- up/down to change difficulty
 		- O in the chart preview screen to go to options
+		- R to select a random song, T to select a random song within the current sort group
+ 		- L to reload the song database from disk
 	- In gameplay:
 		- ESC to immediately back out to song select
 		- numpad 0 to enable keyboard input
