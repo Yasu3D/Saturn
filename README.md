@@ -50,6 +50,8 @@ Each song and its charts must be within its own folder. You can name the song fo
 You can also nest folders to organize things more. In Saturn, you can group songs by the folder they are in, so you may find it helpful to group related songs/charts into the same folder.
 
 ### Song folder contents
+> _We will move to a new format, that is better suited for Saturn, in the future. As such, instructions below are temporary._
+
 Song folders must use the [wack format](https://github.com/muskit/wack-format), with some additional chart filename restrictions:
 - Numbered chart files must only use the names `0.mer` through `4.mer`. Any other chart name will be ignored (e.g. `9p.mer`). The meta file should still be called `meta.mer`.
 	- `0.mer` will be the NORMAL difficulty.
@@ -62,6 +64,7 @@ Song folders must use the [wack format](https://github.com/muskit/wack-format), 
 - It's possible to have 5 charts on the same song if you have all difficulties.
 
 If you are using [MercuryMapper](https://github.com/Yasu3D/MercuryMapper), there is an option to export for Saturn.
+
 ### Converting charts to wack format
 If you have a chart that you'd like to use in Saturn that isn't in this format, here's the general gist of how you should convert it.
 
@@ -161,3 +164,4 @@ Saturn is a community-run game and lives on community contributions. If you want
 	- Set the song folder and difficulty on the component and enable it.
 	- Hit Play in Unity, then hit L to load and begin the selected chart.
 	- This is also useful for checking replays - hit F11 to load the replay before loading the chart.
+    - When the Debug Chart Player is enabled, you can use the up/down arrow keys to change the scroll speed.
