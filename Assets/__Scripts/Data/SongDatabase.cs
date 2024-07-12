@@ -21,6 +21,7 @@ public class SongDatabase : MonoBehaviour
         IEnumerable<string> songDirectories =
             Directory.EnumerateFiles(songPacksPath, "meta.mer", SearchOption.AllDirectories);
 
+        songs.Clear();
         foreach (string filepath in songDirectories) songs.Add(LoadSongData(filepath));
     }
 

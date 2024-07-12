@@ -440,6 +440,58 @@ public class SongSelectLogic : MonoBehaviour
         SceneSwitcher.Instance.LoadScene("_Options");
     }
 
+    public async void OnReload()
+    {
+        songDatabase.LoadAllSongData();
+
+        SetSongAndDiffFromPersistentState();
+
+        if (page is MenuPage.ChartPreview)
+        {
+            buttonManager.SetActiveButtons(1);
+            pageAnimator.ToChartPreviewInstant();
+        }
+
+        await LoadAllCards();
+    }
+
+    public async void OnRandom()
+    {
+        int songCount = songList.Groups.Sum(group => group.Entries.Count);
+        int randomIndex = UnityEngine.Random.Range(0, songCount);
+
+        // Note: we are taking the random index as an "offset", but this is equivalent since it's uniformly distributed
+        // in the whole list of songs. (No matter the static offset of the current song, the distribution is still
+        // uniform.)
+        (int newGroupIndex, int newEntryIndex) =
+            songList.RelativeSongIndexes(selectedGroupIndex, selectedEntryIndex, randomIndex);
+        Difficulty newDifficulty =
+            FindNearestDifficulty(songList.Groups[newGroupIndex].Entries[newEntryIndex].Difficulties,
+                selectedDifficulty);
+        SetSongAndDifficulty(newGroupIndex, newEntryIndex, newDifficulty);
+
+        bgmPreview.FadeoutBgmPreview();
+        bgmPreview.ResetLingerTimer();
+
+        await LoadAllCards();
+    }
+
+    public async void OnGroupRandom()
+    {
+        int newEntryIndex = UnityEngine.Random.Range(0, songList.Groups[selectedGroupIndex].Entries.Count);
+        Difficulty newDifficulty =
+            FindNearestDifficulty(songList.Groups[selectedGroupIndex].Entries[newEntryIndex].Difficulties,
+                selectedDifficulty);
+
+        SetSongAndDifficulty(selectedGroupIndex, newEntryIndex, newDifficulty);
+
+        bgmPreview.FadeoutBgmPreview();
+        bgmPreview.ResetLingerTimer();
+
+        await LoadAllCards();
+
+    }
+
     private async Awaitable LoadAllCards()
     {
         // The loop is async, so SelectedGroupIndex and SelectedEntryIndex can change.
@@ -555,6 +607,9 @@ public class SongSelectLogic : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow)) OnDifficultyChange(+1);
         if (Input.GetKeyDown(KeyCode.DownArrow)) OnDifficultyChange(-1);
         if (Input.GetKeyDown(KeyCode.O)) OnOptions();
+        if (Input.GetKeyDown(KeyCode.L)) OnReload();
+        if (Input.GetKeyDown(KeyCode.R)) OnRandom();
+        if (Input.GetKeyDown(KeyCode.T)) OnGroupRandom();
 
         if (Input.GetKeyDown(KeyCode.X)) bgmPreview.FadeoutBgmPreview();
     }
