@@ -42,8 +42,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _InnerRadius: 0.955
-    - _OuterRadius: 0.976
+    - _InnerRadius: 0.972
+    - _OuterRadius: 0.99
     - _Progress: 0
     m_Colors: []
   m_BuildTextureStacks: []
