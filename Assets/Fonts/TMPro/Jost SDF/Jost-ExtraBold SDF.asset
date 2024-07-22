@@ -120,9 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Jost-ExtraBold SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 1806812161
   material: {fileID: -7757548015563402283}
-  materialHashCode: 0
+  materialHashCode: 866628097
   m_Version: 1.1.0
   m_SourceFontFileGUID: b2ef5c0b29fc0034fb5b3a1ae2114e6d
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: b2ef5c0b29fc0034fb5b3a1ae2114e6d,
@@ -5648,7 +5648,8 @@ MonoBehaviour:
   m_FontFeatureTable:
     m_GlyphPairAdjustmentRecords: []
   fallbackFontAssets: []
-  m_FallbackFontAssetTable: []
+  m_FallbackFontAssetTable:
+  - {fileID: 11400000, guid: b0111cf8ee005b447b9367257579a25d, type: 2}
   m_CreationSettings:
     sourceFontFileName: 
     sourceFontFileGUID: b2ef5c0b29fc0034fb5b3a1ae2114e6d
