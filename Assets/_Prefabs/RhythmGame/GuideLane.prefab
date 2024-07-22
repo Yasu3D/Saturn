@@ -249,7 +249,7 @@ MonoBehaviour:
   - {fileID: 4442347753466304944}
   - {fileID: 8668145498914119470}
   animationSpeed: 0.008
-  material: {fileID: 2100000, guid: dcc7f7eeee1d3594ea6d88d2f3675315, type: 2}
+  material: {fileID: 2100000, guid: 08c0cfc05af98de4b9e2c6d3b200fb93, type: 2}
 --- !u!1 &255489588697711814
 GameObject:
   m_ObjectHideFlags: 0
