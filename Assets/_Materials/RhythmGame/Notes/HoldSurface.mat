@@ -107,7 +107,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _ColorIndex: 1
-    - _State: 0
+    - _State: 1
     m_Floats:
     - _AddStrength: 0.6
     - _AlphaClip: 0
@@ -122,6 +122,7 @@ Material:
     - _ColorID: 1
     - _Cull: 2
     - _Cutoff: 0.5
+    - _Debug: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -132,6 +133,7 @@ Material:
     - _GlossyReflections: 0
     - _Held: 1
     - _Metallic: 0
+    - _NoteSize: 3
     - _NoteWidth: 1
     - _OcclusionStrength: 1
     - _Opacity: 0.6
