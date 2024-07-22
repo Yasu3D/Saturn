@@ -65,7 +65,8 @@ Shader "SaturnGame/UI/BgmProgressBar"
                 float2 polarCoord =  float2(angle / pi, distance);
 
                 // Remap polar x coordinate from [-1 <> 1] to [0 <> 1]
-                polarCoord.x = (polarCoord.x + 1) * 0.5;
+                polarCoord.x = 0.25 + (polarCoord.x + 1) * 0.5;
+                polarCoord.x %= 1;
 
                 // Get radial progress
                 float progressMask = step(_Progress, polarCoord.x);
