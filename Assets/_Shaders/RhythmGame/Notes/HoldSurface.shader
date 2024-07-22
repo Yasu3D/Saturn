@@ -6,6 +6,7 @@ Shader "SaturnGame/RhythmGame/Notes/HoldSurface"
         _ColorIndex ("Color ID", Integer) = 0
         _ConeBounds ("Cone Bounds", Vector) = (0, -6, 0, 0)
         _State ("State", Integer) = 0
+        [IntRange] _NoteSize ("Note Size", Range(1, 5)) = 3
     }
     SubShader
     {
@@ -42,6 +43,9 @@ Shader "SaturnGame/RhythmGame/Notes/HoldSurface"
             float4 _ConeBounds;
             int _ColorIndex;
             int _State;
+            int _NoteSize;
+
+            float _Debug;
             
             v2f vert (appdata v)
             {
@@ -75,8 +79,9 @@ Shader "SaturnGame/RhythmGame/Notes/HoldSurface"
                     {
                         float3 activeGradient = float3(1, 1, 1) - gradient;
                         activeGradient = -activeGradient * activeGradient + float3(1, 1, 1);
-                        
-                        result = float4(activeGradient, 0.6 * (i.world.z < _ConeBounds.x));
+
+                        float bounds[] = { -0.043, -0.05, -0.07, -0.087, -0.105 };
+                        result = float4(activeGradient, 0.6 * (i.world.z < bounds[_NoteSize - 1]));
                         break;
                     }
                 case 2:

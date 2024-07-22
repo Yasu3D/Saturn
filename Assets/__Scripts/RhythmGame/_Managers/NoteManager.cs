@@ -464,9 +464,7 @@ public class NoteManager : MonoBehaviour
     {
         NoteContainer container =
             SetupContainer<NoteContainer, Note, NoteRenderer>(notePool, input, reverse, setRenderer: false);
-
-        int noteWidth = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
-        container.Renderer.Width = noteWidth;
+        
         container.Renderer.SetRenderer(input);
     }
 

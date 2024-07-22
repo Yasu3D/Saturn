@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SaturnGame.RhythmGame;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.Rendering
@@ -30,6 +31,7 @@ public class HoldSurfaceRenderer : MonoBehaviour
     public HoldNote HoldNote;
     private static readonly int ColorPropertyId = Shader.PropertyToID("_ColorIndex");
     private static readonly int StatePropertyId = Shader.PropertyToID("_State");
+    private static readonly int NoteSizePropertyId = Shader.PropertyToID("_NoteSize");
 
     public bool Reverse;
 
@@ -81,6 +83,9 @@ public class HoldSurfaceRenderer : MonoBehaviour
 
         if (materialInstance.HasInteger(ColorPropertyId))
             materialInstance.SetInteger(ColorPropertyId, colorID);
+        
+        if (materialTemplate.HasInteger(NoteSizePropertyId))
+            materialInstance.SetInteger(NoteSizePropertyId, SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth);
 
         state = 0;
         SetState(0);

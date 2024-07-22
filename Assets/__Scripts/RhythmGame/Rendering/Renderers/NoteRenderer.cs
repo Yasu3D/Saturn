@@ -1,5 +1,6 @@
 using System;
 using SaturnGame.RhythmGame;
+using SaturnGame.Settings;
 using UnityEngine;
 
 namespace SaturnGame.Rendering
@@ -36,6 +37,7 @@ public class NoteRenderer : AbstractPositionedChartElementRenderer<Note>
         Position = note.Position;
         
         Color = NoteColors.GetColor(note);
+        Width = SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth;
 
         IsSync = note.IsSync;
         IsBonus = note.BonusType is Note.NoteBonusType.Bonus;
