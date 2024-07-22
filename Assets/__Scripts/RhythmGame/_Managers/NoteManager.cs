@@ -128,7 +128,7 @@ public class NoteManager : MonoBehaviour
         while (barLineIndex < Chart.BarLines.Count && ScaledVisualTime() + ScrollDuration() >=
                Chart.BarLines[barLineIndex].ScaledVisualTime)
         {
-            GetBarLine(Chart.BarLines[barLineIndex].ScaledVisualTime);
+            GetBarLine(Chart.BarLines[barLineIndex]);
             barLineIndex++;
         }
     }
@@ -341,7 +341,7 @@ public class NoteManager : MonoBehaviour
         foreach (BarLineContainer container in barLinePool.ActiveObjects)
         {
             container.gameObject.SetActive(!reverseActive);
-            AnimateObject(container, barLineGarbage, container.Time, container.Time, container.transform, true);
+            AnimateObject(container, barLineGarbage, container.BarLine.TimeMs, container.BarLine.ScaledVisualTime, container.transform, true);
         }
     }
 
@@ -506,11 +506,11 @@ public class NoteManager : MonoBehaviour
         SetupContainer<GenericContainer, PositionedChartElement, GenericRenderer>(rEffectPool, input, reverse);
     }
 
-    private void GetBarLine(float timestamp)
+    private void GetBarLine(BarLine barLine)
     {
         BarLineContainer container = barLinePool.GetObject();
 
-        container.Time = timestamp;
+        container.BarLine = barLine;
         container.transform.SetParent(activeObjectsContainer);
         container.gameObject.SetActive(true);
     }
