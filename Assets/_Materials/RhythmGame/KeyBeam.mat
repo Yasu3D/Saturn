@@ -21,17 +21,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KeyBeam
-  m_Shader: {fileID: -6465566751694194690, guid: cb95396e02e0086e89b63a5b835ca1b8,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 417f37ba5bd73eb43b9f0fff25f83def, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _CLIPJUDGEMENTLINE_ON
+  - _DEV3_ON
   - _LANETYPE_E
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2990
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -60,6 +61,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GradientMap:
+        m_Texture: {fileID: 2800000, guid: c96b8226f1701cd4290b81b67a1e4bf8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GuideLaneGradient:
@@ -106,7 +111,9 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
+    m_Ints:
+    - _ClipJudgementLine: 1
+    - _Dev3: 1
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
@@ -121,6 +128,8 @@ Material:
     - _Depth: 3
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
+    - _Dev: 0.33
+    - _Dev2: 0.185
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
