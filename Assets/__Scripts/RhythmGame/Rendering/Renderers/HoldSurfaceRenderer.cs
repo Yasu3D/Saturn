@@ -84,8 +84,8 @@ public class HoldSurfaceRenderer : MonoBehaviour
         if (materialInstance.HasInteger(ColorPropertyId))
             materialInstance.SetInteger(ColorPropertyId, colorID);
         
-        if (materialTemplate.HasInteger(NoteSizePropertyId))
-            materialInstance.SetInteger(NoteSizePropertyId, SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth);
+        if (materialTemplate.HasFloat(NoteSizePropertyId))
+            materialInstance.SetFloat(NoteSizePropertyId, SettingsManager.Instance.PlayerSettings.DesignSettings.NoteWidth);
 
         state = 0;
         SetState(0);
