@@ -4823,6 +4823,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7619298322578230433}
+  - component: {fileID: 644951685210285624}
   m_Layer: 0
   m_Name: KeyBeam
   m_TagString: Untagged
@@ -4840,7 +4841,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.999, y: 0.999, z: 0.999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3181821515832573103}
@@ -4905,6 +4906,80 @@ Transform:
   - {fileID: 1090400371319323342}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &644951685210285624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9054144599966535815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b475eae8f143572289e52c625bbf075, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laneSegments:
+  - {fileID: 2226460690746031364}
+  - {fileID: 7805973638748774362}
+  - {fileID: 7532423340742877585}
+  - {fileID: 5852873773661855502}
+  - {fileID: 985685155708476916}
+  - {fileID: 4094219324515760944}
+  - {fileID: 6326650345207156614}
+  - {fileID: 861306896656430108}
+  - {fileID: 8678309764968862215}
+  - {fileID: 6127270058126130859}
+  - {fileID: 5032779338865502450}
+  - {fileID: 5263056632233548430}
+  - {fileID: 1941708863378548201}
+  - {fileID: 2951320371347739596}
+  - {fileID: 5120754074817629814}
+  - {fileID: 6864147065975103022}
+  - {fileID: 1128239993911154586}
+  - {fileID: 7662808823273362104}
+  - {fileID: 4834753873126500723}
+  - {fileID: 4690550028160457773}
+  - {fileID: 6547982229599563956}
+  - {fileID: 949479786328084649}
+  - {fileID: 4904842051243809398}
+  - {fileID: 7147392262298293803}
+  - {fileID: 1084704955456737663}
+  - {fileID: 3988967893512465849}
+  - {fileID: 6892681369318537731}
+  - {fileID: 2752070536109882005}
+  - {fileID: 8626335468720554964}
+  - {fileID: 6204341791554625088}
+  - {fileID: 4609538877115715350}
+  - {fileID: 6159074637054500709}
+  - {fileID: 6850758425589122156}
+  - {fileID: 3655394444914089324}
+  - {fileID: 6075261323548038852}
+  - {fileID: 7130545418685541062}
+  - {fileID: 7107893611260264452}
+  - {fileID: 5288835715166513732}
+  - {fileID: 6233400100098422711}
+  - {fileID: 5742843978908507453}
+  - {fileID: 5626155946873691733}
+  - {fileID: 4108645400466774276}
+  - {fileID: 7965371303900628266}
+  - {fileID: 6077578900981897156}
+  - {fileID: 8546843196683470509}
+  - {fileID: 7877056217192999967}
+  - {fileID: 4830188416352155634}
+  - {fileID: 2380235012050748301}
+  - {fileID: 8283743600034980418}
+  - {fileID: 4635392710826683730}
+  - {fileID: 7127804059400544623}
+  - {fileID: 2454226620721494985}
+  - {fileID: 5778444147138185967}
+  - {fileID: 168318834103776010}
+  - {fileID: 8066092754947210549}
+  - {fileID: 1025531696363983470}
+  - {fileID: 8714919784514525557}
+  - {fileID: 8190284985097688949}
+  - {fileID: 7971981553500753592}
+  - {fileID: 6663285456204814554}
+  inputManager: {fileID: 0}
 --- !u!1 &9113948954810867792
 GameObject:
   m_ObjectHideFlags: 0

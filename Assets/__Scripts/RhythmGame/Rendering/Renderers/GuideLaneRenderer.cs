@@ -13,6 +13,7 @@ public class GuideLaneRenderer : MonoBehaviour
     [SerializeField] private List<MeshRenderer> laneSegments;
     [SerializeField] private float animationSpeed = 0.008f;
     [SerializeField] private Material material;
+    [SerializeField] private KeyBeamRenderer keyBeamRenderer;
     private Material materialInstance;
     
     private static readonly int NoteWidthPropertyID = Shader.PropertyToID("_NoteWidth");
@@ -109,7 +110,10 @@ public class GuideLaneRenderer : MonoBehaviour
     {
         for (int i = 0; i < size; i++)
         {
-            laneSegments[(position + size - i + 59) % 60].gameObject.SetActive(state);
+            int index = (position + size - i + 59) % 60;
+            
+            laneSegments[index].gameObject.SetActive(state);
+            keyBeamRenderer.SetClip(index, state);
             await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
         }
     }
@@ -118,7 +122,10 @@ public class GuideLaneRenderer : MonoBehaviour
     {
         for (int i = 0; i < size; i++)
         {
-            laneSegments[(i + position + 60) % 60].gameObject.SetActive(state);
+            int index = (i + position + 60) % 60;
+            
+            laneSegments[index].gameObject.SetActive(state);
+            keyBeamRenderer.SetClip(index, state);
             await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
         }
     }
@@ -134,8 +141,15 @@ public class GuideLaneRenderer : MonoBehaviour
 
         for (int i = 0; i < steps; i++)
         {
-            laneSegments[(centerClockwise - i + offset) % 60].gameObject.SetActive(state);
-            laneSegments[(centerCounterclockwise + i + offset) % 60].gameObject.SetActive(state);
+            int index0 = (centerClockwise - i + offset) % 60;
+            int index1 = (centerCounterclockwise + i + offset) % 60;
+            
+            laneSegments[index0].gameObject.SetActive(state);
+            laneSegments[index1].gameObject.SetActive(state);
+
+            keyBeamRenderer.SetClip(index0, state);
+            keyBeamRenderer.SetClip(index1, state);
+            
             await Awaitable.WaitForSecondsAsync(animationSpeed / speed);
         }
     }
