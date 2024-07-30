@@ -577,7 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeviceSettings:
     DisplaySettings:
-      ViewRectPosition: 56
+      ViewRectPosition: -12
       ViewRectScale: 100
       TargetFramerate: 120
 --- !u!114 &6885694711510743663
