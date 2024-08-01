@@ -79,8 +79,8 @@ public class ChartLoaderTests
     [Test]
     public void TwoOverlappingNotesSplitEvenly()
     {
-        TouchNote note1 = new(0, 0, 0, 5) { TimeMs = 0 };
-        TouchNote note2 = new(0, 64, 0, 5) { TimeMs = 64 };
+        TouchNote note1 = new(0, 0, 0, 5, 1) { TimeMs = 0 };
+        TouchNote note2 = new(0, 64, 0, 5, 2) { TimeMs = 64 };
         Chart chart = new() { Notes = new List<Note> { note1, note2 } };
         InvokePrivateStaticMethod<ChartLoader>("ProcessHitWindows", chart);
         Assert.AreEqual(-100f, note1.EarliestHitTimeMs);
@@ -95,8 +95,8 @@ public class ChartLoaderTests
         // ChainNotes have max ±4frame (66.67ms) window, but TouchNotes have ±6frame (100ms) window.
         // These can overlap, but the midpoints will be outside the max window of the chain note.
         // The touch note's window shouldn't truncate past the start of the chain note's window.
-        TouchNote note1 = new(0, 0, 0, 5) { TimeMs = 0 };
-        ChainNote note2 = new(0, 140, 0, 5) { TimeMs = 140 };
+        TouchNote note1 = new(0, 0, 0, 5, 1) { TimeMs = 0 };
+        ChainNote note2 = new(0, 140, 0, 5, 2) { TimeMs = 140 };
         Chart chart = new() { Notes = new List<Note> { note1, note2 } };
         InvokePrivateStaticMethod<ChartLoader>("ProcessHitWindows", chart);
         Assert.AreEqual(-100f, note1.EarliestHitTimeMs);
@@ -110,8 +110,8 @@ public class ChartLoaderTests
     public void OverlappingWithChainDoesNotTruncateChainInReverse()
     {
         // see OverlappingWithChainDoesNotTruncateChain
-        ChainNote note1 = new(0, 0, 0, 5) { TimeMs = 0 };
-        TouchNote note2 = new(0, 140, 0, 5) { TimeMs = 140 };
+        ChainNote note1 = new(0, 0, 0, 5, 1) { TimeMs = 0 };
+        TouchNote note2 = new(0, 140, 0, 5, 2) { TimeMs = 140 };
         Chart chart = new() { Notes = new List<Note> { note1, note2 } };
         InvokePrivateStaticMethod<ChartLoader>("ProcessHitWindows", chart);
         Assert.AreEqual(-4 * FrameMs, note1.EarliestHitTimeMs);
@@ -136,9 +136,9 @@ public class ChartLoaderTests
         //
         // Here, we must make sure that note3's hit window is only truncated to wherever note1's hitwindow ends.
         // Naively it might get truncated to the midpoint between note1 and note2, which is wrong.
-        TouchNote note1 = new(0, 0, 0, 10) { TimeMs = 0 };
-        TouchNote note2 = new(0, 8, 5, 5) { TimeMs = 8f };
-        TouchNote note3 = new(0, 12, 0, 5) { TimeMs = 12f };
+        TouchNote note1 = new(0, 0, 0, 10, 1) { TimeMs = 0 };
+        TouchNote note2 = new(0, 8, 5, 5, 2) { TimeMs = 8f };
+        TouchNote note3 = new(0, 12, 0, 5, 3) { TimeMs = 12f };
         Chart chart = new() { Notes = new List<Note> { note1, note2, note3 } };
         InvokePrivateStaticMethod<ChartLoader>("ProcessHitWindows", chart);
         Assert.AreEqual(4f, note1.LatestHitTimeMs);
@@ -150,9 +150,9 @@ public class ChartLoaderTests
     public void MultipleOverlappingWindowsDontLeaveGapsInReverse()
     {
         // See MultipleOverlappingWindowsDontLeaveGaps, but now note3 is earliest.
-        TouchNote note3 = new(0, 0, 0, 5) { TimeMs = 0f };
-        TouchNote note2 = new(0, 4, 5, 5) { TimeMs = 4f };
-        TouchNote note1 = new(0, 12, 0, 10) { TimeMs = 12f };
+        TouchNote note3 = new(0, 0, 0, 5, 1) { TimeMs = 0f };
+        TouchNote note2 = new(0, 4, 5, 5, 2) { TimeMs = 4f };
+        TouchNote note1 = new(0, 12, 0, 10, 3) { TimeMs = 12f };
         Chart chart = new() { Notes = new List<Note> { note1, note2, note3 } };
         InvokePrivateStaticMethod<ChartLoader>("ProcessHitWindows", chart);
         Assert.AreEqual(8f, note1.EarliestHitTimeMs);

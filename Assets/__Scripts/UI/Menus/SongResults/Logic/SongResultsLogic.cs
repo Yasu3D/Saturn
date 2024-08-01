@@ -30,10 +30,10 @@ public class SongResultsLogic : MonoBehaviour
         };
         levelText.text = SaturnMath.GetDifficultyString(songDifficulty.Level);
         ScoreData scoreData = PersistentStateManager.Instance.LastScoreData;
+        Debug.Log(scoreData);
         scoreNumRenderer.SetScoreNum(scoreData.Score);
-        judgementsInfoRenderer.SetJudgementCountTexts(scoreData.JudgementCounts);
-        earlyLateInfoRenderer.SetEarlyLateCountTexts(scoreData.EarlyCount, scoreData.LateCount,
-            scoreData.EarlyCountByJudgement, scoreData.LateCountByJudgement);
+        judgementsInfoRenderer.SetJudgementCountTexts(scoreData.JudgementCounts.Total);
+        earlyLateInfoRenderer.SetEarlyLateCountTexts(scoreData.JudgementCounts.Total);
     }
 
     public void OnContinue()

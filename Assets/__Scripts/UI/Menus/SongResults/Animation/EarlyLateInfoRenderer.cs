@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using JetBrains.Annotations;
 using SaturnGame.RhythmGame;
 using TMPro;
 using UnityEngine;
@@ -15,21 +13,19 @@ public class EarlyLateInfoRenderer : MonoBehaviour
     [SerializeField] private TMP_Text lateGreatCountText;
     [SerializeField] private TMP_Text lateGoodCountText;
 
-    private static void SetTextsFromJudgementCounts([NotNull] Dictionary<Judgement, int> countsByJudgement,
-        [NotNull] TMP_Text marvelousCountText, [NotNull] TMP_Text greatCountText,
-        [NotNull] TMP_Text goodCountText)
+    private static void SetTextFromJudgementCountsCell(JudgementCountTableCell judgementCountsCell, TMP_Text earlyText,
+        TMP_Text lateText)
     {
-        marvelousCountText.text = countsByJudgement[Judgement.Marvelous].ToString();
-        greatCountText.text = countsByJudgement[Judgement.Great].ToString();
-        goodCountText.text = countsByJudgement[Judgement.Good].ToString();
+        earlyText.text = judgementCountsCell.EarlyCount.ToString();
+        lateText.text = judgementCountsCell.LateCount.ToString();
     }
 
-    public void SetEarlyLateCountTexts(int earlyCount, int lateCount, [NotNull] Dictionary<Judgement, int> earlyCounts,
-        [NotNull] Dictionary<Judgement, int> lateCounts)
+    public void SetEarlyLateCountTexts(JudgementCountTableRow judgementCounts)
     {
-        earlyCountText.text = earlyCount.ToString();
-        lateCountText.text = lateCount.ToString();
-        SetTextsFromJudgementCounts(earlyCounts, earlyMarvelousCountText, earlyGreatCountText, earlyGoodCountText);
-        SetTextsFromJudgementCounts(lateCounts, lateMarvelousCountText, lateGreatCountText, lateGoodCountText);
+        earlyCountText.text = judgementCounts.TotalEarlyLate.EarlyCount.ToString();
+        lateCountText.text = judgementCounts.TotalEarlyLate.LateCount.ToString();
+        SetTextFromJudgementCountsCell(judgementCounts.Marvelous, earlyMarvelousCountText, lateMarvelousCountText);
+        SetTextFromJudgementCountsCell(judgementCounts.Great, earlyGreatCountText, lateGreatCountText);
+        SetTextFromJudgementCountsCell(judgementCounts.Good, earlyGoodCountText, lateGoodCountText);
     }
 }

@@ -577,7 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeviceSettings:
     DisplaySettings:
-      ViewRectPosition: 56
+      ViewRectPosition: 12
       ViewRectScale: 100
       TargetFramerate: 120
 --- !u!114 &6885694711510743663
@@ -1006,6 +1006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 475237656131189849, guid: 1742c725c74b0ff4bb6edec37a668f80,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 497603979297266261, guid: 1742c725c74b0ff4bb6edec37a668f80,
         type: 3}

@@ -8,9 +8,10 @@ public class TouchNote : Note
         int tick,
         int position,
         int size,
+        int id,
         NoteBonusType bonusType = NoteBonusType.None,
         bool isSync = false
-    ) : base(measure, tick, position, size, bonusType, isSync)
+    ) : base(measure, tick, position, size, id, bonusType, isSync)
     {
     }
 

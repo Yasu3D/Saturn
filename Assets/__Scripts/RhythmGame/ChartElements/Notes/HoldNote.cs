@@ -10,19 +10,10 @@ namespace SaturnGame.RhythmGame
 public class HoldNote : Note
 {
     // if using this constructor, you must add the remaining segments later.
-    public HoldNote([NotNull] HoldSegment start)
+    public HoldNote([NotNull] HoldSegment start, int id)
     {
+        ID = id;
         Notes = new[] { start };
-    }
-
-    public HoldNote([NotNull] HoldSegment start, [NotNull] HoldSegment[] segments, [NotNull] HoldSegment end)
-    {
-        Notes = new[] { start }.Concat(segments).Concat(new[] { end }).ToArray();
-    }
-
-    public HoldNote([NotNull] HoldSegment[] segments)
-    {
-        Notes = segments;
     }
 
     /// <summary>
@@ -148,7 +139,7 @@ public class HoldNote : Note
     /// </summary>
     /// <remarks>
     /// - It may be null if the note has not been hit yet.<br/><br/>
-    /// - If the hold start is missed (e.g. StartJudgment == Miss), it should be set to the TimeMs of the Hold Start until the note is touched.<br/><br/>
+    /// - If the hold start is missed (e.g. StartJudgement == Miss), it should be set to the TimeMs of the Hold Start until the note is touched.<br/><br/>
     /// - Hold Leniency is judged with this value by checking how much time has elapsed since the last time it was held.<br/><br/>
     /// </remarks>
     public float? LastHeldTimeMs;
