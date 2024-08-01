@@ -10,7 +10,7 @@ public class SwipeNoteTests
     [Test]
     public void NormalSwipeCounts()
     {
-        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 30, SwipeNote.SwipeDirection.Counterclockwise);
+        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 30, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
         bool[,] firstSegments = new bool[60, 4];
         // 3x2 segments from (2, 1) to (4, 2) inclusive
@@ -39,7 +39,7 @@ public class SwipeNoteTests
     [Test]
     public void SmallSwipeDoesntCount()
     {
-        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 30, SwipeNote.SwipeDirection.Counterclockwise);
+        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 30, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
         bool[,] firstSegments = new bool[60, 4];
         // 3x2 segments from (2, 1) to (4, 2) inclusive
@@ -69,7 +69,7 @@ public class SwipeNoteTests
     public void WrongDirectionSwipeDoesntCount()
     {
         // This is the same as NormalSwipeCounts, but the swipe direction is CW instead of CCW.
-        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 30, SwipeNote.SwipeDirection.Clockwise);
+        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 30, 1, SwipeNote.SwipeDirection.Clockwise);
 
         bool[,] firstSegments = new bool[60, 4];
         // 3x2 segments from (2, 1) to (4, 2) inclusive
@@ -98,8 +98,8 @@ public class SwipeNoteTests
     [Test]
     public void BackAndForthSwipeCounts()
     {
-        SwipeNote noteCCW = SwipeNote.CreateSwipe(0, 0, 0, 30, SwipeNote.SwipeDirection.Counterclockwise);
-        SwipeNote noteCW =  SwipeNote.CreateSwipe(0, 0, 0, 30, SwipeNote.SwipeDirection.Clockwise);
+        SwipeNote noteCCW = SwipeNote.CreateSwipe(0, 0, 0, 30, 1, SwipeNote.SwipeDirection.Counterclockwise);
+        SwipeNote noteCW =  SwipeNote.CreateSwipe(0, 0, 0, 30, 2, SwipeNote.SwipeDirection.Clockwise);
 
         bool[,] firstSegments = new bool[60, 4];
         // 3x2 segments from (7, 1) to (9, 2) inclusive
@@ -148,7 +148,7 @@ public class SwipeNoteTests
     public void SwipeAcrossAnglePosZeroCounts()
     {
         // Same as NormalSwipeCounts but the swipe goes across anglePos 0.
-        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 45, 30, SwipeNote.SwipeDirection.Counterclockwise);
+        SwipeNote note = SwipeNote.CreateSwipe(0, 0, 45, 30, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
         bool[,] firstSegments = new bool[60, 4];
         // 3x2 segments from (56, 1) to (58, 2) inclusive
@@ -179,9 +179,9 @@ public class SwipeNoteTests
     [Test]
     public void CreatedFullCircleSwipeNoteHasCorrectType()
     {
-        SwipeNote normalNote = SwipeNote.CreateSwipe(0, 0, 0, 59, SwipeNote.SwipeDirection.Clockwise);
+        SwipeNote normalNote = SwipeNote.CreateSwipe(0, 0, 0, 59, 1, SwipeNote.SwipeDirection.Clockwise);
         Assert.AreNotEqual(fullCircleSwipeNote, normalNote.GetType());
-        SwipeNote fullCircleNote = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Clockwise);
+        SwipeNote fullCircleNote = SwipeNote.CreateSwipe(0, 0, 0, 60, 2, SwipeNote.SwipeDirection.Clockwise);
         Assert.AreEqual(fullCircleSwipeNote, fullCircleNote.GetType());
     }
 
@@ -190,7 +190,7 @@ public class SwipeNoteTests
         [Test]
         public void FullCircleSwipeCounts()
         {
-            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Counterclockwise);
+            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
             bool[,] firstSegments = new bool[60, 4];
             // 3x2 segments from (2, 1) to (4, 2) inclusive
@@ -219,7 +219,7 @@ public class SwipeNoteTests
         [Test]
         public void FullCircleSwipeDoesntCountIfTooSmall()
         {
-            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Counterclockwise);
+            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
             bool[,] firstSegments = new bool[60, 4];
             // 3x2 segments from (2, 1) to (4, 2) inclusive
@@ -249,7 +249,7 @@ public class SwipeNoteTests
         public void FullCircleSwipeDoesntCountIfWrongDirection()
         {
             // This is the same as FullCircleSwipeCounts, but the swipe direction is CW instead of CCW.
-            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Clockwise);
+            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, 1, SwipeNote.SwipeDirection.Clockwise);
 
             bool[,] firstSegments = new bool[60, 4];
             // 3x2 segments from (2, 1) to (4, 2) inclusive
@@ -279,7 +279,7 @@ public class SwipeNoteTests
         public void FullCircleSwipeAcrossAnglePosZeroCounts()
         {
             // Same as FullCircleSwipeCounts but the swipe goes across anglePos 0.
-            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Counterclockwise);
+            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
             bool[,] firstSegments = new bool[60, 4];
             // 3x2 segments from (56, 1) to (58, 2) inclusive
@@ -309,7 +309,7 @@ public class SwipeNoteTests
         public void WrongDirectionFullCircleSwipeAcrossAnglePosZeroDoesntCount()
         {
             // Same as FullCircleSwipeAcrossAnglePosZeroCounts but the swipe direction is CW instead of CCW.
-            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Clockwise);
+            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, 1, SwipeNote.SwipeDirection.Clockwise);
 
             bool[,] firstSegments = new bool[60, 4];
             // 3x2 segments from (56, 1) to (58, 2) inclusive
@@ -340,7 +340,7 @@ public class SwipeNoteTests
         {
             // Basically like FullCircleSwipeAcrossAnglePosZeroCounts but with a second hand swiping in the same
             // direction across anglePos 30. This is the case that breaks if we only have two "virtual notes".
-            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, SwipeNote.SwipeDirection.Counterclockwise);
+            SwipeNote note = SwipeNote.CreateSwipe(0, 0, 0, 60, 1, SwipeNote.SwipeDirection.Counterclockwise);
 
             bool[,] firstSegments = new bool[60, 4];
             // right hand: 3x2 segments from (56, 1) to (58, 2) inclusive
