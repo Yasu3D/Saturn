@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using JetBrains.Annotations;
 using TMPro;
@@ -15,10 +16,13 @@ namespace SaturnGame.RhythmGame
 /// A new ScoringManager should be used for each independent score.
 public class ScoringManager : MonoBehaviour
 {
-    [Header("DEBUG")]
-    [SerializeField] private TextMeshProUGUI debugText;
     public bool AutoWriteReplays = true;
     public bool WritingReplayAndExiting; // Only modify on main thread Update()
+
+    [Header("DEBUG")]
+    [SerializeField] private JudgeDebugInfo judgeDebugInfo;
+    [SerializeField] private NoteDebugInfo noteDebugInfo;
+    [SerializeField] private TextMeshProUGUI holdDebugText;
 
     [Header("MANAGERS")]
     [SerializeField] private TimeManager timeManager;
@@ -43,44 +47,10 @@ public class ScoringManager : MonoBehaviour
     // Notes must be sorted by note TimeMs
     private List<Note> Notes => Chart.ProcessedNotesForGameplay;
 
-    private void ShowDebugText(string text)
+    private ScoreData CurrentScoreData()
     {
-        //Debug.Log( $"{timeManager.VisualTimeMs}: {text}");
-        if (debugText is null)
-            return;
-
-        debugText.text = $"{timeManager.GameplayTimeMs}\n" + text;
-    }
-
-    // TODO: rework this to avoid a bajillion allocations
-    public ScoreData CurrentScoreData()
-    {
-        ScoreData data = new()
-        {
-            Score = 0,
-            MaxScore = 0,
-            JudgementCounts = new()
-            {
-                { Judgement.Marvelous, 0 },
-                { Judgement.Great, 0 },
-                { Judgement.Good, 0 },
-                { Judgement.Miss, 0 },
-            },
-            EarlyCount = 0,
-            EarlyCountByJudgement = new()
-            {
-                { Judgement.Marvelous, 0 },
-                { Judgement.Great, 0 },
-                { Judgement.Good, 0 },
-            },
-            LateCount = 0,
-            LateCountByJudgement = new()
-            {
-                { Judgement.Marvelous, 0 },
-                { Judgement.Great, 0 },
-                { Judgement.Good, 0 },
-            },
-        };
+        // Should default to everything as 0.
+        ScoreData data = new();
 
         if (Notes is null || Notes.Count == 0) return data;
 
@@ -112,23 +82,166 @@ public class ScoringManager : MonoBehaviour
             currentScore += noteScore;
             maxTotalScore += noteMaxScore;
 
-            if (note.Judgement is null or Judgement.None) continue;
-
-            maxCurrentScore += noteMaxScore;
-            data.JudgementCounts[note.Judgement.Value]++;
-
-            if (note is ChainNote || note.TimeErrorMs is null || note.Judgement is Judgement.Miss) continue;
-
-            if (note.TimeErrorMs < 0)
+            float? timeErrorMsToUse = note switch
             {
-                data.EarlyCountByJudgement[note.Judgement.Value]++;
-                if (note.Judgement is not Judgement.Marvelous) data.EarlyCount++;
+                ChainNote => null,
+                _ => note.TimeErrorMs,
+            };
+
+            if (note.Judgement is not null and not Judgement.None)
+            {
+                maxCurrentScore += noteMaxScore;
+                updateRow(ref data.JudgementCounts.Total, note.Judgement!.Value, timeErrorMsToUse,
+                    note is HoldNote { StartJudgement: Judgement.Marvelous });
+
+                switch (note)
+                {
+                    case TouchNote:
+                    {
+                        updateRow(ref data.JudgementCounts.Touch, note.Judgement!.Value, timeErrorMsToUse, false);
+                        break;
+                    }
+                    case SwipeNote:
+                    {
+                        updateRow(ref data.JudgementCounts.Swipe, note.Judgement!.Value, timeErrorMsToUse, false);
+                        break;
+                    }
+                    case SnapNote:
+                    {
+                        updateRow(ref data.JudgementCounts.Snap, note.Judgement!.Value, timeErrorMsToUse, false);
+                        break;
+                    }
+                    case HoldNote holdNote:
+                    {
+                        updateRow(ref data.JudgementCounts.Hold, note.Judgement!.Value, timeErrorMsToUse,
+                            holdNote.StartJudgement is Judgement.Marvelous);
+                        updateRow(ref data.JudgementCounts.HoldStart, holdNote.StartJudgement!.Value,
+                            timeErrorMsToUse,
+                            holdNote.StartJudgement is Judgement.Marvelous);
+                        break;
+                    }
+                    case ChainNote:
+                    {
+                        switch (note.Judgement)
+                        {
+                            case Judgement.Marvelous:
+                            {
+                                data.JudgementCounts.Chain.MarvelousCount++;
+                                break;
+                            }
+                            case Judgement.Miss:
+                            {
+                                data.JudgementCounts.Chain.MissCount++;
+                                break;
+                            }
+                            case Judgement.Good:
+                            case Judgement.Great:
+                            {
+                                throw new("Chain note should not be Good or Great");
+                            }
+                            case Judgement.None:
+                            case null:
+                            {
+                                break;
+                            }
+                            default:
+                            {
+                                throw new ArgumentOutOfRangeException();
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+            else if (note is HoldNote { StartJudgement: not null and not Judgement.None } holdNote)
+            {
+                // just update the hold start, without marking the actual note, since we don't know the judgement yet
+                updateRow(ref data.JudgementCounts.HoldStart, holdNote.StartJudgement!.Value, timeErrorMsToUse,
+                    holdNote.StartJudgement is Judgement.Marvelous);
             }
 
-            if (note.TimeErrorMs > 0)
+            continue;
+
+            // holdStartMarv should be true if and only if this is a hold note and the hold start was a marvelous.
+            // holdStartMarv should be used for all rows applied to the hold note, not just the hold start row
+            void updateRow(ref JudgementCountTableRow row, Judgement judgement, float? timeErrorMs,
+                bool holdStartMarv)
             {
-                data.LateCountByJudgement[note.Judgement.Value]++;
-                if (note.Judgement is not Judgement.Marvelous) data.LateCount++;
+                // ok this is kind of stupid, but I don't actually know how to do this properly and this works for now
+                bool shouldUpdateCell = false;
+                JudgementCountTableCell dummyCell = default;
+                ref JudgementCountTableCell cell = ref dummyCell;
+                switch (judgement)
+                {
+                    case Judgement.Miss:
+                    {
+                        row.MissCount++;
+                        break;
+                    }
+                    case Judgement.Good:
+                    {
+                        cell = ref row.Good;
+                        shouldUpdateCell = true;
+                        break;
+                    }
+                    case Judgement.Great:
+                    {
+                        cell = ref row.Great;
+                        shouldUpdateCell = true;
+                        break;
+                    }
+                    case Judgement.Marvelous:
+                    {
+                        cell = ref row.Marvelous;
+                        shouldUpdateCell = true;
+                        break;
+                    }
+                    case Judgement.None:
+                    {
+                        throw new("Judgement should not be none at this point");
+                    }
+                    default:
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+                }
+
+                // A hold could be judged as Good even though the start judgement was Marvelous. We shouldn't count this
+                // toward the total early/late counts.
+                if (judgement is Judgement.Good or Judgement.Great && !holdStartMarv)
+                {
+                    switch (timeErrorMs)
+                    {
+                        case < 0:
+                        {
+                            row.TotalEarlyLate.EarlyCount++;
+                            break;
+                        }
+                        case > 0:
+                        {
+                            row.TotalEarlyLate.LateCount++;
+                            break;
+                        }
+                    }
+                }
+
+                if (!shouldUpdateCell) return;
+
+                cell.Count++;
+                switch (timeErrorMs)
+                {
+                    case < 0:
+                    {
+                        cell.EarlyCount++;
+                        break;
+                    }
+                    case > 0:
+                    {
+                        cell.LateCount++;
+                        break;
+                    }
+                }
             }
         }
 
@@ -145,7 +258,7 @@ public class ScoringManager : MonoBehaviour
 
     private void HitNote(float hitTimeMs, [NotNull] Note note, bool needSnapSwipeHitsound = false)
     {
-        Judgement lastJudgement = note.Hit(hitTimeMs);
+        Judgement judgement = note.Hit(hitTimeMs);
         ScoreData currentScoreData = CurrentScoreData();
 
         // HoldNotes affect combo at hold end
@@ -153,11 +266,15 @@ public class ScoringManager : MonoBehaviour
 
         scoreText.UpdateScore(currentScoreData);
         centerDisplay.UpdateScore(currentScoreData);
+        judgeDebugInfo?.UpdateWithNewInfo(currentScoreData);
         float earlyLateErrorMs = 0;
-        if (note is not ChainNote && lastJudgement is not Judgement.Marvelous)
+        if (note is not ChainNote && judgement is not Judgement.Marvelous)
             // TimeErrorMs should always be set by Hit
             earlyLateErrorMs = note.TimeErrorMs!.Value;
-        judgementDisplay.ShowJudgement(lastJudgement, earlyLateErrorMs);
+        judgementDisplay.ShowJudgement(judgement, earlyLateErrorMs);
+
+        noteDebugInfo.AddInfo(
+            $"{note.ID}: {judgement} {note.TimeErrorMs!.Value.ToString("+0.0;-0.0;0", CultureInfo.CurrentCulture)}");
 
         NeedTouchHitsound = true;
         NeedSwipeSnapHitsound = needSnapSwipeHitsound;
@@ -227,7 +344,6 @@ public class ScoringManager : MonoBehaviour
                 case HoldNote holdNote:
                 {
                     holdNote.MissHit();
-                    // HoldNotes affect combo at hold end.
                     activeHolds.Add(holdNote);
                     break;
                 }
@@ -236,7 +352,9 @@ public class ScoringManager : MonoBehaviour
             ScoreData currentScoreData = CurrentScoreData();
             scoreText.UpdateScore(currentScoreData);
             centerDisplay.UpdateScore(currentScoreData);
+            judgeDebugInfo?.UpdateWithNewInfo(currentScoreData);
             judgementDisplay.ShowJudgement(Judgement.Miss, 0);
+            noteDebugInfo.AddInfo($"{note.ID}: miss");
             return;
         }
 
@@ -303,6 +421,7 @@ public class ScoringManager : MonoBehaviour
         {
             // Hold was hit early, and we haven't started the actual hold body.
             // Skip doing any judgement on this hold for now.
+            holdDebugText.text += $"\n{holdNote.ID}: waiting";
             return false;
         }
 
@@ -316,6 +435,8 @@ public class ScoringManager : MonoBehaviour
                 // segment is out of time window
                 continue;
             //ShowDebugText($"check segment {i} ({curSegment.TimeMs} - {nextSegment.TimeMs})");
+            // TODO: i think this is broken - old segment that started before prevtouchtime and wasn't touched could be dropped
+            // i'm also sleep deprived so idk
             if (curSegment.Touched(prevTouchState))
             {
                 holdNote.Held = true;
@@ -325,31 +446,42 @@ public class ScoringManager : MonoBehaviour
                     float dropTimeMs = curSegment.TimeMs - holdNote.LastHeldTimeMs!.Value;
                     if (dropTimeMs > HoldNote.LeniencyMs && !holdNote.Dropped)
                     {
-                        ShowDebugText($"dropped hold after {dropTimeMs} ({curSegment.TimeMs} - {holdNote.LastHeldTimeMs})");
+                        noteDebugInfo.AddInfo(
+                            $"{holdNote.ID}: D {dropTimeMs.ToString("0.0", CultureInfo.CurrentCulture)} - " +
+                            $"{curSegment.Measure}:{curSegment.ChartTick}");
                         holdNote.Dropped = true;
                     }
                 }
 
                 holdNote.CurrentlyHeld = true;
-                // The note should be held up until at least the earlier of the next segment start or the current time.
+                // The note should be held up until at least the earliest of the next segment start or the current time.
                 holdNote.LastHeldTimeMs = Math.Min(timeMs, nextSegment.TimeMs);
             }
             else
                 holdNote.CurrentlyHeld = false;
         }
 
-        if (timeMs < holdNote.End.TimeMs) return false;
+        if (timeMs < holdNote.End.TimeMs)
+        {
+            holdDebugText.text += $"\n{holdNote.ID}: ";
+            if (holdNote.Held) holdDebugText.text += "T";
+            if (holdNote.Dropped) holdDebugText.text += "D";
+            if (holdNote.CurrentlyHeld) holdDebugText.text += "H";
+            return false;
+        }
 
         // Hold note is finished.
         if (holdNote is { CurrentlyHeld: false, Dropped: false } &&
             holdNote.End.TimeMs - holdNote.LastHeldTimeMs > HoldNote.LeniencyMs)
         {
             holdNote.Dropped = true;
-            ShowDebugText($"dropped hold end after {holdNote.End.TimeMs - holdNote.LastHeldTimeMs}");
+            noteDebugInfo.AddInfo(
+                $"{holdNote.ID}: D " +
+                (holdNote.End.TimeMs - holdNote.LastHeldTimeMs!.Value).ToString("0.0", CultureInfo.CurrentCulture) +
+                " - end");
         }
 
         Judgement judgement = holdNote.Judge();
-        ShowDebugText($"HoldNote\nStart: {holdNote.StartJudgement}\nCurrentlyHeld: {holdNote.CurrentlyHeld}\nHeld: {holdNote.Held}\nDropped: {holdNote.Dropped}");
         if (holdNote.CurrentlyHeld) NeedTouchHitsound = true;
 
         switch (judgement)
@@ -376,10 +508,22 @@ public class ScoringManager : MonoBehaviour
         ScoreData currentScoreData = CurrentScoreData();
         scoreText.UpdateScore(currentScoreData);
         centerDisplay.UpdateScore(currentScoreData);
+        judgeDebugInfo?.UpdateWithNewInfo(currentScoreData);
         judgementDisplay.ShowJudgement(judgement, 0);
+        string debugText = $"{holdNote.ID}: {judgement} ";
+        debugText += holdNote.StartJudgement switch
+        {
+            Judgement.Marvelous => "Ma",
+            Judgement.Great => "Gr",
+            Judgement.Good => "Go",
+            Judgement.Miss => "Mi",
+            _ => "",
+        };
+        if (holdNote.Held) debugText += "T";
+        if (holdNote.Dropped) debugText += "D";
+        noteDebugInfo.AddInfo(debugText);
 
         return true;
-
     }
 
     // minNoteIndex tracks the first note that we need to care about when judging future inputs. It should be greater than
@@ -438,7 +582,11 @@ public class ScoringManager : MonoBehaviour
                 MaybeCalculateHitForNote(timeMs, currentTouchState, note);
             }
 
-            // Note: not using a foreach because we remove finished holds as we iterate
+            holdDebugText.text =
+                $"{(timeMs % 10000).ToString("0000.0", CultureInfo.CurrentCulture)} " +
+                $"({(prevTouchTimeMs % 10000).ToString("0000.0", CultureInfo.CurrentCulture)})";
+
+            // Note: not using a foreach because we remove finished holds as we iterate.
             for (int i = 0; i < activeHolds.Count;)
             {
                 HoldNote holdNote = activeHolds[i];
@@ -501,14 +649,62 @@ public class ScoringManager : MonoBehaviour
     }
 }
 
+
 public struct ScoreData
 {
     public int Score;
     public int MaxScore;
-    public Dictionary<Judgement, int> JudgementCounts;
+    public JudgementCountTable JudgementCounts;
+}
+
+// JudgementCountTable essentially maps to the table shown below the ring during gameplay.
+// We also read from this table on the score screen.
+public struct JudgementCountTable
+{
+    // Total includes judgements from all note types
+    public JudgementCountTableRow Total;
+
+    public JudgementCountTableRow Touch;
+
+    public JudgementCountTableRow Swipe;
+
+    public JudgementCountTableRow Snap;
+
+    // HoldStart looks only at the judgement on the hold start.
+    public JudgementCountTableRow HoldStart;
+
+    // Hold uses the actual final judgement on the hold note.
+    public JudgementCountTableRow Hold;
+
+    // Chain only has Marv and Miss, and does not have any early/late info
+    public JudgementCountTableChainRow Chain;
+}
+
+public struct JudgementCountTableRow
+{
+    public JudgementCountTableCell Marvelous;
+    public JudgementCountTableCell Great;
+    public JudgementCountTableCell Good;
+    public int MissCount;
+    public JudgementCountTableEarlyLateCell TotalEarlyLate;
+}
+
+public struct JudgementCountTableChainRow
+{
+    public int MarvelousCount;
+    public int MissCount;
+}
+
+public struct JudgementCountTableCell
+{
+    public int Count;
     public int EarlyCount;
-    public Dictionary<Judgement, int> EarlyCountByJudgement;
     public int LateCount;
-    public Dictionary<Judgement, int> LateCountByJudgement;
+}
+
+public struct JudgementCountTableEarlyLateCell
+{
+    public int EarlyCount;
+    public int LateCount;
 }
 }

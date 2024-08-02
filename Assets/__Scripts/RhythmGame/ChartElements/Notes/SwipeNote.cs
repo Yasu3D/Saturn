@@ -15,13 +15,14 @@ public class SwipeNote : Note
         int tick,
         int position,
         int size,
+        int id,
         SwipeDirection direction,
         NoteBonusType bonusType = NoteBonusType.None,
         bool isSync = false)
     {
         return size == 60
-            ? new FullCircleSwipeNote(measure, tick, direction, bonusType, isSync)
-            : new SwipeNote(measure, tick, position, size, direction, bonusType, isSync);
+            ? new FullCircleSwipeNote(measure, tick, id, direction, bonusType, isSync)
+            : new SwipeNote(measure, tick, position, size, id, direction, bonusType, isSync);
     }
 
     private SwipeNote(
@@ -29,10 +30,11 @@ public class SwipeNote : Note
         int tick,
         int position,
         int size,
+        int id,
         SwipeDirection direction,
         NoteBonusType bonusType = NoteBonusType.None,
         bool isSync = false
-    ) : base(measure, tick, position, size, bonusType, isSync)
+    ) : base(measure, tick, position, size, id, bonusType, isSync)
     {
         if (size == 60 && GetType() == typeof(SwipeNote))
             throw new Exception("Use CreateSwipe for full circle swipes");
@@ -122,17 +124,18 @@ public class SwipeNote : Note
         public FullCircleSwipeNote(
             int measure,
             int tick,
+            int id,
             SwipeDirection direction,
             NoteBonusType bonusType,
             bool isSync
-        ) : base(measure, tick, 0, 60, direction, bonusType, isSync)
+        ) : base(measure, tick, 0, 60, id, direction, bonusType, isSync)
         {
             virtualNotes = new SwipeNote[]
             {
-                new(measure, tick, 0, 30, direction, bonusType, isSync),
-                new(measure, tick, 15, 30, direction, bonusType, isSync),
-                new(measure, tick, 30, 30, direction, bonusType, isSync),
-                new(measure, tick, 45, 30, direction, bonusType, isSync),
+                new(measure, tick, 0, 30, -1, direction, bonusType, isSync),
+                new(measure, tick, 15, 30, -1, direction, bonusType, isSync),
+                new(measure, tick, 30, 30, -1, direction, bonusType, isSync),
+                new(measure, tick, 45, 30, -1, direction, bonusType, isSync),
             };
         }
 

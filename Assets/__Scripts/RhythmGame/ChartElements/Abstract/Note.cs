@@ -12,6 +12,9 @@ namespace SaturnGame.RhythmGame
 [Serializable]
 public abstract class Note : PositionedChartElement
 {
+    // ID must be unique within a given chart.
+    public int ID;
+
     public NoteBonusType BonusType;
 
     // IsSync is true if this note is a "sync" note, that is,
@@ -56,8 +59,9 @@ public abstract class Note : PositionedChartElement
     // A null TimeErrorMs is possible if the HitWindows were judged as a Miss, or if the note hasn't been hit yet.
     public float? TimeErrorMs => HitTimeMs - TimeMs;
 
-    protected Note(int measure, int tick, int position, int size, NoteBonusType bonusType, bool isSync = false) : base(measure, tick, position, size)
+    protected Note(int measure, int tick, int position, int size, int id, NoteBonusType bonusType, bool isSync = false) : base(measure, tick, position, size)
     {
+        ID = id;
         BonusType = bonusType;
         IsSync = isSync;
     }
@@ -115,31 +119,31 @@ public abstract class Note : PositionedChartElement
     }
 
     [NotNull]
-    public static Note CreateFromNoteID(int measure, int tick, int noteID, int position, int size)
+    public static Note CreateFromNoteTypeID(int measure, int tick, int noteTypeID, int position, int size, int id)
     {
         Note note;
 
-        switch (noteID)
+        switch (noteTypeID)
         {
             case 1:
             case 2:
             case 20:
             {
-                note = new TouchNote(measure, tick, position, size);
+                note = new TouchNote(measure, tick, position, size, id);
                 break;
             }
 
             case 3:
             case 21:
             {
-                note = new SnapNote(measure, tick, position, size, SnapNote.SnapDirection.Forward);
+                note = new SnapNote(measure, tick, position, size, id, SnapNote.SnapDirection.Forward);
                 break;
             }
 
             case 4:
             case 22:
             {
-                note = new SnapNote(measure, tick, position, size, SnapNote.SnapDirection.Backward);
+                note = new SnapNote(measure, tick, position, size, id, SnapNote.SnapDirection.Backward);
                 break;
             }
 
@@ -147,7 +151,7 @@ public abstract class Note : PositionedChartElement
             case 6:
             case 23:
             {
-                note = SwipeNote.CreateSwipe(measure, tick, position, size, SwipeNote.SwipeDirection.Clockwise);
+                note = SwipeNote.CreateSwipe(measure, tick, position, size, id, SwipeNote.SwipeDirection.Clockwise);
                 break;
             }
 
@@ -155,7 +159,7 @@ public abstract class Note : PositionedChartElement
             case 8:
             case 24:
             {
-                note = SwipeNote.CreateSwipe(measure, tick, position, size, SwipeNote.SwipeDirection.Counterclockwise);
+                note = SwipeNote.CreateSwipe(measure, tick, position, size, id, SwipeNote.SwipeDirection.Counterclockwise);
                 break;
             }
 
@@ -163,7 +167,7 @@ public abstract class Note : PositionedChartElement
             case 16:
             case 26:
             {
-                note = new ChainNote(measure, tick, position, size);
+                note = new ChainNote(measure, tick, position, size, id);
                 break;
             }
 
@@ -173,24 +177,24 @@ public abstract class Note : PositionedChartElement
             case 11:
             {
                 throw new ArgumentException(
-                    $"Note ID {noteID} represents a HoldNote component which is unsupported by this function",
-                    nameof(noteID));
+                    $"Note type ID {noteTypeID} represents a HoldNote component which is unsupported by this function",
+                    nameof(noteTypeID));
             }
 
             case 12:
             case 13:
             case 14:
             {
-                throw new ArgumentException($"Note ID {noteID} does not represent a Note", nameof(noteID));
+                throw new ArgumentException($"Note ID {noteTypeID} does not represent a Note", nameof(noteTypeID));
             }
 
             default:
             {
-                throw new ArgumentException($"Unknown note ID {noteID}", nameof(noteID));
+                throw new ArgumentException($"Unknown note ID {noteTypeID}", nameof(noteTypeID));
             }
         }
 
-        note.SetBonusTypeFromNoteID(noteID);
+        note.SetBonusTypeFromNoteID(noteTypeID);
 
         return note;
     }
@@ -266,7 +270,10 @@ public readonly struct HitWindow
 
 public enum Judgement
 {
-    None, // Represents cases where the judgement is missing entirely, e.g. for a note that did not receive any judgement.
+    // None may represent cases where the judgement is missing or unknown. In general, null is preferred for this or for
+    // notes that have not yet been judged, and None should not be used. However, None is included here as a sane value
+    // for the default value of the enum.
+    None = default,
     Miss,
     Good,
     Great,

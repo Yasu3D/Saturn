@@ -154,6 +154,7 @@ public class ChartLoader
 
                     int position = Convert.ToInt32(splitLine[5], CultureInfo.InvariantCulture);
                     int size = Convert.ToInt32(splitLine[6], CultureInfo.InvariantCulture);
+                    int noteId = Convert.ToInt32(splitLine[4], CultureInfo.InvariantCulture);
 
                     Note tempNote;
 
@@ -165,7 +166,7 @@ public class ChartLoader
                             HoldSegment holdStart = new(measure, tick, position, size, true);
                             int nextNoteID = Convert.ToInt32(splitLine[8], CultureInfo.InvariantCulture);
 
-                            HoldNote hold = new(holdStart);
+                            HoldNote hold = new(holdStart, noteId);
                             hold.SetBonusTypeFromNoteID(noteTypeID);
                             incompleteHoldNotes.Add((hold, nextNoteID));
 
@@ -175,7 +176,6 @@ public class ChartLoader
                         }
                         case 10 or 11:
                         {
-                            int noteId = Convert.ToInt32(splitLine[4], CultureInfo.InvariantCulture);
                             bool renderFlag = Convert.ToInt32(splitLine[7], CultureInfo.InvariantCulture) == 1;
                             int? nextNoteId = noteTypeID == 10
                                 ? Convert.ToInt32(splitLine[8], CultureInfo.InvariantCulture)
@@ -194,7 +194,7 @@ public class ChartLoader
                         }
                         default:
                         {
-                            Note note = Note.CreateFromNoteID(measure, tick, noteTypeID, position, size);
+                            Note note = Note.CreateFromNoteTypeID(measure, tick, noteTypeID, position, size, noteId);
                             chart.Notes.Add(note);
                             tempNote = note;
                             break;
