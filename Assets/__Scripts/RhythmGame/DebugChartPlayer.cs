@@ -18,7 +18,7 @@ public class DebugChartPlayer : MonoBehaviour
             Song song = SongDatabase.LoadSongData(folderPath);
             SongDifficulty songDiff = song.SongDiffs[difficulty];
             PersistentStateManager.Instance.SelectedSong = song;
-            PersistentStateManager.Instance.SelectedDifficulty = songDiff;
+            PersistentStateManager.Instance.SelectedDifficultyInfo = songDiff;
             await chartManager.LoadChartAndStart();
         }
 

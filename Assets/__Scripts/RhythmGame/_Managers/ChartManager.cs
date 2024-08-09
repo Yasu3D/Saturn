@@ -16,7 +16,7 @@ public class ChartManager : MonoBehaviour
 
     public async Awaitable LoadChartAndStart()
     {
-        SongDifficulty difficulty = PersistentStateManager.Instance.SelectedDifficulty;
+        SongDifficulty difficulty = PersistentStateManager.Instance.SelectedDifficultyInfo;
         Chart = ChartLoader.LoadChart(difficulty.ChartFilepath);
         BGM = await AudioLoader.LoadBgm(difficulty.AudioFilepath, streamAudio: false);
 

@@ -67,10 +67,10 @@ public class SongSelectLogic : MonoBehaviour
         int entryIndex = 0;
         Difficulty difficulty = 0;
 
-        if (PersistentStateManager.Instance.SelectedSong.FolderPath is string path)
+        if (PersistentStateManager.Instance.SelectedSongFolderPath is string path)
         {
             (int, int)? foundIndexes =
-                songList.FindSongFolder(path, PersistentStateManager.Instance.SelectedDifficulty.Difficulty);
+                songList.FindSongFolder(path, PersistentStateManager.Instance.SelectedDifficulty);
 
             if (foundIndexes != null)
             {
@@ -78,7 +78,7 @@ public class SongSelectLogic : MonoBehaviour
                 // We aren't guaranteed that this difficulty still exists on this song, but SetSongAndDifficulty will
                 // find the nearest difficulty in case this one no longer exists, so it should be fine.
                 // WARNING: This assumes that the difficulty index is the same as the enum value.
-                difficulty = PersistentStateManager.Instance.SelectedDifficulty.Difficulty;
+                difficulty = PersistentStateManager.Instance.SelectedDifficulty;
             }
         }
 
@@ -124,7 +124,7 @@ public class SongSelectLogic : MonoBehaviour
     {
         Dictionary<Difficulty, SongDifficulty> diffInfos = SelectedEntry.Song.SongDiffs;
         selectedDifficulty = FindNearestDifficulty(diffInfos.Keys, difficulty);
-        PersistentStateManager.Instance.SelectedDifficulty = SelectedEntry.Song.SongDiffs[selectedDifficulty];
+        PersistentStateManager.Instance.SelectedDifficultyInfo = SelectedEntry.Song.SongDiffs[selectedDifficulty];
 
         bool higherDiffExists = HigherDiff(diffInfos, selectedDifficulty) != null;
         bool lowerDiffExists = LowerDiff(diffInfos, selectedDifficulty) != null;
