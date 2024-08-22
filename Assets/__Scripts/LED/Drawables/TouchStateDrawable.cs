@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using SaturnGame.LED;
 using SaturnGame.RhythmGame;
 using UnityEngine;
@@ -9,8 +10,9 @@ namespace SaturnGame
 /// </summary>
 public class TouchStateDrawable : LedDrawable
 {
-    // TODO: make this read from the touch ring in menus, but from gameplay InputManager (could be replay) during gameplay
-    // [SerializeField] private InputManager inputManager;
+    [CanBeNull]
+    private static IInputProvider InputProvider => InputManager.Instance as IInputProvider ?? TouchRingManager.Instance;
+
     [SerializeField] private TouchRipplePool touchRipplePool;
     [SerializeField] private LedCompositor touchRippleCompositor;
     [SerializeField] private float blinkSpeed = 2; // radians/s, NOT Hz
@@ -26,10 +28,10 @@ public class TouchStateDrawable : LedDrawable
 
     private void Update()
     {
-        if (InputManager.Instance == null) return;
+        if (InputProvider == null) return;
 
         touchState.CopyTo(ref prevTouchState);
-        InputManager.Instance.CurrentTouchState.CopyTo(ref touchState);
+        InputProvider.GetCurrentTouchState().CopyTo(ref touchState);
 
         for (int anglePos = 0; anglePos < 60; anglePos++)
         for (int depthPos = 0; depthPos < 4; depthPos++)
