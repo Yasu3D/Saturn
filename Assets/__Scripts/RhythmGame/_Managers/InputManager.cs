@@ -12,7 +12,7 @@ namespace SaturnGame.RhythmGame
 /// It pulls current input from these providers, associates it with the current gameplay time, buffers the input if
 /// artificial latency is active, and then processes the input by calling into <see cref="scoringManager"/>.
 /// </summary>
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
     public enum InputSource
     {

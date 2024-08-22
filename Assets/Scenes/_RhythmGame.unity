@@ -8017,7 +8017,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1868002016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8030,14 +8030,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6df31cd262bbcf48906892391ce2953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 1
+  compositor: {fileID: 0}
   Layer: 0
-  scaPath: LED/R_NOTE.sca
-  frames: []
-  Playing: 0
   Loop: 0
   Framerate: 60
-  Frame: 0
+  scaPath: LED/R_NOTE.sca
 --- !u!4 &1868002017
 Transform:
   m_ObjectHideFlags: 0

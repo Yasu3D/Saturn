@@ -23,10 +23,12 @@ public class ViewportController : UIBehaviour
         UpdateRect();
     }
 
+    #if UNITY_EDITOR
     protected override void OnValidate()
     {
         UpdateRect();
     }
+    #endif
 
     private void OnDisplaySettingsChanged()
     {

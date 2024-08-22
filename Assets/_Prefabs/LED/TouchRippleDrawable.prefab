@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e353ff9be2fa640a557273099ef73f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 1
+  compositor: {fileID: 0}
   Layer: 0
-  TouchPosition: 0
-  scaPath: LED/CUSTOM SIZE/TOUCH_RIPPLE.sca
-  frames: []
-  Playing: 0
-  frame: 0
+  Loop: 0
+  Framerate: 60
+  TouchAnglePos: 0
+  TouchDepthPos: 0
+  Pool: {fileID: 0}
