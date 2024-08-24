@@ -26,6 +26,7 @@ public class LedCompositor : PersistentSingleton<LedCompositor>
         rgbaValues = new Color32[480],
     };
 
+    // TODO: needs to be volatile?
     private bool sendingLedData;
 
     private NativeLedOutput nativeLedOutput;
