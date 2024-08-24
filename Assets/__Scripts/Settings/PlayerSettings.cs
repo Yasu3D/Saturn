@@ -432,6 +432,8 @@ public class SoundSettings : SettingsWithTomlMetadata
 {
     [DataMember(Name="touch_se")] public int TouchSE { get; set; } = 0;
     public int BgmVolume { get; set; } = 100;
+
+    // 0 - 100
     public int HitsoundOverallVolume { get; set; } = 70;
     public int GuideVolume { get; set; } = 30;
     public int TouchNoteVolume { get; set; } = 80;

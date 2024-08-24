@@ -28,11 +28,11 @@ public class ScoringManager : MonoBehaviour
     [SerializeField] private TimeManager timeManager;
     [SerializeField] private ChartManager chartManager;
     [SerializeField] private ReplayManager replayManager;
+    [SerializeField] private HitsoundManager hitsoundManager;
 
     [Space(10)]
 
     public int CurrentCombo;
-    public int LastMissChartTick;
     public bool NeedTouchHitsound;
     public bool NeedSwipeSnapHitsound;
 
@@ -262,7 +262,7 @@ public class ScoringManager : MonoBehaviour
         ScoreData currentScoreData = CurrentScoreData();
 
         // HoldNotes affect combo at hold end
-        if (note is not HoldNote) IncrementCombo(note.ChartTick);
+        if (note is not HoldNote) IncrementCombo();
 
         scoreText.UpdateScore(currentScoreData);
         centerDisplay.UpdateScore(currentScoreData);
@@ -276,26 +276,21 @@ public class ScoringManager : MonoBehaviour
         noteDebugInfo.AddInfo(
             $"{note.ID}: {judgement} {note.TimeErrorMs!.Value.ToString("+0.0;-0.0;0", CultureInfo.CurrentCulture)}");
 
-        NeedTouchHitsound = true;
-        NeedSwipeSnapHitsound = needSnapSwipeHitsound;
+        hitsoundManager.PlayNoteHitsound(note);
     }
 
-    private void IncrementCombo(int chartTick)
+    private void IncrementCombo()
     {
-        // If we missed a note that was later than the note we just hit, don't count it towards the combo.
-        if (LastMissChartTick <= chartTick)
-            CurrentCombo++;
         // Warning: we could still miss a note that is earlier than the note we just hit. So, the combo would be the
         // number of notes hit consecutively, but they would not actually be consecutive notes.
 
+        CurrentCombo++;
         centerDisplay.UpdateCombo(CurrentCombo);
     }
 
-    private void EndCombo(int chartTick)
+    private void EndCombo()
     {
         CurrentCombo = 0;
-        LastMissChartTick = chartTick;
-
         centerDisplay.UpdateCombo(CurrentCombo);
     }
 
@@ -320,7 +315,7 @@ public class ScoringManager : MonoBehaviour
                     // These note types require an input within the window to hit, so we know they can't have been hit
                     // between the last input and this one.
                     note.MissHit();
-                    EndCombo(note.ChartTick);
+                    EndCombo();
                     break;
                 }
                 case ChainNote chainNote:
@@ -490,12 +485,12 @@ public class ScoringManager : MonoBehaviour
             case Judgement.Great:
             case Judgement.Good:
             {
-                IncrementCombo(holdNote.End.ChartTick);
+                IncrementCombo();
                 break;
             }
             case Judgement.Miss:
             {
-                EndCombo(holdNote.End.ChartTick);
+                EndCombo();
                 break;
             }
             case Judgement.None:
