@@ -22,7 +22,7 @@ public class DifficultyText : MonoBehaviour
 
     private void Start()
     {
-        SongDifficulty songDifficulty = PersistentStateManager.Instance.SelectedDifficulty;
+        SongDifficulty songDifficulty = PersistentStateManager.Instance.SelectedDifficultyInfo;
         difficulty = songDifficulty.Difficulty;
         difficultyLevel = songDifficulty.Level;
         UpdateDifficultyText();

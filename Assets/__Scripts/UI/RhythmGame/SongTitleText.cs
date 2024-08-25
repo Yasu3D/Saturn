@@ -8,7 +8,7 @@ public class SongTitleText : MonoBehaviour
     [SerializeField] private ArcTextMeshPro arc;
     private void Start()
     {
-        UpdateText(PersistentStateManager.Instance.SelectedSong.Title);
+        UpdateText(PersistentStateManager.Instance.SelectedSong?.Title);
     }
 
     private void UpdateText(string title)

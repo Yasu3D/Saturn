@@ -53,7 +53,7 @@ public class ReplayManager : MonoBehaviour
     public async Awaitable WriteReplayFile()
     {
         string chartRelativePath = Path.GetRelativePath(SongDatabase.SongPacksPath,
-            PersistentStateManager.Instance.SelectedDifficulty.ChartFilepath);
+            PersistentStateManager.Instance.SelectedDifficultyInfo.ChartFilepath);
         string timestamp = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
         string replayFileName = $"replay-{chartRelativePath}-{timestamp}.json.gz";
         string escapedReplayFileName = String.Join('_', replayFileName.Split(Path.GetInvalidFileNameChars()));

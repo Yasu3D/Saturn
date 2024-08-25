@@ -11,7 +11,39 @@ public class LedCompositor : MonoBehaviour
     public Color BaseColor = Color.clear;
     private readonly Color[,] ledValues = new Color[8, 60];
 
-    public static void ClearCanvas(Color[,] values, Color color)
+    [SerializeField] private bool useNativeLedImplementation;
+    [SerializeField] [Range(0, 1)] private float ledBrightness;
+
+    [SerializeField] private Color32[,] ledValues = new Color32[8,60];
+
+    private readonly LedData ledData = new()
+    {
+        unitCount = 60 * 8,
+        rgbaValues = new Color32[480],
+    };
+
+    // TODO: needs to be volatile?
+    private bool sendingLedData;
+
+    private NativeLedOutput nativeLedOutput;
+
+    private void Start()
+    {
+        if (useNativeLedImplementation)
+        {
+            nativeLedOutput = new();
+            nativeLedOutput.Init();
+        }
+        else
+            USBIntLED.Safe_USBIntLED_Init();
+    }
+
+    private byte AdjustBrightness(byte value)
+    {
+        return (byte)(value * ledBrightness);
+    }
+
+    private void ClearCanvas(Color32 color)
     {
         for (int i = 0; i < 8; i++)
         for (int j = 0; j < 60; j++)

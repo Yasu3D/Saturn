@@ -128,8 +128,20 @@ public class InputManager : Singleton<InputManager>, IInputProvider
         }
 
         // Actually handle inputs.
+        int handledStates = 0;
         foreach (TimedTouchState timedTouchState in GetTimedTouchStatesUntil(timeManager.GameplayTimeMs))
+        {
+            handledStates++;
             HandleNewTouchState(timedTouchState.TouchState, timedTouchState.TimeMs);
+        }
+
+        if (handledStates == 0)
+        {
+            // Call HandleNewTouchState with a null touch state so that ScoringManager will update state for the current
+            // time. This is idempotent for the ultimate state but will allow certain scoring info like hold notes or
+            // passing chain notes to be judged now instead of waiting for the next input.
+            HandleNewTouchState(null, timeManager.GameplayTimeMs);
+        }
     }
 }
 

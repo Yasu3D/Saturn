@@ -18,7 +18,7 @@ public class SongResultsLogic : MonoBehaviour
     {
         Song song = PersistentStateManager.Instance.SelectedSong;
         songTitleText.text = song.Title;
-        SongDifficulty songDifficulty = PersistentStateManager.Instance.SelectedDifficulty;
+        SongDifficulty songDifficulty = PersistentStateManager.Instance.SelectedDifficultyInfo;
         difficultyText.text = songDifficulty.Difficulty switch
         {
             Difficulty.Normal => "NORMAL",

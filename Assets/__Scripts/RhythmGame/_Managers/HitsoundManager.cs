@@ -11,11 +11,12 @@ public class HitsoundManager : MonoBehaviour
 {
     [SerializeField] private ChartManager chartManager;
     [SerializeField] private TimeManager timeManager;
-    [SerializeField] private ScoringManager scoringManager;
 
     [SerializeField] private AudioClip guideSound;
     [SerializeField] private AudioClip touchSound;
     [SerializeField] private AudioClip swipeSound;
+    [SerializeField] private AudioClip bonusSound;
+    [SerializeField] private AudioClip rNoteSound;
 
     public int PoolSize;
     [SerializeField] private AudioSource hitsoundSourcePrefab;
@@ -23,6 +24,10 @@ public class HitsoundManager : MonoBehaviour
     [SerializeField] private Transform activeHitsoundSourcesParent;
     public List<AudioSource> AvailableHitsoundSources = new();
     public List<AudioSource> ActiveHitsoundSources = new();
+
+    private const float HitsoundLevelDbOffset = -10f;
+
+    private static SoundSettings SoundSettings => SettingsManager.Instance.PlayerSettings.SoundSettings;
 
     // Start is called before the first frame update
     private void Start()
@@ -34,10 +39,12 @@ public class HitsoundManager : MonoBehaviour
 
     private void SetHitsoundMixerLevel()
     {
-        float settingsHitsoundVolume = SettingsManager.Instance.PlayerSettings.SoundSettings.HitsoundOverallVolume;
-        float newDbLevel = SaturnMath.FractionToDecibel(settingsHitsoundVolume / 100f);
+        float settingsHitsoundVolume = SoundSettings.HitsoundOverallVolume;
+        float newDbLevel = SaturnMath.FractionToDecibel(settingsHitsoundVolume / 100f) + HitsoundLevelDbOffset;
         hitsoundSourcePrefab.outputAudioMixerGroup.audioMixer.SetFloat("HitsoundAttenuationLevel", newDbLevel);
         Debug.Log($"set hitsound level to {newDbLevel}dB ({settingsHitsoundVolume})");
+
+        // TODO: also set bgm level
     }
 
     private void EnsurePoolSize()
@@ -89,12 +96,52 @@ public class HitsoundManager : MonoBehaviour
         }
     }
 
-    private void PlayHitsound(AudioClip clip, float volume = 0.3f)
+    private void PlayHitsound(AudioClip clip, int volume = 100)
     {
         AudioSource source = GetHitsoundSourceFromPool();
         source.clip = clip;
-        source.volume = volume;
+        source.volume = volume / 100f;
         source.Play();
+    }
+
+    public void PlayNoteHitsound([NotNull] Note note)
+    {
+        switch (note)
+        {
+            case TouchNote:
+                PlayHitsound(touchSound, SoundSettings.TouchNoteVolume);
+                break;
+            case ChainNote:
+                PlayHitsound(touchSound, SoundSettings.ChainNoteVolume);
+                break;
+            case HoldNote:
+                PlayHitsound(touchSound, SoundSettings.HoldNoteVolume);
+                break;
+            case SnapNote:
+                PlayHitsound(touchSound, SoundSettings.SnapNoteVolume);
+                PlayHitsound(swipeSound, SoundSettings.SnapNoteVolume);
+                break;
+            case SwipeNote:
+                PlayHitsound(touchSound, SoundSettings.SlideNoteVolume);
+                PlayHitsound(swipeSound, SoundSettings.SlideNoteVolume);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(note));
+        }
+
+        switch (note.BonusType)
+        {
+            case Note.NoteBonusType.None:
+                break;
+            case Note.NoteBonusType.Bonus:
+                PlayHitsound(bonusSound, SoundSettings.BonusEffectVolume);
+                break;
+            case Note.NoteBonusType.RNote:
+                PlayHitsound(rNoteSound, SoundSettings.RNoteEffectVolume);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private bool ShouldPlayGuideSound()
@@ -132,20 +179,8 @@ public class HitsoundManager : MonoBehaviour
                 // Note: ideally we would play the guide sound at the exact time the note is supposed to be hit,
                 // using PlayScheduled, but I'm too lazy to do this now. Given a decent enough framerate, this is
                 // pretty good.
-                PlayHitsound(guideSound);
+                PlayHitsound(guideSound, SoundSettings.GuideVolume);
             }
-        }
-
-        if (scoringManager.NeedTouchHitsound)
-        {
-            PlayHitsound(touchSound);
-            scoringManager.NeedTouchHitsound = false;
-        }
-
-        if (scoringManager.NeedSwipeSnapHitsound)
-        {
-            PlayHitsound(swipeSound);
-            scoringManager.NeedSwipeSnapHitsound = false;
         }
     }
 }
