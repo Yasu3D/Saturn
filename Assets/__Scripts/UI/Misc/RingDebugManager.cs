@@ -32,7 +32,7 @@ public class RingDebugManager : MonoBehaviour
         }
     }
 
-    public void UpdateColors(Color32[,] colors)
+    public void UpdateColors(Color[,] colors)
     {
         for (int i = 0; i < 8; i++)
         for (int j = 0; j < 60; j++)
@@ -43,6 +43,10 @@ public class RingDebugManager : MonoBehaviour
         }
     }
 
-    public void ToggleVisibility() => grid.gameObject.SetActive(!grid.gameObject.activeSelf);
+    private void Update()
+    {
+        // Toggle RingDebug when F2 is pressed
+        if (Input.GetKeyDown(KeyCode.F2)) grid.gameObject.SetActive(!grid.gameObject.activeSelf);
+    }
 }
 }

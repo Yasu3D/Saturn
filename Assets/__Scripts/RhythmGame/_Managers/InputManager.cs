@@ -12,7 +12,7 @@ namespace SaturnGame.RhythmGame
 /// It pulls current input from these providers, associates it with the current gameplay time, buffers the input if
 /// artificial latency is active, and then processes the input by calling into <see cref="scoringManager"/>.
 /// </summary>
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>, IInputProvider
 {
     public enum InputSource
     {
@@ -43,6 +43,7 @@ public class InputManager : MonoBehaviour
     private readonly KeyboardInput keyboardInput = new();
 
     public TouchState CurrentTouchState = TouchState.CreateNew();
+    public TouchState GetCurrentTouchState() => CurrentTouchState;
 
     private void Start()
     {
