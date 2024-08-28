@@ -1873,7 +1873,7 @@ MonoBehaviour:
     atlasWidth: 512
     atlasHeight: 512
     characterSetSelectionMode: 6
-    characterSequence: 21,2C,2E,30-3B,3F,41-5A,5F,61-7A
+    characterSequence: 21,2C,2E,30-3B,3F,41-5A,61-7A
     referencedFontAssetGUID: 015c12cdaf08072418f95e323bdf1081
     referencedTextAssetGUID: 
     fontStyle: 0
@@ -1983,7 +1983,7 @@ Material:
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.6770833
-    - _ScaleRatioC: 0.6770833
+    - _ScaleRatioC: 0.33854166
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -1996,9 +1996,9 @@ Material:
     - _StencilWriteMask: 255
     - _TextureHeight: 512
     - _TextureWidth: 512
-    - _UnderlayDilate: 0
+    - _UnderlayDilate: 1
     - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: 0
+    - _UnderlayOffsetY: -1
     - _UnderlaySoftness: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
@@ -2014,5 +2014,5 @@ Material:
     - _ReflectFaceColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectOutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
-    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
