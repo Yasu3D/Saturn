@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using SaturnGame.RhythmGame;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +11,7 @@ namespace SaturnGame
     {
         [SerializeField] private RawImage rawImgJacket;
         [SerializeField] private Image imgDiffLabel;
+        [SerializeField] private Image imgBackgroundBlur;
         
         [SerializeField] private TextMeshProUGUI tmpTitle;
         [SerializeField] private TextMeshProUGUI tmpArtist;
@@ -60,12 +58,18 @@ namespace SaturnGame
 
         [SerializeField] private RectTransform rectLeftPanel;
         [SerializeField] private RectTransform rectResults;
+        [SerializeField] private RectTransform rectDetails;
         
         [SerializeField] private float animDuration = 0.5f;
         [SerializeField] private Ease animEase = Ease.OutQuad;
 
         private void Start()
         {
+            rectLeftPanel.anchoredPosition = new(-1500, 0);
+            rectResults.anchoredPosition = new(-1500, 0);
+            rectDetails.anchoredPosition = new(-1500, 0);
+            imgBackgroundBlur.DOFade(0, 0);
+            
             SetJudgementCount(50, 30, 10, 2, 3);
             SetSongInfo("test title", "test artist", "14+", null, Difficulty.Expert);
         }
@@ -75,12 +79,14 @@ namespace SaturnGame
             if (Input.GetKeyDown(KeyCode.Alpha1)) Anim_ShowResults();
             if (Input.GetKeyDown(KeyCode.Alpha2)) Anim_HideResults();
             if (Input.GetKeyDown(KeyCode.Alpha3)) AnimateScore(1000000);
+            if (Input.GetKeyDown(KeyCode.Alpha4)) Anim_ShowDetails();
+            if (Input.GetKeyDown(KeyCode.Alpha5)) Anim_HideDetails();
         }
 
         public void Anim_ShowResults()
         {
-            rectLeftPanel.anchoredPosition = new(-700, 0);
-            rectResults.anchoredPosition = new(-1200, 0);
+            rectLeftPanel.anchoredPosition = new(-1500, 0);
+            rectResults.anchoredPosition = new(-1500, 0);
 
             rectLeftPanel.DOAnchorPosX(0, animDuration).SetEase(animEase);
             rectResults.DOAnchorPosX(0, animDuration).SetEase(animEase);
@@ -91,8 +97,29 @@ namespace SaturnGame
             rectLeftPanel.anchoredPosition = new(0, 0);
             rectResults.anchoredPosition = new(0, 0);
 
-            rectLeftPanel.DOAnchorPosX(-700, animDuration).SetEase(animEase);
-            rectResults.DOAnchorPosX(-1200, animDuration).SetEase(animEase);
+            rectLeftPanel.DOAnchorPosX(-1500, animDuration).SetEase(animEase);
+            rectResults.DOAnchorPosX(-1500, animDuration).SetEase(animEase);
+            
+            rectDetails.DOAnchorPosX(-1500, animDuration).SetEase(animEase);
+            imgBackgroundBlur.DOFade(0, animDuration * 0.5f).SetEase(animEase);
+        }
+
+        public void Anim_ShowDetails()
+        {
+            rectDetails.anchoredPosition = new(-1500, 0);
+            imgBackgroundBlur.DOFade(0, 0);
+            
+            rectDetails.DOAnchorPosX(0, animDuration).SetEase(animEase);
+            imgBackgroundBlur.DOFade(1, animDuration * 0.5f).SetEase(animEase);
+        }
+
+        public void Anim_HideDetails()
+        {
+            rectDetails.anchoredPosition = new(0, 0);
+            imgBackgroundBlur.DOFade(1, 0);
+            
+            rectDetails.DOAnchorPosX(-1500, animDuration).SetEase(animEase);
+            imgBackgroundBlur.DOFade(0, animDuration * 0.5f).SetEase(animEase);
         }
 
         public void SetSongInfo(string title, string artist, string level, [CanBeNull] Texture2D jacketTexture, Difficulty diff)
