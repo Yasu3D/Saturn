@@ -1,32 +1,102 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using SaturnGame.Loading;
 using System;
 using System.Globalization;
 using System.Linq;
-using JetBrains.Annotations;
+using SaturnGame.RhythmGame.Loading;
+using MerLoader = SaturnGame.Loading.MerLoader;
 
 namespace SaturnGame.Data
 {
 public class SongDatabase : MonoBehaviour
 {
-    [NotNull] public static string SongPacksPath => Path.Combine(Application.streamingAssetsPath, "SongPacks");
-    private readonly List<Song> songs = new();
+    public static string SongPacksPath => Path.Combine(Application.streamingAssetsPath, "SongPacks");
+    public List<Song> songs = new();
 
-    public void LoadAllSongData()
+    public void LoadSongList()
     {
-        string songPacksPath = SongPacksPath;
-        Directory.CreateDirectory(songPacksPath);
-        IEnumerable<string> songDirectories =
-            Directory.EnumerateFiles(songPacksPath, "meta.mer", SearchOption.AllDirectories);
-
+        string path = SongPacksPath;
         songs.Clear();
-        foreach (string filepath in songDirectories) songs.Add(LoadSongData(filepath));
+        
+        Directory.CreateDirectory(path);
+
+        IEnumerable<string> songDirectories = Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories).Where(d => Directory.EnumerateFiles(d, "*.SAT").Any());
+        foreach (string directory in songDirectories) songs.Add(LoadSong(directory));    
+        
+        // TODO: REMOVE MER SUPPORT.
+        IEnumerable<string> MER_songDirectories = Directory.EnumerateFiles(path, "meta.mer", SearchOption.AllDirectories);
+        foreach (string filepath in MER_songDirectories) songs.Add(MER_LoadSong(filepath));
     }
 
-    [NotNull]
-    public static Song LoadSongData([NotNull] string metaMerPath)
+    public static Song LoadSong(string folderPath)
+    {
+        // whatever, i'm enforcing jacket.png until i can rewrite all of this.
+        string jacketPath = Directory.GetFiles(folderPath).FirstOrDefault(file =>
+        {
+            string filename = Path.GetFileNameWithoutExtension(file);
+            string extension = Path.GetExtension(file);
+
+            return filename == "jacket" && extension is ".png" or ".jpg" or ".jpeg";
+        });
+        
+        string title = "";
+        string rubi = null;
+        string artist = "";
+        string bpm = "";
+        List<SongDifficulty> diffs = new();
+
+        string[] fileIDs = { "0.sat", "1.sat", "2.sat", "3.sat", "4.sat" };
+        
+        for (Difficulty i = 0; i <= Difficulty.Beyond; i++)
+        {
+            string chartFilepath = Path.Combine(folderPath, fileIDs[(int)i]);
+
+            if (!File.Exists(chartFilepath)) continue;
+
+            SongDifficulty diff = new()
+            {
+                Difficulty = i,
+                LastUpdatedTime = File.GetLastWriteTime(chartFilepath),
+            };
+            
+            string[] data = File.ReadLines(chartFilepath).ToArray();
+            int commentIndex = Array.IndexOf(data, "@COMMENTS");
+            string[] metadata = data[1..commentIndex];
+            
+            diff.ChartFilepath = chartFilepath;
+            diff.PreviewDuration = 10f;
+
+            foreach (string line in metadata)
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                
+                // again whatever, we're defaulting to whatever we can find for this metadata.
+                if (ChartLoader.ContainsTag(line, "@TITLE ", out string result)) title = result;
+                if (ChartLoader.ContainsTag(line, "@RUBI ", out result)) rubi = result;
+                if (ChartLoader.ContainsTag(line, "@ARTIST ", out result)) artist = result;
+                if (ChartLoader.ContainsTag(line, "@BPM_TEXT ", out result)) bpm = result;
+                
+                if (ChartLoader.ContainsTag(line, "@AUTHOR ", out result)) diff.Charter = result;
+                if (ChartLoader.ContainsTag(line, "@LEVEL ", out result)) diff.Level = Convert.ToDecimal(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "@PREVIEW_START ", out result)) diff.PreviewStart = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "@PREVIEW_TIME ", out result)) diff.PreviewDuration = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "@BGM ", out result)) diff.AudioFilepath = Path.Combine(folderPath ?? "", result);
+                if (ChartLoader.ContainsTag(line, "@BGM_OFFSET ", out result)) diff.AudioOffset = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "@BGA ", out result)) diff.MovieFilepath = result == "" ? "" : Path.Combine(folderPath ?? "", result);
+                if (ChartLoader.ContainsTag(line, "@BGA_OFFSET ", out result)) diff.MovieOffset = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+            }
+
+            diffs.Add(diff);
+        }
+        
+        if (diffs.Count == 0)
+            Debug.Log($"{artist} - {title} empty diffs {folderPath}");
+
+        return new(title, rubi, artist, bpm, folderPath, jacketPath, diffs.ToArray());
+    }
+    
+    public static Song MER_LoadSong(string metaMerPath)
     {
         FileStream metaStream = new(metaMerPath, FileMode.Open, FileAccess.Read);
         List<string> metaFile = MerLoader.LoadMer(metaStream);
@@ -130,10 +200,8 @@ public class SongDatabase : MonoBehaviour
 
         return new(title, rubi, artist, bpm, folderPath, jacketPath, diffs.ToArray());
     }
-
-    [NotNull]
-    private static IEnumerable<SongListEntry> SplitEntriesBy<T>([NotNull] IEnumerable<SongListEntry> entries,
-        Func<SongDifficulty, T> keySelector)
+    
+    private static IEnumerable<SongListEntry> SplitEntriesBy<T>(IEnumerable<SongListEntry> entries, Func<SongDifficulty, T> keySelector)
     {
         // We use SelectMany since each entry may be split into multiple.
         return entries.SelectMany(entry =>
@@ -152,8 +220,7 @@ public class SongDatabase : MonoBehaviour
                     Difficulties = group.Select(diff => diff.Difficulty).ToArray(),
                 }));
     }
-
-    [NotNull]
+    
     public SortedSongList SortSongList(GroupType groupType, SortType sortType)
     {
         SortedSongList sortedList = new()

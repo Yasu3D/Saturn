@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SaturnGame.RhythmGame;
+using SaturnGame.RhythmGame.Loading;
 using static TestUtils;
 
 public class ChartLoaderTests

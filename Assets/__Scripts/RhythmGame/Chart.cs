@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using UnityEngine.Serialization;
 
 namespace SaturnGame.RhythmGame
 {
@@ -11,7 +12,7 @@ namespace SaturnGame.RhythmGame
 [Serializable]
 public class Chart
 {
-    [UsedImplicitly] public float Difficulty = 0;
+    [FormerlySerializedAs("Difficulty")] [UsedImplicitly] public float Level = 0;
     [UsedImplicitly] public float ClearThreshold = 0;
     public float AudioOffset = 0;
     [UsedImplicitly] public float MovieOffset = 0;

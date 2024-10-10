@@ -15,7 +15,7 @@ public class DebugChartPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             string folderPath = Path.Combine(SongDatabase.SongPacksPath, folderInSongPacks, "meta.mer");
-            Song song = SongDatabase.LoadSongData(folderPath);
+            Song song = SongDatabase.MER_LoadSong(folderPath);
             SongDifficulty songDiff = song.SongDiffs[difficulty];
             PersistentStateManager.Instance.SelectedSong = song;
             PersistentStateManager.Instance.SelectedDifficultyInfo = songDiff;

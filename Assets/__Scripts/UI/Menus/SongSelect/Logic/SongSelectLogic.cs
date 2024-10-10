@@ -46,7 +46,7 @@ public class SongSelectLogic : MonoBehaviour
         Debug.Log($"Coming from {SceneSwitcher.Instance.LastScene}");
         page = SceneSwitcher.Instance.LastScene == "_Options" ? MenuPage.ChartPreview : MenuPage.SongSelect;
 
-        songDatabase.LoadAllSongData();
+        songDatabase.LoadSongList();
 
         SetSongAndDiffFromPersistentState();
 
@@ -442,7 +442,7 @@ public class SongSelectLogic : MonoBehaviour
 
     public async void OnReload()
     {
-        songDatabase.LoadAllSongData();
+        songDatabase.LoadSongList();
 
         SetSongAndDiffFromPersistentState();
 

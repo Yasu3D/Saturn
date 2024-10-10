@@ -1,4 +1,5 @@
 using SaturnGame.Loading;
+using SaturnGame.RhythmGame.Loading;
 using UnityEngine;
 
 namespace SaturnGame.RhythmGame

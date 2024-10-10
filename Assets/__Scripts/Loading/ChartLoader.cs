@@ -3,546 +3,368 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
-using SaturnGame.Loading;
 using SaturnGame.Settings;
 using UnityEngine;
 
-namespace SaturnGame.RhythmGame
+namespace SaturnGame.RhythmGame.Loading
 {
 public class ChartLoader
 {
     public static Chart LoadChart(string filepath)
     {
-        ChartLoader loader = new();
-
-        if (!loader.LoadChartFromFilename(filepath))
-            throw new Exception("Failed to load chart");
-
-        return loader.chart;
-    }
-
-    private Chart chart;
-
-    private readonly List<Gimmick> bpmGimmicks = new();
-    private readonly List<Gimmick> timeSigGimmicks = new();
-
-    private int readerIndex;
-
-    /// <summary>
-    /// Parses a <c>.mer</c> file and creates lists of objects from it.
-    /// </summary>
-    /// <param name="filepath"></param>
-    /// <returns></returns>
-    private bool LoadChartFromFilename(string filepath)
-    {
-        if (!File.Exists(filepath)) return false;
-
-        FileStream fileStream = new(filepath, FileMode.Open, FileAccess.Read);
-        List<string> merFile = MerLoader.LoadMer(fileStream);
-
-        readerIndex = 0;
-        bpmGimmicks.Clear();
-        timeSigGimmicks.Clear();
-
-        chart = new Chart();
-
-        ParseMetadata(merFile);
-        ParseChart(merFile);
-        GenerateBarLines();
-        CreateBgmData();
-        CreateHiSpeedData();
-        SetTime();
-        ProcessHitWindows(chart);
-
-        if (chart.ReverseGimmicks.Count != 0)
-            GenerateReverseLists();
-
-        if (SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes != 0)
-            MirrorChart();
-
-        if (!CheckLoadErrors().passed)
+        try
         {
-            Debug.LogError($"Chart load failed! | {CheckLoadErrors().error}");
-            return false;
+            string[] data = File.ReadLines(filepath).ToArray();
+            if (data.Length == 0) throw new("Chart File is empty!");
+
+            // Naively detect .SAT format
+            if (data[0].Contains("@SAT_VERSION"))
+            {
+                return SatLoader.LoadChart(filepath, data);
+            }
+            else
+            {
+                return MerLoader.LoadChart(data);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            throw;
+        }
+    }
+    
+    public static bool ContainsTag(string input, string tag, out string result)
+    {
+        if (input.Contains(tag))
+        {
+            result = input[(input.IndexOf(tag, StringComparison.Ordinal) + tag.Length)..].Trim();
+            return true;
         }
 
-        // TODO: Remove this
-        Debug.Log("[Chart Load] Chart loaded successfully!");
-        return true;
+        result = "";
+        return false;
     }
+}
 
-
-    /// <summary>
-    /// Loops through a .mer file's metadata tags until it<br />
-    /// either finds a <c>#BODY</c> tag or runs out of lines to parse.
-    /// </summary>
-    /// <param name="merFile"></param>
-    private void ParseMetadata([CanBeNull] List<string> merFile)
+internal static class SatLoader
+{
+    public static Chart LoadChart(string filepath, string[] data)
     {
-        if (merFile == null) return;
+        return new();
+    }
+}
 
-        do
+internal static class MerLoader
+{
+    public static Chart LoadChart(string[] data)
+    {
+        int contentSeparator = Array.IndexOf(data, "#BODY");
+        if (contentSeparator == -1) throw new("#BODY declaration not found!");
+
+        string[] metadata = data[..contentSeparator];
+        string[] content = data[(contentSeparator + 1)..];
+
+        Chart chart = new();
+        List<Gimmick> bpmGimmicks = new();
+        List<Gimmick> timeSigGimmicks = new();
+        
+        parseMetadata();
+        parseContent();
+        ChartPostProcessing.GenerateBarLines(chart);
+        ChartPostProcessing.GenerateBgmData(chart, bpmGimmicks, timeSigGimmicks);
+        ChartPostProcessing.GenerateHiSpeedData(chart);
+        ChartPostProcessing.SetTime(chart);
+        ChartPostProcessing.ProcessHitWindows(chart);
+        
+        if (chart.ReverseGimmicks.Count != 0) ChartPostProcessing.GenerateReverseLists(chart);
+        if (SettingsManager.Instance != null && SettingsManager.Instance.PlayerSettings.GameSettings.MirrorNotes != 0) ChartPostProcessing.MirrorChart(chart);
+        
+        return chart;
+
+        void parseMetadata()
         {
-            string merLine = merFile[readerIndex];
-
-            string tempDifficultyString = MerLoader.GetMetadata(merLine, "#DIFFICULTY ");
-            if (tempDifficultyString != null)
-                chart.Difficulty = Convert.ToSingle(tempDifficultyString, CultureInfo.InvariantCulture);
-
-            string tempClearThresholdString = MerLoader.GetMetadata(merLine, "#CLEAR_THRESHOLD");
-            if (tempClearThresholdString != null)
-                chart.ClearThreshold = Convert.ToSingle(tempClearThresholdString, CultureInfo.InvariantCulture);
-
-            string tempAudioOffsetString = MerLoader.GetMetadata(merLine, "#OFFSET ");
-            if (tempAudioOffsetString != null)
-                chart.AudioOffset = Convert.ToSingle(tempAudioOffsetString, CultureInfo.InvariantCulture);
-
-            string tempMovieOffsetString = MerLoader.GetMetadata(merLine, "#MOVIEOFFSET ");
-            if (tempMovieOffsetString != null)
-                chart.MovieOffset = Convert.ToSingle(tempMovieOffsetString, CultureInfo.InvariantCulture);
-
-            if (merLine.Contains("#BODY"))
+            foreach (string line in metadata)
             {
-                readerIndex++;
-                break;
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                string result;
+                
+                if (ChartLoader.ContainsTag(line, "#DIFFICULTY ", out result)) chart.Level = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "#LEVEL ", out result)) chart.Level = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "#CLEAR_THRESHOLD ", out result)) chart.ClearThreshold = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "#OFFSET ", out result)) chart.AudioOffset = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                if (ChartLoader.ContainsTag(line, "#MOVIEOFFSET ", out result)) chart.MovieOffset = Convert.ToSingle(result, CultureInfo.InvariantCulture);
+                
+                //if (ChartLoader.ContainsTag(line, "#AUDIO ", out result)) chart.BgmFilepath = Path.Combine(Path.GetDirectoryName(chart.Filepath) ?? "", result);
+                //if (ChartLoader.ContainsTag(line, "#AUTHOR ", out result)) chart.Author = result;
+                //if (ChartLoader.ContainsTag(line, "#PREVIEW_TIME ", out result)) chart.PreviewStart = Convert.ToDecimal(result, CultureInfo.InvariantCulture);
+                //if (ChartLoader.ContainsTag(line, "#PREVIEW_LENGTH ", out result)) chart.PreviewTime = Convert.ToDecimal(result, CultureInfo.InvariantCulture);
             }
-        } while (++readerIndex < merFile.Count);
-    }
+        }
 
-    /// <summary>
-    /// Loops through a .mer file's body and adds chartObjects to appropriate lists.
-    /// </summary>
-    /// <param name="merFile"></param>
-    private void ParseChart(List<string> merFile)
-    {
-        Note lastNote = null; // make lastNote start as null so the compiler doesn't scream
-        Gimmick tempGimmick;
-        // (incomplete HoldNote, next segment noteId)
-        List<(HoldNote, int)> incompleteHoldNotes = new();
-        // noteId -> (segment, next segment noteId)
-        Dictionary<int, (HoldSegment, int?)> allHoldSegments = new();
-
-        for (int i = readerIndex; i < merFile.Count; i++)
+        void parseContent()
         {
-            if (string.IsNullOrEmpty(merFile[i])) continue;
+            Note lastNote = null; // make lastNote start as null so the compiler doesn't scream
+            Gimmick tempGimmick;
+            // (incomplete HoldNote, next segment noteId)
+            List<(HoldNote, int)> incompleteHoldNotes = new();
+            // noteId -> (segment, next segment noteId)
+            Dictionary<int, (HoldSegment, int?)> allHoldSegments = new();
 
-            string[] splitLine = merFile[i].Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-
-            int measure = Convert.ToInt32(splitLine[0], CultureInfo.InvariantCulture);
-            int tick = Convert.ToInt32(splitLine[1], CultureInfo.InvariantCulture);
-            int objectID = Convert.ToInt32(splitLine[2], CultureInfo.InvariantCulture);
-
-            switch (objectID)
+            foreach (string line in content)
             {
-                // Invalid ID
-                case 0:
-                {
-                    continue;
-                }
-                // Note
-                case 1:
-                {
-                    int noteTypeID = Convert.ToInt32(splitLine[3], CultureInfo.InvariantCulture);
+                if (string.IsNullOrEmpty(line)) continue;
 
-                    // end of chart note
-                    if (noteTypeID is 14)
+                string[] split = line.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                int measure = Convert.ToInt32(split[0], CultureInfo.InvariantCulture);
+                int tick = Convert.ToInt32(split[1], CultureInfo.InvariantCulture);
+                int objectID = Convert.ToInt32(split[2], CultureInfo.InvariantCulture);
+
+                switch (objectID)
+                {
+                    // Invalid ID
+                    case 0:
                     {
-                        chart.EndOfChart = new(measure, tick);
                         continue;
                     }
-
-                    int position = Convert.ToInt32(splitLine[5], CultureInfo.InvariantCulture);
-                    int size = Convert.ToInt32(splitLine[6], CultureInfo.InvariantCulture);
-                    int noteId = Convert.ToInt32(splitLine[4], CultureInfo.InvariantCulture);
-
-                    Note tempNote;
-
-                    switch (noteTypeID)
+                    // Note
+                    case 1:
                     {
-                        // hold notes
-                        case 9 or 25:
-                        {
-                            HoldSegment holdStart = new(measure, tick, position, size, true);
-                            int nextNoteID = Convert.ToInt32(splitLine[8], CultureInfo.InvariantCulture);
+                        int noteTypeID = Convert.ToInt32(split[3], CultureInfo.InvariantCulture);
 
-                            HoldNote hold = new(holdStart, noteId);
-                            hold.SetBonusTypeFromNoteID(noteTypeID);
-                            incompleteHoldNotes.Add((hold, nextNoteID));
-
-                            tempNote = hold;
-                            chart.HoldNotes.Add(hold);
-                            break;
-                        }
-                        case 10 or 11:
+                        // end of chart note
+                        if (noteTypeID is 14)
                         {
-                            bool renderFlag = Convert.ToInt32(splitLine[7], CultureInfo.InvariantCulture) == 1;
-                            int? nextNoteId = noteTypeID == 10
-                                ? Convert.ToInt32(splitLine[8], CultureInfo.InvariantCulture)
-                                : null;
-                            allHoldSegments.Add(noteId,
-                                (new HoldSegment(measure, tick, position, size, renderFlag), nextNoteId));
-                            continue; // don't proceed to sync check for hold segments
-                        }
-                        // mask notes
-                        case 12 or 13:
-                        {
-                            int dir = Convert.ToInt32(splitLine[8], CultureInfo.InvariantCulture);
-                            bool add = noteTypeID == 12;
-                            chart.Masks.Add(new Mask(measure, tick, position, size, (Mask.MaskDirection)dir, add));
+                            chart.EndOfChart = new(measure, tick);
                             continue;
                         }
-                        default:
+
+                        int position = Convert.ToInt32(split[5], CultureInfo.InvariantCulture);
+                        int size = Convert.ToInt32(split[6], CultureInfo.InvariantCulture);
+                        int noteId = Convert.ToInt32(split[4], CultureInfo.InvariantCulture);
+
+                        Note tempNote;
+
+                        switch (noteTypeID)
                         {
-                            Note note = Note.CreateFromNoteTypeID(measure, tick, noteTypeID, position, size, noteId);
-                            chart.Notes.Add(note);
-                            tempNote = note;
-                            break;
+                            // hold notes
+                            case 9 or 25:
+                            {
+                                HoldSegment holdStart = new(measure, tick, position, size, true);
+                                int nextNoteID = Convert.ToInt32(split[8], CultureInfo.InvariantCulture);
+
+                                HoldNote hold = new(holdStart, noteId);
+                                hold.SetBonusTypeFromNoteID(noteTypeID);
+                                incompleteHoldNotes.Add((hold, nextNoteID));
+
+                                tempNote = hold;
+                                chart.HoldNotes.Add(hold);
+                                break;
+                            }
+                            case 10 or 11:
+                            {
+                                bool renderFlag = Convert.ToInt32(split[7], CultureInfo.InvariantCulture) == 1;
+                                int? nextNoteId = noteTypeID == 10
+                                    ? Convert.ToInt32(split[8], CultureInfo.InvariantCulture)
+                                    : null;
+                                allHoldSegments.Add(noteId, (new(measure, tick, position, size, renderFlag), nextNoteId));
+                                continue; // don't proceed to sync check for hold segments
+                            }
+                            // mask notes
+                            case 12 or 13:
+                            {
+                                int dir = Convert.ToInt32(split[8], CultureInfo.InvariantCulture);
+                                bool add = noteTypeID == 12;
+                                chart.Masks.Add(new(measure, tick, position, size, (Mask.MaskDirection)dir, add));
+                                continue;
+                            }
+                            default:
+                            {
+                                Note note = Note.CreateFromNoteTypeID(measure, tick, noteTypeID, position, size, noteId);
+                                chart.Notes.Add(note);
+                                tempNote = note;
+                                break;
+                            }
                         }
+
+                        if (tempNote is null)
+                            Debug.LogError($"null noteid {noteTypeID}");
+
+                        // all other notes
+                        ChartPostProcessing.CheckSync(chart, tempNote, lastNote);
+                        lastNote = tempNote;
+                        break;
                     }
-
-                    if (tempNote is null)
-                        Debug.LogError($"null noteid {noteTypeID}");
-
-                    // all other notes
-                    CheckSync(tempNote, lastNote);
-                    lastNote = tempNote;
-                    break;
-                }
-                // Gimmick
-                default:
-                {
-                    // create a gimmick
-                    object value1 = null;
-                    object value2 = null;
-
-                    // avoid IndexOutOfRangeExceptions :]
-                    if (objectID is 3)
+                    // Gimmick
+                    default:
                     {
-                        if (splitLine.Length == 4)
+                        // create a gimmick
+                        object value1 = null;
+                        object value2 = null;
+
+                        // avoid IndexOutOfRangeExceptions :]
+                        if (objectID is 3)
                         {
-                            value1 = Convert.ToInt32(splitLine[3], CultureInfo.InvariantCulture);
-                            value2 = 4; // yeah.......... this happens in the wild
+                            if (split.Length == 4)
+                            {
+                                value1 = Convert.ToInt32(split[3], CultureInfo.InvariantCulture);
+                                value2 = 4; // yeah.......... this happens in the wild
+                            }
+                            else if (split.Length > 4)
+                            {
+                                value1 = Convert.ToInt32(split[3], CultureInfo.InvariantCulture);
+                                value2 = Convert.ToInt32(split[4], CultureInfo.InvariantCulture);
+                            }
                         }
-                        else if (splitLine.Length > 4)
+
+                        if (objectID is 2 or 5 && split.Length > 3)
+                            value1 = Convert.ToSingle(split[3], CultureInfo.InvariantCulture);
+
+                        tempGimmick = new(measure, tick, objectID, value1, value2);
+
+                        // sort gimmicks by type
+                        switch (tempGimmick.Type)
                         {
-                            value1 = Convert.ToInt32(splitLine[3], CultureInfo.InvariantCulture);
-                            value2 = Convert.ToInt32(splitLine[4], CultureInfo.InvariantCulture);
+                            case Gimmick.GimmickType.BeatsPerMinute:
+                            {
+                                bpmGimmicks.Add(tempGimmick);
+                                break;
+                            }
+                            case Gimmick.GimmickType.TimeSignature:
+                            {
+                                timeSigGimmicks.Add(tempGimmick);
+                                break;
+                            }
+                            case Gimmick.GimmickType.HiSpeed:
+                            {
+                                chart.HiSpeedGimmicks.Add(tempGimmick);
+                                break;
+                            }
+                            case Gimmick.GimmickType.StopStart:
+                            {
+                                // Convert Stops to HiSpeed changes internally since they're functionally identical(?)
+                                tempGimmick.Type = Gimmick.GimmickType.StopStart;
+                                tempGimmick.HiSpeed = 0;
+                                chart.HiSpeedGimmicks.Add(tempGimmick);
+                                break;
+                            }
+                            case Gimmick.GimmickType.StopEnd:
+                            {
+                                // Same as above.
+                                tempGimmick.Type = Gimmick.GimmickType.StopEnd;
+                                tempGimmick.HiSpeed = chart.HiSpeedGimmicks.LastOrDefault(x =>
+                                        x.ChartTick < tempGimmick.ChartTick && x.Type is Gimmick.GimmickType.HiSpeed)
+                                    ?.HiSpeed ?? 1;
+                                chart.HiSpeedGimmicks.Add(tempGimmick);
+                                break;
+                            }
+                            case Gimmick.GimmickType.ReverseEffectStart:
+                            case Gimmick.GimmickType.ReverseEffectEnd:
+                            case Gimmick.GimmickType.ReverseNoteEnd:
+                            {
+                                chart.ReverseGimmicks.Add(tempGimmick);
+                                break;
+                            }
                         }
+
+                        break;
                     }
-
-                    if (objectID is 2 or 5 && splitLine.Length > 3)
-                        value1 = Convert.ToSingle(splitLine[3], CultureInfo.InvariantCulture);
-
-                    tempGimmick = new Gimmick(measure, tick, objectID, value1, value2);
-
-                    // sort gimmicks by type
-                    switch (tempGimmick.Type)
-                    {
-                        case Gimmick.GimmickType.BeatsPerMinute:
-                        {
-                            bpmGimmicks.Add(tempGimmick);
-                            break;
-                        }
-                        case Gimmick.GimmickType.TimeSignature:
-                        {
-                            timeSigGimmicks.Add(tempGimmick);
-                            break;
-                        }
-                        case Gimmick.GimmickType.HiSpeed:
-                        {
-                            chart.HiSpeedGimmicks.Add(tempGimmick);
-                            break;
-                        }
-                        case Gimmick.GimmickType.StopStart:
-                        {
-                            // Convert Stops to HiSpeed changes internally since they're functionally identical(?)
-                            tempGimmick.Type = Gimmick.GimmickType.StopStart;
-                            tempGimmick.HiSpeed = 0;
-                            chart.HiSpeedGimmicks.Add(tempGimmick);
-                            break;
-                        }
-                        case Gimmick.GimmickType.StopEnd:
-                        {
-                            // Same as above.
-                            tempGimmick.Type = Gimmick.GimmickType.StopEnd;
-                            tempGimmick.HiSpeed = chart.HiSpeedGimmicks.LastOrDefault(x =>
-                                    x.ChartTick < tempGimmick.ChartTick && x.Type is Gimmick.GimmickType.HiSpeed)
-                                ?.HiSpeed ?? 1;
-                            chart.HiSpeedGimmicks.Add(tempGimmick);
-                            break;
-                        }
-                        case Gimmick.GimmickType.ReverseEffectStart:
-                        case Gimmick.GimmickType.ReverseEffectEnd:
-                        case Gimmick.GimmickType.ReverseNoteEnd:
-                        {
-                            chart.ReverseGimmicks.Add(tempGimmick);
-                            break;
-                        }
-                    }
-
-                    break;
                 }
             }
-        }
 
-        // Assemble holds
-        foreach ((HoldNote holdNote, int? firstNoteId) in incompleteHoldNotes)
-        {
-            List<HoldSegment> holdSegments = holdNote.Notes.ToList();
-            int? currentNoteId = firstNoteId;
-
-            while (currentNoteId is int noteId)
+            // Assemble holds
+            foreach ((HoldNote holdNote, int? firstNoteId) in incompleteHoldNotes)
             {
-                (HoldSegment segment, int? nextNoteId) = allHoldSegments[noteId];
-                holdSegments.Add(segment);
-                currentNoteId = nextNoteId;
+                List<HoldSegment> holdSegments = holdNote.Notes.ToList();
+                int? currentNoteId = firstNoteId;
+
+                while (currentNoteId is int noteId)
+                {
+                    (HoldSegment segment, int? nextNoteId) = allHoldSegments[noteId];
+                    holdSegments.Add(segment);
+                    currentNoteId = nextNoteId;
+                }
+
+                holdNote.Notes = holdSegments.ToArray();
             }
-
-            holdNote.Notes = holdSegments.ToArray();
         }
     }
+}
 
-    /// <summary>
-    /// Check for common errors that may happen during a chart load.
-    /// </summary>
-    private (bool passed, string error) CheckLoadErrors()
-    {
-        // I made the checks separate to spare the next person reading this an aneurysm.
-        // It's also organized from most likely to least likely, so it doesn't matter much.
-        if (chart.EndOfChart is null)
-            return (false, "Chart is missing End of Chart note!");
-
-        if (chart.Notes.Last().TimeMs > chart.EndOfChart.TimeMs)
-            return (false, "Notes behind end of Chart note!");
-
-        // this is fine actually lol
-        //if (bgmClip != null && chart.notes.Last().TimeMs > bgmClip.length * 1000) // conv. to ms
-        //    return (false, "Chart is longer than audio!");
-
-        if (chart.BGMDataGimmicks.Count == 0)
-            return (false, "Chart is missing BPM and TimeSignature data!");
-
-        // Reverses always come in groups of 3 gimmicks. If the count is not divisible by 3 something's wrong.
-        if (SaturnMath.Modulo(chart.ReverseGimmicks.Count, 3) != 0)
-        {
-            return (false,
-                "Invalid reverse gimmicks! Every reverse must have these segments: [Effect Start] [Effect End] [Note End]");
-        }
-
-        // Loop through all reverses to find any overlapping/out of order/broken ones.
-        // The order must always be Effect Start > Effect End > Note End.
-        Gimmick.GimmickType lastReverse = Gimmick.GimmickType.ReverseNoteEnd;
-        foreach (Gimmick gimmick in chart.ReverseGimmicks)
-        {
-            Gimmick.GimmickType currentReverse = gimmick.Type;
-
-            if ((currentReverse is Gimmick.GimmickType.ReverseEffectStart &&
-                 lastReverse is not Gimmick.GimmickType.ReverseNoteEnd) ||
-                (currentReverse is Gimmick.GimmickType.ReverseEffectEnd &&
-                 lastReverse is not Gimmick.GimmickType.ReverseEffectStart) ||
-                (currentReverse is Gimmick.GimmickType.ReverseNoteEnd &&
-                 lastReverse is not Gimmick.GimmickType.ReverseEffectEnd))
-                return (false, "Invalid reverse gimmicks! Reverses are either overlapping or broken.");
-
-            lastReverse = currentReverse;
-        }
-
-        return (true, "");
-    }
-
-    /// <summary>
-    /// Adds reversed notes to a list for Reverse Gimmick animations.
-    /// </summary>
-    private void GenerateReverseLists()
-    {
-        // Loop over all Reverse Gimmicks except the last two to avoid an ArrayIndexOutOfBoundsException
-        for (int i = 0; i < chart.ReverseGimmicks.Count - 2; i++)
-        {
-            if (chart.ReverseGimmicks[i].Type is not Gimmick.GimmickType.ReverseEffectStart)
-                continue;
-
-            // If [i] is EffectStart, then [i + 1] must be EffectEnd and [i + 2] must be NoteEnd
-            float effectStartTime = chart.ReverseGimmicks[i].ScaledVisualTime;
-            float effectEndTime = chart.ReverseGimmicks[i + 1].ScaledVisualTime;
-            float noteEndTime = chart.ReverseGimmicks[i + 2].ScaledVisualTime;
-
-            List<Note> notesToReverse = chart.Notes
-                .Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
-            List<HoldNote> holdsToReverse = chart.HoldNotes.Where(x =>
-                x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
-
-            // TODO: reverse syncs?
-
-            foreach (Note note in notesToReverse)
-                ReverseNote(note, effectStartTime, effectEndTime, noteEndTime);
-
-            foreach (HoldNote hold in holdsToReverse)
-                ReverseHold(hold, effectStartTime, effectEndTime, noteEndTime);
-
-            // List.Reverse() from Linq
-            chart.ReverseHoldNotes.Reverse();
-        }
-    }
-
-    /// <summary>
-    /// Creates a copy of a Note, remaps it's position in time, <br />
-    /// then adds a copy of it to <c>reverseNotes</c>
-    /// </summary>
-    private void ReverseNote([NotNull] Note note, float startTime, float midTime, float endTime)
-    {
-        Note copy = (Note)note.Clone();
-        copy.ReverseTime(startTime, midTime, endTime);
-
-        chart.ReverseNotes.Insert(0, copy);
-    }
-
-    /// <summary>
-    /// Reverses a Hold Note by creating a deep copy of it, <br />
-    /// then remapping each segment note's position in time.
-    /// </summary>
-    private void ReverseHold([NotNull] HoldNote hold, float startTime, float midTime, float endTime)
-    {
-        HoldNote copy = HoldNote.DeepCopy(hold);
-        copy.ReverseTime(startTime, midTime, endTime);
-
-        chart.ReverseHoldNotes.Add(copy);
-    }
-
-    /// <summary>
-    /// Generates a Bar Line every Measure.
-    /// </summary>
-    private void GenerateBarLines()
-    {
-        for (int i = 0; i <= chart.EndOfChart.Measure; i++)
-            chart.BarLines.Add(new BarLine(i, 0));
-    }
-
+internal static class ChartPostProcessing
+{
     /// <summary>
     /// Check if the last parsed note is on the same timestamp as the current note. <br />
     /// This should efficiently and cleanly detect any simultaneous notes.
     /// </summary>
-    private void CheckSync(Note current, [CanBeNull] Note last)
+    internal static void CheckSync(Chart chart, Note note0, Note note1)
     {
-        if (last == null) return;
-        if ((last is ChainNote && last.BonusType != Note.NoteBonusType.RNote) || (current is ChainNote && current.BonusType != Note.NoteBonusType.RNote)) return;
-        if ((last is HoldNote || current is HoldNote) && last.Position == current.Position && last.Size == current.Size) return;
+        if (note1 == null) return;
+        if ((note1 is ChainNote && note1.BonusType != Note.NoteBonusType.RNote) || (note0 is ChainNote && note0.BonusType != Note.NoteBonusType.RNote)) return;
+        if ((note1 is HoldNote || note0 is HoldNote) && note1.Position == note0.Position && note1.Size == note0.Size) return;
 
-        if (current.Measure == last.Measure && current.Tick == last.Tick)
+        if (note0.Measure == note1.Measure && note0.Tick == note1.Tick)
         {
-            last.IsSync = true;
-            current.IsSync = true;
+            note1.IsSync = true;
+            note0.IsSync = true;
 
-            GenerateSync(current, last);
+            generateSync();
+        }
+
+        return;
+
+        void generateSync()
+        {
+            int measure = note0.Measure;
+            int tick = note0.Tick;
+
+            // Instead of finding the shortest path between 4 points,
+            // think of two "imaginary" notes between note0 and note1 that fill the gaps.
+            // Check which of these two imaginary notes is smaller, then return that note.
+
+            // The somewhat "random" math here is explainable. Trust me.
+            // For the sizes, it subtracts 1 in the modulo, then adds back 1 after to "shift" the range from 0-60 to 1-59.
+            // The notes are also shrunk by 1 on each side, so [pos + 1] and [size - 2].
+            // These two are then simplified because they cancel each other out.
+            // The comments after each line show what it was before the simplification.
+            // Thanks for coming to my ted talk. Happy contributing.
+
+            // cg505's note: This may not work when there are more than 2 simultaneous notes... but let's not
+            // get a headache over that at this point.
+            // yasu's note: it appears mercury's system is just as "dumb". Good enough :3
+
+            int position0 = SaturnMath.Modulo(note0.Position + note0.Size - 1, 60); // pos + 1 // size  - 2
+            int size0 = SaturnMath.Modulo(note1.Position - position0, 60) + 1; // pos + 1 // shift - 1
+
+            int position1 = SaturnMath.Modulo(note1.Position + note1.Size - 1, 60); // pos + 1 // size  - 2
+            int size1 = SaturnMath.Modulo(note0.Position - position1, 60) + 1; // pos + 1 // shift - 1
+
+            int finalPosition = size0 > size1 ? position1 : position0;
+            int finalSize = Mathf.Min(size0, size1);
+
+            if (finalSize > 30) return;
+
+            SyncIndicator sync = new(measure, tick, finalPosition, finalSize);
+            chart.Syncs.Add(sync);
         }
     }
-
+    
     /// <summary>
-    /// Finds shortest distance between two notes and <br />
-    /// generates a sync object connecting them
+    /// Generates a Bar Line every Measure.
     /// </summary>
-    private void GenerateSync([NotNull] Note note0, [NotNull] Note note1)
+    internal static void GenerateBarLines(Chart chart)
     {
-        int measure = note0.Measure;
-        int tick = note0.Tick;
-
-        // Instead of finding the shortest path between 4 points,
-        // think of two "imaginary" notes between note0 and note1 that fill the gaps.
-        // Check which of these two imaginary notes is smaller, then return that note.
-
-        // The somewhat "random" math here is explainable. Trust me.
-        // For the sizes, it subtracts 1 in the modulo, then adds back 1 after to "shift" the range from 0-60 to 1-59.
-        // The notes are also shrunk by 1 on each side, so [pos + 1] and [size - 2].
-        // These two are then simplified because they cancel each other out.
-        // The comments after each line show what it was before the simplification.
-        // Thanks for coming to my ted talk. Happy contributing.
-
-        // cg505's note: This may not work when there are more than 2 simultaneous notes... but let's not
-        // get a headache over that at this point.
-        // yasu's note: it appears mercury's system is just as "dumb". Good enough :3
-
-        int position0 = SaturnMath.Modulo(note0.Position + note0.Size - 1, 60); // pos + 1 // size  - 2
-        int size0 = SaturnMath.Modulo(note1.Position - position0, 60) + 1; // pos + 1 // shift - 1
-
-        int position1 = SaturnMath.Modulo(note1.Position + note1.Size - 1, 60); // pos + 1 // size  - 2
-        int size1 = SaturnMath.Modulo(note0.Position - position1, 60) + 1; // pos + 1 // shift - 1
-
-        int finalPosition = size0 > size1 ? position1 : position0;
-        int finalSize = Mathf.Min(size0, size1);
-
-        if (finalSize > 30) return;
-
-        SyncIndicator sync = new(measure, tick, finalPosition, finalSize);
-        chart.Syncs.Add(sync);
+        for (int i = 0; i <= chart.EndOfChart.Measure; i++)
+            chart.BarLines.Add(new(i, 0));
     }
-
-    /// <summary>
-    /// Mirrors a note along an axis.
-    /// </summary>
-    /// <remarks>
-    /// Axis 30 = horizontal mirror <br/>
-    /// Axis 0 = vertical mirror
-    /// </remarks>
-    private static void MirrorObject([NotNull] PositionedChartElement note, int axis = 30)
-    {
-        int newPos = SaturnMath.Modulo(axis - note.Size - note.Position, 60);
-
-        if (note is SwipeNote swipeNote)
-        {
-            switch (swipeNote.Direction)
-            {
-                case SwipeNote.SwipeDirection.Clockwise:
-                {
-                    swipeNote.Direction = SwipeNote.SwipeDirection.Counterclockwise;
-                    break;
-                }
-                case SwipeNote.SwipeDirection.Counterclockwise:
-                {
-                    swipeNote.Direction = SwipeNote.SwipeDirection.Clockwise;
-                    break;
-                }
-            }
-        }
-
-        note.Position = newPos;
-    }
-
-    /// <summary>
-    /// Mirrors an entire chart.
-    /// </summary>
-    private void MirrorChart()
-    {
-        foreach (Note note in chart.Notes)
-            MirrorObject(note);
-
-        foreach (Mask mask in chart.Masks)
-            MirrorObject(mask);
-
-        foreach (SyncIndicator sync in chart.Syncs)
-            MirrorObject(sync);
-
-        foreach (HoldNote hold in chart.HoldNotes)
-        {
-            foreach (HoldSegment note in hold.Notes)
-                MirrorObject(note);
-        }
-
-        foreach (Note note in chart.ReverseNotes)
-            MirrorObject(note);
-
-        foreach (HoldNote hold in chart.ReverseHoldNotes)
-        {
-            foreach (HoldSegment note in hold.Notes)
-                MirrorObject(note);
-        }
-    }
-
+    
     /// <summary>
     /// A rather bulky function that ""cleanly"" merges BeatsPerMinuteGimmicks <br />
     /// and TimeSignatureGimmicks into one list. My only excuse for the bulk <br />
     /// is that most charts don't have many BPM/TimeSig changes.
     /// </summary>
-    private void CreateBgmData()
+    internal static void GenerateBgmData(Chart chart, List<Gimmick> bpmGimmicks, List<Gimmick> timeSigGimmicks)
     {
         if (bpmGimmicks.Count == 0 || timeSigGimmicks.Count == 0) return;
 
@@ -608,7 +430,7 @@ public class ChartLoader
     /// <summary>
     /// Calculates scaled timestamps for HiSpeed changes.
     /// </summary>
-    private void CreateHiSpeedData()
+    internal static void GenerateHiSpeedData(Chart chart)
     {
         foreach (Gimmick gimmick in chart.HiSpeedGimmicks)
             gimmick.CalculateTime(chart.BGMDataGimmicks);
@@ -634,7 +456,7 @@ public class ChartLoader
     /// and calculates the object's time in milliseconds <br />
     /// according to all BPM and TimeSignature changes.
     /// </summary>
-    private void SetTime()
+    internal static void SetTime(Chart chart)
     {
         foreach (Note note in chart.Notes)
         {
@@ -675,36 +497,118 @@ public class ChartLoader
         chart.EndOfChart.CalculateTime(chart.BGMDataGimmicks);
         chart.EndOfChart.CalculateScaledTime(chart.HiSpeedGimmicks);
     }
-
-    private static bool SegmentsOverlap([NotNull] PositionedChartElement note1, [NotNull] PositionedChartElement note2)
+    
+    /// <summary>
+    /// Mirrors an entire chart.
+    /// </summary>
+    internal static void MirrorChart(Chart chart)
     {
-        if (note1.Left == note1.Right || note2.Left == note2.Right)
+        foreach (Note note in chart.Notes) MirrorObject(note);
+        
+        foreach (Mask mask in chart.Masks) MirrorObject(mask);
+        
+        foreach (SyncIndicator sync in chart.Syncs) MirrorObject(sync);
+
+        foreach (Note note in chart.ReverseNotes) MirrorObject(note);
+        
+        foreach (HoldNote hold in chart.HoldNotes)
         {
-            // Full circle notes always overlap
-            return true;
+            foreach (HoldSegment note in hold.Notes) MirrorObject(note);
         }
 
-        // Bonus reading: https://fgiesen.wordpress.com/2015/09/24/intervals-in-modular-arithmetic/
-        // Each note is a half-open interval in mod60.
-
-        // See point_in_half_open_interval in the link.
-        // This returns true iff point is in the half-open interval [note.Left, note.Right) (mod 60)
-        // TODO: move to SaturnMath
-        bool pointWithinNote([NotNull] PositionedChartElement note, int point)
+        foreach (HoldNote hold in chart.ReverseHoldNotes)
         {
-            return SaturnMath.Modulo(point - note.Left, 60) < SaturnMath.Modulo(note.Right - note.Left, 60);
+            foreach (HoldSegment note in hold.Notes) MirrorObject(note);
+        }
+    }
+    
+    /// <summary>
+    /// Mirrors a note along an axis.
+    /// </summary>
+    /// <remarks>
+    /// Axis 30 = horizontal mirror <br/>
+    /// Axis 0 = vertical mirror
+    /// </remarks>
+    private static void MirrorObject(PositionedChartElement note, int axis = 30)
+    {
+        int newPos = SaturnMath.Modulo(axis - note.Size - note.Position, 60);
+
+        if (note is SwipeNote swipeNote)
+        {
+            swipeNote.Direction = swipeNote.Direction switch
+            {
+                SwipeNote.SwipeDirection.Clockwise => SwipeNote.SwipeDirection.Counterclockwise,
+                SwipeNote.SwipeDirection.Counterclockwise => SwipeNote.SwipeDirection.Clockwise,
+                _ => swipeNote.Direction,
+            };
         }
 
-        // See half_open_intervals_overlap in the link.
-        // We know that the interval size is positive, so we don't need to worry about that case.
-        return pointWithinNote(note1, note2.Left) || pointWithinNote(note2, note1.Left);
+        note.Position = newPos;
+    }
+    
+    /// <summary>
+    /// Generates a List of Notes for reverse gimmicks.
+    /// </summary>
+    /// <param name="chart"></param>
+    internal static void GenerateReverseLists(Chart chart)
+    {
+        // Loop over all Reverse Gimmicks except the last two to avoid an ArrayIndexOutOfBoundsException
+        for (int i = 0; i < chart.ReverseGimmicks.Count - 2; i++)
+        {
+            if (chart.ReverseGimmicks[i].Type is not Gimmick.GimmickType.ReverseEffectStart)
+                continue;
+
+            // If [i] is EffectStart, then [i + 1] must be EffectEnd and [i + 2] must be NoteEnd
+            float effectStartTime = chart.ReverseGimmicks[i].ScaledVisualTime;
+            float effectEndTime = chart.ReverseGimmicks[i + 1].ScaledVisualTime;
+            float noteEndTime = chart.ReverseGimmicks[i + 2].ScaledVisualTime;
+
+            List<Note> notesToReverse = chart.Notes
+                .Where(x => x.ScaledVisualTime >= effectEndTime && x.ScaledVisualTime < noteEndTime).ToList();
+            List<HoldNote> holdsToReverse = chart.HoldNotes.Where(x =>
+                x.Start.ScaledVisualTime >= effectEndTime && x.End.ScaledVisualTime < noteEndTime).ToList();
+
+            // TODO: reverse syncs?
+
+            foreach (Note note in notesToReverse)
+                ReverseNote(chart, note, effectStartTime, effectEndTime, noteEndTime);
+
+            foreach (HoldNote hold in holdsToReverse)
+                ReverseHold(chart, hold, effectStartTime, effectEndTime, noteEndTime);
+
+            // List.Reverse() from Linq
+            chart.ReverseHoldNotes.Reverse();
+        }
+    }
+    
+    /// <summary>
+    /// Creates a copy of a Note, remaps its position in time, <br />
+    /// then adds a copy of it to <c>reverseNotes</c>
+    /// </summary>
+    private static void ReverseNote(Chart chart, Note note, float startTime, float midTime, float endTime)
+    {
+        Note copy = (Note)note.Clone();
+        copy.ReverseTime(startTime, midTime, endTime);
+
+        chart.ReverseNotes.Insert(0, copy);
     }
 
-    private static void ProcessHitWindows([NotNull] Chart chart)
+    /// <summary>
+    /// Reverses a Hold Note by creating a deep copy of it, <br />
+    /// then remapping each segment note's position in time.
+    /// </summary>
+    private static void ReverseHold(Chart chart, HoldNote hold, float startTime, float midTime, float endTime)
+    {
+        HoldNote copy = HoldNote.DeepCopy(hold);
+        copy.ReverseTime(startTime, midTime, endTime);
+
+        chart.ReverseHoldNotes.Add(copy);
+    }
+    
+    internal static void ProcessHitWindows(Chart chart)
     {
         List<Note> allNotesFromChart = chart.Notes.Concat(chart.HoldNotes).OrderBy(note => note.TimeMs).ToList();
-        // TODO: swipe notes within a hold... that is gonna be hell lmao
-        // TODO: holds with a swipe on the hold start take on the timing window of the swipe??
+        // TODO: swipe notes within a hold --- Window stays unchanged! - Yasu
         chart.ProcessedNotesForGameplay.Clear();
 
         foreach (Note note in allNotesFromChart)
@@ -759,6 +663,30 @@ public class ChartLoader
             }
 
             chart.ProcessedNotesForGameplay.Add(note);
+        }
+    }
+    
+    internal static bool SegmentsOverlap(PositionedChartElement note1, PositionedChartElement note2)
+    {
+        if (note1.Left == note1.Right || note2.Left == note2.Right)
+        {
+            // Full circle notes always overlap
+            return true;
+        }
+
+        // Bonus reading: https://fgiesen.wordpress.com/2015/09/24/intervals-in-modular-arithmetic/
+        // Each note is a half-open interval in mod60.
+
+        // See half_open_intervals_overlap in the link.
+        // We know that the interval size is positive, so we don't need to worry about that case.
+        return pointWithinNote(note1, note2.Left) || pointWithinNote(note2, note1.Left);
+
+        // See point_in_half_open_interval in the link.
+        // This returns true iff point is in the half-open interval [note.Left, note.Right) (mod 60)
+        // TODO: move to SaturnMath
+        bool pointWithinNote(PositionedChartElement note, int point)
+        {
+            return SaturnMath.Modulo(point - note.Left, 60) < SaturnMath.Modulo(note.Right - note.Left, 60);
         }
     }
 }

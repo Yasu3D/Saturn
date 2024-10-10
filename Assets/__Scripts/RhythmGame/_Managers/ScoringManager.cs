@@ -260,7 +260,7 @@ public class ScoringManager : MonoBehaviour
     {
         Judgement judgement = note.Hit(hitTimeMs);
         ScoreData currentScoreData = CurrentScoreData();
-
+ 
         // HoldNotes affect combo at hold end
         if (note is not HoldNote) IncrementCombo();
 
@@ -268,14 +268,15 @@ public class ScoringManager : MonoBehaviour
         centerDisplay.UpdateScore(currentScoreData);
         judgeDebugInfo?.UpdateWithNewInfo(currentScoreData);
         float earlyLateErrorMs = 0;
+        
         if (note is not ChainNote && judgement is not Judgement.Marvelous)
+        {
             // TimeErrorMs should always be set by Hit
             earlyLateErrorMs = note.TimeErrorMs!.Value;
+        }
+        
         judgementDisplay.ShowJudgement(judgement, earlyLateErrorMs);
-
-        noteDebugInfo.AddInfo(
-            $"{note.ID}: {judgement} {note.TimeErrorMs!.Value.ToString("+0.0;-0.0;0", CultureInfo.CurrentCulture)}");
-
+        noteDebugInfo.AddInfo($"{note.ID}: {judgement} {note.TimeErrorMs!.Value.ToString("+0.0;-0.0;0", CultureInfo.CurrentCulture)}");
         hitsoundManager.PlayNoteHitsound(note);
     }
 
