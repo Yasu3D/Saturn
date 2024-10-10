@@ -1296,7 +1296,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 390}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2936072241718545089
@@ -1334,11 +1334,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a1df51008ef6d043abfb7a57b8bc01b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rect: {fileID: 3470604888072715699}
-  titleText: {fileID: 8578688337042133740}
-  artistText: {fileID: 289606473864722743}
-  difficultyText: {fileID: 5574123797634028416}
-  jacketImage: {fileID: 2860582878354993813}
+  Rect: {fileID: 3470604888072715699}
+  TitleText: {fileID: 8578688337042133740}
+  ArtistText: {fileID: 289606473864722743}
+  DifficultyText: {fileID: 5574123797634028416}
+  JacketImage: {fileID: 2860582878354993813}
 --- !u!1 &9061558751820417428
 GameObject:
   m_ObjectHideFlags: 0

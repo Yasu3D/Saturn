@@ -41,8 +41,10 @@ public class TextTicker : MonoBehaviour
 
         // Reset offset and text positions.
         offset = 0;
-        rect.anchoredPosition = new Vector2(startPos + offset, 0);
+        rect.anchoredPosition = new(startPos + offset, 0);
         cloneRect.anchoredPosition = rect.anchoredPosition + new Vector2(textBounds, 0);
+        
+        cloneRect.localPosition = new(cloneRect.localPosition.x, cloneRect.localPosition.y, 0); // I hate this
         cloneRect.localScale = Vector3.one; // I hate this
 
         // Update cloned text and set visibility
